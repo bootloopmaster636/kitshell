@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/widgets/utility.dart';
@@ -32,7 +33,7 @@ class WifiPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HoverRevealer(
-      icon: Icons.wifi,
+      icon: FontAwesomeIcons.wifi,
       widget: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
         child: Row(
@@ -72,7 +73,7 @@ class BrightnessPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HoverRevealer(
-      icon: Icons.brightness_medium_outlined,
+      icon: FontAwesomeIcons.sun,
       value: 56,
       widget: Slider(
         value: 0.5,
@@ -92,7 +93,7 @@ class VolumePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HoverRevealer(
-      icon: Icons.volume_up_outlined,
+      icon: FontAwesomeIcons.volumeHigh,
       value: 56,
       widget: Slider(
         value: 0.5,
@@ -112,7 +113,7 @@ class BatteryPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HoverRevealer(
-      icon: Icons.battery_0_bar_rounded,
+      icon: FontAwesomeIcons.batteryThreeQuarters,
       value: 56,
       widget: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),

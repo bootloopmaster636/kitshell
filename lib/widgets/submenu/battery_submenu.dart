@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/widgets/utility.dart';
 
@@ -7,10 +8,10 @@ class BatterySubmenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Submenu(
-      icon: Icons.battery_0_bar_rounded,
+    return const Submenu(
+      icon: FontAwesomeIcons.batteryThreeQuarters,
       title: 'Battery',
-      body: const Padding(
+      body: Padding(
         padding: EdgeInsets.symmetric(horizontal: panelHeight / 4),
         child: Text('Work In Progress :D'),
       ),

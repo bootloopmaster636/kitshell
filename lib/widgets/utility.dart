@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
 
@@ -54,7 +55,7 @@ class Submenu extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: panelHeight / 3, vertical: panelHeight / 4),
               child: Row(
                 children: [
-                  Icon(
+                  FaIcon(
                     icon,
                     size: panelHeight / 2.5,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -146,9 +147,9 @@ class HoverRevealer extends HookWidget {
               backgroundColor: Theme.of(context).colorScheme.primary,
               largeSize: 12,
               textStyle: const TextStyle(fontSize: 8),
-              child: Icon(
+              child: FaIcon(
                 icon,
-                size: panelHeight / 2.5,
+                size: panelHeight / 3,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
