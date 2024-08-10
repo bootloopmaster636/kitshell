@@ -2,7 +2,7 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kitshell/logic/time.dart';
+import 'package:kitshell/logic/time/time.dart';
 
 class TimeWidget extends StatelessWidget {
   const TimeWidget({Key? key}) : super(key: key);

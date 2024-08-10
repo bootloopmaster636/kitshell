@@ -20,7 +20,7 @@ class TimeLogic extends _$TimeLogic {
     return Time(time: DateTime.now());
   }
 
-  void startTime() {
+  void startPolling() {
     Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       state = Time(time: DateTime.now());
     });

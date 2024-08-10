@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:kitshell/logic/battery/battery.dart';
 import 'package:kitshell/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/widgets/utility.dart';
 
@@ -105,29 +107,23 @@ class VolumePanel extends StatelessWidget {
   }
 }
 
-class BatteryPanel extends StatelessWidget {
+class BatteryPanel extends ConsumerWidget {
   const BatteryPanel({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final batteryInfo = ref.watch(batteryLogicProvider);
     return HoverRevealer(
       icon: FontAwesomeIcons.batteryThreeQuarters,
-      value: 56,
+      value: batteryInfo.value?.level,
       widget: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
         child: Row(
           children: [
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('75%'),
-                  Text('0.5W'),
-                ],
-              ),
-            ),
+            Text(batteryInfo.value?.state.toString().split('.').last ?? 'Status not available'),
+            const Spacer(),
             IconButton(
               onPressed: () {
                 Navigator.push(

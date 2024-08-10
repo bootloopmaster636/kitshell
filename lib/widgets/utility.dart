@@ -17,7 +17,7 @@ class Submenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         child: Row(
           children: [
             InkWell(

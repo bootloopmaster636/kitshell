@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
-import 'package:kitshell/logic/time.dart';
+import 'package:kitshell/logic/time/time.dart';
 import 'package:kitshell/widgets/main/quick_settings.dart';
 import 'package:kitshell/widgets/main/time.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
+
+import 'logic/battery/battery.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,7 +92,8 @@ class Init extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(timeLogicProvider.notifier).startTime();
+    ref.read(timeLogicProvider.notifier).startPolling();
+    ref.read(batteryLogicProvider.notifier).startPolling();
 
     return child;
   }
