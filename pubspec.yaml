@@ -27,6 +27,7 @@ dependencies:
   battery_plus: ^5.0.3
   font_awesome_flutter: ^10.7.0
   process_run: ^1.1.0
+  logger: ^2.4.0
 
 dev_dependencies:
   flutter_test:

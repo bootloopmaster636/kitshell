@@ -58,19 +58,24 @@ class BatteryLogic extends _$BatteryLogic {
 class PowerProfilesLogic extends _$PowerProfilesLogic {
   @override
   Future<PowerProfilesInfo> build() async {
+    await getPowerProfile();
+    return state.value!;
+  }
+
+  Future<void> getPowerProfile() async {
     final shell = Shell();
     final result = await shell.run('powerprofilesctl get');
-    final profile = result.last.toString().trim();
+    final profile = result.outText;
 
     switch (profile) {
       case 'power-saver':
-        return const PowerProfilesInfo(profile: PowerProfiles.powersave);
+        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.powersave));
       case 'performance':
-        return const PowerProfilesInfo(profile: PowerProfiles.performance);
+        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.performance));
       case 'balanced':
-        return const PowerProfilesInfo(profile: PowerProfiles.balanced);
+        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.balanced));
       default:
-        return const PowerProfilesInfo(profile: PowerProfiles.balanced);
+        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.balanced));
     }
   }
 
