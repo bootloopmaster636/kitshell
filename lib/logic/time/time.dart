@@ -4,25 +4,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'time.freezed.dart';
+
 part 'time.g.dart';
 
 @Freezed()
-class Time with _$Time {
-  const factory Time({
+class TimeInfo with _$TimeInfo {
+  const factory TimeInfo({
     required DateTime time,
-  }) = _Time;
+  }) = _TimeInfo;
 }
 
 @riverpod
-class TimeLogic extends _$TimeLogic {
+class TimeInfoLogic extends _$TimeInfoLogic {
   @override
-  Time build() {
-    return Time(time: DateTime.now());
+  TimeInfo build() {
+    return TimeInfo(time: DateTime.now());
   }
 
   void startPolling() {
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      state = Time(time: DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      state = TimeInfo(time: DateTime.now());
     });
   }
 }

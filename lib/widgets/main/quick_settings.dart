@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/logic/battery/battery.dart';
+import 'package:kitshell/logic/sound/sound.dart';
 import 'package:kitshell/widgets/submenu/battery_submenu.dart';
+import 'package:kitshell/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/widgets/utility.dart';
-
-import '../submenu/wifi_submenu.dart';
 
 class QuickSettingsContainer extends StatelessWidget {
   const QuickSettingsContainer({super.key});
@@ -87,19 +89,23 @@ class BrightnessPanel extends StatelessWidget {
   }
 }
 
-class VolumePanel extends StatelessWidget {
+class VolumePanel extends HookConsumerWidget {
   const VolumePanel({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final soundInfo = ref.watch(soundLogicProvider).value;
+
     return HoverRevealer(
       icon: FontAwesomeIcons.volumeHigh,
-      value: 56,
+      value: ((soundInfo?.volume ?? 0) * 100).toInt(),
       widget: Slider(
-        value: 0.5,
-        onChanged: (value) {},
+        value: soundInfo?.volume ?? 0,
+        onChanged: (value) {
+          ref.read(soundLogicProvider.notifier).setVolume(value);
+        },
         activeColor: Theme.of(context).colorScheme.onSurface,
         inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
       ),
@@ -116,7 +122,7 @@ class BatteryPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final batteryInfo = ref.watch(batteryLogicProvider);
     return HoverRevealer(
-      icon: FontAwesomeIcons.batteryThreeQuarters,
+      icon: batteryInfo.value?.icon ?? FontAwesomeIcons.batteryEmpty,
       value: batteryInfo.value?.level,
       widget: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),

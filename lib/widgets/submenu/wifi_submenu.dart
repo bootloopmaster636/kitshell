@@ -4,7 +4,7 @@ import 'package:kitshell/const.dart';
 import 'package:kitshell/widgets/utility.dart';
 
 class WifiSubmenu extends StatelessWidget {
-  const WifiSubmenu({Key? key}) : super(key: key);
+  const WifiSubmenu({super.key});
 
   @override
   Widget build(BuildContext context) {

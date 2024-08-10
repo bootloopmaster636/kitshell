@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/logic/time/time.dart';
 
 class TimeWidget extends StatelessWidget {
-  const TimeWidget({Key? key}) : super(key: key);
+  const TimeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,14 @@ class TimePart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = ref.watch(timeLogicProvider);
+    final time = ref.watch(timeInfoLogicProvider);
     return DefaultTextStyle(
       style: TextStyle(
-          fontFamily: GoogleFonts.poppins().fontFamily,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onPrimaryContainer),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
       child: Row(
         children: [
           AnimatedFlipCounter(
@@ -74,12 +75,13 @@ class DatePart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = ref.watch(timeLogicProvider);
+    final time = ref.watch(timeInfoLogicProvider);
     return DefaultTextStyle(
       style: TextStyle(
-          fontFamily: GoogleFonts.poppins().fontFamily,
-          fontSize: 10,
-          color: Theme.of(context).colorScheme.onPrimaryContainer),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        fontSize: 10,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
       child: Row(
         children: [
           AnimatedFlipCounter(

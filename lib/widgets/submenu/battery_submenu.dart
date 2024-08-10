@@ -7,7 +7,7 @@ import 'package:kitshell/logic/battery/battery.dart';
 import 'package:kitshell/widgets/utility.dart';
 
 class BatterySubmenu extends StatelessWidget {
-  const BatterySubmenu({Key? key}) : super(key: key);
+  const BatterySubmenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class BatterySubmenu extends StatelessWidget {
 }
 
 class PowerProfilesSettings extends ConsumerWidget {
-  const PowerProfilesSettings({Key? key}) : super(key: key);
+  const PowerProfilesSettings({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

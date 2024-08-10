@@ -18,8 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$BatteryInfo {
   int get level => throw _privateConstructorUsedError;
   BatteryState get state => throw _privateConstructorUsedError;
+  IconData get icon => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BatteryInfoCopyWith<BatteryInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -30,7 +33,7 @@ abstract class $BatteryInfoCopyWith<$Res> {
           BatteryInfo value, $Res Function(BatteryInfo) then) =
       _$BatteryInfoCopyWithImpl<$Res, BatteryInfo>;
   @useResult
-  $Res call({int level, BatteryState state});
+  $Res call({int level, BatteryState state, IconData icon});
 }
 
 /// @nodoc
@@ -43,11 +46,14 @@ class _$BatteryInfoCopyWithImpl<$Res, $Val extends BatteryInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? level = null,
     Object? state = null,
+    Object? icon = null,
   }) {
     return _then(_value.copyWith(
       level: null == level
@@ -58,6 +64,10 @@ class _$BatteryInfoCopyWithImpl<$Res, $Val extends BatteryInfo>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as BatteryState,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as IconData,
     ) as $Val);
   }
 }
@@ -70,7 +80,7 @@ abstract class _$$BatteryInfoImplCopyWith<$Res>
       __$$BatteryInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int level, BatteryState state});
+  $Res call({int level, BatteryState state, IconData icon});
 }
 
 /// @nodoc
@@ -81,11 +91,14 @@ class __$$BatteryInfoImplCopyWithImpl<$Res>
       _$BatteryInfoImpl _value, $Res Function(_$BatteryInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? level = null,
     Object? state = null,
+    Object? icon = null,
   }) {
     return _then(_$BatteryInfoImpl(
       level: null == level
@@ -96,6 +109,10 @@ class __$$BatteryInfoImplCopyWithImpl<$Res>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as BatteryState,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as IconData,
     ));
   }
 }
@@ -103,16 +120,19 @@ class __$$BatteryInfoImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$BatteryInfoImpl implements _BatteryInfo {
-  const _$BatteryInfoImpl({required this.level, required this.state});
+  const _$BatteryInfoImpl(
+      {required this.level, required this.state, required this.icon});
 
   @override
   final int level;
   @override
   final BatteryState state;
+  @override
+  final IconData icon;
 
   @override
   String toString() {
-    return 'BatteryInfo(level: $level, state: $state)';
+    return 'BatteryInfo(level: $level, state: $state, icon: $icon)';
   }
 
   @override
@@ -121,13 +141,16 @@ class _$BatteryInfoImpl implements _BatteryInfo {
         (other.runtimeType == runtimeType &&
             other is _$BatteryInfoImpl &&
             (identical(other.level, level) || other.level == level) &&
-            (identical(other.state, state) || other.state == state));
+            (identical(other.state, state) || other.state == state) &&
+            (identical(other.icon, icon) || other.icon == icon));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, level, state);
+  int get hashCode => Object.hash(runtimeType, level, state, icon);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BatteryInfoImplCopyWith<_$BatteryInfoImpl> get copyWith =>
@@ -137,14 +160,20 @@ class _$BatteryInfoImpl implements _BatteryInfo {
 abstract class _BatteryInfo implements BatteryInfo {
   const factory _BatteryInfo(
       {required final int level,
-      required final BatteryState state}) = _$BatteryInfoImpl;
+      required final BatteryState state,
+      required final IconData icon}) = _$BatteryInfoImpl;
 
   @override
   int get level;
   @override
   BatteryState get state;
   @override
-  @JsonKey(ignore: true)
+  IconData get icon;
+
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BatteryInfoImplCopyWith<_$BatteryInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -153,7 +182,9 @@ abstract class _BatteryInfo implements BatteryInfo {
 mixin _$PowerProfilesInfo {
   PowerProfiles get profile => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PowerProfilesInfoCopyWith<PowerProfilesInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -177,6 +208,8 @@ class _$PowerProfilesInfoCopyWithImpl<$Res, $Val extends PowerProfilesInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -210,6 +243,8 @@ class __$$PowerProfilesInfoImplCopyWithImpl<$Res>
       $Res Function(_$PowerProfilesInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -248,7 +283,9 @@ class _$PowerProfilesInfoImpl implements _PowerProfilesInfo {
   @override
   int get hashCode => Object.hash(runtimeType, profile);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PowerProfilesInfoImplCopyWith<_$PowerProfilesInfoImpl> get copyWith =>
@@ -262,8 +299,11 @@ abstract class _PowerProfilesInfo implements PowerProfilesInfo {
 
   @override
   PowerProfiles get profile;
+
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PowerProfilesInfoImplCopyWith<_$PowerProfilesInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

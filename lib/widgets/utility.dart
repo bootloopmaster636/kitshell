@@ -143,9 +143,10 @@ class HoverRevealer extends HookWidget {
             alignment: Alignment.center,
             child: Badge(
               label: value == null ? null : Text(value.toString()),
-              smallSize: 0,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              largeSize: 12,
+              smallSize: 0,
+              largeSize: 10,
+              offset: const Offset(4, -8),
               textStyle: const TextStyle(fontSize: 8),
               child: FaIcon(
                 icon,

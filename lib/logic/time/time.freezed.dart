@@ -15,31 +15,36 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$Time {
+mixin _$TimeInfo {
   DateTime get time => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
-  $TimeCopyWith<Time> get copyWith => throw _privateConstructorUsedError;
+  /// Create a copy of TimeInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TimeInfoCopyWith<TimeInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TimeCopyWith<$Res> {
-  factory $TimeCopyWith(Time value, $Res Function(Time) then) =
-      _$TimeCopyWithImpl<$Res, Time>;
+abstract class $TimeInfoCopyWith<$Res> {
+  factory $TimeInfoCopyWith(TimeInfo value, $Res Function(TimeInfo) then) =
+      _$TimeInfoCopyWithImpl<$Res, TimeInfo>;
   @useResult
   $Res call({DateTime time});
 }
 
 /// @nodoc
-class _$TimeCopyWithImpl<$Res, $Val extends Time>
-    implements $TimeCopyWith<$Res> {
-  _$TimeCopyWithImpl(this._value, this._then);
+class _$TimeInfoCopyWithImpl<$Res, $Val extends TimeInfo>
+    implements $TimeInfoCopyWith<$Res> {
+  _$TimeInfoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TimeInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -55,28 +60,32 @@ class _$TimeCopyWithImpl<$Res, $Val extends Time>
 }
 
 /// @nodoc
-abstract class _$$TimeImplCopyWith<$Res> implements $TimeCopyWith<$Res> {
-  factory _$$TimeImplCopyWith(
-          _$TimeImpl value, $Res Function(_$TimeImpl) then) =
-      __$$TimeImplCopyWithImpl<$Res>;
+abstract class _$$TimeInfoImplCopyWith<$Res>
+    implements $TimeInfoCopyWith<$Res> {
+  factory _$$TimeInfoImplCopyWith(
+          _$TimeInfoImpl value, $Res Function(_$TimeInfoImpl) then) =
+      __$$TimeInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({DateTime time});
 }
 
 /// @nodoc
-class __$$TimeImplCopyWithImpl<$Res>
-    extends _$TimeCopyWithImpl<$Res, _$TimeImpl>
-    implements _$$TimeImplCopyWith<$Res> {
-  __$$TimeImplCopyWithImpl(_$TimeImpl _value, $Res Function(_$TimeImpl) _then)
+class __$$TimeInfoImplCopyWithImpl<$Res>
+    extends _$TimeInfoCopyWithImpl<$Res, _$TimeInfoImpl>
+    implements _$$TimeInfoImplCopyWith<$Res> {
+  __$$TimeInfoImplCopyWithImpl(
+      _$TimeInfoImpl _value, $Res Function(_$TimeInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TimeInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? time = null,
   }) {
-    return _then(_$TimeImpl(
+    return _then(_$TimeInfoImpl(
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -87,42 +96,47 @@ class __$$TimeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TimeImpl implements _Time {
-  const _$TimeImpl({required this.time});
+class _$TimeInfoImpl implements _TimeInfo {
+  const _$TimeInfoImpl({required this.time});
 
   @override
   final DateTime time;
 
   @override
   String toString() {
-    return 'Time(time: $time)';
+    return 'TimeInfo(time: $time)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TimeImpl &&
+            other is _$TimeInfoImpl &&
             (identical(other.time, time) || other.time == time));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, time);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TimeInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$TimeImplCopyWith<_$TimeImpl> get copyWith =>
-      __$$TimeImplCopyWithImpl<_$TimeImpl>(this, _$identity);
+  _$$TimeInfoImplCopyWith<_$TimeInfoImpl> get copyWith =>
+      __$$TimeInfoImplCopyWithImpl<_$TimeInfoImpl>(this, _$identity);
 }
 
-abstract class _Time implements Time {
-  const factory _Time({required final DateTime time}) = _$TimeImpl;
+abstract class _TimeInfo implements TimeInfo {
+  const factory _TimeInfo({required final DateTime time}) = _$TimeInfoImpl;
 
   @override
   DateTime get time;
+
+  /// Create a copy of TimeInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$TimeImplCopyWith<_$TimeImpl> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TimeInfoImplCopyWith<_$TimeInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

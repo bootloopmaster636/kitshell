@@ -6,19 +6,21 @@ part of 'time.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timeLogicHash() => r'90d3c74251a2837989d54b84ef1a6383af2230c4';
+String _$timeInfoLogicHash() => r'51922835385170900cc7987cae8d46dde3af3c73';
 
-/// See also [TimeLogic].
-@ProviderFor(TimeLogic)
-final timeLogicProvider = AutoDisposeNotifierProvider<TimeLogic, Time>.internal(
-  TimeLogic.new,
-  name: r'timeLogicProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$timeLogicHash,
+/// See also [TimeInfoLogic].
+@ProviderFor(TimeInfoLogic)
+final timeInfoLogicProvider =
+    AutoDisposeNotifierProvider<TimeInfoLogic, TimeInfo>.internal(
+  TimeInfoLogic.new,
+  name: r'timeInfoLogicProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$timeInfoLogicHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TimeLogic = AutoDisposeNotifier<Time>;
+typedef _$TimeInfoLogic = AutoDisposeNotifier<TimeInfo>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
