@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/logic/battery/battery.dart';
+import 'package:kitshell/logic/brightness/brightness.dart';
 import 'package:kitshell/logic/sound/sound.dart';
 import 'package:kitshell/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/widgets/submenu/wifi_submenu.dart';
@@ -69,19 +70,23 @@ class WifiPanel extends StatelessWidget {
   }
 }
 
-class BrightnessPanel extends StatelessWidget {
+class BrightnessPanel extends ConsumerWidget {
   const BrightnessPanel({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final brightnessInfo = ref.watch(brightnessLogicProvider);
     return HoverRevealer(
       icon: FontAwesomeIcons.sun,
-      value: 56,
+      value: ((brightnessInfo.value?.brightness ?? 0) / (brightnessInfo.value?.maxBrightness ?? 100) * 100).toInt(),
       widget: Slider(
-        value: 0.5,
-        onChanged: (value) {},
+        value: brightnessInfo.value?.brightness.toDouble() ?? 50,
+        max: brightnessInfo.value?.maxBrightness.toDouble() ?? 100,
+        onChanged: (value) {
+          ref.read(brightnessLogicProvider.notifier).setBrightness(value.toInt());
+        },
         activeColor: Theme.of(context).colorScheme.onSurface,
         inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
       ),

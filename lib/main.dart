@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/logic/battery/battery.dart';
+import 'package:kitshell/logic/brightness/brightness.dart';
 import 'package:kitshell/logic/sound/sound.dart';
 import 'package:kitshell/logic/time/time.dart';
 import 'package:kitshell/widgets/main/quick_settings.dart';
@@ -95,6 +96,7 @@ class Init extends ConsumerWidget {
     ref.read(timeInfoLogicProvider.notifier).startPolling();
     ref.read(batteryLogicProvider.notifier).startPolling();
     ref.read(soundLogicProvider.notifier).startPolling();
+    ref.read(brightnessLogicProvider.notifier).startPolling();
 
     return child;
   }
