@@ -122,53 +122,70 @@ class HoverRevealer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    return MouseRegion(
-      onHover: (event) {
-        isHovered.value = true;
-      },
-      onExit: (event) {
-        isHovered.value = false;
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCirc,
-            width: isHovered.value ? panelHeight : panelHeight - 16,
-            height: panelHeight,
-            color: isHovered.value
-                ? Theme.of(context).colorScheme.surface
-                : Theme.of(context).colorScheme.primaryContainer,
-            alignment: Alignment.center,
-            child: Badge(
-              label: value == null ? null : Text(value.toString()),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              smallSize: 0,
-              largeSize: 10,
-              offset: const Offset(4, -8),
-              textStyle: const TextStyle(fontSize: 8),
-              child: FaIcon(
-                icon,
-                size: panelHeight / 3,
-                color: Theme.of(context).colorScheme.onSurface,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: MouseRegion(
+        onHover: (event) {
+          isHovered.value = true;
+        },
+        onExit: (event) {
+          isHovered.value = false;
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCirc,
+              width: isHovered.value ? panelHeight : panelHeight - 16,
+              height: panelHeight,
+              color: isHovered.value
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondaryContainer,
+              alignment: Alignment.center,
+              child: Badge(
+                label: value == null
+                    ? null
+                    : Text(
+                        value.toString(),
+                        style: TextStyle(
+                          color: isHovered.value
+                              ? Theme.of(context).colorScheme.onSecondaryContainer
+                              : Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                backgroundColor: isHovered.value
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSecondaryContainer,
+                smallSize: 0,
+                largeSize: 10,
+                offset: const Offset(4, -8),
+                textStyle: const TextStyle(fontSize: 8),
+                child: FaIcon(
+                  icon,
+                  size: panelHeight / 3,
+                  color: isHovered.value
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
               ),
             ),
-          ),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCirc,
-            height: panelHeight,
-            width: isHovered.value ? panelWidth / 8 : 0,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(0),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCirc,
+              height: panelHeight,
+              width: isHovered.value ? panelWidth / 8 : 0,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(0),
+              ),
+              clipBehavior: Clip.hardEdge,
+              alignment: Alignment.centerLeft,
+              child: widget,
             ),
-            clipBehavior: Clip.hardEdge,
-            alignment: Alignment.centerLeft,
-            child: widget,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

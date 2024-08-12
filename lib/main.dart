@@ -60,7 +60,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         child: const MainContent(),
       ),
     );
@@ -79,7 +79,7 @@ class MainContent extends StatelessWidget {
       child: const Row(
         children: [
           TimeWidget(),
-          Gap(8),
+          Gap(4),
           QuickSettingsContainer(),
         ],
       ),
