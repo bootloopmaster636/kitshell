@@ -31,10 +31,9 @@ class SoundLogic extends _$SoundLogic {
   }
 
   Future<void> startPolling() async {
-    Timer.periodic(const Duration(seconds: 2), (timer) async {
-      // get the volume and mute status
-      final shell = Shell(verbose: false);
+    final shell = Shell(verbose: false);
 
+    Timer.periodic(const Duration(seconds: 5), (timer) async {
       final stdout = await shell.run('wpctl get-volume @DEFAULT_AUDIO_SINK@');
       final volume = double.parse(stdout.outText.split(' ')[1]);
 

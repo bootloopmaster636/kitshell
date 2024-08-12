@@ -34,9 +34,10 @@ class BrightnessLogic extends _$BrightnessLogic {
   }
 
   Future<void> startPolling() async {
-    Timer.periodic(const Duration(seconds: 2), (timer) async {
+    final shell = Shell(verbose: false);
+
+    Timer.periodic(const Duration(seconds: 5), (timer) async {
       // get the volume and mute status
-      final shell = Shell(verbose: false);
       final stdout = await shell.run('brightnessctl g');
       final brightness = int.parse(stdout.outText);
 
