@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
-import 'package:kitshell/logic/battery/battery.dart';
-import 'package:kitshell/logic/brightness/brightness.dart';
-import 'package:kitshell/logic/sound/sound.dart';
-import 'package:kitshell/logic/time/time.dart';
-import 'package:kitshell/widgets/main/quick_settings.dart';
-import 'package:kitshell/widgets/main/time.dart';
+import 'package:kitshell/panel/logic/battery/battery.dart';
+import 'package:kitshell/panel/logic/brightness/brightness.dart';
+import 'package:kitshell/panel/logic/sound/sound.dart';
+import 'package:kitshell/panel/logic/time/time.dart';
+import 'package:kitshell/panel/widgets/main/quick_settings.dart';
+import 'package:kitshell/panel/widgets/main/time.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
@@ -23,6 +23,7 @@ Future<void> main() async {
   await waylandLayerShellPlugin.initialize(panelWidth.toInt(), panelHeight.toInt());
   await waylandLayerShellPlugin.setAnchor(ShellEdge.edgeBottom, true);
   await waylandLayerShellPlugin.setExclusiveZone(panelHeight.toInt());
+
   runApp(const ProviderScope(child: App()));
 }
 
@@ -59,7 +60,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: const MainContent(),
       ),
     );
