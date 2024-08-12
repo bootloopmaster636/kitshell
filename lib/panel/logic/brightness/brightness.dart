@@ -20,7 +20,7 @@ class BrightnessLogic extends _$BrightnessLogic {
   @override
   Future<BrightnessInfo?> build() async {
     // get the volume and mute status
-    final shell = Shell();
+    final shell = Shell(verbose: false);
     final stdout = await shell.run('brightnessctl g');
     final brightness = int.parse(stdout.outText);
 
@@ -36,7 +36,7 @@ class BrightnessLogic extends _$BrightnessLogic {
   Future<void> startPolling() async {
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       // get the volume and mute status
-      final shell = Shell();
+      final shell = Shell(verbose: false);
       final stdout = await shell.run('brightnessctl g');
       final brightness = int.parse(stdout.outText);
 
@@ -57,6 +57,6 @@ class BrightnessLogic extends _$BrightnessLogic {
       ),
     );
 
-    unawaited(Shell().run('brightnessctl s $brightness'));
+    unawaited(Shell(verbose: false, options: ShellOptions(noStdoutResult: true)).run('brightnessctl s $brightness'));
   }
 }

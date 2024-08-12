@@ -6,7 +6,7 @@ part of 'brightness.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$brightnessLogicHash() => r'a2777f250142d6c60b03da6ffacdcdfc0893029c';
+String _$brightnessLogicHash() => r'813bbfc63118698992bae5ef38541128dcd00e6d';
 
 /// See also [BrightnessLogic].
 @ProviderFor(BrightnessLogic)

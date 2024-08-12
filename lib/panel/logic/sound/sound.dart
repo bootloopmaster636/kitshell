@@ -24,18 +24,17 @@ class SoundLogic extends _$SoundLogic {
     final stdout = await shell.run('wpctl get-volume @DEFAULT_AUDIO_SINK@');
     final volume = double.parse(stdout.outText.split(' ')[1]);
 
-    state = AsyncValue.data(
-      SoundInfo(
-        volume: volume,
-        isMuted: false,
-      ),
+    return SoundInfo(
+      volume: volume,
+      isMuted: false,
     );
   }
 
   Future<void> startPolling() async {
     Timer.periodic(const Duration(seconds: 2), (timer) async {
       // get the volume and mute status
-      final shell = Shell();
+      final shell = Shell(verbose: false);
+
       final stdout = await shell.run('wpctl get-volume @DEFAULT_AUDIO_SINK@');
       final volume = double.parse(stdout.outText.split(' ')[1]);
 
@@ -56,6 +55,7 @@ class SoundLogic extends _$SoundLogic {
       ),
     );
 
-    unawaited(Shell().run('wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ $volume'));
+    unawaited(Shell(verbose: false, options: ShellOptions(noStdoutResult: true))
+        .run('wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ $volume'));
   }
 }

@@ -6,7 +6,7 @@ part of 'sound.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$soundLogicHash() => r'3fada7251fc1c134fcf0b2adbc0c835b3611082e';
+String _$soundLogicHash() => r'c35678eef4781370bbc1aeee39e68da63d26c1e2';
 
 /// See also [SoundLogic].
 @ProviderFor(SoundLogic)

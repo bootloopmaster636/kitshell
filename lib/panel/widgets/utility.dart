@@ -138,8 +138,8 @@ class HoverRevealer extends HookWidget {
             width: isHovered.value ? panelHeight : panelHeight - 16,
             height: panelHeight,
             color: isHovered.value
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : Theme.of(context).colorScheme.surface,
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).colorScheme.primaryContainer,
             alignment: Alignment.center,
             child: Badge(
               label: value == null ? null : Text(value.toString()),
@@ -161,7 +161,7 @@ class HoverRevealer extends HookWidget {
             height: panelHeight,
             width: isHovered.value ? panelWidth / 8 : 0,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondaryContainer,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(0),
             ),
             clipBehavior: Clip.hardEdge,

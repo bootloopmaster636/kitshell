@@ -2,7 +2,7 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kitshell/logic/time/time.dart';
+import 'package:kitshell/panel/logic/time/time.dart';
 
 class TimeWidget extends StatelessWidget {
   const TimeWidget({super.key});
@@ -11,7 +11,7 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.primary,
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Column(
@@ -41,7 +41,7 @@ class TimePart extends ConsumerWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       child: Row(
         children: [
@@ -80,7 +80,7 @@ class DatePart extends ConsumerWidget {
       style: TextStyle(
         fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 10,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       child: Row(
         children: [

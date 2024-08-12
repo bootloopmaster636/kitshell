@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kitshell/const.dart';
-import 'package:kitshell/widgets/utility.dart';
+import 'package:kitshell/panel/widgets/utility.dart';
 
 class WifiSubmenu extends StatelessWidget {
   const WifiSubmenu({super.key});
