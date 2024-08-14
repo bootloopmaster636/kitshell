@@ -44,9 +44,7 @@ class App extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       themeMode: ThemeMode.dark,
-      home: const Init(
-        child: Main(),
-      ),
+      home: const Main(),
     );
   }
 }
@@ -87,6 +85,7 @@ class MainContent extends StatelessWidget {
   }
 }
 
+@Deprecated('Using build() in logic instead')
 class Init extends ConsumerWidget {
   const Init({required this.child, super.key});
 

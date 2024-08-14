@@ -28,6 +28,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   process_run: ^1.1.0
   logger: ^2.4.0
+  desktop_multi_window: ^0.2.0
 
 dev_dependencies:
   flutter_test:

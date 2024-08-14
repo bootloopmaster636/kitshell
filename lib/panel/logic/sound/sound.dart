@@ -19,13 +19,10 @@ class SoundInfo with _$SoundInfo {
 class SoundLogic extends _$SoundLogic {
   @override
   Future<SoundInfo?> build() async {
-    // get the volume and mute status
-    final shell = Shell();
-    final stdout = await shell.run('wpctl get-volume @DEFAULT_AUDIO_SINK@');
-    final volume = double.parse(stdout.outText.split(' ')[1]);
+    await startPolling();
 
-    return SoundInfo(
-      volume: volume,
+    return const SoundInfo(
+      volume: 0,
       isMuted: false,
     );
   }

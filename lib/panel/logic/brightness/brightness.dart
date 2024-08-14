@@ -19,16 +19,14 @@ class BrightnessInfo with _$BrightnessInfo {
 class BrightnessLogic extends _$BrightnessLogic {
   @override
   Future<BrightnessInfo?> build() async {
-    // get the volume and mute status
     final shell = Shell(verbose: false);
-    final stdout = await shell.run('brightnessctl g');
-    final brightness = int.parse(stdout.outText);
-
     final stdoutMax = await shell.run('brightnessctl m');
     final maxBrightness = int.parse(stdoutMax.outText);
 
+    await startPolling();
+
     return BrightnessInfo(
-      brightness: brightness,
+      brightness: 0,
       maxBrightness: maxBrightness,
     );
   }

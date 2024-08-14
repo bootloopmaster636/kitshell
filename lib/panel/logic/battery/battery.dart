@@ -32,11 +32,12 @@ class PowerProfilesInfo with _$PowerProfilesInfo {
 class BatteryLogic extends _$BatteryLogic {
   @override
   Future<BatteryInfo> build() async {
-    final battery = Battery();
+    await startPolling();
 
-    return Future.value(
-      BatteryInfo(
-        level: await battery.batteryLevel, state: await battery.batteryState, icon: FontAwesomeIcons.batteryEmpty,),
+    return const BatteryInfo(
+      level: 0,
+      state: BatteryState.unknown,
+      icon: FontAwesomeIcons.batteryEmpty,
     );
   }
 
@@ -59,11 +60,13 @@ class BatteryLogic extends _$BatteryLogic {
         icon = FontAwesomeIcons.batteryEmpty;
       }
 
-      state = AsyncValue.data(BatteryInfo(
-        level: batteryLevel,
-        state: batteryState,
-        icon: icon,
-      ),);
+      state = AsyncValue.data(
+        BatteryInfo(
+          level: batteryLevel,
+          state: batteryState,
+          icon: icon,
+        ),
+      );
     });
   }
 }

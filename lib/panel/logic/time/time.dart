@@ -18,6 +18,7 @@ class TimeInfo with _$TimeInfo {
 class TimeInfoLogic extends _$TimeInfoLogic {
   @override
   TimeInfo build() {
+    startPolling();
     return TimeInfo(time: DateTime.now());
   }
 
