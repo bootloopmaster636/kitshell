@@ -52,6 +52,6 @@ class SoundLogic extends _$SoundLogic {
     );
 
     unawaited(Shell(verbose: false, options: ShellOptions(noStdoutResult: true))
-        .run('wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ $volume'));
+        .run('wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ $volume'),);
   }
 }

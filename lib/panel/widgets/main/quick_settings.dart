@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/panel/logic/battery/battery.dart';
-import 'package:kitshell/panel/logic/brightness/brightness.dart';
-import 'package:kitshell/panel/logic/sound/sound.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
+
+import '../../logic/battery/battery.dart';
+import '../../logic/brightness/brightness.dart';
+import '../../logic/sound/sound.dart';
 
 class QuickSettingsContainer extends StatelessWidget {
   const QuickSettingsContainer({super.key});

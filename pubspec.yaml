@@ -29,6 +29,9 @@ dependencies:
   process_run: ^1.1.0
   logger: ^2.4.0
   desktop_multi_window: ^0.2.0
+  rust_lib_kitshell:
+    path: rust_builder
+  flutter_rust_bridge: 2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +43,8 @@ dev_dependencies:
   very_good_analysis: ^6.0.0
   custom_lint: ^0.6.4
   riverpod_generator: ^2.4.0
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

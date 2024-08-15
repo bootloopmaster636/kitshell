@@ -3,17 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
-import 'package:kitshell/panel/logic/battery/battery.dart';
-import 'package:kitshell/panel/logic/brightness/brightness.dart';
-import 'package:kitshell/panel/logic/sound/sound.dart';
-import 'package:kitshell/panel/logic/time/time.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
+import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await RustLib.init();
+
   final waylandLayerShellPlugin = WaylandLayerShell();
   final isSupported = await waylandLayerShellPlugin.initialize(1, 1);
   if (!isSupported) {
@@ -82,22 +81,5 @@ class MainContent extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-@Deprecated('Using build() in logic instead')
-class Init extends ConsumerWidget {
-  const Init({required this.child, super.key});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(timeInfoLogicProvider.notifier).startPolling();
-    ref.read(batteryLogicProvider.notifier).startPolling();
-    ref.read(soundLogicProvider.notifier).startPolling();
-    ref.read(brightnessLogicProvider.notifier).startPolling();
-
-    return child;
   }
 }

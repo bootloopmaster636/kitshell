@@ -6,7 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
 
 class Submenu extends StatelessWidget {
-  const Submenu({required this.icon, required this.title, required this.body, this.action, super.key});
+  const Submenu(
+      {required this.icon,
+      required this.title,
+      required this.body,
+      this.action,
+      super.key,});
 
   final IconData icon;
   final String title;
@@ -52,7 +57,8 @@ class Submenu extends StatelessWidget {
               width: panelWidth / 4,
               height: panelHeight,
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: panelHeight / 3, vertical: panelHeight / 4),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: panelHeight / 3, vertical: panelHeight / 4,),
               child: Row(
                 children: [
                   FaIcon(
@@ -113,7 +119,8 @@ class Submenu extends StatelessWidget {
 }
 
 class HoverRevealer extends HookWidget {
-  const HoverRevealer({required this.icon, required this.widget, this.value, super.key});
+  const HoverRevealer(
+      {required this.icon, required this.widget, this.value, super.key,});
 
   final IconData icon;
   final Widget widget;
@@ -150,7 +157,9 @@ class HoverRevealer extends HookWidget {
                         value.toString(),
                         style: TextStyle(
                           color: isHovered.value
-                              ? Theme.of(context).colorScheme.onSecondaryContainer
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
                               : Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),

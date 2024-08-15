@@ -86,13 +86,17 @@ class PowerProfilesLogic extends _$PowerProfilesLogic {
 
     switch (profile) {
       case 'power-saver':
-        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.powersave));
+        state = const AsyncValue.data(
+            PowerProfilesInfo(profile: PowerProfiles.powersave),);
       case 'performance':
-        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.performance));
+        state = const AsyncValue.data(
+            PowerProfilesInfo(profile: PowerProfiles.performance),);
       case 'balanced':
-        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.balanced));
+        state = const AsyncValue.data(
+            PowerProfilesInfo(profile: PowerProfiles.balanced),);
       default:
-        state = const AsyncValue.data(PowerProfilesInfo(profile: PowerProfiles.balanced));
+        state = const AsyncValue.data(
+            PowerProfilesInfo(profile: PowerProfiles.balanced),);
     }
   }
 

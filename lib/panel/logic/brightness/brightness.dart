@@ -56,6 +56,7 @@ class BrightnessLogic extends _$BrightnessLogic {
       ),
     );
 
-    unawaited(Shell(verbose: false, options: ShellOptions(noStdoutResult: true)).run('brightnessctl s $brightness'));
+    unawaited(Shell(verbose: false, options: ShellOptions(noStdoutResult: true))
+        .run('brightnessctl s $brightness'),);
   }
 }

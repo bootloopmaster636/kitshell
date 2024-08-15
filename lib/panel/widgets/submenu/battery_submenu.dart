@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
-import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
+
+import '../../logic/battery/battery.dart';
 
 class BatterySubmenu extends StatelessWidget {
   const BatterySubmenu({super.key});

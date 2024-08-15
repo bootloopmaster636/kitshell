@@ -19,9 +19,7 @@ mixin _$BrightnessInfo {
   int get brightness => throw _privateConstructorUsedError;
   int get maxBrightness => throw _privateConstructorUsedError;
 
-  /// Create a copy of BrightnessInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $BrightnessInfoCopyWith<BrightnessInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -45,8 +43,6 @@ class _$BrightnessInfoCopyWithImpl<$Res, $Val extends BrightnessInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of BrightnessInfo
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,8 +81,6 @@ class __$$BrightnessInfoImplCopyWithImpl<$Res>
       _$BrightnessInfoImpl _value, $Res Function(_$BrightnessInfoImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BrightnessInfo
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,9 +130,7 @@ class _$BrightnessInfoImpl implements _BrightnessInfo {
   @override
   int get hashCode => Object.hash(runtimeType, brightness, maxBrightness);
 
-  /// Create a copy of BrightnessInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BrightnessInfoImplCopyWith<_$BrightnessInfoImpl> get copyWith =>
@@ -155,11 +147,8 @@ abstract class _BrightnessInfo implements BrightnessInfo {
   int get brightness;
   @override
   int get maxBrightness;
-
-  /// Create a copy of BrightnessInfo
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BrightnessInfoImplCopyWith<_$BrightnessInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

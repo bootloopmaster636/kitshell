@@ -6,7 +6,7 @@ part of 'battery.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$batteryLogicHash() => r'3fbf37159782fab927c948b794284b496a997253';
+String _$batteryLogicHash() => r'5f33c39596d572e7b9cd74e91e1c0fce1922793c';
 
 /// See also [BatteryLogic].
 @ProviderFor(BatteryLogic)
