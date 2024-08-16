@@ -40,4 +40,11 @@ impl BrightnessData {
             Ok(())
         }).expect("Failed to get brightness");
     }
+
+    async fn set_brightness_all(&mut self, brightness: u32) {
+        brightness::brightness_devices().try_for_each(|mut dev| async move {
+            dev.set(brightness).unwrap();
+            Ok(())
+        }).expect("Failed to set brightness");
+    }
 }
