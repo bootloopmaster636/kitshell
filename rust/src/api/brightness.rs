@@ -3,10 +3,10 @@ use brightness::Brightness;
 use flutter_rust_bridge::frb;
 use futures::TryStreamExt;
 
-#[frb(dart_metadata=("freezed"))]
+#[frb(opaque)]
 pub struct BrightnessData {
-    device: Vec<str>,
-    brightness: Vec<u32>,
+    pub device: Vec<str>,
+    pub brightness: Vec<u32>,
 }
 
 impl BrightnessData {
@@ -27,7 +27,7 @@ impl BrightnessData {
         }
     }
 
-    pub async fn get_brightness(&mut self) {
+    async fn get_brightness(&mut self) {
         let mut device_name: Vec<str> = Vec::new();
         let mut device_brightness: Vec<u32> = Vec::new();
 
@@ -41,7 +41,7 @@ impl BrightnessData {
         }).expect("Failed to get brightness");
     }
 
-    async fn set_brightness_all(&mut self, brightness: u32) {
+    pub async fn set_brightness_all(&mut self, brightness: u32) {
         brightness::brightness_devices().try_for_each(|mut dev| async move {
             dev.set(brightness).unwrap();
             Ok(())

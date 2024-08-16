@@ -58,7 +58,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => -1770165748;
+  int get rustContentHash => 739586289;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -69,11 +69,35 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Uint32List crateApiBrightnessBrightnessDataAutoAccessorGetBrightness(
+      {required BrightnessData that});
+
+  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+      {required BrightnessData that});
+
+  void crateApiBrightnessBrightnessDataAutoAccessorSetBrightness(
+      {required BrightnessData that, required Uint32List brightness});
+
+  void crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
+      {required BrightnessData that, required List<String> device});
+
   Stream<BrightnessData> crateApiBrightnessBrightnessDataGetBrightnessStream();
+
+  Future<void> crateApiBrightnessBrightnessDataSetBrightnessAll(
+      {required BrightnessData that, required int brightness});
 
   Future<void> crateApiInitEnableRustStacktrace();
 
   Stream<DateTime> crateApiTimeTimeStream();
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_BrightnessData;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_BrightnessData;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_BrightnessDataPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -85,14 +109,129 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  Uint32List crateApiBrightnessBrightnessDataAutoAccessorGetBrightness(
+      {required BrightnessData that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_32_strict,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiBrightnessBrightnessDataAutoAccessorGetBrightnessConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBrightnessBrightnessDataAutoAccessorGetBrightnessConstMeta =>
+          const TaskConstMeta(
+            debugName: "BrightnessData_auto_accessor_get_brightness",
+            argNames: ["that"],
+          );
+
+  @override
+  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+      {required BrightnessData that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_String,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceConstMeta =>
+          const TaskConstMeta(
+            debugName: "BrightnessData_auto_accessor_get_device",
+            argNames: ["that"],
+          );
+
+  @override
+  void crateApiBrightnessBrightnessDataAutoAccessorSetBrightness(
+      {required BrightnessData that, required Uint32List brightness}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+            that, serializer);
+        sse_encode_list_prim_u_32_strict(brightness, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiBrightnessBrightnessDataAutoAccessorSetBrightnessConstMeta,
+      argValues: [that, brightness],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBrightnessBrightnessDataAutoAccessorSetBrightnessConstMeta =>
+          const TaskConstMeta(
+            debugName: "BrightnessData_auto_accessor_set_brightness",
+            argNames: ["that", "brightness"],
+          );
+
+  @override
+  void crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
+      {required BrightnessData that, required List<String> device}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+            that, serializer);
+        sse_encode_list_String(device, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceConstMeta,
+      argValues: [that, device],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceConstMeta =>
+          const TaskConstMeta(
+            debugName: "BrightnessData_auto_accessor_set_device",
+            argNames: ["that", "device"],
+          );
+
+  @override
   Stream<BrightnessData> crateApiBrightnessBrightnessDataGetBrightnessStream() {
     final sink = RustStreamSink<BrightnessData>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_StreamSink_brightness_data_Sse(sink, serializer);
+        sse_encode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+            sink, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 1, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -108,8 +247,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
       get kCrateApiBrightnessBrightnessDataGetBrightnessStreamConstMeta =>
           const TaskConstMeta(
-            debugName: "brightness_data_get_brightness_stream",
+            debugName: "BrightnessData_get_brightness_stream",
             argNames: ["sink"],
+          );
+
+  @override
+  Future<void> crateApiBrightnessBrightnessDataSetBrightnessAll(
+      {required BrightnessData that, required int brightness}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+            that, serializer);
+        sse_encode_u_32(brightness, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiBrightnessBrightnessDataSetBrightnessAllConstMeta,
+      argValues: [that, brightness],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBrightnessBrightnessDataSetBrightnessAllConstMeta =>
+          const TaskConstMeta(
+            debugName: "BrightnessData_set_brightness_all",
+            argNames: ["that", "brightness"],
           );
 
   @override
@@ -118,7 +286,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -144,7 +312,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_Chrono_Local_Sse(sink, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -162,10 +330,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ["sink"],
       );
 
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_BrightnessData => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_BrightnessData => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData;
+
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AnyhowException(raw as String);
+  }
+
+  @protected
+  BrightnessData
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  BrightnessData
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  BrightnessData
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -175,14 +375,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<DateTime> dco_decode_StreamSink_Chrono_Local_Sse(dynamic raw) {
+  BrightnessData
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RustStreamSink<BrightnessData>
+      dco_decode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+          dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
   }
 
   @protected
-  RustStreamSink<BrightnessData> dco_decode_StreamSink_brightness_data_Sse(
-      dynamic raw) {
+  RustStreamSink<DateTime> dco_decode_StreamSink_Chrono_Local_Sse(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
   }
@@ -191,18 +400,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
-  }
-
-  @protected
-  BrightnessData dco_decode_brightness_data(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return BrightnessData(
-      device: dco_decode_list_String(arr[0]),
-      brightness: dco_decode_list_prim_u_32_strict(arr[1]),
-    );
   }
 
   @protected
@@ -248,10 +445,43 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_usize(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_String(deserializer);
     return AnyhowException(inner);
+  }
+
+  @protected
+  BrightnessData
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  BrightnessData
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  BrightnessData
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -262,14 +492,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<DateTime> sse_decode_StreamSink_Chrono_Local_Sse(
-      SseDeserializer deserializer) {
+  BrightnessData
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BrightnessDataImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RustStreamSink<BrightnessData>
+      sse_decode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+          SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     throw UnimplementedError('Unreachable ()');
   }
 
   @protected
-  RustStreamSink<BrightnessData> sse_decode_StreamSink_brightness_data_Sse(
+  RustStreamSink<DateTime> sse_decode_StreamSink_Chrono_Local_Sse(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     throw UnimplementedError('Unreachable ()');
@@ -280,14 +520,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
-  }
-
-  @protected
-  BrightnessData sse_decode_brightness_data(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_device = sse_decode_list_String(deserializer);
-    var var_brightness = sse_decode_list_prim_u_32_strict(deserializer);
-    return BrightnessData(device: var_device, brightness: var_brightness);
   }
 
   @protected
@@ -340,6 +572,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt sse_decode_usize(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
@@ -359,10 +597,65 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          BrightnessData self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BrightnessDataImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          BrightnessData self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BrightnessDataImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          BrightnessData self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BrightnessDataImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
   void sse_encode_Chrono_Local(DateTime self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_64(
         PlatformInt64Util.from(self.microsecondsSinceEpoch), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
+          BrightnessData self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BrightnessDataImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+          RustStreamSink<BrightnessData> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+        self.setupAndSerialize(
+            codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData,
+          decodeErrorData: sse_decode_AnyhowException,
+        )),
+        serializer);
   }
 
   @protected
@@ -379,30 +672,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_StreamSink_brightness_data_Sse(
-      RustStreamSink<BrightnessData> self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(
-        self.setupAndSerialize(
-            codec: SseCodec(
-          decodeSuccessData: sse_decode_brightness_data,
-          decodeErrorData: sse_decode_AnyhowException,
-        )),
-        serializer);
-  }
-
-  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
-  }
-
-  @protected
-  void sse_encode_brightness_data(
-      BrightnessData self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_list_String(self.device, serializer);
-    sse_encode_list_prim_u_32_strict(self.brightness, serializer);
   }
 
   @protected
@@ -454,6 +726,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_usize(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
@@ -464,4 +742,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self ? 1 : 0);
   }
+}
+
+@sealed
+class BrightnessDataImpl extends RustOpaque implements BrightnessData {
+  // Not to be used by end users
+  BrightnessDataImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  BrightnessDataImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_BrightnessData,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BrightnessData,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BrightnessDataPtr,
+  );
+
+  Uint32List get brightness => RustLib.instance.api
+          .crateApiBrightnessBrightnessDataAutoAccessorGetBrightness(
+        that: this,
+      );
+
+  List<String> get device => RustLib.instance.api
+          .crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+        that: this,
+      );
+
+  set brightness(Uint32List brightness) => RustLib.instance.api
+      .crateApiBrightnessBrightnessDataAutoAccessorSetBrightness(
+          that: this, brightness: brightness);
+
+  set device(List<String> device) => RustLib.instance.api
+      .crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
+          that: this, device: device);
+
+  Future<void> setBrightnessAll({required int brightness}) =>
+      RustLib.instance.api.crateApiBrightnessBrightnessDataSetBrightnessAll(
+          that: this, brightness: brightness);
 }
