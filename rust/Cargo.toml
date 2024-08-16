@@ -10,3 +10,5 @@ crate-type = ["cdylib", "staticlib"]
 flutter_rust_bridge = "=2.2.0"
 anyhow = "1.0.75"
 chrono = "0.4.38"
+futures = "0.3.29"
+brightness = "0.5.0"

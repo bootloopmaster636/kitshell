@@ -20,7 +20,9 @@ mixin _$BatteryInfo {
   BatteryState get state => throw _privateConstructorUsedError;
   IconData get icon => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BatteryInfoCopyWith<BatteryInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$BatteryInfoCopyWithImpl<$Res, $Val extends BatteryInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class __$$BatteryInfoImplCopyWithImpl<$Res>
       _$BatteryInfoImpl _value, $Res Function(_$BatteryInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,7 +148,9 @@ class _$BatteryInfoImpl implements _BatteryInfo {
   @override
   int get hashCode => Object.hash(runtimeType, level, state, icon);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BatteryInfoImplCopyWith<_$BatteryInfoImpl> get copyWith =>
@@ -161,8 +169,11 @@ abstract class _BatteryInfo implements BatteryInfo {
   BatteryState get state;
   @override
   IconData get icon;
+
+  /// Create a copy of BatteryInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BatteryInfoImplCopyWith<_$BatteryInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -171,7 +182,9 @@ abstract class _BatteryInfo implements BatteryInfo {
 mixin _$PowerProfilesInfo {
   PowerProfiles get profile => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PowerProfilesInfoCopyWith<PowerProfilesInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -195,6 +208,8 @@ class _$PowerProfilesInfoCopyWithImpl<$Res, $Val extends PowerProfilesInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -228,6 +243,8 @@ class __$$PowerProfilesInfoImplCopyWithImpl<$Res>
       $Res Function(_$PowerProfilesInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -266,7 +283,9 @@ class _$PowerProfilesInfoImpl implements _PowerProfilesInfo {
   @override
   int get hashCode => Object.hash(runtimeType, profile);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PowerProfilesInfoImplCopyWith<_$PowerProfilesInfoImpl> get copyWith =>
@@ -280,8 +299,11 @@ abstract class _PowerProfilesInfo implements PowerProfilesInfo {
 
   @override
   PowerProfiles get profile;
+
+  /// Create a copy of PowerProfilesInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PowerProfilesInfoImplCopyWith<_$PowerProfilesInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -19,7 +19,9 @@ mixin _$SoundInfo {
   double get volume => throw _privateConstructorUsedError;
   bool get isMuted => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SoundInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SoundInfoCopyWith<SoundInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$SoundInfoCopyWithImpl<$Res, $Val extends SoundInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +84,8 @@ class __$$SoundInfoImplCopyWithImpl<$Res>
       _$SoundInfoImpl _value, $Res Function(_$SoundInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -126,7 +132,9 @@ class _$SoundInfoImpl implements _SoundInfo {
   @override
   int get hashCode => Object.hash(runtimeType, volume, isMuted);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SoundInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SoundInfoImplCopyWith<_$SoundInfoImpl> get copyWith =>
@@ -142,8 +150,11 @@ abstract class _SoundInfo implements SoundInfo {
   double get volume;
   @override
   bool get isMuted;
+
+  /// Create a copy of SoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SoundInfoImplCopyWith<_$SoundInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
