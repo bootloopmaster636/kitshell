@@ -27,7 +27,7 @@ impl BrightnessData {
         }
     }
 
-    async fn get_brightness(&mut self) {
+    pub async fn get_brightness(&mut self) {
         let mut device_name: Vec<str> = Vec::new();
         let mut device_brightness: Vec<u32> = Vec::new();
 
