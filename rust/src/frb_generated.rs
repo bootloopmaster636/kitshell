@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.2.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 739586289;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 594621058;
 
 // Section: executor
 
@@ -92,14 +92,14 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_get_brightness_imp
         },
     )
 }
-fn wire__crate__api__brightness__BrightnessData_auto_accessor_get_device_impl(
+fn wire__crate__api__brightness__BrightnessData_auto_accessor_get_device_name_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "BrightnessData_auto_accessor_get_device",
+            debug_name: "BrightnessData_auto_accessor_get_device_name",
             port: None,
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
@@ -132,7 +132,7 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_get_device_impl(
                     }
                 }
                 let api_that_guard = api_that_guard.unwrap();
-                let output_ok = Result::<_, ()>::Ok(api_that_guard.device.clone())?;
+                let output_ok = Result::<_, ()>::Ok(api_that_guard.device_name.clone())?;
                 Ok(output_ok)
             })())
         },
@@ -189,14 +189,14 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_brightness_imp
         },
     )
 }
-fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_impl(
+fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_name_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "BrightnessData_auto_accessor_set_device",
+            debug_name: "BrightnessData_auto_accessor_set_device_name",
             port: None,
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
@@ -213,7 +213,7 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_impl(
             let api_that = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>,
             >>::sse_decode(&mut deserializer);
-            let api_device = <Vec<String>>::sse_decode(&mut deserializer);
+            let api_device_name = <Vec<String>>::sse_decode(&mut deserializer);
             deserializer.end();
             transform_result_sse::<_, ()>((move || {
                 let mut api_that_guard = None;
@@ -232,7 +232,7 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_impl(
                 let mut api_that_guard = api_that_guard.unwrap();
                 let output_ok = Result::<_, ()>::Ok({
                     {
-                        api_that_guard.device = api_device;
+                        api_that_guard.device_name = api_device_name;
                     };
                 })?;
                 Ok(output_ok)
@@ -240,51 +240,22 @@ fn wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_impl(
         },
     )
 }
-fn wire__crate__api__brightness__BrightnessData_get_brightness_stream_impl(
+fn wire__crate__api__brightness__get_brightness_stream_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "BrightnessData_get_brightness_stream",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_sink = <StreamSink<
-                RustOpaqueMoi<
-                    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>,
-                >,
-                flutter_rust_bridge::for_generated::SseCodec,
-            >>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let output_ok = Result::<_, ()>::Ok({
-                            crate::api::brightness::BrightnessData::get_brightness_stream(api_sink)
-                                .await;
-                        })?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
-            }
-        },
-    )
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "get_brightness_stream", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<BrightnessData,flutter_rust_bridge::for_generated::SseCodec>>::sse_decode(&mut deserializer);deserializer.end(); move |context| async move {
+                    transform_result_sse::<_, ()>((move || async move {
+                         let output_ok = Result::<_,()>::Ok({ crate::api::brightness::get_brightness_stream(api_sink).await; })?;   Ok(output_ok)
+                    })().await)
+                } })
 }
-fn wire__crate__api__brightness__BrightnessData_set_brightness_all_impl(
+fn wire__crate__api__brightness__set_brightness_all_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -292,7 +263,7 @@ fn wire__crate__api__brightness__BrightnessData_set_brightness_all_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "BrightnessData_set_brightness_all",
+            debug_name: "set_brightness_all",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -306,37 +277,13 @@ fn wire__crate__api__brightness__BrightnessData_set_brightness_all_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_that = <RustOpaqueMoi<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>,
-            >>::sse_decode(&mut deserializer);
             let api_brightness = <u32>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
-                        let mut api_that_guard = None;
-                        let decode_indices_ =
-                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
-                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                    &api_that, 0, true,
-                                )],
-                            );
-                        for i in decode_indices_ {
-                            match i {
-                                0 => {
-                                    api_that_guard =
-                                        Some(api_that.lockable_decode_async_ref_mut().await)
-                                }
-                                _ => unreachable!(),
-                            }
-                        }
-                        let mut api_that_guard = api_that_guard.unwrap();
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::brightness::BrightnessData::set_brightness_all(
-                                &mut *api_that_guard,
-                                api_brightness,
-                            )
-                            .await;
+                            crate::api::brightness::set_brightness_all(api_brightness).await;
                         })?;
                         Ok(output_ok)
                     })()
@@ -470,12 +417,7 @@ impl SseDecode
     }
 }
 
-impl SseDecode
-    for StreamSink<
-        RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>>,
-        flutter_rust_bridge::for_generated::SseCodec,
-    >
-{
+impl SseDecode for StreamSink<BrightnessData, flutter_rust_bridge::for_generated::SseCodec> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <String>::sse_decode(deserializer);
@@ -593,18 +535,15 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        5 => wire__crate__api__brightness__BrightnessData_get_brightness_stream_impl(
+        5 => wire__crate__api__brightness__get_brightness_stream_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__brightness__BrightnessData_set_brightness_all_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
+        6 => {
+            wire__crate__api__brightness__set_brightness_all_impl(port, ptr, rust_vec_len, data_len)
+        }
         7 => wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len),
         8 => wire__crate__api__time__time_stream_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
@@ -624,7 +563,7 @@ fn pde_ffi_dispatcher_sync_impl(
             rust_vec_len,
             data_len,
         ),
-        2 => wire__crate__api__brightness__BrightnessData_auto_accessor_get_device_impl(
+        2 => wire__crate__api__brightness__BrightnessData_auto_accessor_get_device_name_impl(
             ptr,
             rust_vec_len,
             data_len,
@@ -634,7 +573,7 @@ fn pde_ffi_dispatcher_sync_impl(
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_impl(
+        4 => wire__crate__api__brightness__BrightnessData_auto_accessor_set_device_name_impl(
             ptr,
             rust_vec_len,
             data_len,
@@ -692,12 +631,7 @@ impl SseEncode
     }
 }
 
-impl SseEncode
-    for StreamSink<
-        RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>>,
-        flutter_rust_bridge::for_generated::SseCodec,
-    >
-{
+impl SseEncode for StreamSink<BrightnessData, flutter_rust_bridge::for_generated::SseCodec> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         unimplemented!("")

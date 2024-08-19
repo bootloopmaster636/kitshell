@@ -58,7 +58,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => 739586289;
+  int get rustContentHash => 594621058;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -72,19 +72,18 @@ abstract class RustLibApi extends BaseApi {
   Uint32List crateApiBrightnessBrightnessDataAutoAccessorGetBrightness(
       {required BrightnessData that});
 
-  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDeviceName(
       {required BrightnessData that});
 
   void crateApiBrightnessBrightnessDataAutoAccessorSetBrightness(
       {required BrightnessData that, required Uint32List brightness});
 
-  void crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
-      {required BrightnessData that, required List<String> device});
+  void crateApiBrightnessBrightnessDataAutoAccessorSetDeviceName(
+      {required BrightnessData that, required List<String> deviceName});
 
-  Stream<BrightnessData> crateApiBrightnessBrightnessDataGetBrightnessStream();
+  Stream<BrightnessData> crateApiBrightnessGetBrightnessStream();
 
-  Future<void> crateApiBrightnessBrightnessDataSetBrightnessAll(
-      {required BrightnessData that, required int brightness});
+  Future<void> crateApiBrightnessSetBrightnessAll({required int brightness});
 
   Future<void> crateApiInitEnableRustStacktrace();
 
@@ -137,7 +136,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+  List<String> crateApiBrightnessBrightnessDataAutoAccessorGetDeviceName(
       {required BrightnessData that}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -151,16 +150,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta:
-          kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceConstMeta,
+          kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceNameConstMeta,
       argValues: [that],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta
-      get kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceConstMeta =>
+      get kCrateApiBrightnessBrightnessDataAutoAccessorGetDeviceNameConstMeta =>
           const TaskConstMeta(
-            debugName: "BrightnessData_auto_accessor_get_device",
+            debugName: "BrightnessData_auto_accessor_get_device_name",
             argNames: ["that"],
           );
 
@@ -194,14 +193,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  void crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
-      {required BrightnessData that, required List<String> device}) {
+  void crateApiBrightnessBrightnessDataAutoAccessorSetDeviceName(
+      {required BrightnessData that, required List<String> deviceName}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
             that, serializer);
-        sse_encode_list_String(device, serializer);
+        sse_encode_list_String(deviceName, serializer);
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
       },
       codec: SseCodec(
@@ -209,26 +208,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta:
-          kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceConstMeta,
-      argValues: [that, device],
+          kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceNameConstMeta,
+      argValues: [that, deviceName],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta
-      get kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceConstMeta =>
+      get kCrateApiBrightnessBrightnessDataAutoAccessorSetDeviceNameConstMeta =>
           const TaskConstMeta(
-            debugName: "BrightnessData_auto_accessor_set_device",
-            argNames: ["that", "device"],
+            debugName: "BrightnessData_auto_accessor_set_device_name",
+            argNames: ["that", "deviceName"],
           );
 
   @override
-  Stream<BrightnessData> crateApiBrightnessBrightnessDataGetBrightnessStream() {
+  Stream<BrightnessData> crateApiBrightnessGetBrightnessStream() {
     final sink = RustStreamSink<BrightnessData>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+        sse_encode_StreamSink_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
             sink, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 5, port: port_);
@@ -237,28 +236,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiBrightnessBrightnessDataGetBrightnessStreamConstMeta,
+      constMeta: kCrateApiBrightnessGetBrightnessStreamConstMeta,
       argValues: [sink],
       apiImpl: this,
     )));
     return sink.stream;
   }
 
-  TaskConstMeta
-      get kCrateApiBrightnessBrightnessDataGetBrightnessStreamConstMeta =>
-          const TaskConstMeta(
-            debugName: "BrightnessData_get_brightness_stream",
-            argNames: ["sink"],
-          );
+  TaskConstMeta get kCrateApiBrightnessGetBrightnessStreamConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_brightness_stream",
+        argNames: ["sink"],
+      );
 
   @override
-  Future<void> crateApiBrightnessBrightnessDataSetBrightnessAll(
-      {required BrightnessData that, required int brightness}) {
+  Future<void> crateApiBrightnessSetBrightnessAll({required int brightness}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData(
-            that, serializer);
         sse_encode_u_32(brightness, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 6, port: port_);
@@ -267,18 +262,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiBrightnessBrightnessDataSetBrightnessAllConstMeta,
-      argValues: [that, brightness],
+      constMeta: kCrateApiBrightnessSetBrightnessAllConstMeta,
+      argValues: [brightness],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta
-      get kCrateApiBrightnessBrightnessDataSetBrightnessAllConstMeta =>
-          const TaskConstMeta(
-            debugName: "BrightnessData_set_brightness_all",
-            argNames: ["that", "brightness"],
-          );
+  TaskConstMeta get kCrateApiBrightnessSetBrightnessAllConstMeta =>
+      const TaskConstMeta(
+        debugName: "set_brightness_all",
+        argNames: ["brightness"],
+      );
 
   @override
   Future<void> crateApiInitEnableRustStacktrace() {
@@ -384,7 +378,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<BrightnessData>
-      dco_decode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+      dco_decode_StreamSink_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
@@ -502,7 +496,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<BrightnessData>
-      sse_decode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+      sse_decode_StreamSink_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     throw UnimplementedError('Unreachable ()');
@@ -645,14 +639,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_StreamSink_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
+      sse_encode_StreamSink_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData_Sse(
           RustStreamSink<BrightnessData> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(
         self.setupAndSerialize(
             codec: SseCodec(
           decodeSuccessData:
-              sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData,
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBrightnessData,
           decodeErrorData: sse_decode_AnyhowException,
         )),
         serializer);
@@ -768,8 +762,8 @@ class BrightnessDataImpl extends RustOpaque implements BrightnessData {
         that: this,
       );
 
-  List<String> get device => RustLib.instance.api
-          .crateApiBrightnessBrightnessDataAutoAccessorGetDevice(
+  List<String> get deviceName => RustLib.instance.api
+          .crateApiBrightnessBrightnessDataAutoAccessorGetDeviceName(
         that: this,
       );
 
@@ -777,11 +771,7 @@ class BrightnessDataImpl extends RustOpaque implements BrightnessData {
       .crateApiBrightnessBrightnessDataAutoAccessorSetBrightness(
           that: this, brightness: brightness);
 
-  set device(List<String> device) => RustLib.instance.api
-      .crateApiBrightnessBrightnessDataAutoAccessorSetDevice(
-          that: this, device: device);
-
-  Future<void> setBrightnessAll({required int brightness}) =>
-      RustLib.instance.api.crateApiBrightnessBrightnessDataSetBrightnessAll(
-          that: this, brightness: brightness);
+  set deviceName(List<String> deviceName) => RustLib.instance.api
+      .crateApiBrightnessBrightnessDataAutoAccessorSetDeviceName(
+          that: this, deviceName: deviceName);
 }

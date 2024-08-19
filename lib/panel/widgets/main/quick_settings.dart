@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kitshell/panel/logic/battery/battery.dart';
+import 'package:kitshell/panel/logic/sound/sound.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
-
-import '../../logic/battery/battery.dart';
-import '../../logic/brightness/brightness.dart';
-import '../../logic/sound/sound.dart';
+import 'package:kitshell/src/rust/api/brightness.dart';
 
 class QuickSettingsContainer extends StatelessWidget {
   const QuickSettingsContainer({super.key});
@@ -69,26 +68,43 @@ class WifiPanel extends StatelessWidget {
   }
 }
 
-class BrightnessPanel extends ConsumerWidget {
+class BrightnessPanel extends StatefulWidget {
   const BrightnessPanel({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final brightnessInfo = ref.watch(brightnessLogicProvider);
-    return HoverRevealer(
-      icon: FontAwesomeIcons.sun,
-      value: ((brightnessInfo.value?.brightness ?? 0) / (brightnessInfo.value?.maxBrightness ?? 100) * 100).toInt(),
-      widget: Slider(
-        value: brightnessInfo.value?.brightness.toDouble() ?? 50,
-        max: brightnessInfo.value?.maxBrightness.toDouble() ?? 100,
-        onChanged: (value) {
-          ref.read(brightnessLogicProvider.notifier).setBrightness(value.toInt());
-        },
-        activeColor: Theme.of(context).colorScheme.onSurface,
-        inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-      ),
+  State<BrightnessPanel> createState() => _BrightnessPanelState();
+}
+
+class _BrightnessPanelState extends State<BrightnessPanel> {
+  late Stream<BrightnessData> brightnessStream;
+
+  @override
+  void initState() {
+    super.initState();
+    brightnessStream = getBrightnessStream();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: brightnessStream,
+      builder: (context, snap) {
+        return HoverRevealer(
+          icon: FontAwesomeIcons.sun,
+          value: snap.data?.brightness.first,
+          widget: Slider(
+            value: snap.data?.brightness.first.toDouble() ?? 100,
+            onChanged: (value) async {
+              await setBrightnessAll(brightness: value.toInt());
+            },
+            max: 100,
+            activeColor: Theme.of(context).colorScheme.onSurface,
+            inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          ),
+        );
+      },
     );
   }
 }

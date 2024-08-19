@@ -6,20 +6,21 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_brightness`, `new`
+// These functions are ignored because they are not marked as `pub`: `get_brightness`
+
+Stream<BrightnessData> getBrightnessStream() =>
+    RustLib.instance.api.crateApiBrightnessGetBrightnessStream();
+
+Future<void> setBrightnessAll({required int brightness}) => RustLib.instance.api
+    .crateApiBrightnessSetBrightnessAll(brightness: brightness);
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BrightnessData>>
 abstract class BrightnessData implements RustOpaqueInterface {
   Uint32List get brightness;
 
-  List<String> get device;
+  List<String> get deviceName;
 
   set brightness(Uint32List brightness);
 
-  set device(List<String> device);
-
-  static Stream<BrightnessData> getBrightnessStream() => RustLib.instance.api
-      .crateApiBrightnessBrightnessDataGetBrightnessStream();
-
-  Future<void> setBrightnessAll({required int brightness});
+  set deviceName(List<String> deviceName);
 }

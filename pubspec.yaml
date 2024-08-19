@@ -23,7 +23,7 @@ dependencies:
   hooks_riverpod: ^2.5.1
   flutter_animate: ^4.5.0
   google_fonts: ^6.2.1
-  battery_plus: ^5.0.3
+  battery_plus: ^6.0.2
   font_awesome_flutter: ^10.7.0
   process_run: ^1.1.0
   logger: ^2.4.0
@@ -31,12 +31,13 @@ dependencies:
   rust_lib_kitshell:
     path: rust_builder
   flutter_rust_bridge: 2.2.0
+  freezed: ^2.5.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   riverpod_lint: ^2.3.10
   build_runner: ^2.4.11
   very_good_analysis: ^6.0.0
@@ -44,7 +45,6 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   integration_test:
     sdk: flutter
-  freezed: ^2.5.7
 
 flutter:
   uses-material-design: true
