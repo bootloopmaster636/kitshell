@@ -6,12 +6,13 @@ import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
 
 class Submenu extends StatelessWidget {
-  const Submenu(
-      {required this.icon,
-      required this.title,
-      required this.body,
-      this.action,
-      super.key,});
+  const Submenu({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.action,
+    super.key,
+  });
 
   final IconData icon;
   final String title;
@@ -58,7 +59,9 @@ class Submenu extends StatelessWidget {
               height: panelHeight,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(
-                  horizontal: panelHeight / 3, vertical: panelHeight / 4,),
+                horizontal: panelHeight / 3,
+                vertical: panelHeight / 4,
+              ),
               child: Row(
                 children: [
                   FaIcon(
@@ -119,8 +122,12 @@ class Submenu extends StatelessWidget {
 }
 
 class HoverRevealer extends HookWidget {
-  const HoverRevealer(
-      {required this.icon, required this.widget, this.value, super.key,});
+  const HoverRevealer({
+    required this.icon,
+    required this.widget,
+    this.value,
+    super.key,
+  });
 
   final IconData icon;
   final Widget widget;
@@ -157,9 +164,7 @@ class HoverRevealer extends HookWidget {
                         value.toString(),
                         style: TextStyle(
                           color: isHovered.value
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
+                              ? Theme.of(context).colorScheme.onSecondaryContainer
                               : Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),
@@ -180,18 +185,19 @@ class HoverRevealer extends HookWidget {
                 ),
               ),
             ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOutCirc,
-              height: panelHeight,
-              width: isHovered.value ? panelWidth / 8 : 0,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(0),
+            Visibility(
+              visible: isHovered.value,
+              child: Container(
+                height: panelHeight,
+                width: panelWidth / 8,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                clipBehavior: Clip.hardEdge,
+                alignment: Alignment.centerLeft,
+                child: widget,
               ),
-              clipBehavior: Clip.hardEdge,
-              alignment: Alignment.centerLeft,
-              child: widget,
             ),
           ],
         ),
