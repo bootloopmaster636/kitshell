@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
+import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
@@ -78,6 +79,8 @@ class MainContent extends StatelessWidget {
           TimeWidget(),
           Gap(4),
           QuickSettingsContainer(),
+          Spacer(),
+          Mpris(),
         ],
       ),
     );
