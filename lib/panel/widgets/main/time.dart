@@ -11,7 +11,7 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Column(

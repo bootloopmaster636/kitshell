@@ -137,7 +137,7 @@ class HoverRevealer extends HookWidget {
   Widget build(BuildContext context) {
     final isHovered = useState(false);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: MouseRegion(
         onHover: (event) {
           isHovered.value = true;
@@ -153,9 +153,15 @@ class HoverRevealer extends HookWidget {
               curve: Curves.easeOutCirc,
               width: isHovered.value ? panelHeight : panelHeight - 16,
               height: panelHeight,
-              color: isHovered.value
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondaryContainer,
+              decoration: BoxDecoration(
+                color: isHovered.value
+                    ? Theme.of(context).colorScheme.surfaceContainer
+                    : Theme.of(context).colorScheme.secondaryContainer,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(999),
+                  bottomLeft: Radius.circular(999),
+                ),
+              ),
               alignment: Alignment.center,
               child: Badge(
                 label: value == null
@@ -163,25 +169,19 @@ class HoverRevealer extends HookWidget {
                     : Text(
                         value.toString(),
                         style: TextStyle(
-                          color: isHovered.value
-                              ? Theme.of(context).colorScheme.onSecondaryContainer
-                              : Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                backgroundColor: isHovered.value
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onSecondaryContainer,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 smallSize: 0,
                 largeSize: 10,
-                offset: const Offset(4, -8),
-                textStyle: const TextStyle(fontSize: 8),
+                textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                offset: const Offset(6, -6),
                 child: FaIcon(
                   icon,
                   size: panelHeight / 3,
-                  color: isHovered.value
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
             ),
@@ -191,8 +191,11 @@ class HoverRevealer extends HookWidget {
                 height: panelHeight,
                 width: panelWidth / 8,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(0),
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(999),
+                    bottomRight: Radius.circular(999),
+                  ),
                 ),
                 clipBehavior: Clip.hardEdge,
                 alignment: Alignment.centerLeft,

@@ -41,18 +41,11 @@ class WifiPanel extends StatelessWidget {
     return HoverRevealer(
       icon: FontAwesomeIcons.wifi,
       widget: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('SSID'),
-                  Text('Connected'),
-                ],
-              ),
-            ),
+            const Text('SSID'),
+            const Spacer(),
             IconButton(
               onPressed: () {
                 Navigator.push(
@@ -137,25 +130,34 @@ class BatteryPanel extends ConsumerWidget {
                       : FontAwesomeIcons.batteryEmpty,
       value: batteryInfo.value?.capacityPercent.first.toInt(),
       widget: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           children: [
             const Gap(4),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(
-                  batteryInfo.value?.status.first == BatteryState.full
-                      ? 'Full'
-                      : batteryInfo.value?.status.first == BatteryState.charging
-                          ? 'Charging'
-                          : batteryInfo.value?.status.first == BatteryState.discharging
-                              ? 'Discharging'
-                              : batteryInfo.value?.status.first == BatteryState.empty
-                                  ? 'Empty'
-                                  : 'Unknown',
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
+                    batteryInfo.value?.status.first == BatteryState.full
+                        ? 'Full'
+                        : batteryInfo.value?.status.first == BatteryState.charging
+                            ? 'Charging'
+                            : batteryInfo.value?.status.first == BatteryState.discharging
+                                ? 'Discharging'
+                                : batteryInfo.value?.status.first == BatteryState.empty
+                                    ? 'Empty'
+                                    : 'Unknown',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
                 ),
+                const Gap(8),
                 Text('${batteryInfo.value?.drainRateWatt.first.toStringAsFixed(2)} W'),
               ],
             ),
