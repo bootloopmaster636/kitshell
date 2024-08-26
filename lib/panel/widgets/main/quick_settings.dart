@@ -119,7 +119,7 @@ class BatteryPanel extends ConsumerWidget {
     final batteryInfo = ref.watch(batteryLogicProvider);
 
     return HoverRevealer(
-      icon: batteryInfo.value!.capacityPercent.first >= 90
+      icon: (batteryInfo.value?.capacityPercent.first ?? 100) >= 90
           ? FontAwesomeIcons.batteryFull
           : batteryInfo.value!.capacityPercent.first >= 70
               ? FontAwesomeIcons.batteryThreeQuarters
@@ -143,15 +143,17 @@ class BatteryPanel extends ConsumerWidget {
                   ),
                   padding: const EdgeInsets.all(4),
                   child: Text(
-                    batteryInfo.value?.status.first == BatteryState.full
-                        ? 'Full'
-                        : batteryInfo.value?.status.first == BatteryState.charging
-                            ? 'Charging'
-                            : batteryInfo.value?.status.first == BatteryState.discharging
-                                ? 'Discharging'
-                                : batteryInfo.value?.status.first == BatteryState.empty
-                                    ? 'Empty'
-                                    : 'Unknown',
+                    batteryInfo.value?.status.isEmpty ?? false
+                        ? 'Loading'
+                        : batteryInfo.value?.status.first == BatteryState.full
+                            ? 'Full'
+                            : batteryInfo.value?.status.first == BatteryState.charging
+                                ? 'Charging'
+                                : batteryInfo.value?.status.first == BatteryState.discharging
+                                    ? '${batteryInfo.value?.capacityPercent.first.toInt()}%'
+                                    : batteryInfo.value?.status.first == BatteryState.empty
+                                        ? 'Empty'
+                                        : 'Unknown',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),

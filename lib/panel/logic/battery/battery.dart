@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -35,7 +34,6 @@ class BatteryLogic extends _$BatteryLogic {
       state = AsyncValue.data(
         await getBatteryData(),
       );
-      log('Battery data updated');
     });
   }
 }
