@@ -161,6 +161,14 @@ class HoverRevealer extends HookWidget {
                   topLeft: Radius.circular(999),
                   bottomLeft: Radius.circular(999),
                 ),
+                boxShadow: [
+                  if (isHovered.value)
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                    ),
+                ],
               ),
               alignment: Alignment.center,
               child: Badge(
@@ -196,6 +204,14 @@ class HoverRevealer extends HookWidget {
                     topRight: Radius.circular(999),
                     bottomRight: Radius.circular(999),
                   ),
+                  boxShadow: [
+                    if (isHovered.value)
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                      ),
+                  ],
                 ),
                 clipBehavior: Clip.hardEdge,
                 alignment: Alignment.centerLeft,
