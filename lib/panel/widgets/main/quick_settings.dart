@@ -8,6 +8,7 @@ import 'package:kitshell/panel/logic/sound/sound.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
+import 'package:kitshell/src/rust/api/battery.dart';
 import 'package:kitshell/src/rust/api/brightness.dart';
 import 'package:kitshell/src/rust/api/wireplumber.dart';
 
@@ -18,7 +19,7 @@ class QuickSettingsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        // BatteryPanel(),
+        BatteryPanel(),
         Gap(8),
         VolumePanel(),
         Gap(8),
@@ -123,14 +124,41 @@ class BatteryPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final batteryInfo = ref.watch(batteryLogicProvider);
+
     return HoverRevealer(
-      icon: batteryInfo.value?.icon ?? FontAwesomeIcons.batteryEmpty,
-      value: batteryInfo.value?.level,
+      icon: batteryInfo.value!.capacityPercent.first >= 90
+          ? FontAwesomeIcons.batteryFull
+          : batteryInfo.value!.capacityPercent.first >= 70
+              ? FontAwesomeIcons.batteryThreeQuarters
+              : batteryInfo.value!.capacityPercent.first >= 40
+                  ? FontAwesomeIcons.batteryHalf
+                  : batteryInfo.value!.capacityPercent.first >= 15
+                      ? FontAwesomeIcons.batteryQuarter
+                      : FontAwesomeIcons.batteryEmpty,
+      value: batteryInfo.value?.capacityPercent.first.toInt(),
       widget: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
         child: Row(
           children: [
-            Text(batteryInfo.value?.state.toString().split('.').last ?? 'Status not available'),
+            const Gap(4),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  batteryInfo.value?.status.first == BatteryState.full
+                      ? 'Full'
+                      : batteryInfo.value?.status.first == BatteryState.charging
+                          ? 'Charging'
+                          : batteryInfo.value?.status.first == BatteryState.discharging
+                              ? 'Discharging'
+                              : batteryInfo.value?.status.first == BatteryState.empty
+                                  ? 'Empty'
+                                  : 'Unknown',
+                ),
+                Text('${batteryInfo.value?.drainRateWatt.first.toStringAsFixed(2)} W'),
+              ],
+            ),
             const Spacer(),
             IconButton(
               onPressed: () {

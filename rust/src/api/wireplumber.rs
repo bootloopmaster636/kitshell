@@ -23,7 +23,7 @@ pub async fn get_volume() -> WireplumberData {
 // tries to run wpctl set-volume @DEFAULT_AUDIO_SINK@ <volume> and return the volume
 // volume range is 0.0 to 1.0
 pub async fn set_volume(volume: f32) {
-    let output = Command::new("wpctl")
+    Command::new("wpctl")
         .args(["set-volume", "@DEFAULT_AUDIO_SINK@", &volume.to_string()])
         .output()
         .expect("failed to execute process");

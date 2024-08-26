@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.2.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 468678910;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 781972914;
 
 // Section: executor
 
@@ -45,6 +45,42 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire__crate__api__battery__get_battery_data_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_battery_data",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok =
+                            Result::<_, ()>::Ok(crate::api::battery::get_battery_data().await)?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__brightness__get_brightness_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -238,6 +274,35 @@ impl SseDecode for String {
     }
 }
 
+impl SseDecode for crate::api::battery::BatteryData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_capacityPercent = <Vec<f32>>::sse_decode(deserializer);
+        let mut var_drainRateWatt = <Vec<f32>>::sse_decode(deserializer);
+        let mut var_status = <Vec<crate::api::battery::BatteryState>>::sse_decode(deserializer);
+        return crate::api::battery::BatteryData {
+            capacity_percent: var_capacityPercent,
+            drain_rate_watt: var_drainRateWatt,
+            status: var_status,
+        };
+    }
+}
+
+impl SseDecode for crate::api::battery::BatteryState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::battery::BatteryState::Charging,
+            1 => crate::api::battery::BatteryState::Discharging,
+            2 => crate::api::battery::BatteryState::Full,
+            3 => crate::api::battery::BatteryState::Empty,
+            4 => crate::api::battery::BatteryState::Unknown,
+            _ => unreachable!("Invalid variant for BatteryState: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for crate::api::brightness::BrightnessData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -257,6 +322,13 @@ impl SseDecode for f32 {
     }
 }
 
+impl SseDecode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
+    }
+}
+
 impl SseDecode for Vec<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -264,6 +336,32 @@ impl SseDecode for Vec<String> {
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
             ans_.push(<String>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::battery::BatteryState> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::battery::BatteryState>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<f32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<f32>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -320,13 +418,6 @@ impl SseDecode for crate::api::wireplumber::WireplumberData {
     }
 }
 
-impl SseDecode for i32 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
-    }
-}
-
 impl SseDecode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -343,13 +434,14 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
-        2 => {
+        1 => wire__crate__api__battery__get_battery_data_impl(port, ptr, rust_vec_len, data_len),
+        2 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
+        3 => {
             wire__crate__api__brightness__set_brightness_all_impl(port, ptr, rust_vec_len, data_len)
         }
-        3 => wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
+        4 => wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -368,6 +460,52 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::battery::BatteryData {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.capacity_percent.into_into_dart().into_dart(),
+            self.drain_rate_watt.into_into_dart().into_dart(),
+            self.status.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::battery::BatteryData
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::BatteryData>
+    for crate::api::battery::BatteryData
+{
+    fn into_into_dart(self) -> crate::api::battery::BatteryData {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::battery::BatteryState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Charging => 0.into_dart(),
+            Self::Discharging => 1.into_dart(),
+            Self::Full => 2.into_dart(),
+            Self::Empty => 3.into_dart(),
+            Self::Unknown => 4.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::battery::BatteryState
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::BatteryState>
+    for crate::api::battery::BatteryState
+{
+    fn into_into_dart(self) -> crate::api::battery::BatteryState {
+        self
+    }
+}
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::brightness::BrightnessData {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
@@ -414,6 +552,34 @@ impl SseEncode for String {
     }
 }
 
+impl SseEncode for crate::api::battery::BatteryData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<f32>>::sse_encode(self.capacity_percent, serializer);
+        <Vec<f32>>::sse_encode(self.drain_rate_watt, serializer);
+        <Vec<crate::api::battery::BatteryState>>::sse_encode(self.status, serializer);
+    }
+}
+
+impl SseEncode for crate::api::battery::BatteryState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::battery::BatteryState::Charging => 0,
+                crate::api::battery::BatteryState::Discharging => 1,
+                crate::api::battery::BatteryState::Full => 2,
+                crate::api::battery::BatteryState::Empty => 3,
+                crate::api::battery::BatteryState::Unknown => 4,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for crate::api::brightness::BrightnessData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -429,12 +595,39 @@ impl SseEncode for f32 {
     }
 }
 
+impl SseEncode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+    }
+}
+
 impl SseEncode for Vec<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <String>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::battery::BatteryState> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::battery::BatteryState>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<f32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <f32>::sse_encode(item, serializer);
         }
     }
 }
@@ -482,13 +675,6 @@ impl SseEncode for crate::api::wireplumber::WireplumberData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <f32>::sse_encode(self.volume, serializer);
-    }
-}
-
-impl SseEncode for i32 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
     }
 }
 

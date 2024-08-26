@@ -6,12 +6,12 @@ part of 'battery.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$batteryLogicHash() => r'5f33c39596d572e7b9cd74e91e1c0fce1922793c';
+String _$batteryLogicHash() => r'6292f0969bee6be7213075d53ea227fbbf5e5548';
 
 /// See also [BatteryLogic].
 @ProviderFor(BatteryLogic)
 final batteryLogicProvider =
-    AutoDisposeAsyncNotifierProvider<BatteryLogic, BatteryInfo>.internal(
+    AutoDisposeAsyncNotifierProvider<BatteryLogic, BatteryData>.internal(
   BatteryLogic.new,
   name: r'batteryLogicProvider',
   debugGetCreateSourceHash:
@@ -20,7 +20,7 @@ final batteryLogicProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$BatteryLogic = AutoDisposeAsyncNotifier<BatteryInfo>;
+typedef _$BatteryLogic = AutoDisposeAsyncNotifier<BatteryData>;
 String _$powerProfilesLogicHash() =>
     r'2cd9f708e6ac6c230bfb9fd6f05b44f389461a44';
 
