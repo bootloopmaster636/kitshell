@@ -3,11 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
+import 'package:kitshell/panel/logic/brightness/brightness.dart';
 import 'package:kitshell/panel/logic/sound/sound.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
 import 'package:kitshell/src/rust/api/brightness.dart';
+import 'package:kitshell/src/rust/api/wireplumber.dart';
 
 class QuickSettingsContainer extends StatelessWidget {
   const QuickSettingsContainer({super.key});
@@ -16,7 +18,7 @@ class QuickSettingsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        BatteryPanel(),
+        // BatteryPanel(),
         Gap(8),
         VolumePanel(),
         Gap(8),
@@ -68,43 +70,25 @@ class WifiPanel extends StatelessWidget {
   }
 }
 
-class BrightnessPanel extends StatefulWidget {
+class BrightnessPanel extends ConsumerWidget {
   const BrightnessPanel({
     super.key,
   });
 
   @override
-  State<BrightnessPanel> createState() => _BrightnessPanelState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final brightness = ref.watch(brightnessLogicProvider);
 
-class _BrightnessPanelState extends State<BrightnessPanel> {
-  late Stream<BrightnessData> brightnessStream;
-
-  @override
-  void initState() {
-    super.initState();
-    brightnessStream = getBrightnessStream();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: brightnessStream,
-      builder: (context, snap) {
-        return HoverRevealer(
-          icon: FontAwesomeIcons.sun,
-          value: snap.data?.brightness.first,
-          widget: Slider(
-            value: snap.data?.brightness.first.toDouble() ?? 100,
-            onChanged: (value) async {
-              await setBrightnessAll(brightness: value.toInt());
-            },
-            max: 100,
-            activeColor: Theme.of(context).colorScheme.onSurface,
-            inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-          ),
-        );
-      },
+    return HoverRevealer(
+      icon: FontAwesomeIcons.sun,
+      value: brightness.value?.brightness.first,
+      widget: Slider(
+        value: brightness.value?.brightness.first.toDouble() ?? 100,
+        onChanged: (value) async {
+          await setBrightnessAll(brightness: value.toInt());
+        },
+        max: 100,
+      ),
     );
   }
 }
@@ -124,10 +108,8 @@ class VolumePanel extends HookConsumerWidget {
       widget: Slider(
         value: soundInfo?.volume ?? 0,
         onChanged: (value) {
-          ref.read(soundLogicProvider.notifier).setVolume(value);
+          setVolume(volume: value);
         },
-        activeColor: Theme.of(context).colorScheme.onSurface,
-        inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
       ),
     );
   }
