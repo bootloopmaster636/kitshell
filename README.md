@@ -2,15 +2,17 @@
 
 A modern shell for WLroots based compositor.
 
-## Getting Started
+## Under heavy development 
 
-This project is a starting point for a Flutter application.
+Will add some image after major features done.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Feature/To-do list:
+[x] Battery
+[x] Power profiles
+[x] Sound (wireplumber)
+[x] Brightness 
+[x] Mpris/music player
+[ ] Wi-Fi 
+[ ] App launcher
+[ ] Hyprland related stuff (workspaces, etc.)
+[ ] Kitshell settings on another window
