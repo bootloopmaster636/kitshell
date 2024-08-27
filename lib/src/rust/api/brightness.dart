@@ -3,8 +3,8 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
-import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:kitshell/src/rust/frb_generated.dart';
 
 Future<BrightnessData> getBrightness() =>
     RustLib.instance.api.crateApiBrightnessGetBrightness();
@@ -13,13 +13,13 @@ Future<void> setBrightnessAll({required int brightness}) => RustLib.instance.api
     .crateApiBrightnessSetBrightnessAll(brightness: brightness);
 
 class BrightnessData {
-  final List<String> deviceName;
-  final Uint32List brightness;
 
   const BrightnessData({
     required this.deviceName,
     required this.brightness,
   });
+  final List<String> deviceName;
+  final Uint32List brightness;
 
   @override
   int get hashCode => deviceName.hashCode ^ brightness.hashCode;

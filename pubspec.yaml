@@ -5,12 +5,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.1 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
 
   cupertino_icons: ^1.0.6
   wayland_layer_shell: ^1.0.1
@@ -32,9 +31,13 @@ dependencies:
     path: rust_builder
   flutter_rust_bridge: 2.2.0
   freezed: ^2.5.2
+  octo_image: ^2.1.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+
+  integration_test:
     sdk: flutter
 
   flutter_lints: ^4.0.0
@@ -43,11 +46,8 @@ dev_dependencies:
   very_good_analysis: ^6.0.0
   custom_lint: ^0.6.4
   riverpod_generator: ^2.4.0
-  integration_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/
