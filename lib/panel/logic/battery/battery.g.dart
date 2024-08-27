@@ -22,12 +22,12 @@ final batteryLogicProvider =
 
 typedef _$BatteryLogic = AutoDisposeAsyncNotifier<BatteryData>;
 String _$powerProfilesLogicHash() =>
-    r'2cd9f708e6ac6c230bfb9fd6f05b44f389461a44';
+    r'cbbb9ac4cb94611a215fa5db34f5f15fe8f54b70';
 
 /// See also [PowerProfilesLogic].
 @ProviderFor(PowerProfilesLogic)
 final powerProfilesLogicProvider = AutoDisposeAsyncNotifierProvider<
-    PowerProfilesLogic, PowerProfilesInfo>.internal(
+    PowerProfilesLogic, PowerProfiles>.internal(
   PowerProfilesLogic.new,
   name: r'powerProfilesLogicProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -37,6 +37,6 @@ final powerProfilesLogicProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$PowerProfilesLogic = AutoDisposeAsyncNotifier<PowerProfilesInfo>;
+typedef _$PowerProfilesLogic = AutoDisposeAsyncNotifier<PowerProfiles>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/widgets/utility.dart';
+import 'package:kitshell/src/rust/api/battery.dart';
 
 class BatterySubmenu extends StatelessWidget {
   const BatterySubmenu({super.key});
@@ -36,7 +37,7 @@ class PowerProfilesSettings extends ConsumerWidget {
           const Gap(8),
           ChoiceChip(
             label: const Text('Power Saver'),
-            selected: selectedProfile.value?.profile == PowerProfiles.powersave,
+            selected: selectedProfile.value == PowerProfiles.powersave,
             onSelected: (selected) {
               ref.read(powerProfilesLogicProvider.notifier).changePowerProfiles(PowerProfiles.powersave);
             },
@@ -44,7 +45,7 @@ class PowerProfilesSettings extends ConsumerWidget {
           const Gap(4),
           ChoiceChip(
             label: const Text('Balanced'),
-            selected: selectedProfile.value?.profile == PowerProfiles.balanced,
+            selected: selectedProfile.value == PowerProfiles.balanced,
             onSelected: (selected) {
               ref.read(powerProfilesLogicProvider.notifier).changePowerProfiles(PowerProfiles.balanced);
             },
@@ -52,7 +53,7 @@ class PowerProfilesSettings extends ConsumerWidget {
           const Gap(4),
           ChoiceChip(
             label: const Text('Performance'),
-            selected: selectedProfile.value?.profile == PowerProfiles.performance,
+            selected: selectedProfile.value == PowerProfiles.performance,
             onSelected: (selected) {
               ref.read(powerProfilesLogicProvider.notifier).changePowerProfiles(PowerProfiles.performance);
             },

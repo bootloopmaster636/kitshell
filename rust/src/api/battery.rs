@@ -1,5 +1,6 @@
 use battery::units;
 use battery::units::ratio::percent;
+use std::process::Command;
 
 pub enum BatteryState {
     Charging,
@@ -7,6 +8,12 @@ pub enum BatteryState {
     Full,
     Empty,
     Unknown,
+}
+
+pub enum PowerProfiles {
+    Powersave,
+    Balanced,
+    Performance,
 }
 
 pub struct BatteryData {
@@ -42,4 +49,33 @@ pub async fn get_battery_data() -> BatteryData {
         drain_rate_watt: drain_rate_watt_list,
         status: status_list,
     }
+}
+
+pub async fn get_power_profile() -> PowerProfiles {
+    let output = Command::new("powerprofilesctl")
+        .args(["get"])
+        .output()
+        .expect("failed to execute process");
+
+    let output_string = String::from_utf8_lossy(&output.stdout);
+
+    match output_string.trim() {
+        "power-saver" => PowerProfiles::Powersave,
+        "balanced" => PowerProfiles::Balanced,
+        "performance" => PowerProfiles::Performance,
+        _ => panic!("Unknown power profile"),
+    }
+}
+
+pub async fn set_power_profile(profile: PowerProfiles) {
+    let profile_string = match profile {
+        PowerProfiles::Powersave => "power-saver",
+        PowerProfiles::Balanced => "balanced",
+        PowerProfiles::Performance => "performance",
+    };
+
+    Command::new("powerprofilesctl")
+        .args(["set", profile_string])
+        .output()
+        .expect("failed to execute process");
 }

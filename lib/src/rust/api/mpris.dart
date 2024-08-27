@@ -3,8 +3,8 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:kitshell/src/rust/frb_generated.dart';
 
 Future<MprisData> getMprisData() =>
     RustLib.instance.api.crateApiMprisGetMprisData();
@@ -19,6 +19,15 @@ Future<void> playerPrevious() =>
     RustLib.instance.api.crateApiMprisPlayerPrevious();
 
 class MprisData {
+  final String title;
+  final List<String> artist;
+  final String album;
+  final String imageUrl;
+  final BigInt duration;
+  final BigInt position;
+  final bool isPlaying;
+  final bool canNext;
+  final bool canPrevious;
 
   const MprisData({
     required this.title,
@@ -31,15 +40,6 @@ class MprisData {
     required this.canNext,
     required this.canPrevious,
   });
-  final String title;
-  final List<String> artist;
-  final String album;
-  final String imageUrl;
-  final BigInt duration;
-  final BigInt position;
-  final bool isPlaying;
-  final bool canNext;
-  final bool canPrevious;
 
   @override
   int get hashCode =>
