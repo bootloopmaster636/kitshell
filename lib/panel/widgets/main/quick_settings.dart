@@ -11,6 +11,7 @@ import 'package:kitshell/panel/widgets/utility.dart';
 import 'package:kitshell/src/rust/api/battery.dart';
 import 'package:kitshell/src/rust/api/brightness.dart';
 import 'package:kitshell/src/rust/api/wireplumber.dart';
+import 'package:page_transition/page_transition.dart';
 
 class QuickSettingsContainer extends StatelessWidget {
   const QuickSettingsContainer({super.key});
@@ -50,8 +51,12 @@ class WifiPanel extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const WifiSubmenu(),
+                  PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    duration: const Duration(milliseconds: 100),
+                    reverseDuration: const Duration(milliseconds: 150),
+                    curve: Curves.easeOutExpo,
+                    child: const WifiSubmenu(),
                   ),
                 );
               },
@@ -168,8 +173,12 @@ class BatteryPanel extends ConsumerWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const BatterySubmenu(),
+                  PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    duration: const Duration(milliseconds: 100),
+                    reverseDuration: const Duration(milliseconds: 150),
+                    curve: Curves.easeOutExpo,
+                    child: const BatterySubmenu(),
                   ),
                 );
               },

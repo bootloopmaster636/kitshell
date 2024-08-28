@@ -33,12 +33,12 @@ class Submenu extends StatelessWidget {
               child: Container(
                 height: panelHeight,
                 width: panelHeight,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
                 padding: const EdgeInsets.all(8),
                 child: Icon(
-                  Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  size: panelHeight / 2.5,
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  size: panelHeight / 2,
                 ),
               ),
             )
@@ -48,8 +48,8 @@ class Submenu extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
                 )
-                .slideX(
-                  begin: 0.5,
+                .slideY(
+                  begin: 0.8,
                   end: 0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
@@ -88,8 +88,8 @@ class Submenu extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
                 )
-                .slideX(
-                  begin: 0.5,
+                .slideY(
+                  begin: 0.8,
                   end: 0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
@@ -108,8 +108,8 @@ class Submenu extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
                 )
-                .slideX(
-                  begin: 0.5,
+                .slideY(
+                  begin: 0.8,
                   end: 0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOutCirc,
