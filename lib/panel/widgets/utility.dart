@@ -126,12 +126,14 @@ class HoverRevealer extends HookWidget {
     required this.icon,
     required this.widget,
     this.value,
+    this.onTap,
     super.key,
   });
 
   final IconData icon;
   final Widget widget;
   final int? value;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +198,7 @@ class HoverRevealer extends HookWidget {
             Visibility(
               visible: isHovered.value,
               child: Container(
-                height: panelHeight,
+                height: double.infinity,
                 width: panelWidth / 8,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainer,
@@ -215,7 +217,20 @@ class HoverRevealer extends HookWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 alignment: Alignment.centerLeft,
-                child: widget,
+                child: Material(
+                  textStyle: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
+                  child: SizedBox(
+                    height: double.infinity,
+                    child: InkWell(
+                      onTap: onTap == null
+                          ? null
+                          : () {
+                              onTap!();
+                            },
+                      child: widget,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

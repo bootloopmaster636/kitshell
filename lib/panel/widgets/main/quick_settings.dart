@@ -41,27 +41,23 @@ class WifiPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return HoverRevealer(
       icon: FontAwesomeIcons.wifi,
-      widget: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+      onTap: () {
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.bottomToTop,
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 150),
+            curve: Curves.easeOutExpo,
+            child: const WifiSubmenu(),
+          ),
+        );
+      },
+      widget: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            const Text('SSID'),
-            const Spacer(),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    duration: const Duration(milliseconds: 100),
-                    reverseDuration: const Duration(milliseconds: 150),
-                    curve: Curves.easeOutExpo,
-                    child: const WifiSubmenu(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.settings),
-            ),
+            Text('SSID'),
           ],
         ),
       ),
@@ -134,56 +130,48 @@ class BatteryPanel extends ConsumerWidget {
                       ? FontAwesomeIcons.batteryQuarter
                       : FontAwesomeIcons.batteryEmpty,
       value: batteryInfo.value?.capacityPercent.first.toInt(),
+      onTap: () {
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.bottomToTop,
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 150),
+            curve: Curves.easeOutExpo,
+            child: const BatterySubmenu(),
+          ),
+        );
+      },
       widget: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           children: [
             const Gap(4),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  child: Text(
-                    batteryInfo.value?.status.isEmpty ?? false
-                        ? 'Loading'
-                        : batteryInfo.value?.status.first == BatteryState.full
-                            ? 'Full'
-                            : batteryInfo.value?.status.first == BatteryState.charging
-                                ? 'Charging'
-                                : batteryInfo.value?.status.first == BatteryState.discharging
-                                    ? '${batteryInfo.value?.capacityPercent.first.toInt()}%'
-                                    : batteryInfo.value?.status.first == BatteryState.empty
-                                        ? 'Empty'
-                                        : 'Unknown',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                batteryInfo.value?.status.isEmpty ?? false
+                    ? 'Loading'
+                    : batteryInfo.value?.status.first == BatteryState.full
+                        ? 'Full'
+                        : batteryInfo.value?.status.first == BatteryState.charging
+                            ? 'Charging'
+                            : batteryInfo.value?.status.first == BatteryState.discharging
+                                ? '${batteryInfo.value?.capacityPercent.first.toInt()}%'
+                                : batteryInfo.value?.status.first == BatteryState.empty
+                                    ? 'Empty'
+                                    : 'Unknown',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                const Gap(8),
-                Text('${batteryInfo.value?.drainRateWatt.first.toStringAsFixed(2)} W'),
-              ],
+              ),
             ),
-            const Spacer(),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    duration: const Duration(milliseconds: 100),
-                    reverseDuration: const Duration(milliseconds: 150),
-                    curve: Curves.easeOutExpo,
-                    child: const BatterySubmenu(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.settings),
-            ),
+            const Gap(8),
+            Text('${batteryInfo.value?.drainRateWatt.first.toStringAsFixed(2)} W'),
           ],
         ),
       ),
