@@ -43,7 +43,6 @@ class App extends StatelessWidget {
         brightness: Brightness.dark,
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
-      themeMode: ThemeMode.dark,
       home: const Main(),
     );
   }
