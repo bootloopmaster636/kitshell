@@ -10,7 +10,7 @@ class WifiList extends _$WifiList {
     state = const AsyncLoading();
 
     try {
-      final data = await getWifiList();
+      final data = await getWifiList(rescan: false);
       return data;
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
@@ -22,7 +22,7 @@ class WifiList extends _$WifiList {
     state = const AsyncLoading();
 
     try {
-      final data = await getWifiList();
+      final data = await getWifiList(rescan: true);
       state = AsyncData(data);
     } catch (e) {
       state = AsyncError(e, StackTrace.current);

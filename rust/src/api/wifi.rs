@@ -6,11 +6,11 @@ pub struct WifiData {
     pub signal_strength: u32,
 }
 
-pub async fn get_wifi_list() -> Vec<WifiData> {
+pub async fn get_wifi_list(rescan: bool) -> Vec<WifiData> {
     let mut wifi_list: Vec<WifiData> = Vec::new();
 
     let wifi = WiFi::new("wlan0".to_string());
-    let scan_result = wifi.scan(true).expect("Failed to scan wifi");
+    let scan_result = wifi.scan(rescan).expect("Failed to scan wifi");
 
     for network in scan_result {
         let wifi_data = WifiData {

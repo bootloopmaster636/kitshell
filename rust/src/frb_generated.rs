@@ -468,12 +468,13 @@ fn wire__crate__api__wifi__get_wifi_list_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_rescan = <bool>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok =
-                            Result::<_, ()>::Ok(crate::api::wifi::get_wifi_list().await)?;
+                            Result::<_, ()>::Ok(crate::api::wifi::get_wifi_list(api_rescan).await)?;
                         Ok(output_ok)
                     })()
                     .await,
