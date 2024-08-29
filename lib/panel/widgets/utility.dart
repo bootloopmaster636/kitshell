@@ -79,17 +79,16 @@ class Submenu extends HookWidget {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(
                 horizontal: panelHeight / 3,
-                vertical: panelHeight / 4,
               ),
               child: Row(
                 children: [
                   if (icon != null)
                     FaIcon(
                       icon,
-                      size: panelHeight / 2.5,
+                      size: panelHeight / 3,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
-                  if (icon != null) const Gap(panelHeight / 6),
+                  if (icon != null) const Gap(8),
                   Text(
                     title,
                     style: const TextStyle(
@@ -98,7 +97,7 @@ class Submenu extends HookWidget {
                     ),
                   ),
                   const Spacer(),
-                  action ?? const SizedBox(),
+                  if (action != null) action!,
                 ],
               ),
             )
@@ -255,6 +254,36 @@ class HoverRevealer extends HookWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LoadingSpinner extends StatelessWidget {
+  const LoadingSpinner({this.customLoadingMessage, super.key});
+
+  final String? customLoadingMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: [
+          const SizedBox(
+            height: panelHeight / 2,
+            width: panelHeight / 2,
+            child: CircularProgressIndicator(),
+          ),
+          const Gap(16),
+          Text(
+            customLoadingMessage ?? 'Loading',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: panelHeight / 3,
+            ),
+          ),
+        ],
       ),
     );
   }
