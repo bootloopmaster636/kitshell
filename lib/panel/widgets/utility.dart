@@ -7,9 +7,7 @@ import 'package:kitshell/const.dart';
 
 class Submenu extends HookWidget {
   const Submenu({
-    this.icon,
-    required this.title,
-    required this.body,
+    required this.title, required this.body, this.icon,
     this.action,
     super.key,
   });

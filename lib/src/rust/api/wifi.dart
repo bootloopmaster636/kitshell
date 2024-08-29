@@ -3,22 +3,22 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
-import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:kitshell/src/rust/frb_generated.dart';
 
 Future<List<WifiData>> getWifiList() =>
     RustLib.instance.api.crateApiWifiGetWifiList();
 
 class WifiData {
-  final bool isConnected;
-  final String ssid;
-  final int signalStrength;
 
   const WifiData({
     required this.isConnected,
     required this.ssid,
     required this.signalStrength,
   });
+  final bool isConnected;
+  final String ssid;
+  final int signalStrength;
 
   @override
   int get hashCode =>
