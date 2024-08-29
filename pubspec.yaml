@@ -24,7 +24,6 @@ dependencies:
   google_fonts: ^6.2.1
   font_awesome_flutter: ^10.7.0
   logger: ^2.4.0
-  desktop_multi_window: ^0.2.0
   rust_lib_kitshell:
     path: rust_builder
   flutter_rust_bridge: 2.2.0

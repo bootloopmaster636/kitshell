@@ -7,6 +7,7 @@ import 'api/battery.dart';
 import 'api/brightness.dart';
 import 'api/init.dart';
 import 'api/mpris.dart';
+import 'api/wifi.dart';
 import 'api/wireplumber.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -62,6 +63,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  List<WifiData> dco_decode_list_wifi_data(dynamic raw);
+
+  @protected
   MprisData dco_decode_mpris_data(dynamic raw);
 
   @protected
@@ -78,6 +82,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void dco_decode_unit(dynamic raw);
+
+  @protected
+  WifiData dco_decode_wifi_data(dynamic raw);
 
   @protected
   WireplumberData dco_decode_wireplumber_data(dynamic raw);
@@ -123,6 +130,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  List<WifiData> sse_decode_list_wifi_data(SseDeserializer deserializer);
+
+  @protected
   MprisData sse_decode_mpris_data(SseDeserializer deserializer);
 
   @protected
@@ -139,6 +149,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_decode_unit(SseDeserializer deserializer);
+
+  @protected
+  WifiData sse_decode_wifi_data(SseDeserializer deserializer);
 
   @protected
   WireplumberData sse_decode_wireplumber_data(SseDeserializer deserializer);
@@ -189,6 +202,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Uint8List self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_wifi_data(List<WifiData> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_mpris_data(MprisData self, SseSerializer serializer);
 
   @protected
@@ -205,6 +221,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_unit(void self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_wifi_data(WifiData self, SseSerializer serializer);
 
   @protected
   void sse_encode_wireplumber_data(

@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  desktop_multi_window
   wayland_layer_shell
 )
 

@@ -7,6 +7,7 @@ import 'api/battery.dart';
 import 'api/brightness.dart';
 import 'api/init.dart';
 import 'api/mpris.dart';
+import 'api/wifi.dart';
 import 'api/wireplumber.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -60,7 +61,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.2.0';
 
   @override
-  int get rustContentHash => -1665744446;
+  int get rustContentHash => 258781430;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -92,6 +93,8 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiMprisPlayerPlay();
 
   Future<void> crateApiMprisPlayerPrevious();
+
+  Future<List<WifiData>> crateApiWifiGetWifiList();
 
   Future<WireplumberData> crateApiWireplumberGetVolume();
 
@@ -370,12 +373,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<WireplumberData> crateApiWireplumberGetVolume() {
+  Future<List<WifiData>> crateApiWifiGetWifiList() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 12, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_wifi_data,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiWifiGetWifiListConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiWifiGetWifiListConstMeta => const TaskConstMeta(
+        debugName: "get_wifi_list",
+        argNames: [],
+      );
+
+  @override
+  Future<WireplumberData> crateApiWireplumberGetVolume() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 13, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_wireplumber_data,
@@ -400,7 +426,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_f_32(volume, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 13, port: port_);
+            funcId: 14, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -510,6 +536,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<WifiData> dco_decode_list_wifi_data(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_wifi_data).toList();
+  }
+
+  @protected
   MprisData dco_decode_mpris_data(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -556,6 +588,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void dco_decode_unit(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return;
+  }
+
+  @protected
+  WifiData dco_decode_wifi_data(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WifiData(
+      isConnected: dco_decode_bool(arr[0]),
+      ssid: dco_decode_String(arr[1]),
+      signalStrength: dco_decode_u_32(arr[2]),
+    );
   }
 
   @protected
@@ -676,6 +721,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<WifiData> sse_decode_list_wifi_data(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WifiData>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_wifi_data(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   MprisData sse_decode_mpris_data(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_title = sse_decode_String(deserializer);
@@ -727,6 +784,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_decode_unit(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  WifiData sse_decode_wifi_data(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_isConnected = sse_decode_bool(deserializer);
+    var var_ssid = sse_decode_String(deserializer);
+    var var_signalStrength = sse_decode_u_32(deserializer);
+    return WifiData(
+        isConnected: var_isConnected,
+        ssid: var_ssid,
+        signalStrength: var_signalStrength);
   }
 
   @protected
@@ -833,6 +902,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_wifi_data(
+      List<WifiData> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_wifi_data(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_mpris_data(MprisData self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.title, serializer);
@@ -873,6 +952,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_unit(void self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  void sse_encode_wifi_data(WifiData self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_bool(self.isConnected, serializer);
+    sse_encode_String(self.ssid, serializer);
+    sse_encode_u_32(self.signalStrength, serializer);
   }
 
   @protected

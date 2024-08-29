@@ -23,6 +23,8 @@ Future<void> main() async {
   await waylandLayerShellPlugin.initialize(panelWidth.toInt(), panelHeight.toInt());
   await waylandLayerShellPlugin.setAnchor(ShellEdge.edgeBottom, true);
   await waylandLayerShellPlugin.setExclusiveZone(panelHeight.toInt());
+  await waylandLayerShellPlugin.setLayer(ShellLayer.layerTop);
+  await waylandLayerShellPlugin.setKeyboardMode(ShellKeyboardMode.keyboardModeOnDemand);
 
   runApp(const ProviderScope(child: App()));
 }

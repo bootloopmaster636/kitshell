@@ -1458,6 +1458,7 @@ dependencies = [
  "futures",
  "lazy_static",
  "mpris",
+ "waifai",
 ]
 
 [[package]]
@@ -1774,6 +1775,12 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+
+[[package]]
+name = "waifai"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e7e018acb1ed23c75e9e8f83622762ee1fc048a38ccf789f983085c083e3033"
 
 [[package]]
 name = "waker-fn"
