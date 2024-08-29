@@ -7,14 +7,14 @@ import 'package:kitshell/const.dart';
 
 class Submenu extends HookWidget {
   const Submenu({
-    required this.icon,
+    this.icon,
     required this.title,
     required this.body,
     this.action,
     super.key,
   });
 
-  final IconData icon;
+  final IconData? icon;
   final String title;
   final Widget? action;
   final Widget body;
@@ -83,12 +83,13 @@ class Submenu extends HookWidget {
               ),
               child: Row(
                 children: [
-                  FaIcon(
-                    icon,
-                    size: panelHeight / 2.5,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  const Gap(panelHeight / 6),
+                  if (icon != null)
+                    FaIcon(
+                      icon,
+                      size: panelHeight / 2.5,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  if (icon != null) const Gap(panelHeight / 6),
                   Text(
                     title,
                     style: const TextStyle(
