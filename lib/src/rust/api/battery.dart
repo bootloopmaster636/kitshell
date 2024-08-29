@@ -3,8 +3,8 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:kitshell/src/rust/frb_generated.dart';
 
 Future<BatteryData> getBatteryData() =>
     RustLib.instance.api.crateApiBatteryGetBatteryData();
@@ -16,15 +16,15 @@ Future<void> setPowerProfile({required PowerProfiles profile}) =>
     RustLib.instance.api.crateApiBatterySetPowerProfile(profile: profile);
 
 class BatteryData {
+  final Float32List capacityPercent;
+  final Float32List drainRateWatt;
+  final List<BatteryState> status;
 
   const BatteryData({
     required this.capacityPercent,
     required this.drainRateWatt,
     required this.status,
   });
-  final Float32List capacityPercent;
-  final Float32List drainRateWatt;
-  final List<BatteryState> status;
 
   @override
   int get hashCode =>
