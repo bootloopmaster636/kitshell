@@ -47,7 +47,7 @@ class WifiPanel extends StatelessWidget {
           PageTransition(
             type: PageTransitionType.bottomToTop,
             duration: const Duration(milliseconds: 100),
-            reverseDuration: const Duration(milliseconds: 150),
+            reverseDuration: const Duration(milliseconds: 120),
             curve: Curves.easeOutExpo,
             child: const WifiSubmenu(),
           ),
@@ -136,7 +136,7 @@ class BatteryPanel extends ConsumerWidget {
           PageTransition(
             type: PageTransitionType.bottomToTop,
             duration: const Duration(milliseconds: 100),
-            reverseDuration: const Duration(milliseconds: 150),
+            reverseDuration: const Duration(milliseconds: 120),
             curve: Curves.easeOutExpo,
             child: const BatterySubmenu(),
           ),

@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
 
-class Submenu extends StatelessWidget {
+class Submenu extends HookWidget {
   const Submenu({
     required this.icon,
     required this.title,
@@ -21,39 +21,58 @@ class Submenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isExitHovered = useState(false);
+
     return Material(
       child: ColoredBox(
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: Row(
           children: [
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
+            MouseRegion(
+              onHover: (event) {
+                isExitHovered.value = true;
               },
-              child: Container(
-                height: panelHeight,
-                width: panelHeight,
-                color: Theme.of(context).colorScheme.secondary,
-                padding: const EdgeInsets.all(8),
-                child: Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                  size: panelHeight / 2,
+              onExit: (event) {
+                isExitHovered.value = false;
+              },
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: panelHeight,
+                  width: panelHeight,
+                  color: Theme.of(context).colorScheme.secondary,
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    size: panelHeight / 2,
+                  )
+                      .animate(
+                        target: isExitHovered.value ? 1 : 0,
+                      )
+                      .slideY(
+                        begin: 0,
+                        end: 0.2,
+                        duration: const Duration(milliseconds: 150),
+                        curve: Curves.easeInOutSine,
+                      ),
                 ),
-              ),
-            )
-                .animate(delay: const Duration(milliseconds: 250))
-                .fadeIn(
-                  begin: 0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOutCirc,
-                )
-                .slideY(
-                  begin: 0.8,
-                  end: 0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOutCirc,
-                ),
+              )
+                  .animate(delay: const Duration(milliseconds: 250))
+                  .fadeIn(
+                    begin: 0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOutCirc,
+                  )
+                  .slideY(
+                    begin: 0.8,
+                    end: 0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOutCirc,
+                  ),
+            ),
             Container(
               width: panelWidth / 4,
               height: panelHeight,

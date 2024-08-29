@@ -32,11 +32,12 @@ class Mpris extends HookConsumerWidget {
             curve: Curves.easeOutExpo,
             width: isHovered.value ? panelWidth / 4 : panelWidth / 6,
             child: Stack(
-              fit: StackFit.expand,
+              fit: StackFit.passthrough,
               children: [
                 ClipRect(
+                  clipBehavior: Clip.antiAlias,
                   child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                     child: OctoImage(
                       image: (mprisData.value!.imageUrl.startsWith('file://'))
                           ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
@@ -77,19 +78,29 @@ class MprisContent extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: OctoImage(
-              image: (mprisData.value!.imageUrl.startsWith('file://'))
-                  ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
-                  : NetworkImage(mprisData.value?.imageUrl ?? ''),
-              progressIndicatorBuilder: (context, event) {
-                return Container(
-                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: const CircularProgressIndicator(),
-                );
-              },
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.3),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: OctoImage(
+                image: (mprisData.value!.imageUrl.startsWith('file://'))
+                    ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
+                    : NetworkImage(mprisData.value?.imageUrl ?? ''),
+                progressIndicatorBuilder: (context, event) {
+                  return Container(
+                    color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: const CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -119,7 +130,10 @@ class MprisContent extends ConsumerWidget {
                     const Gap(4),
                     LinearProgressIndicator(
                       value: mprisData.value!.position / mprisData.value!.duration,
+                      borderRadius: BorderRadius.circular(999),
+                      minHeight: 2,
                       color: Theme.of(context).colorScheme.onSurface,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                     ),
                   ],
                 ),
