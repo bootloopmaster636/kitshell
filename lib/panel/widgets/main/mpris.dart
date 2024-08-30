@@ -18,48 +18,52 @@ class Mpris extends HookConsumerWidget {
     final mprisData = ref.watch(mprisLogicProvider);
     final isHovered = useState(false);
 
-    return MouseRegion(
-      onHover: (event) {
-        isHovered.value = true;
-      },
-      onExit: (event) {
-        isHovered.value = false;
-      },
-      child: mprisData.when(
-        data: (data) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeOutExpo,
-            width: isHovered.value ? panelWidth / 4 : panelWidth / 6,
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                ClipRect(
-                  clipBehavior: Clip.antiAlias,
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                    child: OctoImage(
-                      image: (mprisData.value!.imageUrl.startsWith('file://'))
-                          ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
-                          : NetworkImage(mprisData.value?.imageUrl ?? ''),
-                      fit: BoxFit.cover,
+    return RepaintBoundary(
+      child: MouseRegion(
+        onHover: (event) {
+          isHovered.value = true;
+        },
+        onExit: (event) {
+          isHovered.value = false;
+        },
+        child: mprisData.when(
+          data: (data) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOutExpo,
+              width: isHovered.value ? panelWidth / 4 : panelWidth / 6,
+              child: Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  ClipRect(
+                    clipBehavior: Clip.antiAlias,
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                      child: OctoImage(
+                        image: (mprisData.value!.imageUrl.startsWith('file://'))
+                            ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
+                            : NetworkImage(mprisData.value?.imageUrl ?? ''),
+                        fit: BoxFit.cover,
+                        memCacheHeight: panelHeight.toInt(),
+                        memCacheWidth: panelHeight.toInt(),
+                      ),
                     ),
                   ),
-                ),
-                ColoredBox(
-                  color: Theme.of(context).colorScheme.surface.withOpacity(0.75),
-                  child: MprisContent(isHovered: isHovered),
-                ),
-              ],
-            ),
-          );
-        },
-        loading: () {
-          return const SizedBox();
-        },
-        error: (error, stackTrace) {
-          return const SizedBox();
-        },
+                  ColoredBox(
+                    color: Theme.of(context).colorScheme.surface.withOpacity(0.75),
+                    child: MprisContent(isHovered: isHovered),
+                  ),
+                ],
+              ),
+            );
+          },
+          loading: () {
+            return const SizedBox();
+          },
+          error: (error, stackTrace) {
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -93,6 +97,8 @@ class MprisContent extends ConsumerWidget {
                 image: (mprisData.value!.imageUrl.startsWith('file://'))
                     ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
                     : NetworkImage(mprisData.value?.imageUrl ?? ''),
+                memCacheHeight: panelHeight.toInt() * 2,
+                memCacheWidth: panelHeight.toInt() * 2,
                 progressIndicatorBuilder: (context, event) {
                   return Container(
                     color: Theme.of(context).colorScheme.surfaceContainerHigh,

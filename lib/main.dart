@@ -37,6 +37,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return ToastificationWrapper(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'KITShell',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -63,29 +64,18 @@ class Main extends StatelessWidget {
     return Material(
       child: ColoredBox(
         color: Theme.of(context).colorScheme.secondaryContainer,
-        child: const MainContent(),
-      ),
-    );
-  }
-}
-
-class MainContent extends StatelessWidget {
-  const MainContent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
-      child: const Row(
-        children: [
-          TimeWidget(),
-          Gap(4),
-          QuickSettingsContainer(),
-          Spacer(),
-          Mpris(),
-        ],
+        child: DefaultTextStyle(
+          style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
+          child: const Row(
+            children: [
+              TimeWidget(),
+              Gap(4),
+              QuickSettingsContainer(),
+              Spacer(),
+              Mpris(),
+            ],
+          ),
+        ),
       ),
     );
   }

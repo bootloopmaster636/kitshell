@@ -7,7 +7,9 @@ import 'package:kitshell/const.dart';
 
 class Submenu extends HookWidget {
   const Submenu({
-    required this.title, required this.body, this.icon,
+    required this.title,
+    required this.body,
+    this.icon,
     this.action,
     super.key,
   });
@@ -173,9 +175,7 @@ class HoverRevealer extends HookWidget {
               width: isHovered.value ? panelHeight : panelHeight - 16,
               height: panelHeight,
               decoration: BoxDecoration(
-                color: isHovered.value
-                    ? Theme.of(context).colorScheme.surfaceContainer
-                    : Theme.of(context).colorScheme.secondaryContainer,
+                color: isHovered.value ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(999),
                   bottomLeft: Radius.circular(999),
@@ -183,7 +183,7 @@ class HoverRevealer extends HookWidget {
                 boxShadow: [
                   if (isHovered.value)
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 1,
                       blurRadius: 1,
                     ),
@@ -226,7 +226,7 @@ class HoverRevealer extends HookWidget {
                   boxShadow: [
                     if (isHovered.value)
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 1,
                         blurRadius: 1,
                       ),

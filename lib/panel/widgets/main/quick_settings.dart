@@ -19,16 +19,18 @@ class QuickSettingsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      children: [
-        BatteryPanel(),
-        Gap(8),
-        VolumePanel(),
-        Gap(8),
-        BrightnessPanel(),
-        Gap(8),
-        WifiPanel(),
-      ],
+    return const RepaintBoundary(
+      child: Row(
+        children: [
+          BatteryPanel(),
+          Gap(8),
+          VolumePanel(),
+          Gap(8),
+          BrightnessPanel(),
+          Gap(8),
+          WifiPanel(),
+        ],
+      ),
     );
   }
 }
