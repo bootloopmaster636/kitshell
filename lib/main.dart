@@ -37,7 +37,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return ToastificationWrapper(
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'KITShell',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
