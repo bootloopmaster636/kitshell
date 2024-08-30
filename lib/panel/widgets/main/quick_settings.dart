@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/logic/brightness/brightness.dart';
 import 'package:kitshell/panel/logic/sound/sound.dart';
+import 'package:kitshell/panel/logic/wifi/wifi.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
@@ -32,13 +33,15 @@ class QuickSettingsContainer extends StatelessWidget {
   }
 }
 
-class WifiPanel extends StatelessWidget {
+class WifiPanel extends ConsumerWidget {
   const WifiPanel({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wifi = ref.watch(wifiListProvider);
+
     return HoverRevealer(
       icon: FontAwesomeIcons.wifi,
       onTap: () {
@@ -53,11 +56,14 @@ class WifiPanel extends StatelessWidget {
           ),
         );
       },
-      widget: const Padding(
+      widget: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            Text('SSID'),
+            Text(
+              '${wifi.value?.where((element) => element.isConnected == true).first.ssid ?? 'Unknown'}'
+              ' (${wifi.value?.where((element) => element.isConnected == true).first.signalStrength ?? 0}%)',
+            ),
           ],
         ),
       ),
