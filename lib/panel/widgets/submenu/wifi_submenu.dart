@@ -90,13 +90,35 @@ class WlanStationTile extends StatelessWidget {
           elevation: 2,
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Text(
-              '$ssid ($signalStrength dBm)',
-              style: TextStyle(
-                color: isConnected
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
+            child: Row(
+              children: [
+                const Gap(4),
+                Icon(
+                  signalStrength > 75
+                      ? Icons.network_wifi_rounded
+                      : signalStrength > 50
+                          ? Icons.network_wifi_3_bar_rounded
+                          : signalStrength > 25
+                              ? Icons.network_wifi_2_bar_rounded
+                              : Icons.network_wifi_1_bar_rounded,
+                  color: isConnected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSecondaryContainer,
+                  size: panelHeight / 3,
+                ),
+                const Gap(8),
+                Expanded(
+                  child: Text(
+                    ssid,
+                    style: TextStyle(
+                      color: isConnected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSecondaryContainer,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -147,33 +169,13 @@ class ConnectionSubmenu extends HookConsumerWidget {
                   ),
                 ),
               ),
+              onSubmitted: (value) {
+                connect(isLoading, context, ref, ssid, passwordCtl);
+              },
             ),
           ),
-          FilledButton(
-            onPressed: isLoading.value
-                ? null
-                : () async {
-                    isLoading.value = true;
-                    if (context.mounted) {
-                      try {
-                        final result = await connectToWifi(ssid: ssid, password: passwordCtl.value.text);
-                        if (result) {
-                          await ref.read(wifiListProvider.notifier).scanWifi();
-                          showToast(context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
-                          Future.delayed(toastDuration + const Duration(milliseconds: 500), () {
-                            Navigator.pop(context);
-                          });
-                        } else {
-                          showToast(context: context, message: 'Failed to connect to $ssid', icon: Icons.error);
-                        }
-
-                        isLoading.value = false;
-                      } catch (e) {
-                        showToast(context: context, message: 'Failed to connect, wrong password?', icon: Icons.error);
-                        isLoading.value = false;
-                      }
-                    }
-                  },
+          TextButton(
+            onPressed: isLoading.value ? null : () => connect(isLoading, context, ref, ssid, passwordCtl),
             child: const Text('Connect'),
           ),
           const Gap(8),
@@ -184,5 +186,29 @@ class ConnectionSubmenu extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> connect(ValueNotifier<bool> isLoading, BuildContext context, WidgetRef ref, String ssid,
+      TextEditingController passwordCtl) async {
+    isLoading.value = true;
+    if (context.mounted) {
+      try {
+        final result = await connectToWifi(ssid: ssid, password: passwordCtl.value.text);
+        if (result) {
+          await ref.read(wifiListProvider.notifier).scanWifi();
+          showToast(context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
+          Future.delayed(toastDuration + const Duration(milliseconds: 500), () {
+            Navigator.pop(context);
+          });
+        } else {
+          showToast(context: context, message: 'Failed to connect to $ssid', icon: Icons.error);
+        }
+
+        isLoading.value = false;
+      } catch (e) {
+        showToast(context: context, message: 'Failed to connect, wrong password?', icon: Icons.error);
+        isLoading.value = false;
+      }
+    }
   }
 }
