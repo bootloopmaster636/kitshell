@@ -7,6 +7,7 @@ import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
+import 'package:toastification/toastification.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
@@ -34,18 +35,20 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'KITShell',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        fontFamily: GoogleFonts.poppins().fontFamily,
+    return ToastificationWrapper(
+      child: MaterialApp(
+        title: 'KITShell',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          fontFamily: GoogleFonts.poppins().fontFamily,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark),
+          brightness: Brightness.dark,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+        ),
+        home: const Main(),
       ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark),
-        brightness: Brightness.dark,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-      ),
-      home: const Main(),
     );
   }
 }

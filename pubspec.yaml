@@ -30,6 +30,7 @@ dependencies:
   freezed: ^2.5.2
   octo_image: ^2.1.0
   page_transition: ^2.1.0
+  toastification: ^2.2.0
 
 dev_dependencies:
   flutter_test:

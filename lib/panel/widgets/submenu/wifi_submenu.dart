@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/const.dart';
+import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/logic/wifi/wifi.dart';
-import 'package:kitshell/panel/widgets/utility.dart';
+import 'package:kitshell/panel/widgets/utility_widgets.dart';
+import 'package:kitshell/src/rust/api/wifi.dart';
 import 'package:page_transition/page_transition.dart';
 
 class WifiSubmenu extends ConsumerWidget {
@@ -73,7 +78,9 @@ class WlanStationTile extends StatelessWidget {
               duration: const Duration(milliseconds: 100),
               reverseDuration: const Duration(milliseconds: 120),
               curve: Curves.easeOutExpo,
-              child: const ConnectionSubmenu(),
+              child: ConnectionSubmenu(
+                ssid: ssid,
+              ),
             ),
           );
         },
@@ -98,16 +105,19 @@ class WlanStationTile extends StatelessWidget {
   }
 }
 
-class ConnectionSubmenu extends HookWidget {
-  const ConnectionSubmenu({super.key});
+class ConnectionSubmenu extends HookConsumerWidget {
+  const ConnectionSubmenu({required this.ssid, super.key});
+
+  final String ssid;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final passwordCtl = useTextEditingController();
     final isPasswordObscured = useState(true);
+    final isLoading = useState(false);
 
     return Submenu(
-      title: 'Connect to SSID',
+      title: 'Connect to $ssid',
       body: Row(
         children: [
           Container(
@@ -140,11 +150,37 @@ class ConnectionSubmenu extends HookWidget {
             ),
           ),
           FilledButton(
-            onPressed: () {
-              // Connect to SSID
-            },
+            onPressed: isLoading.value
+                ? null
+                : () async {
+                    isLoading.value = true;
+                    if (context.mounted) {
+                      try {
+                        final result = await connectToWifi(ssid: ssid, password: passwordCtl.value.text);
+                        if (result) {
+                          await ref.read(wifiListProvider.notifier).scanWifi();
+                          showToast(context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
+                          Future.delayed(toastDuration + const Duration(milliseconds: 500), () {
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          showToast(context: context, message: 'Failed to connect to $ssid', icon: Icons.error);
+                        }
+
+                        isLoading.value = false;
+                      } catch (e) {
+                        showToast(context: context, message: 'Failed to connect, wrong password?', icon: Icons.error);
+                        isLoading.value = false;
+                      }
+                    }
+                  },
             child: const Text('Connect'),
           ),
+          const Gap(8),
+          if (isLoading.value)
+            const LoadingSpinner(
+              customLoadingMessage: 'Connecting...',
+            ),
         ],
       ),
     );

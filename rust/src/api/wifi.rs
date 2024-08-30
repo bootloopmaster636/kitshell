@@ -22,3 +22,8 @@ pub async fn get_wifi_list(rescan: bool) -> Vec<WifiData> {
     }
     wifi_list
 }
+
+pub async fn connect_to_wifi(ssid: &str, password: &str) -> anyhow::Result<bool> {
+    let wifi = WiFi::new("wlan0".to_string());
+    Ok(wifi.connect(ssid, Option::from(password)).expect("Failed to connect to wifi"))
+}

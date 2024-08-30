@@ -29,7 +29,7 @@ pub async fn get_battery_data() -> BatteryData {
     let mut drain_rate_watt_list: Vec<f32> = Vec::new();
     let mut status_list: Vec<BatteryState> = Vec::new();
 
-    for (idx, maybe_battery) in manager.batteries().unwrap().enumerate() {
+    for (_idx, maybe_battery) in manager.batteries().unwrap().enumerate() {
         let battery = maybe_battery.unwrap();
 
         capacity_percent_list.push(f32::from(battery.state_of_charge().get::<percent>()));

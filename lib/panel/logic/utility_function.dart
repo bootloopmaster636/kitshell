@@ -10,7 +10,7 @@ void showToast({
   // ImageProvider? image,
 }) {
   toastification.showCustom(
-    autoCloseDuration: const Duration(seconds: 3),
+    autoCloseDuration: toastDuration,
     alignment: Alignment.centerRight,
     animationDuration: const Duration(milliseconds: 800),
     animationBuilder: (context, animation, alignment, child) {

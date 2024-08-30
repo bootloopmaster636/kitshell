@@ -9,6 +9,10 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<List<WifiData>> getWifiList({required bool rescan}) =>
     RustLib.instance.api.crateApiWifiGetWifiList(rescan: rescan);
 
+Future<bool> connectToWifi({required String ssid, required String password}) =>
+    RustLib.instance.api
+        .crateApiWifiConnectToWifi(ssid: ssid, password: password);
+
 class WifiData {
   final bool isConnected;
   final String ssid;

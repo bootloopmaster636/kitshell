@@ -7,7 +7,7 @@ import 'package:kitshell/panel/logic/brightness/brightness.dart';
 import 'package:kitshell/panel/logic/sound/sound.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
-import 'package:kitshell/panel/widgets/utility.dart';
+import 'package:kitshell/panel/widgets/utility_widgets.dart';
 import 'package:kitshell/src/rust/api/battery.dart';
 import 'package:kitshell/src/rust/api/brightness.dart';
 import 'package:kitshell/src/rust/api/wireplumber.dart';
