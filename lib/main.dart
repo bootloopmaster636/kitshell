@@ -39,11 +39,11 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: 'KITShell',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
         darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
