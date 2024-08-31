@@ -32,6 +32,14 @@ class Mpris extends HookConsumerWidget {
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
               width: isHovered.value ? panelWidth / 4 : panelWidth / 6,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
               child: Stack(
                 fit: StackFit.passthrough,
                 children: [
