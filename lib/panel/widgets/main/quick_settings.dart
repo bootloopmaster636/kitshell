@@ -22,6 +22,7 @@ class QuickSettingsContainer extends StatelessWidget {
     return const RepaintBoundary(
       child: Row(
         children: [
+          Gap(4),
           BatteryPanel(),
           Gap(8),
           VolumePanel(),

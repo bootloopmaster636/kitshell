@@ -215,7 +215,7 @@ class HoverRevealer extends HookWidget {
             Visibility(
               visible: isHovered.value,
               child: Container(
-                height: double.infinity,
+                height: panelHeight,
                 width: panelWidth / 8,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainer,

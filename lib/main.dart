@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
@@ -61,19 +60,19 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: ColoredBox(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        child: DefaultTextStyle(
-          style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
-          child: const Row(
-            children: [
-              TimeWidget(),
-              Gap(4),
-              QuickSettingsContainer(),
-              Spacer(),
-              Mpris(),
-            ],
-          ),
+      child: DefaultTextStyle(
+        style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
+        child: Row(
+          children: [
+            const TimeWidget(),
+            Expanded(
+              child: ColoredBox(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                child: const QuickSettingsContainer(),
+              ),
+            ),
+            const Mpris(),
+          ],
         ),
       ),
     );
