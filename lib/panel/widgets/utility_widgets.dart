@@ -289,9 +289,10 @@ class LoadingSpinner extends StatelessWidget {
 }
 
 class ExpandedSubmenu extends StatelessWidget {
-  const ExpandedSubmenu({required this.title, super.key});
+  const ExpandedSubmenu({required this.title, required this.child, super.key});
 
   final String title;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +301,7 @@ class ExpandedSubmenu extends StatelessWidget {
         height: expandedPanelHeight,
         width: panelWidth,
         color: Theme.of(context).colorScheme.primaryContainer,
-        padding: const EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 8),
         child: Column(
           children: [
             Row(
@@ -317,11 +318,39 @@ class ExpandedSubmenu extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: panelHeight / 2,
+                    fontSize: 20,
                   ),
                 ),
               ],
             )
+                .animate(delay: 300.ms)
+                .fadeIn(
+                  duration: 800.ms,
+                  curve: Curves.easeOutExpo,
+                )
+                .slideY(
+                  begin: 0.4,
+                  end: 0,
+                  duration: 800.ms,
+                  curve: Curves.easeOutExpo,
+                ),
+            const Gap(4),
+            Expanded(
+              child: child
+                  .animate(
+                    delay: 350.ms,
+                  )
+                  .fadeIn(
+                    duration: 800.ms,
+                    curve: Curves.easeOutExpo,
+                  )
+                  .slideY(
+                    begin: 0.2,
+                    end: 0,
+                    duration: 800.ms,
+                    curve: Curves.easeOutExpo,
+                  ),
+            ),
           ],
         ),
       ),

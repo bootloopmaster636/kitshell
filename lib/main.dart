@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
+import 'package:kitshell/panel/logic/settings/look_and_feel.dart';
+import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
-import 'package:kitshell/panel/widgets/utility_widgets.dart';
+import 'package:kitshell/settings/settings.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
@@ -32,20 +33,24 @@ Future<void> main() async {
   runApp(const ProviderScope(child: App()));
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ToastificationWrapper(
       child: MaterialApp(
         title: 'KITShell',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: ref.watch(settingsLookAndFeelProvider).value?.color ?? Colors.purple),
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
         darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: ref.watch(settingsLookAndFeelProvider).value?.color ?? Colors.purple,
+            brightness: Brightness.dark,
+          ),
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
@@ -77,21 +82,14 @@ class Main extends StatelessWidget {
                       title: const Text('Kitshell Settings'),
                       leading: const Icon(Icons.settings_outlined),
                       onTap: () {
-                        WaylandLayerShell().initialize(panelWidth.toInt(), expandedPanelHeight.toInt());
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.bottomToTop,
-                            duration: const Duration(milliseconds: 100),
-                            reverseDuration: const Duration(milliseconds: 120),
-                            curve: Curves.easeOutExpo,
-                            child: const ExpandedSubmenu(
-                              title: 'Settings',
-                            ),
-                          ),
+                        Navigator.of(context).pop();
+                        pushExpandedSubmenu(
+                          context: context,
+                          title: 'Settings',
+                          child: const SettingsContent(),
                         );
                       },
-                    )
+                    ),
                   ];
                 },
                 verticalPadding: 0,

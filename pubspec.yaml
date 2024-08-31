@@ -32,6 +32,8 @@ dependencies:
   page_transition: ^2.1.0
   toastification: ^2.2.0
   contextmenu: ^3.0.0
+  flutter_colorpicker: ^1.1.0
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:
