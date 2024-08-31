@@ -31,6 +31,7 @@ dependencies:
   octo_image: ^2.1.0
   page_transition: ^2.1.0
   toastification: ^2.2.0
+  contextmenu: ^3.0.0
 
 dev_dependencies:
   flutter_test:
