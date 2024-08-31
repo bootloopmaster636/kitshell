@@ -24,6 +24,11 @@ class MprisLogic extends _$MprisLogic {
     );
   }
 
+  @override
+  bool updateShouldNotify(AsyncValue<MprisData> previous, AsyncValue<MprisData> next) {
+    return previous.value?.position != next.value?.position;
+  }
+
   Future<void> startPolling() async {
     Timer.periodic(pollingRate, (timer) async {
       try {

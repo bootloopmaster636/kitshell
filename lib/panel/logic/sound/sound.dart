@@ -17,6 +17,11 @@ class SoundLogic extends _$SoundLogic {
     );
   }
 
+  @override
+  bool updateShouldNotify(AsyncValue<WireplumberData> previous, AsyncValue<WireplumberData> next) {
+    return previous.value?.volume != next.value?.volume;
+  }
+
   Future<void> startPolling() async {
     Timer.periodic(pollingRate, (timer) async {
       state = AsyncValue.data(

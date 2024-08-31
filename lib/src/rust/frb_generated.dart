@@ -493,7 +493,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return BatteryData(
-      capacityPercent: dco_decode_list_prim_f_32_strict(arr[0]),
+      capacityPercent: dco_decode_list_prim_u_8_strict(arr[0]),
       drainRateWatt: dco_decode_list_prim_f_32_strict(arr[1]),
       status: dco_decode_list_battery_state(arr[2]),
     );
@@ -661,7 +661,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   BatteryData sse_decode_battery_data(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_capacityPercent = sse_decode_list_prim_f_32_strict(deserializer);
+    var var_capacityPercent = sse_decode_list_prim_u_8_strict(deserializer);
     var var_drainRateWatt = sse_decode_list_prim_f_32_strict(deserializer);
     var var_status = sse_decode_list_battery_state(deserializer);
     return BatteryData(
@@ -851,7 +851,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_battery_data(BatteryData self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_list_prim_f_32_strict(self.capacityPercent, serializer);
+    sse_encode_list_prim_u_8_strict(self.capacityPercent, serializer);
     sse_encode_list_prim_f_32_strict(self.drainRateWatt, serializer);
     sse_encode_list_battery_state(self.status, serializer);
   }

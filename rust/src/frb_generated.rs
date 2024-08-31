@@ -617,7 +617,7 @@ impl SseDecode for String {
 impl SseDecode for crate::api::battery::BatteryData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_capacityPercent = <Vec<f32>>::sse_decode(deserializer);
+        let mut var_capacityPercent = <Vec<u8>>::sse_decode(deserializer);
         let mut var_drainRateWatt = <Vec<f32>>::sse_decode(deserializer);
         let mut var_status = <Vec<crate::api::battery::BatteryState>>::sse_decode(deserializer);
         return crate::api::battery::BatteryData {
@@ -1047,7 +1047,7 @@ impl SseEncode for String {
 impl SseEncode for crate::api::battery::BatteryData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Vec<f32>>::sse_encode(self.capacity_percent, serializer);
+        <Vec<u8>>::sse_encode(self.capacity_percent, serializer);
         <Vec<f32>>::sse_encode(self.drain_rate_watt, serializer);
         <Vec<crate::api::battery::BatteryState>>::sse_encode(self.status, serializer);
     }

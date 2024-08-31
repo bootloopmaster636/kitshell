@@ -17,7 +17,7 @@ pub enum PowerProfiles {
 }
 
 pub struct BatteryData {
-    pub capacity_percent: Vec<f32>,
+    pub capacity_percent: Vec<u8>,
     pub drain_rate_watt: Vec<f32>,
     pub status: Vec<BatteryState>,
 }
@@ -25,14 +25,14 @@ pub struct BatteryData {
 pub async fn get_battery_data() -> BatteryData {
     let manager = battery::Manager::new().unwrap();
 
-    let mut capacity_percent_list: Vec<f32> = Vec::new();
+    let mut capacity_percent_list: Vec<u8> = Vec::new();
     let mut drain_rate_watt_list: Vec<f32> = Vec::new();
     let mut status_list: Vec<BatteryState> = Vec::new();
 
     for (_idx, maybe_battery) in manager.batteries().unwrap().enumerate() {
         let battery = maybe_battery.unwrap();
 
-        capacity_percent_list.push(f32::from(battery.state_of_charge().get::<percent>()));
+        capacity_percent_list.push(battery.state_of_charge().get::<percent>().round() as u8);
         drain_rate_watt_list.push(f32::from(battery.energy_rate().get::<units::power::watt>()));
 
         match battery.state() {

@@ -18,6 +18,11 @@ class WifiList extends _$WifiList {
     }
   }
 
+  @override
+  bool updateShouldNotify(AsyncValue<List<WifiData>> previous, AsyncValue<List<WifiData>> next) {
+    return previous.value != next.value;
+  }
+
   Future<void> scanWifi() async {
     state = const AsyncLoading();
 

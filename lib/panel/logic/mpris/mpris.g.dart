@@ -6,7 +6,7 @@ part of 'mpris.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mprisLogicHash() => r'b469558146e4f1d9d82f25c0281c19f38ee51d5f';
+String _$mprisLogicHash() => r'22d53617fddc8ff9de8bddfcbf6f357d741b4dd5';
 
 /// See also [MprisLogic].
 @ProviderFor(MprisLogic)

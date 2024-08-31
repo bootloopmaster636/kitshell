@@ -18,6 +18,18 @@ class BrightnessLogic extends _$BrightnessLogic {
     );
   }
 
+  @override
+  bool updateShouldNotify(AsyncValue<BrightnessData> previous, AsyncValue<BrightnessData> next) {
+    bool shouldNotify = false;
+    for (int i = 0; i < previous.value!.brightness.length; i++) {
+      if (previous.value!.brightness[i] != next.value!.brightness[i]) {
+        shouldNotify = true;
+        break;
+      }
+    }
+    return shouldNotify;
+  }
+
   Future<void> startPolling() async {
     Timer.periodic(pollingRate, (timer) async {
       state = AsyncData(await getBrightness());

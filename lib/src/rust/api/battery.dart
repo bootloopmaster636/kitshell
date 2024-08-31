@@ -16,7 +16,7 @@ Future<void> setPowerProfile({required PowerProfiles profile}) =>
     RustLib.instance.api.crateApiBatterySetPowerProfile(profile: profile);
 
 class BatteryData {
-  final Float32List capacityPercent;
+  final Uint8List capacityPercent;
   final Float32List drainRateWatt;
   final List<BatteryState> status;
 

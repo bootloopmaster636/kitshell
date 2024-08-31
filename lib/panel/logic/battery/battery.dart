@@ -12,10 +12,24 @@ class BatteryLogic extends _$BatteryLogic {
   Future<BatteryData> build() async {
     await startPolling();
     return BatteryData(
-      capacityPercent: Float32List(1),
+      capacityPercent: Uint8List(1),
       drainRateWatt: Float32List(1),
       status: List.empty(),
     );
+  }
+
+  @override
+  bool updateShouldNotify(AsyncValue<BatteryData> previous, AsyncValue<BatteryData> next) {
+    bool shouldUpdate = false;
+
+    for (int i = 0; i < next.value!.capacityPercent.length; i++) {
+      if (((next.value!.drainRateWatt[i]) * 10).round() != (previous.value!.drainRateWatt[i] * 10).round()) {
+        shouldUpdate = true;
+        break;
+      }
+    }
+
+    return shouldUpdate;
   }
 
   Future<void> startPolling() async {
