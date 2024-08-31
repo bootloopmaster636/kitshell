@@ -60,7 +60,7 @@ class WifiPanel extends ConsumerWidget {
         );
       },
       widget: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
             Text(

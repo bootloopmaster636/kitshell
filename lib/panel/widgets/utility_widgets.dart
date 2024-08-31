@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
+import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
 class Submenu extends HookWidget {
   const Submenu({
@@ -282,6 +283,47 @@ class LoadingSpinner extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ExpandedSubmenu extends StatelessWidget {
+  const ExpandedSubmenu({required this.title, super.key});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        height: expandedPanelHeight,
+        width: panelWidth,
+        color: Theme.of(context).colorScheme.primaryContainer,
+        padding: const EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    WaylandLayerShell().initialize(panelWidth.toInt(), panelHeight.toInt());
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.keyboard_arrow_down_rounded),
+                ),
+                const Gap(4),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: panelHeight / 2,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
