@@ -18,6 +18,7 @@ class LookAndFeel with _$LookAndFeel {
 class SettingsLookAndFeel extends _$SettingsLookAndFeel {
   @override
   Future<LookAndFeel> build() async {
+    state = const AsyncLoading();
     return const LookAndFeel(
       themeMode: ThemeModeOption.system,
       color: Colors.deepPurple,

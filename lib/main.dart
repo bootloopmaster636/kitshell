@@ -8,6 +8,7 @@ import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
+import 'package:kitshell/panel/widgets/utility_widgets.dart';
 import 'package:kitshell/settings/settings_screen.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:toastification/toastification.dart';
@@ -38,6 +39,7 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final settingsProvider = ref.watch(settingsLookAndFeelProvider);
     return ToastificationWrapper(
       child: MaterialApp(
         title: 'KITShell',
@@ -59,7 +61,7 @@ class App extends ConsumerWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         ),
-        home: const Main(),
+        home: settingsProvider.isLoading ? const LoadingScreen() : const Main(),
       ),
     );
   }

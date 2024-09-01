@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
@@ -351,6 +353,50 @@ class ExpandedSubmenu extends StatelessWidget {
                     curve: Curves.easeOutExpo,
                   ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        color: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/logoV1.svg',
+              width: panelHeight - 8,
+            ),
+            const Gap(4),
+            Text(
+              'Kitshell',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontFamily: GoogleFonts.inter().fontFamily,
+              ),
+            ),
+            const Gap(64),
+            const SizedBox(
+              width: panelWidth / 6,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Initializing...'),
+                  const Gap(4),
+                  LinearProgressIndicator(),
+                ],
+              ),
+            )
           ],
         ),
       ),

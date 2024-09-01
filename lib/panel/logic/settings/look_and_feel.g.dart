@@ -7,7 +7,7 @@ part of 'look_and_feel.dart';
 // **************************************************************************
 
 String _$settingsLookAndFeelHash() =>
-    r'3e1b588ad5368539fad792257470f57c89ca8c90';
+    r'765e4b25e2c586228d5d09e0ddc7422bb20fc1ee';
 
 /// See also [SettingsLookAndFeel].
 @ProviderFor(SettingsLookAndFeel)
