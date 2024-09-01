@@ -11,7 +11,7 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        color: Theme.of(context).colorScheme.secondary,
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Column(
@@ -40,7 +40,7 @@ class TimePart extends ConsumerWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onSecondary,
       ),
       child: Row(
         children: [
@@ -78,7 +78,7 @@ class DatePart extends ConsumerWidget {
       style: TextStyle(
         fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 10,
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onSecondary,
       ),
       child: Row(
         children: [
