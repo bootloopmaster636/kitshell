@@ -1,5 +1,6 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
@@ -111,6 +112,8 @@ class Main extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(
+          duration: 500.ms,
+        );
   }
 }
