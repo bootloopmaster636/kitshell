@@ -191,11 +191,7 @@ class PlayerControls extends StatelessWidget {
           IconButton(
             icon: Icon(mprisData.value!.isPlaying ? Icons.pause : Icons.play_arrow),
             onPressed: () async {
-              if (mprisData.value!.isPlaying) {
-                await playerPause();
-              } else {
-                await playerPlay();
-              }
+              await playerTogglePause();
             },
           ),
           IconButton(

@@ -9,9 +9,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<MprisData> getMprisData() =>
     RustLib.instance.api.crateApiMprisGetMprisData();
 
-Future<void> playerPause() => RustLib.instance.api.crateApiMprisPlayerPause();
-
-Future<void> playerPlay() => RustLib.instance.api.crateApiMprisPlayerPlay();
+Future<void> playerTogglePause() =>
+    RustLib.instance.api.crateApiMprisPlayerTogglePause();
 
 Future<void> playerNext() => RustLib.instance.api.crateApiMprisPlayerNext();
 

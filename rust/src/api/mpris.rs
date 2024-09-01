@@ -39,14 +39,13 @@ pub async fn get_mpris_data() -> anyhow::Result<MprisData> {
     })
 }
 
-pub async fn player_pause() {
+pub async fn player_toggle_pause() {
     let player = PlayerFinder::new().expect("Failed to connect to D-Bus").find_active().expect("No active player found");
-    player.pause().expect("Failed to pause player");
-}
-
-pub async fn player_play() {
-    let player = PlayerFinder::new().expect("Failed to connect to D-Bus").find_active().expect("No active player found");
-    player.play().expect("Failed to play player");
+    if (player.get_playback_status().expect("Failed to get playback status") == mpris::PlaybackStatus::Playing) {
+        player.pause().expect("Failed to pause player");
+    } else {
+        player.play().expect("Failed to play player");
+    }
 }
 
 pub async fn player_next() {
