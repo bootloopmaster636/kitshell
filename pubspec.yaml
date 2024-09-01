@@ -34,6 +34,7 @@ dependencies:
   contextmenu: ^3.0.0
   flutter_colorpicker: ^1.1.0
   expandable: ^5.0.1
+  smooth_scroll_multiplatform: ^1.0.8
 
 dev_dependencies:
   flutter_test:

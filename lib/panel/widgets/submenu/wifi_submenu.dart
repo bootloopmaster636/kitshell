@@ -12,6 +12,7 @@ import 'package:kitshell/panel/logic/wifi/wifi.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
 import 'package:kitshell/src/rust/api/wifi.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
 class WifiSubmenu extends ConsumerWidget {
   const WifiSubmenu({super.key});
@@ -35,23 +36,29 @@ class WifiSubmenu extends ConsumerWidget {
             ? const LoadingSpinner(
                 customLoadingMessage: 'Scanning...',
               )
-            : ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: wifiList.value?.length,
-                itemBuilder: (context, index) {
-                  final wifi = wifiList.value?[index];
-                  return WlanStationTile(
-                    ssid: wifi?.ssid ?? 'Unknown',
-                    signalStrength: wifi?.signalStrength ?? 0,
-                    isConnected: wifi?.isConnected ?? false,
-                  );
-                },
-              ).animate().fadeIn(duration: 500.ms).slideX(
-                  begin: 0.2,
-                  end: 0,
-                  duration: 500.ms,
-                  curve: Curves.easeOutExpo,
-                ),
+            : DynMouseScroll(
+                durationMS: 200,
+                animationCurve: Curves.easeOutQuad,
+                builder: (context, controller, physics) => ListView.builder(
+                  controller: controller,
+                  physics: physics,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: wifiList.value?.length,
+                  itemBuilder: (context, index) {
+                    final wifi = wifiList.value?[index];
+                    return WlanStationTile(
+                      ssid: wifi?.ssid ?? 'Unknown',
+                      signalStrength: wifi?.signalStrength ?? 0,
+                      isConnected: wifi?.isConnected ?? false,
+                    );
+                  },
+                ).animate().fadeIn(duration: 500.ms).slideX(
+                      begin: 0.2,
+                      end: 0,
+                      duration: 500.ms,
+                      curve: Curves.easeOutExpo,
+                    ),
+              ),
       ),
     );
   }
@@ -195,8 +202,8 @@ class ConnectionSubmenu extends HookConsumerWidget {
       try {
         final result = await connectToWifi(ssid: ssid, password: passwordCtl.value.text);
         if (result) {
-          await ref.read(wifiListProvider.notifier).scanWifi();
           showToast(context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
+          unawaited(ref.read(wifiListProvider.notifier).scanWifi());
           Future.delayed(toastDuration + const Duration(milliseconds: 500), () {
             Navigator.pop(context);
           });
