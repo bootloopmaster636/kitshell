@@ -8,7 +8,6 @@ class WifiList extends _$WifiList {
   @override
   Future<List<WifiData>> build() async {
     state = const AsyncLoading();
-
     try {
       final data = await getWifiList(rescan: false);
       return data;

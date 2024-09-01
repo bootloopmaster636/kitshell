@@ -11,6 +11,7 @@ part 'brightness.g.dart';
 class BrightnessLogic extends _$BrightnessLogic {
   @override
   Future<BrightnessData> build() async {
+    state = const AsyncLoading();
     await startPolling();
     return BrightnessData(
       brightness: Uint32List(1),
@@ -20,8 +21,11 @@ class BrightnessLogic extends _$BrightnessLogic {
 
   @override
   bool updateShouldNotify(AsyncValue<BrightnessData> previous, AsyncValue<BrightnessData> next) {
-    bool shouldNotify = false;
-    for (int i = 0; i < previous.value!.brightness.length; i++) {
+    var shouldNotify = false;
+
+    if (previous.value == null) return true;
+
+    for (var i = 0; i < previous.value!.brightness.length; i++) {
       if (previous.value!.brightness[i] != next.value!.brightness[i]) {
         shouldNotify = true;
         break;

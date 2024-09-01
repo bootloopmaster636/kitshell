@@ -10,6 +10,7 @@ part 'battery.g.dart';
 class BatteryLogic extends _$BatteryLogic {
   @override
   Future<BatteryData> build() async {
+    state = const AsyncLoading();
     await startPolling();
     return BatteryData(
       capacityPercent: Uint8List(1),
@@ -20,10 +21,15 @@ class BatteryLogic extends _$BatteryLogic {
 
   @override
   bool updateShouldNotify(AsyncValue<BatteryData> previous, AsyncValue<BatteryData> next) {
-    bool shouldUpdate = false;
+    var shouldUpdate = false;
 
-    for (int i = 0; i < next.value!.capacityPercent.length; i++) {
-      if (((next.value!.drainRateWatt[i]) * 10).round() != (previous.value!.drainRateWatt[i] * 10).round()) {
+    if (previous.value == null || next.value == null) {
+      return true;
+    }
+
+    for (var i = 0; i < next.value!.capacityPercent.length; i++) {
+      if (((next.value!.drainRateWatt[i]) * 100).round() != (previous.value!.drainRateWatt[i] * 100).round() ||
+          previous.value?.status[i] != next.value?.status[i]) {
         shouldUpdate = true;
         break;
       }

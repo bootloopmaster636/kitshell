@@ -10,6 +10,7 @@ part 'mpris.g.dart';
 class MprisLogic extends _$MprisLogic {
   @override
   Future<MprisData> build() async {
+    state = const AsyncLoading();
     await startPolling();
     return MprisData(
       title: 'Title',

@@ -10,8 +10,8 @@ part 'sound.g.dart';
 class SoundLogic extends _$SoundLogic {
   @override
   Future<WireplumberData> build() async {
+    state = const AsyncLoading();
     await startPolling();
-
     return const WireplumberData(
       volume: 0,
     );
