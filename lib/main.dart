@@ -54,6 +54,11 @@ class App extends ConsumerWidget {
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
+        themeMode: ref.watch(settingsLookAndFeelProvider).value?.themeMode,
+        themeAnimationStyle: AnimationStyle(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        ),
         home: const Main(),
       ),
     );
