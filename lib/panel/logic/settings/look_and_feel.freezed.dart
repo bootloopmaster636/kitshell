@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LookAndFeel {
-  ThemeMode get themeMode => throw _privateConstructorUsedError;
+  ThemeModeOption get themeMode => throw _privateConstructorUsedError;
   Color get color => throw _privateConstructorUsedError;
 
   /// Create a copy of LookAndFeel
@@ -32,7 +32,7 @@ abstract class $LookAndFeelCopyWith<$Res> {
           LookAndFeel value, $Res Function(LookAndFeel) then) =
       _$LookAndFeelCopyWithImpl<$Res, LookAndFeel>;
   @useResult
-  $Res call({ThemeMode themeMode, Color color});
+  $Res call({ThemeModeOption themeMode, Color color});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$LookAndFeelCopyWithImpl<$Res, $Val extends LookAndFeel>
       themeMode: null == themeMode
           ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
+              as ThemeModeOption,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,7 @@ abstract class _$$LookAndFeelImplCopyWith<$Res>
       __$$LookAndFeelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ThemeMode themeMode, Color color});
+  $Res call({ThemeModeOption themeMode, Color color});
 }
 
 /// @nodoc
@@ -97,7 +97,7 @@ class __$$LookAndFeelImplCopyWithImpl<$Res>
       themeMode: null == themeMode
           ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
+              as ThemeModeOption,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -112,7 +112,7 @@ class _$LookAndFeelImpl implements _LookAndFeel {
   const _$LookAndFeelImpl({required this.themeMode, required this.color});
 
   @override
-  final ThemeMode themeMode;
+  final ThemeModeOption themeMode;
   @override
   final Color color;
 
@@ -145,11 +145,11 @@ class _$LookAndFeelImpl implements _LookAndFeel {
 
 abstract class _LookAndFeel implements LookAndFeel {
   const factory _LookAndFeel(
-      {required final ThemeMode themeMode,
+      {required final ThemeModeOption themeMode,
       required final Color color}) = _$LookAndFeelImpl;
 
   @override
-  ThemeMode get themeMode;
+  ThemeModeOption get themeMode;
   @override
   Color get color;
 

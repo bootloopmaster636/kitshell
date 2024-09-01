@@ -1,10 +1,7 @@
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:kitshell/panel/logic/settings/look_and_feel.dart';
+import 'package:kitshell/settings/settings_section.dart';
 
 final List<Widget> settingsSectionContents = [
   const SectionGeneral(),
@@ -41,6 +38,7 @@ class SettingsContent extends HookWidget {
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
             ),
+            height: double.infinity,
             padding: const EdgeInsets.all(16),
             child: settingsSectionContents[selectedSection.value],
           ),
@@ -76,52 +74,6 @@ class SettingsSectionContent extends StatelessWidget {
   }
 }
 
-class SectionGeneral extends StatelessWidget {
-  const SectionGeneral({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class SectionLookAndFeel extends ConsumerWidget {
-  const SectionLookAndFeel({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: ExpandablePanel(
-              theme: ExpandableThemeData(
-                hasIcon: true,
-                iconColor: Theme.of(context).colorScheme.onSurface,
-                headerAlignment: ExpandablePanelHeaderAlignment.center,
-              ),
-              header: const Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Text('Accent Color'),
-              ),
-              expanded: MaterialPicker(
-                pickerColor: ref.watch(settingsLookAndFeelProvider).value?.color ?? Colors.purple,
-                onColorChanged: (color) {
-                  ref.read(settingsLookAndFeelProvider.notifier).changeColor(color);
-                },
-              ),
-              collapsed: const SizedBox(),
-            ),
-          ),
-          const Gap(8),
-          Placeholder(),
-        ],
-      ),
-    );
-  }
-}
-
 class SettingsSectionTile extends StatelessWidget {
   const SettingsSectionTile({
     required this.index,
@@ -143,8 +95,14 @@ class SettingsSectionTile extends StatelessWidget {
           ? Theme.of(context).colorScheme.surfaceContainerHigh
           : Theme.of(context).colorScheme.surface,
       child: ListTile(
-        leading: Icon(icon),
-        title: Text(title),
+        leading: Icon(
+          icon,
+          size: 20,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 14),
+        ),
         onTap: () {
           notifier.value = index;
         },

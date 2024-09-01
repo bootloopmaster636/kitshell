@@ -8,7 +8,7 @@ import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
-import 'package:kitshell/settings/settings.dart';
+import 'package:kitshell/settings/settings_screen.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wayland_layer_shell/types.dart';
@@ -54,7 +54,7 @@ class App extends ConsumerWidget {
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
-        themeMode: ref.watch(settingsLookAndFeelProvider).value?.themeMode,
+        themeMode: ref.watch(settingsLookAndFeelProvider).value?.themeMode.value,
         themeAnimationStyle: AnimationStyle(
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
