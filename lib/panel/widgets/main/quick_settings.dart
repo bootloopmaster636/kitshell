@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/logic/brightness/brightness.dart';
 import 'package:kitshell/panel/logic/sound/sound.dart';
@@ -46,7 +47,12 @@ class WifiPanel extends ConsumerWidget {
     final wifi = ref.watch(wifiListProvider);
 
     return HoverRevealer(
-      icon: FontAwesomeIcons.wifi,
+      icon: (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 75
+          ? Icons.wifi
+          : (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 50
+              ? Icons.wifi_2_bar_outlined
+              : Icons.wifi_1_bar_rounded,
+      iconSize: panelHeight / 2.5,
       onTap: () {
         Navigator.push(
           context,
@@ -90,6 +96,7 @@ class BrightnessPanel extends ConsumerWidget {
         value: brightness.value?.brightness.first.toDouble() ?? 100,
         onChanged: (value) async {
           await setBrightnessAll(brightness: value.toInt());
+          await ref.read(brightnessLogicProvider.notifier).updateValue();
         },
         max: 100,
       ),
@@ -107,12 +114,17 @@ class VolumePanel extends HookConsumerWidget {
     final soundInfo = ref.watch(soundLogicProvider).value;
 
     return HoverRevealer(
-      icon: FontAwesomeIcons.volumeHigh,
+      icon: (soundInfo?.volume ?? 0) > 0.6
+          ? FontAwesomeIcons.volumeHigh
+          : (soundInfo?.volume ?? 0) > 0.3
+              ? FontAwesomeIcons.volumeLow
+              : FontAwesomeIcons.volumeOff,
       value: ((soundInfo?.volume ?? 0) * 100).toInt(),
       widget: Slider(
         value: soundInfo?.volume ?? 0,
-        onChanged: (value) {
-          setVolume(volume: value);
+        onChanged: (value) async {
+          await setVolume(volume: value);
+          await ref.read(soundLogicProvider.notifier).updateValue();
         },
       ),
     );
@@ -138,6 +150,7 @@ class BatteryPanel extends ConsumerWidget {
                   : batteryInfo.value!.capacityPercent.first >= 15
                       ? FontAwesomeIcons.batteryQuarter
                       : FontAwesomeIcons.batteryEmpty,
+      iconOverlay: batteryInfo.value?.status.first == BatteryState.charging ? FontAwesomeIcons.bolt : null,
       value: batteryInfo.value?.capacityPercent.first.toInt(),
       onTap: () {
         Navigator.push(

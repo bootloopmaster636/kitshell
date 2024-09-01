@@ -35,4 +35,8 @@ class BrightnessLogic extends _$BrightnessLogic {
       state = AsyncData(await getBrightness());
     });
   }
+
+  Future<void> updateValue() async {
+    state = AsyncData(await getBrightness());
+  }
 }

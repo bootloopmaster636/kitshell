@@ -147,12 +147,16 @@ class HoverRevealer extends HookWidget {
   const HoverRevealer({
     required this.icon,
     required this.widget,
+    this.iconSize,
+    this.iconOverlay,
     this.value,
     this.onTap,
     super.key,
   });
 
   final IconData icon;
+  final double? iconSize;
+  final IconData? iconOverlay;
   final Widget widget;
   final int? value;
   final void Function()? onTap;
@@ -208,11 +212,31 @@ class HoverRevealer extends HookWidget {
                 largeSize: 10,
                 textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
                 offset: const Offset(6, -6),
-                child: FaIcon(
-                  icon,
-                  size: panelHeight / 3,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
+                child: iconOverlay == null
+                    ? FaIcon(
+                        icon,
+                        size: iconSize ?? panelHeight / 3,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      )
+                    : Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          FaIcon(
+                            icon,
+                            size: iconSize ?? panelHeight / 3,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: -6,
+                            child: FaIcon(
+                              iconOverlay,
+                              size: panelHeight / 6,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ],
+                      ),
               ),
             ),
             Visibility(

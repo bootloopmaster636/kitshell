@@ -29,4 +29,10 @@ class SoundLogic extends _$SoundLogic {
       );
     });
   }
+
+  Future<void> updateValue() async {
+    state = AsyncValue.data(
+      await getVolume(),
+    );
+  }
 }
