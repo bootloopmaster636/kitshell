@@ -197,11 +197,11 @@ class HoverRevealer extends HookWidget {
                     : Text(
                         value.toString(),
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.onTertiary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
                 smallSize: 0,
                 largeSize: 10,
                 textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
