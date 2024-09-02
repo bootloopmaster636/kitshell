@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kitshell/settings/enums.dart';
+import 'package:kitshell/settings/persistence/look_and_feel_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'look_and_feel.freezed.dart';
@@ -19,10 +20,8 @@ class SettingsLookAndFeel extends _$SettingsLookAndFeel {
   @override
   Future<LookAndFeel> build() async {
     state = const AsyncLoading();
-    return const LookAndFeel(
-      themeMode: ThemeModeOption.system,
-      color: Colors.deepPurple,
-    );
+    final data = getLookAndFeelSettings();
+    return data;
   }
 
   void changeColor(Color color) {
@@ -30,6 +29,7 @@ class SettingsLookAndFeel extends _$SettingsLookAndFeel {
       state.value?.copyWith(color: color) ??
           const LookAndFeel(themeMode: ThemeModeOption.system, color: Colors.deepPurple),
     );
+    storeLookAndFeelSettings(LookAndFeel(themeMode: state.value!.themeMode, color: color));
   }
 
   void changeThemeMode(ThemeModeOption? themeMode) {
@@ -37,5 +37,6 @@ class SettingsLookAndFeel extends _$SettingsLookAndFeel {
       state.value?.copyWith(themeMode: themeMode ?? ThemeModeOption.system) ??
           const LookAndFeel(themeMode: ThemeModeOption.system, color: Colors.deepPurple),
     );
+    storeLookAndFeelSettings(LookAndFeel(themeMode: themeMode ?? ThemeModeOption.system, color: state.value!.color));
   }
 }

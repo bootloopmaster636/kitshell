@@ -26,7 +26,7 @@ dependencies:
   logger: ^2.4.0
   rust_lib_kitshell:
     path: rust_builder
-  flutter_rust_bridge: 2.2.0
+  flutter_rust_bridge: 2.3.0
   freezed: ^2.5.2
   octo_image: ^2.1.0
   page_transition: ^2.1.0
@@ -36,6 +36,9 @@ dependencies:
   expandable: ^5.0.1
   smooth_scroll_multiplatform: ^1.0.8
   flutter_svg: ^2.0.10+1
+  objectbox: ^4.0.2
+  objectbox_flutter_libs: ^4.0.2
+  tinycolor2: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -46,10 +49,11 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
   riverpod_lint: ^2.3.10
-  build_runner: ^2.4.11
+  build_runner: ^2.4.12
   very_good_analysis: ^6.0.0
   custom_lint: ^0.6.4
   riverpod_generator: ^2.4.0
+  objectbox_generator: any
 
 flutter:
   uses-material-design: true

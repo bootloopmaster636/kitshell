@@ -44,7 +44,6 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsProvider = ref.watch(settingsLookAndFeelProvider);
     return ToastificationWrapper(
       child: MaterialApp(
         title: 'KITShell',
@@ -66,7 +65,7 @@ class App extends ConsumerWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         ),
-        home: settingsProvider.isLoading ? const LoadingScreen() : const Main(),
+        home: ref.watch(settingsLookAndFeelProvider).isLoading ? const LoadingScreen() : const Main(),
       ),
     );
   }

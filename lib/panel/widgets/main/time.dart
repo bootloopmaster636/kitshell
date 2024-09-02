@@ -1,7 +1,6 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/panel/logic/time/time.dart';
 
 class TimeWidget extends StatelessWidget {
@@ -37,7 +36,6 @@ class TimePart extends ConsumerWidget {
 
     return DefaultTextStyle(
       style: TextStyle(
-        fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.bold,
         color: Theme.of(context).colorScheme.onSecondary,
@@ -76,7 +74,6 @@ class DatePart extends ConsumerWidget {
 
     return DefaultTextStyle(
       style: TextStyle(
-        fontFamily: GoogleFonts.poppins().fontFamily,
         fontSize: 10,
         color: Theme.of(context).colorScheme.onSecondary,
       ),
