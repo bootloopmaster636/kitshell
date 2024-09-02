@@ -10,15 +10,19 @@ import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
 import 'package:kitshell/settings/logic/look_and_feel.dart';
+import 'package:kitshell/settings/persistence/objectbox.dart';
 import 'package:kitshell/settings/settings_screen.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
+late ObjectBox objectbox;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RustLib.init();
+  objectbox = await ObjectBox.create();
 
   final waylandLayerShellPlugin = WaylandLayerShell();
   final isSupported = await waylandLayerShellPlugin.initialize(1, 1);
@@ -47,7 +51,7 @@ class App extends ConsumerWidget {
         theme: ThemeData(
           colorScheme:
               ColorScheme.fromSeed(seedColor: ref.watch(settingsLookAndFeelProvider).value?.color ?? Colors.purple),
-          fontFamily: GoogleFonts.poppins().fontFamily,
+          fontFamily: GoogleFonts.inter().fontFamily,
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
@@ -55,7 +59,7 @@ class App extends ConsumerWidget {
             brightness: Brightness.dark,
           ),
           brightness: Brightness.dark,
-          fontFamily: GoogleFonts.poppins().fontFamily,
+          fontFamily: GoogleFonts.inter().fontFamily,
         ),
         themeMode: ref.watch(settingsLookAndFeelProvider).value?.themeMode.value,
         themeAnimationStyle: AnimationStyle(
