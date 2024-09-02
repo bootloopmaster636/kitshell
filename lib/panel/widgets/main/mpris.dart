@@ -28,6 +28,9 @@ class Mpris extends HookConsumerWidget {
         },
         child: mprisData.when(
           data: (data) {
+            if (data.imageUrl.isEmpty) {
+              return const NoPlayer();
+            }
             return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
@@ -69,7 +72,7 @@ class Mpris extends HookConsumerWidget {
             return const SizedBox();
           },
           error: (error, stackTrace) {
-            return const SizedBox();
+            return const NoPlayer();
           },
         ),
       ),
@@ -205,6 +208,23 @@ class PlayerControls extends StatelessWidget {
         ],
       ),
       secondChild: const SizedBox(),
+    );
+  }
+}
+
+class NoPlayer extends StatelessWidget {
+  const NoPlayer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.tertiaryContainer,
+      height: panelHeight,
+      padding: const EdgeInsets.all(8),
+      child: Icon(
+        Icons.music_off_outlined,
+        color: Theme.of(context).colorScheme.onTertiaryContainer,
+      ),
     );
   }
 }
