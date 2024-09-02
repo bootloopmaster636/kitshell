@@ -4,8 +4,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/panel/logic/settings/look_and_feel.dart';
 import 'package:kitshell/settings/enums.dart';
+import 'package:kitshell/settings/logic/look_and_feel.dart';
 
 class SectionGeneral extends StatelessWidget {
   const SectionGeneral({super.key});
