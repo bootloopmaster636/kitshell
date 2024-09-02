@@ -1,5 +1,4 @@
 import 'package:kitshell/objectbox.g.dart';
-import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class ObjectBox {
@@ -10,8 +9,8 @@ class ObjectBox {
   late final Store store;
 
   static Future<ObjectBox> create() async {
-    final docsDir = await getApplicationDocumentsDirectory();
-    final store = await openStore(directory: p.join(docsDir.path, 'kitshell-box'));
+    final local = await getApplicationSupportDirectory();
+    final store = await openStore(directory: local.path);
     return ObjectBox._create(store);
   }
 }
