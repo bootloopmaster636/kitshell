@@ -20,18 +20,25 @@ class QuickSettingsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const RepaintBoundary(
-      child: Row(
-        children: [
-          Gap(4),
-          BatteryPanel(),
-          Gap(8),
-          VolumePanel(),
-          Gap(8),
-          BrightnessPanel(),
-          Gap(8),
-          WifiPanel(),
-        ],
+    return RepaintBoundary(
+      child: SliderTheme(
+        data: SliderThemeData(
+          trackHeight: 24,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 13),
+          overlayShape: SliderComponentShape.noOverlay,
+        ),
+        child: const Row(
+          children: [
+            Gap(4),
+            BatteryPanel(),
+            Gap(8),
+            VolumePanel(),
+            Gap(8),
+            BrightnessPanel(),
+            Gap(8),
+            WifiPanel(),
+          ],
+        ),
       ),
     );
   }
@@ -92,13 +99,28 @@ class BrightnessPanel extends ConsumerWidget {
     return HoverRevealer(
       icon: FontAwesomeIcons.sun,
       value: brightness.value?.brightness.first,
-      widget: Slider(
-        value: brightness.value?.brightness.first.toDouble() ?? 100,
-        onChanged: (value) async {
-          await setBrightnessAll(brightness: value.toInt());
-          await ref.read(brightnessLogicProvider.notifier).updateValue();
-        },
-        max: 100,
+      widget: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 12),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 6,
+              child: Slider(
+                value: brightness.value?.brightness.first.toDouble() ?? 100,
+                onChanged: (value) async {
+                  await setBrightnessAll(brightness: value.toInt());
+                  await ref.read(brightnessLogicProvider.notifier).updateValue();
+                },
+                max: 100,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                '${brightness.value?.brightness.first}',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -120,12 +142,27 @@ class VolumePanel extends HookConsumerWidget {
               ? FontAwesomeIcons.volumeLow
               : FontAwesomeIcons.volumeOff,
       value: ((soundInfo?.volume ?? 0) * 100).toInt(),
-      widget: Slider(
-        value: soundInfo?.volume ?? 0,
-        onChanged: (value) async {
-          await setVolume(volume: value);
-          await ref.read(soundLogicProvider.notifier).updateValue();
-        },
+      widget: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 12),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 6,
+              child: Slider(
+                value: soundInfo?.volume ?? 0,
+                onChanged: (value) async {
+                  await setVolume(volume: value);
+                  await ref.read(soundLogicProvider.notifier).updateValue();
+                },
+              ),
+            ),
+            Flexible(
+              child: Text(
+                ((soundInfo?.volume ?? 0) * 100).toStringAsFixed(0),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

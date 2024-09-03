@@ -173,82 +173,25 @@ class HoverRevealer extends HookWidget {
         onExit: (event) {
           isHovered.value = false;
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOutCirc,
-              width: isHovered.value ? panelHeight : panelHeight - 16,
-              height: panelHeight,
-              decoration: BoxDecoration(
-                color: isHovered.value ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(999),
-                  bottomLeft: Radius.circular(999),
-                ),
-                boxShadow: [
-                  if (isHovered.value)
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                    ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Badge(
-                label: value == null
-                    ? null
-                    : Text(
-                        value.toString(),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onTertiary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                backgroundColor: Theme.of(context).colorScheme.tertiary,
-                smallSize: 0,
-                largeSize: 10,
-                textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
-                offset: const Offset(6, -6),
-                child: iconOverlay == null
-                    ? FaIcon(
-                        icon,
-                        size: iconSize ?? panelHeight / 3,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      )
-                    : Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          FaIcon(
-                            icon,
-                            size: iconSize ?? panelHeight / 3,
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: -6,
-                            child: FaIcon(
-                              iconOverlay,
-                              size: panelHeight / 6,
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-            ),
-            Visibility(
-              visible: isHovered.value,
-              child: Container(
+        child: GestureDetector(
+          onTap: onTap == null
+              ? null
+              : () {
+                  onTap!();
+                },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCirc,
+                width: isHovered.value ? panelHeight : panelHeight - 16,
                 height: panelHeight,
-                width: panelWidth / 8,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  color: isHovered.value ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(999),
-                    bottomRight: Radius.circular(999),
+                    topLeft: Radius.circular(999),
+                    bottomLeft: Radius.circular(999),
                   ),
                   boxShadow: [
                     if (isHovered.value)
@@ -259,25 +202,76 @@ class HoverRevealer extends HookWidget {
                       ),
                   ],
                 ),
-                clipBehavior: Clip.hardEdge,
-                alignment: Alignment.centerLeft,
-                child: Material(
-                  textStyle: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface),
-                  child: SizedBox(
-                    height: double.infinity,
-                    child: InkWell(
-                      onTap: onTap == null
-                          ? null
-                          : () {
-                              onTap!();
-                            },
-                      child: widget,
-                    ),
-                  ),
+                alignment: Alignment.center,
+                child: Badge(
+                  label: value == null
+                      ? null
+                      : Text(
+                          value.toString(),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onTertiary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  smallSize: 0,
+                  largeSize: 10,
+                  textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                  offset: const Offset(6, -6),
+                  child: iconOverlay == null
+                      ? FaIcon(
+                          icon,
+                          size: iconSize ?? panelHeight / 3,
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        )
+                      : Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            FaIcon(
+                              icon,
+                              size: iconSize ?? panelHeight / 3,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: -6,
+                              child: FaIcon(
+                                iconOverlay,
+                                size: panelHeight / 6,
+                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
               ),
-            ),
-          ],
+              Visibility(
+                visible: isHovered.value,
+                child: Container(
+                  height: panelHeight,
+                  width: panelWidth / 8,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(999),
+                      bottomRight: Radius.circular(999),
+                    ),
+                    boxShadow: [
+                      if (isHovered.value)
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                        ),
+                    ],
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  alignment: Alignment.centerLeft,
+                  child: widget,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
