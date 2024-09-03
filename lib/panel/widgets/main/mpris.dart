@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/const.dart';
@@ -34,11 +35,11 @@ class Mpris extends HookConsumerWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
-              width: isHovered.value ? panelWidth / 4 : panelWidth / 6,
+              width: isHovered.value ? panelWidth / 5 : panelWidth / 6,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.2),
+                    color: Theme.of(context).shadowColor.withOpacity(0.2),
                     blurRadius: 4,
                   ),
                 ],
@@ -49,7 +50,7 @@ class Mpris extends HookConsumerWidget {
                   ClipRect(
                     clipBehavior: Clip.antiAlias,
                     child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                      imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                       child: OctoImage(
                         image: (mprisData.value!.imageUrl.startsWith('file://'))
                             ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
@@ -61,7 +62,7 @@ class Mpris extends HookConsumerWidget {
                     ),
                   ),
                   ColoredBox(
-                    color: Theme.of(context).colorScheme.surface.withOpacity(0.75),
+                    color: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.7),
                     child: MprisContent(isHovered: isHovered),
                   ),
                 ],
@@ -97,7 +98,7 @@ class MprisContent extends ConsumerWidget {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.3),
+                  color: Theme.of(context).shadowColor.withOpacity(0.3),
                   blurRadius: 4,
                 ),
               ],
@@ -149,8 +150,8 @@ class MprisContent extends ConsumerWidget {
                       value: mprisData.value!.position / mprisData.value!.duration,
                       borderRadius: BorderRadius.circular(999),
                       minHeight: 2,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
                     ),
                   ],
                 ),
@@ -184,7 +185,10 @@ class PlayerControls extends StatelessWidget {
       firstChild: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.skip_previous),
+            icon: const FaIcon(
+              FontAwesomeIcons.backward,
+              size: panelHeight / 4,
+            ),
             onPressed: mprisData.value!.canPrevious
                 ? () async {
                     await playerPrevious();
@@ -192,13 +196,13 @@ class PlayerControls extends StatelessWidget {
                 : null,
           ),
           IconButton(
-            icon: Icon(mprisData.value!.isPlaying ? Icons.pause : Icons.play_arrow),
+            icon: FaIcon(mprisData.value!.isPlaying ? FontAwesomeIcons.pause : FontAwesomeIcons.play),
             onPressed: () async {
               await playerTogglePause();
             },
           ),
           IconButton(
-            icon: const Icon(Icons.skip_next),
+            icon: const FaIcon(FontAwesomeIcons.forward, size: panelHeight / 4),
             onPressed: mprisData.value!.canNext
                 ? () async {
                     await playerNext();

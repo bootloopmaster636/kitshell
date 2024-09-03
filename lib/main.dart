@@ -59,6 +59,7 @@ class App extends ConsumerWidget {
           ),
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.inter().fontFamily,
+          applyElevationOverlayColor: true,
         ),
         themeMode: ref.watch(settingsLookAndFeelProvider).value?.themeMode.value,
         themeAnimationStyle: AnimationStyle(
