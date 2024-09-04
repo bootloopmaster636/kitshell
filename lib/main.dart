@@ -106,7 +106,7 @@ class Main extends StatelessWidget {
           child: ColoredBox(
             color: Theme.of(context).colorScheme.secondaryContainer,
             child: const Stack(
-              fit: StackFit.passthrough,
+              alignment: Alignment.bottomCenter,
               children: [
                 Row(
                   children: [
