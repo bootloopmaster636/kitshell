@@ -47,11 +47,14 @@ class Hyprland extends HookConsumerWidget {
             Flexible(
               flex: 5,
               child: Center(
-                child: Text(
-                  activeWindowTitle ?? 'Unknown',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    activeWindowTitle ?? 'Unknown',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ),
