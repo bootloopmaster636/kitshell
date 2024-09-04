@@ -15,6 +15,9 @@ Future<void> dispatchSwitchWorkspaceNext() =>
 Future<void> dispatchSwitchWorkspacePrevious() =>
     RustLib.instance.api.crateApiHyprlandDispatchSwitchWorkspacePrevious();
 
+Future<void> dispatchKillActive() =>
+    RustLib.instance.api.crateApiHyprlandDispatchKillActive();
+
 Future<String> getActiveWindowTitle() =>
     RustLib.instance.api.crateApiHyprlandGetActiveWindowTitle();
 

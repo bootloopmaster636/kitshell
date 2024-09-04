@@ -30,6 +30,10 @@ pub fn dispatch_switch_workspace_previous() {
     Dispatch::call(Workspace(WorkspaceIdentifierWithSpecial::Relative(-1))).expect("Failed to switch to previous workspace");
 }
 
+pub fn dispatch_kill_active() {
+    Dispatch::call(KillActiveWindow).unwrap();
+}
+
 pub fn get_active_window_title() -> String {
     let data = Client::get_active().unwrap().expect("Failed to get active window");
     data.title
