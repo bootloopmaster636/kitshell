@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,17 +28,29 @@ class QuickSettingsContainer extends StatelessWidget {
           thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 13),
           overlayShape: SliderComponentShape.noOverlay,
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Gap(4),
+            // Gap(4),
             BatteryPanel(),
-            Gap(8),
+            // Gap(8),
             VolumePanel(),
-            Gap(8),
+            // Gap(8),
             BrightnessPanel(),
-            Gap(8),
+            // Gap(8),
             WifiPanel(),
-          ],
+          ]
+              .map((e) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: e,
+                  ))
+              .toList()
+              .animate(interval: 100.ms, delay: 600.ms)
+              .slideY(
+                begin: 1,
+                end: 0,
+                duration: 800.ms,
+                curve: Curves.easeOutExpo,
+              ),
         ),
       ),
     );
