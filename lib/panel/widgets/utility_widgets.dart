@@ -320,7 +320,7 @@ class ExpandedSubmenu extends StatelessWidget {
       child: Container(
         height: expandedPanelHeight,
         width: panelWidth,
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         padding: const EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 8),
         child: Column(
           children: [
@@ -343,7 +343,7 @@ class ExpandedSubmenu extends StatelessWidget {
                 ),
               ],
             )
-                .animate(delay: 300.ms)
+                .animate(delay: 400.ms)
                 .fadeIn(
                   duration: 800.ms,
                   curve: Curves.easeOutExpo,
@@ -358,7 +358,7 @@ class ExpandedSubmenu extends StatelessWidget {
             Expanded(
               child: child
                   .animate(
-                    delay: 350.ms,
+                    delay: 450.ms,
                   )
                   .fadeIn(
                     duration: 800.ms,

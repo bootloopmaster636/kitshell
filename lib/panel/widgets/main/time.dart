@@ -1,6 +1,7 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/time/time.dart';
 
 class TimeWidget extends StatelessWidget {
@@ -9,7 +10,8 @@ class TimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: ColoredBox(
+      child: Container(
+        height: panelHeight,
         color: Theme.of(context).colorScheme.secondary,
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
