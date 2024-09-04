@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:kitshell/settings/settings_section.dart';
 
 final List<Widget> settingsSectionContents = [
-  const SectionGeneral(),
   const SectionLookAndFeel(),
+  const SectionLayerShell(),
 ];
 
 class SettingsContent extends HookWidget {
@@ -59,14 +59,14 @@ class SettingsSectionContent extends StatelessWidget {
       children: [
         SettingsSectionTile(
           index: 0,
-          title: 'General',
-          icon: Icons.settings_outlined,
+          title: 'Look and feel',
+          icon: Icons.format_paint_outlined,
           notifier: notifier,
         ),
         SettingsSectionTile(
           index: 1,
-          title: 'Look and feel',
-          icon: Icons.format_paint_outlined,
+          title: 'Layer shell',
+          icon: Icons.layers_outlined,
           notifier: notifier,
         ),
       ],

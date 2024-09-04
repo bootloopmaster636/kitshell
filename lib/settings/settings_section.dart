@@ -1,18 +1,109 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/settings/enums.dart';
-import 'package:kitshell/settings/logic/look_and_feel.dart';
+import 'package:kitshell/settings/dropdown_value.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
+import 'package:kitshell/settings/logic/look_and_feel/look_and_feel.dart';
+import 'package:wayland_layer_shell/types.dart';
 
-class SectionGeneral extends StatelessWidget {
-  const SectionGeneral({super.key});
+class SectionLayerShell extends HookConsumerWidget {
+  const SectionLayerShell({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Text('Work in progress');
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelWidthCtl =
+        useTextEditingController(text: ref.watch(layerShellLogicProvider).value?.panelWidth.toString());
+    final panelHeightCtl =
+        useTextEditingController(text: ref.watch(layerShellLogicProvider).value?.panelHeight.toString());
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Card(
+            child: ListTile(
+              title: const Text('Panel width'),
+              visualDensity: VisualDensity.standard,
+              trailing: SizedBox(
+                width: 100,
+                child: TextField(
+                  controller: panelWidthCtl,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    suffix: Text('px'),
+                  ),
+                  textAlign: TextAlign.end,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (value) {
+                    ref.read(layerShellLogicProvider.notifier).setPanelWidth(int.tryParse(value) ?? 1366);
+                  },
+                ),
+              ),
+            ),
+          ),
+          const Gap(4),
+          Card(
+            child: ListTile(
+              title: const Text('Panel height'),
+              subtitle: const Text('⚠️ Experimental, might not work as expected'),
+              visualDensity: VisualDensity.standard,
+              trailing: SizedBox(
+                width: 100,
+                child: TextField(
+                  controller: panelHeightCtl,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    suffix: Text('px'),
+                  ),
+                  textAlign: TextAlign.end,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (value) {
+                    ref.read(layerShellLogicProvider.notifier).setPanelHeight(int.tryParse(value) ?? 48);
+                  },
+                ),
+              ),
+            ),
+          ),
+          const Gap(4),
+          Card(
+            child: ListTile(
+              title: const Text('Shell layer'),
+              subtitle: const Text('Select the layer where the panel should be placed'),
+              visualDensity: VisualDensity.standard,
+              trailing: DropdownMenu<ShellLayerOption>(
+                initialSelection: ShellLayerOption.layerTop,
+                onSelected: (option) {
+                  ref.read(layerShellLogicProvider.notifier).setLayer(option?.value ?? ShellLayer.layerTop);
+                },
+                dropdownMenuEntries: ShellLayerOption.values.map((option) {
+                  return DropdownMenuEntry(
+                    value: option,
+                    label: option.label,
+                  );
+                }).toList(growable: false),
+                textStyle: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          const Gap(8),
+          FilledButton(
+            onPressed: () async {
+              await ref.read(layerShellLogicProvider.notifier).applySettings().then((val) {
+                ref.read(layerShellLogicProvider.notifier).setHeightExpanded();
+              });
+            },
+            child: const Text('Apply layer shell settings'),
+          ),
+        ],
+      ),
+    );
   }
 }
 

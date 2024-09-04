@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
-import 'package:wayland_layer_shell/wayland_layer_shell.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 
 class Submenu extends HookWidget {
   const Submenu({
@@ -308,14 +309,14 @@ class LoadingSpinner extends StatelessWidget {
   }
 }
 
-class ExpandedSubmenu extends StatelessWidget {
+class ExpandedSubmenu extends ConsumerWidget {
   const ExpandedSubmenu({required this.title, required this.child, super.key});
 
   final String title;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: Container(
         height: expandedPanelHeight,
@@ -328,10 +329,10 @@ class ExpandedSubmenu extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    WaylandLayerShell().initialize(panelWidth.toInt(), panelHeight.toInt());
+                    ref.read(layerShellLogicProvider.notifier).setHeightNormal();
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.keyboard_arrow_down_rounded),
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
                 ),
                 const Gap(4),
                 Text(

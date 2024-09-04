@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kitshell/main.dart';
-import 'package:kitshell/settings/enums.dart';
-import 'package:kitshell/settings/logic/look_and_feel.dart';
+import 'package:kitshell/settings/dropdown_value.dart';
+import 'package:kitshell/settings/logic/look_and_feel/look_and_feel.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

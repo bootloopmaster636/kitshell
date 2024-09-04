@@ -10,12 +10,12 @@ import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
-import 'package:kitshell/settings/logic/look_and_feel.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
+import 'package:kitshell/settings/logic/look_and_feel/look_and_feel.dart';
 import 'package:kitshell/settings/persistence/objectbox.dart';
 import 'package:kitshell/settings/settings_screen.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:toastification/toastification.dart';
-import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
 late ObjectBox objectbox;
@@ -31,11 +31,6 @@ Future<void> main() async {
     runApp(const MaterialApp(home: Center(child: Text('Not supported'))));
     return;
   }
-  await waylandLayerShellPlugin.initialize(panelWidth.toInt(), panelHeight.toInt());
-  await waylandLayerShellPlugin.enableAutoExclusiveZone();
-  await waylandLayerShellPlugin.setAnchor(ShellEdge.edgeBottom, true);
-  await waylandLayerShellPlugin.setLayer(ShellLayer.layerTop);
-  await waylandLayerShellPlugin.setKeyboardMode(ShellKeyboardMode.keyboardModeOnDemand);
 
   runApp(const ProviderScope(child: App()));
 }
@@ -67,19 +62,33 @@ class App extends ConsumerWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         ),
-        home: ref.watch(settingsLookAndFeelProvider).isLoading ? const LoadingScreen() : const Main(),
+        home: Init(
+          child: ref.watch(settingsLookAndFeelProvider).isLoading ? const LoadingScreen() : const Main(),
+        ),
       ),
     );
   }
 }
 
-class Main extends StatelessWidget {
+class Init extends ConsumerWidget {
+  const Init({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(layerShellLogicProvider);
+    return child;
+  }
+}
+
+class Main extends ConsumerWidget {
   const Main({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: DefaultTextStyle(
         style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
@@ -94,6 +103,7 @@ class Main extends StatelessWidget {
                   Navigator.of(context).pop();
                   pushExpandedSubmenu(
                     context: context,
+                    ref: ref,
                     title: 'Settings',
                     child: const SettingsContent(),
                   );

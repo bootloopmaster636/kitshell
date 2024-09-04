@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:kitshell/settings/enums.dart';
+import 'package:kitshell/settings/dropdown_value.dart';
 import 'package:kitshell/settings/persistence/look_and_feel_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
