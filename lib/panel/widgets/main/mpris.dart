@@ -62,7 +62,7 @@ class Mpris extends HookConsumerWidget {
                     ),
                   ),
                   ColoredBox(
-                    color: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.7),
+                    color: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.8),
                     child: MprisContent(isHovered: isHovered),
                   ),
                 ],
