@@ -22,5 +22,6 @@ Feature/To-do list:
 - [X] Mpris/music player
 - [X] Wi-Fi
 - [X] Kitshell settings
+- [X] Hyprland related stuff (workspaces, etc.)
 - [ ] App launcher
-- [ ] Hyprland related stuff (workspaces, etc.)
+- [ ] Notifications

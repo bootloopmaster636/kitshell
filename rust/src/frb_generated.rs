@@ -26,9 +26,9 @@
 // Section: imports
 
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
-use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
+use flutter_rust_bridge::for_generated::Lockable;
 use flutter_rust_bridge::{Handler, IntoIntoDart};
-
+use hyprland::data::Workspaces;
 // Section: boilerplate
 
 flutter_rust_bridge::frb_generated_boilerplate!(
@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1792985735;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -240123971;
 
 // Section: executor
 
@@ -75,7 +75,7 @@ fn wire__crate__api__battery__get_battery_data_impl(
                             Result::<_, ()>::Ok(crate::api::battery::get_battery_data().await)?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -111,7 +111,7 @@ fn wire__crate__api__battery__get_power_profile_impl(
                             Result::<_, ()>::Ok(crate::api::battery::get_power_profile().await)?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -149,7 +149,7 @@ fn wire__crate__api__battery__set_power_profile_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -185,7 +185,7 @@ fn wire__crate__api__brightness__get_brightness_impl(
                             Result::<_, ()>::Ok(crate::api::brightness::get_brightness().await)?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -223,7 +223,213 @@ fn wire__crate__api__brightness__set_brightness_all_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dispatch_switch_workspace_next",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok({
+                        crate::api::hyprland::dispatch_switch_workspace_next();
+                    })?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dispatch_switch_workspace_previous",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok({
+                        crate::api::hyprland::dispatch_switch_workspace_previous();
+                    })?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__get_active_window_title_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_active_window_title",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::hyprland::get_active_window_title())?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__get_active_workspace_number_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_active_workspace_number",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::hyprland::get_active_workspace_number())?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__get_hyprland_data_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_hyprland_data",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok =
+                            Result::<_, ()>::Ok(crate::api::hyprland::get_hyprland_data().await)?;
+                        Ok(output_ok)
+                    })()
+                        .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__hyprland__get_workspaces_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_workspaces",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok =
+                            Result::<_, ()>::Ok(crate::api::hyprland::get_workspaces().await)?;
+                        Ok(output_ok)
+                    })()
+                        .await,
                 )
             }
         },
@@ -292,7 +498,7 @@ fn wire__crate__api__mpris__get_mpris_data_impl(
                         let output_ok = crate::api::mpris::get_mpris_data().await?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -329,7 +535,7 @@ fn wire__crate__api__mpris__player_next_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -366,7 +572,7 @@ fn wire__crate__api__mpris__player_previous_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -403,7 +609,7 @@ fn wire__crate__api__mpris__player_toggle_pause_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -441,7 +647,7 @@ fn wire__crate__api__wifi__connect_to_wifi_impl(
                             crate::api::wifi::connect_to_wifi(&api_ssid, &api_password).await?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -478,7 +684,7 @@ fn wire__crate__api__wifi__get_wifi_list_impl(
                             Result::<_, ()>::Ok(crate::api::wifi::get_wifi_list(api_rescan).await)?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -514,7 +720,7 @@ fn wire__crate__api__wireplumber__get_volume_impl(
                             Result::<_, ()>::Ok(crate::api::wireplumber::get_volume().await)?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
@@ -552,12 +758,18 @@ fn wire__crate__api__wireplumber__set_volume_impl(
                         })?;
                         Ok(output_ok)
                     })()
-                    .await,
+                        .await,
                 )
             }
         },
     )
 }
+
+// Section: related_funcs
+
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>
+);
 
 // Section: dart2rust
 
@@ -566,6 +778,26 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <String>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::anyhow::anyhow!("{}", inner);
+    }
+}
+
+impl SseDecode for Workspaces {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode
+for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
     }
 }
 
@@ -629,6 +861,19 @@ impl SseDecode for f32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_f32::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::hyprland::HyprlandData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_activeWindowTitle = <String>::sse_decode(deserializer);
+        let mut var_activeWorkspace =
+            <crate::api::hyprland::WorkspaceData>::sse_decode(deserializer);
+        return crate::api::hyprland::HyprlandData {
+            active_window_title: var_activeWindowTitle,
+            active_workspace: var_activeWorkspace,
+        };
     }
 }
 
@@ -778,6 +1023,13 @@ impl SseDecode for () {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {}
 }
 
+impl SseDecode for usize {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_u64::<NativeEndian>().unwrap() as _
+    }
+}
+
 impl SseDecode for crate::api::wifi::WifiData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -800,6 +1052,18 @@ impl SseDecode for crate::api::wireplumber::WireplumberData {
     }
 }
 
+impl SseDecode for crate::api::hyprland::WorkspaceData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <u8>::sse_decode(deserializer);
+        let mut var_name = <String>::sse_decode(deserializer);
+        return crate::api::hyprland::WorkspaceData {
+            id: var_id,
+            name: var_name,
+        };
+    }
+}
+
 fn pde_ffi_dispatcher_primary_impl(
     func_id: i32,
     port: flutter_rust_bridge::for_generated::MessagePort,
@@ -816,15 +1080,43 @@ fn pde_ffi_dispatcher_primary_impl(
         5 => {
             wire__crate__api__brightness__set_brightness_all_impl(port, ptr, rust_vec_len, data_len)
         }
-        6 => wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
-        11 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        7 => wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        8 => wire__crate__api__hyprland__get_active_window_title_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => wire__crate__api__hyprland__get_active_workspace_number_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        10 => wire__crate__api__hyprland__get_hyprland_data_impl(port, ptr, rust_vec_len, data_len),
+        11 => wire__crate__api__hyprland__get_workspaces_impl(port, ptr, rust_vec_len, data_len),
+        12 => {
+            wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len)
+        }
+        13 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
+        14 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
+        16 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -844,6 +1136,21 @@ fn pde_ffi_dispatcher_sync_impl(
 // Section: rust2dart
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<Workspaces> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<Workspaces> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<Workspaces>> for Workspaces {
+    fn into_into_dart(self) -> FrbWrapper<Workspaces> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::battery::BatteryData {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -851,15 +1158,14 @@ impl flutter_rust_bridge::IntoDart for crate::api::battery::BatteryData {
             self.drain_rate_watt.into_into_dart().into_dart(),
             self.status.into_into_dart().into_dart(),
         ]
-        .into_dart()
+            .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::battery::BatteryData
-{
-}
+for crate::api::battery::BatteryData
+{}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::BatteryData>
-    for crate::api::battery::BatteryData
+for crate::api::battery::BatteryData
 {
     fn into_into_dart(self) -> crate::api::battery::BatteryData {
         self
@@ -879,11 +1185,10 @@ impl flutter_rust_bridge::IntoDart for crate::api::battery::BatteryState {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::battery::BatteryState
-{
-}
+for crate::api::battery::BatteryState
+{}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::BatteryState>
-    for crate::api::battery::BatteryState
+for crate::api::battery::BatteryState
 {
     fn into_into_dart(self) -> crate::api::battery::BatteryState {
         self
@@ -896,17 +1201,36 @@ impl flutter_rust_bridge::IntoDart for crate::api::brightness::BrightnessData {
             self.device_name.into_into_dart().into_dart(),
             self.brightness.into_into_dart().into_dart(),
         ]
-        .into_dart()
+            .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::brightness::BrightnessData
-{
-}
+for crate::api::brightness::BrightnessData
+{}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::brightness::BrightnessData>
-    for crate::api::brightness::BrightnessData
+for crate::api::brightness::BrightnessData
 {
     fn into_into_dart(self) -> crate::api::brightness::BrightnessData {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::hyprland::HyprlandData {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.active_window_title.into_into_dart().into_dart(),
+            self.active_workspace.into_into_dart().into_dart(),
+        ]
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+for crate::api::hyprland::HyprlandData
+{}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::hyprland::HyprlandData>
+for crate::api::hyprland::HyprlandData
+{
+    fn into_into_dart(self) -> crate::api::hyprland::HyprlandData {
         self
     }
 }
@@ -924,12 +1248,12 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::MprisData {
             self.can_next.into_into_dart().into_dart(),
             self.can_previous.into_into_dart().into_dart(),
         ]
-        .into_dart()
+            .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::mpris::MprisData {}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::MprisData>
-    for crate::api::mpris::MprisData
+for crate::api::mpris::MprisData
 {
     fn into_into_dart(self) -> crate::api::mpris::MprisData {
         self
@@ -947,11 +1271,10 @@ impl flutter_rust_bridge::IntoDart for crate::api::battery::PowerProfiles {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::battery::PowerProfiles
-{
-}
+for crate::api::battery::PowerProfiles
+{}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::PowerProfiles>
-    for crate::api::battery::PowerProfiles
+for crate::api::battery::PowerProfiles
 {
     fn into_into_dart(self) -> crate::api::battery::PowerProfiles {
         self
@@ -965,7 +1288,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::wifi::WifiData {
             self.ssid.into_into_dart().into_dart(),
             self.signal_strength.into_into_dart().into_dart(),
         ]
-        .into_dart()
+            .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::wifi::WifiData {}
@@ -981,13 +1304,32 @@ impl flutter_rust_bridge::IntoDart for crate::api::wireplumber::WireplumberData 
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::wireplumber::WireplumberData
-{
-}
+for crate::api::wireplumber::WireplumberData
+{}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::wireplumber::WireplumberData>
-    for crate::api::wireplumber::WireplumberData
+for crate::api::wireplumber::WireplumberData
 {
     fn into_into_dart(self) -> crate::api::wireplumber::WireplumberData {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::hyprland::WorkspaceData {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.name.into_into_dart().into_dart(),
+        ]
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+for crate::api::hyprland::WorkspaceData
+{}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::hyprland::WorkspaceData>
+for crate::api::hyprland::WorkspaceData
+{
+    fn into_into_dart(self) -> crate::api::hyprland::WorkspaceData {
         self
     }
 }
@@ -996,6 +1338,24 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(format!("{:?}", self), serializer);
+    }
+}
+
+impl SseEncode for Workspaces {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
+impl SseEncode
+for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
     }
 }
 
@@ -1053,6 +1413,14 @@ impl SseEncode for f32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_f32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::hyprland::HyprlandData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.active_window_title, serializer);
+        <crate::api::hyprland::WorkspaceData>::sse_encode(self.active_workspace, serializer);
     }
 }
 
@@ -1181,6 +1549,16 @@ impl SseEncode for () {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
+impl SseEncode for usize {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer
+            .cursor
+            .write_u64::<NativeEndian>(self as _)
+            .unwrap();
+    }
+}
+
 impl SseEncode for crate::api::wifi::WifiData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1197,6 +1575,14 @@ impl SseEncode for crate::api::wireplumber::WireplumberData {
     }
 }
 
+impl SseEncode for crate::api::hyprland::WorkspaceData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <u8>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.name, serializer);
+    }
+}
+
 #[cfg(not(target_family = "wasm"))]
 mod io {
     // This file is automatically generated, so please do not edit it.
@@ -1205,15 +1591,25 @@ mod io {
     // Section: imports
 
     use super::*;
-    use flutter_rust_bridge::for_generated::byteorder::{
-        NativeEndian, ReadBytesExt, WriteBytesExt,
-    };
-    use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
-    use flutter_rust_bridge::{Handler, IntoIntoDart};
+    use flutter_rust_bridge::Handler;
 
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_io!();
+
+    #[no_mangle]
+    pub extern "C" fn frbgen_kitshell_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>::increment_strong_count(ptr as _);
+    }
+
+    #[no_mangle]
+    pub extern "C" fn frbgen_kitshell_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>::decrement_strong_count(ptr as _);
+    }
 }
 #[cfg(not(target_family = "wasm"))]
 pub use io::*;
@@ -1227,6 +1623,7 @@ mod web {
     // Section: imports
 
     use super::*;
+    use crate::api::hyprland::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -1238,6 +1635,20 @@ mod web {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_web!();
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Workspaces>>::decrement_strong_count(ptr as _);
+    }
 }
 #[cfg(target_family = "wasm")]
 pub use web::*;

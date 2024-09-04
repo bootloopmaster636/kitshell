@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
+import 'package:kitshell/panel/widgets/main/hyprland.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
 import 'package:kitshell/panel/widgets/main/time.dart';
@@ -82,38 +83,46 @@ class Main extends StatelessWidget {
     return Material(
       child: DefaultTextStyle(
         style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
-        child: Row(
-          children: [
-            const TimeWidget(),
-            Expanded(
-              child: ContextMenuArea(
-                builder: (BuildContext context) {
-                  return [
-                    ListTile(
-                      dense: true,
-                      title: const Text('Kitshell Settings'),
-                      leading: const Icon(Icons.settings_outlined),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        pushExpandedSubmenu(
-                          context: context,
-                          title: 'Settings',
-                          child: const SettingsContent(),
-                        );
-                      },
-                    ),
-                  ];
+        child: ContextMenuArea(
+          builder: (BuildContext context) {
+            return [
+              ListTile(
+                dense: true,
+                title: const Text('Kitshell Settings'),
+                leading: const Icon(Icons.settings_outlined),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  pushExpandedSubmenu(
+                    context: context,
+                    title: 'Settings',
+                    child: const SettingsContent(),
+                  );
                 },
-                verticalPadding: 0,
-                width: panelWidth / 6,
-                child: ColoredBox(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: const QuickSettingsContainer(),
-                ),
               ),
+            ];
+          },
+          verticalPadding: 0,
+          width: panelWidth / 6,
+          child: ColoredBox(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            child: const Stack(
+              children: [
+                Row(
+                  children: [
+                    TimeWidget(),
+                    QuickSettingsContainer(),
+                    Spacer(),
+                    Mpris(),
+                  ],
+                ),
+                Center(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Hyprland(),
+                )),
+              ],
             ),
-            const Mpris(),
-          ],
+          ),
         ),
       ),
     ).animate().fadeIn(
