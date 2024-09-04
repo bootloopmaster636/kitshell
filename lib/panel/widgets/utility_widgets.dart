@@ -188,7 +188,7 @@ class HoverRevealer extends HookWidget {
                 width: isHovered.value ? panelHeight : panelHeight - 16,
                 height: panelHeight,
                 decoration: BoxDecoration(
-                  color: isHovered.value ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
+                  color: isHovered.value ? Theme.of(context).colorScheme.surface : Colors.transparent,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(999),
                     bottomLeft: Radius.circular(999),
@@ -251,7 +251,7 @@ class HoverRevealer extends HookWidget {
                   height: panelHeight,
                   width: panelWidth / 8,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(999),
                       bottomRight: Radius.circular(999),
