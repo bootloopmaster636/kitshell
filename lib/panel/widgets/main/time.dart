@@ -1,5 +1,6 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kitshell/panel/logic/time/time.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
@@ -27,7 +28,12 @@ class TimeWidget extends ConsumerWidget {
           ),
         ),
       ),
-    );
+    ).animate(delay: 600.ms).slideX(
+          begin: -1,
+          end: 0,
+          duration: 800.ms,
+          curve: Curves.easeOutExpo,
+        );
   }
 }
 

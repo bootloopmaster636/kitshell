@@ -128,10 +128,11 @@ class Main extends ConsumerWidget {
                   ],
                 ),
                 Center(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: Hyprland(),
-                )),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Hyprland(),
+                  ),
+                ),
               ],
             ),
           ),
