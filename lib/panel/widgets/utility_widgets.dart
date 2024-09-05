@@ -317,71 +317,77 @@ class LoadingSpinner extends ConsumerWidget {
 }
 
 class ExpandedSubmenu extends ConsumerWidget {
-  const ExpandedSubmenu({required this.title, required this.child, super.key});
+  const ExpandedSubmenu({required this.title, required this.child, this.actions, super.key});
 
   final String title;
   final Widget child;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final expandedPanelHeight =
         (ref.watch(layerShellLogicProvider).value!.panelHeight * expandedSubmenuHeightMultiplier).toDouble();
-    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
 
     return Material(
       child: Container(
         height: expandedPanelHeight,
-        width: panelWidth,
         color: Theme.of(context).colorScheme.surfaceContainer,
-        padding: EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    ref.read(layerShellLogicProvider.notifier).setHeightNormal();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                ),
-                const Gap(4),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            SizedBox(
+              width: expandedSubmenuContentWidth,
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
                   ),
-                ),
-              ],
-            )
-                .animate(delay: 400.ms)
-                .fadeIn(
-                  duration: 800.ms,
-                  curve: Curves.easeOutExpo,
-                )
-                .slideY(
-                  begin: 0.4,
-                  end: 0,
-                  duration: 800.ms,
-                  curve: Curves.easeOutExpo,
-                ),
-            const Gap(4),
-            Expanded(
-              child: child
-                  .animate(
-                    delay: 450.ms,
-                  )
+                  const Gap(4),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  if (actions != null) ...actions!,
+                ],
+              )
+                  .animate(delay: 400.ms)
                   .fadeIn(
                     duration: 800.ms,
                     curve: Curves.easeOutExpo,
                   )
                   .slideY(
-                    begin: 0.2,
+                    begin: 0.4,
                     end: 0,
                     duration: 800.ms,
                     curve: Curves.easeOutExpo,
                   ),
+            ),
+            const Gap(4),
+            Expanded(
+              child: SizedBox(
+                width: expandedSubmenuContentWidth,
+                child: child
+                    .animate(
+                      delay: 450.ms,
+                    )
+                    .fadeIn(
+                      duration: 800.ms,
+                      curve: Curves.easeOutExpo,
+                    )
+                    .slideY(
+                      begin: 0.2,
+                      end: 0,
+                      duration: 800.ms,
+                      curve: Curves.easeOutExpo,
+                    ),
+              ),
             ),
           ],
         ),
@@ -426,7 +432,7 @@ class LoadingScreen extends ConsumerWidget {
                   LinearProgressIndicator(),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
