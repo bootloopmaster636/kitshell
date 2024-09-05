@@ -23,7 +23,7 @@ class TimeInfoLogic extends _$TimeInfoLogic {
 
   @override
   bool updateShouldNotify(TimeInfo oldWidget, TimeInfo newWidget) {
-    return oldWidget.time.minute != newWidget.time.minute && oldWidget.time.hour != newWidget.time.hour;
+    return oldWidget.time.minute != newWidget.time.minute || oldWidget.time.hour != newWidget.time.hour;
   }
 
   void startPolling() {
