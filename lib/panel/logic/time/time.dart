@@ -21,6 +21,11 @@ class TimeInfoLogic extends _$TimeInfoLogic {
     return TimeInfo(time: DateTime.now());
   }
 
+  @override
+  bool updateShouldNotify(TimeInfo oldWidget, TimeInfo newWidget) {
+    return oldWidget.time.minute != newWidget.time.minute && oldWidget.time.hour != newWidget.time.hour;
+  }
+
   void startPolling() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       state = TimeInfo(time: DateTime.now());

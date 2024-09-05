@@ -55,12 +55,6 @@ class TimePart extends ConsumerWidget {
             wholeDigits: 2,
             curve: Curves.easeOutQuad,
           ),
-          const Text(':'),
-          AnimatedFlipCounter(
-            value: time.time.second ?? 0,
-            wholeDigits: 2,
-            curve: Curves.easeOutQuad,
-          ),
         ],
       ),
     );
