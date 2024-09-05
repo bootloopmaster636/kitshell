@@ -20,6 +20,7 @@ mixin _$LayerShellData {
   int get panelHeight => throw _privateConstructorUsedError;
   ShellEdge get anchor => throw _privateConstructorUsedError;
   ShellLayer get layer => throw _privateConstructorUsedError;
+  bool get autoExclusiveZone => throw _privateConstructorUsedError;
   Monitor? get monitor => throw _privateConstructorUsedError;
 
   /// Create a copy of LayerShellData
@@ -40,6 +41,7 @@ abstract class $LayerShellDataCopyWith<$Res> {
       int panelHeight,
       ShellEdge anchor,
       ShellLayer layer,
+      bool autoExclusiveZone,
       Monitor? monitor});
 }
 
@@ -62,6 +64,7 @@ class _$LayerShellDataCopyWithImpl<$Res, $Val extends LayerShellData>
     Object? panelHeight = null,
     Object? anchor = null,
     Object? layer = null,
+    Object? autoExclusiveZone = null,
     Object? monitor = freezed,
   }) {
     return _then(_value.copyWith(
@@ -81,6 +84,10 @@ class _$LayerShellDataCopyWithImpl<$Res, $Val extends LayerShellData>
           ? _value.layer
           : layer // ignore: cast_nullable_to_non_nullable
               as ShellLayer,
+      autoExclusiveZone: null == autoExclusiveZone
+          ? _value.autoExclusiveZone
+          : autoExclusiveZone // ignore: cast_nullable_to_non_nullable
+              as bool,
       monitor: freezed == monitor
           ? _value.monitor
           : monitor // ignore: cast_nullable_to_non_nullable
@@ -102,6 +109,7 @@ abstract class _$$LayerShellDataImplCopyWith<$Res>
       int panelHeight,
       ShellEdge anchor,
       ShellLayer layer,
+      bool autoExclusiveZone,
       Monitor? monitor});
 }
 
@@ -122,6 +130,7 @@ class __$$LayerShellDataImplCopyWithImpl<$Res>
     Object? panelHeight = null,
     Object? anchor = null,
     Object? layer = null,
+    Object? autoExclusiveZone = null,
     Object? monitor = freezed,
   }) {
     return _then(_$LayerShellDataImpl(
@@ -141,6 +150,10 @@ class __$$LayerShellDataImplCopyWithImpl<$Res>
           ? _value.layer
           : layer // ignore: cast_nullable_to_non_nullable
               as ShellLayer,
+      autoExclusiveZone: null == autoExclusiveZone
+          ? _value.autoExclusiveZone
+          : autoExclusiveZone // ignore: cast_nullable_to_non_nullable
+              as bool,
       monitor: freezed == monitor
           ? _value.monitor
           : monitor // ignore: cast_nullable_to_non_nullable
@@ -157,6 +170,7 @@ class _$LayerShellDataImpl implements _LayerShellData {
       required this.panelHeight,
       required this.anchor,
       required this.layer,
+      required this.autoExclusiveZone,
       this.monitor});
 
   @override
@@ -168,11 +182,13 @@ class _$LayerShellDataImpl implements _LayerShellData {
   @override
   final ShellLayer layer;
   @override
+  final bool autoExclusiveZone;
+  @override
   final Monitor? monitor;
 
   @override
   String toString() {
-    return 'LayerShellData(panelWidth: $panelWidth, panelHeight: $panelHeight, anchor: $anchor, layer: $layer, monitor: $monitor)';
+    return 'LayerShellData(panelWidth: $panelWidth, panelHeight: $panelHeight, anchor: $anchor, layer: $layer, autoExclusiveZone: $autoExclusiveZone, monitor: $monitor)';
   }
 
   @override
@@ -186,12 +202,14 @@ class _$LayerShellDataImpl implements _LayerShellData {
                 other.panelHeight == panelHeight) &&
             (identical(other.anchor, anchor) || other.anchor == anchor) &&
             (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.autoExclusiveZone, autoExclusiveZone) ||
+                other.autoExclusiveZone == autoExclusiveZone) &&
             (identical(other.monitor, monitor) || other.monitor == monitor));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, panelWidth, panelHeight, anchor, layer, monitor);
+  int get hashCode => Object.hash(runtimeType, panelWidth, panelHeight, anchor,
+      layer, autoExclusiveZone, monitor);
 
   /// Create a copy of LayerShellData
   /// with the given fields replaced by the non-null parameter values.
@@ -209,6 +227,7 @@ abstract class _LayerShellData implements LayerShellData {
       required final int panelHeight,
       required final ShellEdge anchor,
       required final ShellLayer layer,
+      required final bool autoExclusiveZone,
       final Monitor? monitor}) = _$LayerShellDataImpl;
 
   @override
@@ -219,6 +238,8 @@ abstract class _LayerShellData implements LayerShellData {
   ShellEdge get anchor;
   @override
   ShellLayer get layer;
+  @override
+  bool get autoExclusiveZone;
   @override
   Monitor? get monitor;
 

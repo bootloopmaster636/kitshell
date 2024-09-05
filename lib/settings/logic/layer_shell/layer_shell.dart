@@ -13,6 +13,7 @@ class LayerShellData with _$LayerShellData {
     required int panelHeight,
     required ShellEdge anchor,
     required ShellLayer layer,
+    required bool autoExclusiveZone,
     Monitor? monitor,
   }) = _LayerShellData;
 }
@@ -26,6 +27,7 @@ class LayerShellLogic extends _$LayerShellLogic {
       panelHeight: 48,
       anchor: ShellEdge.edgeBottom,
       layer: ShellLayer.layerOverlay,
+      autoExclusiveZone: true,
     );
     final waylandLayerShellPlugin = WaylandLayerShell();
     await waylandLayerShellPlugin.setKeyboardMode(ShellKeyboardMode.keyboardModeOnDemand);
@@ -33,17 +35,27 @@ class LayerShellLogic extends _$LayerShellLogic {
     await waylandLayerShellPlugin.initialize(data.panelWidth, data.panelHeight);
     await waylandLayerShellPlugin.setAnchor(data.anchor, true);
     await waylandLayerShellPlugin.setLayer(data.layer);
-    // await waylandLayerShellPlugin.setExclusiveZone(data.panelHeight);
-    await waylandLayerShellPlugin.enableAutoExclusiveZone();
+
+    if (data.autoExclusiveZone) {
+      await waylandLayerShellPlugin.enableAutoExclusiveZone();
+    } else {
+      await waylandLayerShellPlugin.setExclusiveZone(data.panelHeight);
+    }
 
     return data;
   }
 
   Future<void> applySettings() async {
     final waylandLayerShellPlugin = WaylandLayerShell();
-    await waylandLayerShellPlugin.initialize(state.value?.panelWidth ?? 1366, state.value?.panelHeight ?? 768);
+    await waylandLayerShellPlugin.initialize(state.value?.panelWidth ?? 1366, state.value?.panelHeight ?? 48);
     await waylandLayerShellPlugin.setAnchor(state.value?.anchor ?? ShellEdge.edgeBottom, true);
     await waylandLayerShellPlugin.setLayer(state.value?.layer ?? ShellLayer.layerTop);
+    await waylandLayerShellPlugin.setExclusiveZone(state.value?.panelHeight ?? 48);
+    if (state.value?.autoExclusiveZone ?? true) {
+      await waylandLayerShellPlugin.enableAutoExclusiveZone();
+    } else {
+      await waylandLayerShellPlugin.setExclusiveZone(state.value?.panelHeight ?? 48);
+    }
   }
 
   Future<void> setHeightNormal() async {
@@ -73,6 +85,11 @@ class LayerShellLogic extends _$LayerShellLogic {
 
   Future<void> setLayer(ShellLayer layer) async {
     final data = state.value?.copyWith(layer: layer);
+    state = AsyncData(data!);
+  }
+
+  Future<void> setAutoExclusiveZone(bool value) async {
+    final data = state.value?.copyWith(autoExclusiveZone: value);
     state = AsyncData(data!);
   }
 }

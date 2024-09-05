@@ -74,6 +74,20 @@ class SectionLayerShell extends HookConsumerWidget {
           const Gap(4),
           Card(
             child: ListTile(
+              title: const Text('Auto exclusive zone'),
+              subtitle: const Text('If disabled, the window will not be pushed when expanded menu shows up.'),
+              visualDensity: VisualDensity.standard,
+              trailing: Switch(
+                value: ref.watch(layerShellLogicProvider).value?.autoExclusiveZone ?? true,
+                onChanged: (value) {
+                  ref.read(layerShellLogicProvider.notifier).setAutoExclusiveZone(value);
+                },
+              ),
+            ),
+          ),
+          const Gap(4),
+          Card(
+            child: ListTile(
               title: const Text('Shell layer'),
               subtitle: const Text('Select the layer where the panel should be placed'),
               visualDensity: VisualDensity.standard,
