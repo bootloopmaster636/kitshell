@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:kitshell/settings/persistence/layer_shell_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
@@ -22,13 +23,8 @@ class LayerShellData with _$LayerShellData {
 class LayerShellLogic extends _$LayerShellLogic {
   @override
   Future<LayerShellData> build() async {
-    final data = const LayerShellData(
-      panelWidth: 1366,
-      panelHeight: 48,
-      anchor: ShellEdge.edgeBottom,
-      layer: ShellLayer.layerOverlay,
-      autoExclusiveZone: true,
-    );
+    final data = getLayerShellSettings();
+
     final waylandLayerShellPlugin = WaylandLayerShell();
     await waylandLayerShellPlugin.setKeyboardMode(ShellKeyboardMode.keyboardModeOnDemand);
 
@@ -56,6 +52,16 @@ class LayerShellLogic extends _$LayerShellLogic {
     } else {
       await waylandLayerShellPlugin.setExclusiveZone(state.value?.panelHeight ?? 48);
     }
+
+    storeLayerShellSettings(
+      state.value ??
+          const LayerShellData(
+              panelWidth: 1366,
+              panelHeight: 768,
+              anchor: ShellEdge.edgeBottom,
+              layer: ShellLayer.layerTop,
+              autoExclusiveZone: false),
+    );
   }
 
   Future<void> setHeightNormal() async {

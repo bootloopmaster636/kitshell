@@ -26,17 +26,81 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:8940013296113580543",
+      "lastPropertyId": "7:8299087758558090198",
+      "name": "LayerShellDb",
+      "properties": [
+        {
+          "id": "1:5223792960823788867",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:3488201430492500299",
+          "name": "panelWidth",
+          "type": 6
+        },
+        {
+          "id": "3:4915639471823377748",
+          "name": "panelHeight",
+          "type": 6
+        },
+        {
+          "id": "4:206618680349430669",
+          "name": "anchor",
+          "type": 9
+        },
+        {
+          "id": "5:6366185305035022933",
+          "name": "layer",
+          "type": 9
+        },
+        {
+          "id": "6:1233915687198706666",
+          "name": "autoExclusiveZone",
+          "type": 1
+        },
+        {
+          "id": "7:8299087758558090198",
+          "name": "monitor",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:3788243437098786057",
+  "lastEntityId": "4:8940013296113580543",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    319117083580890393,
+    1126114942859790230
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    2675071161574506234,
+    3129198010321662728,
+    1579901511205958056,
+    9199787774691584598,
+    1152300156546259865,
+    9084938709976948883,
+    5341313148448273751,
+    8027046667706280950,
+    1061687093147552787,
+    4326268487275303151,
+    3715440438204611605,
+    1280734593217253853,
+    9054602213563610987,
+    4153294262211589001,
+    3344042603675330834,
+    5844917907412048726
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

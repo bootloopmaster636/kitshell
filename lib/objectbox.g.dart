@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'settings/persistence/layer_shell_model.dart';
 import 'settings/persistence/look_and_feel_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -38,6 +39,50 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(3, 6726522371956204320),
             name: 'color',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(4, 8940013296113580543),
+      name: 'LayerShellDb',
+      lastPropertyId: const obx_int.IdUid(7, 8299087758558090198),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5223792960823788867),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 3488201430492500299),
+            name: 'panelWidth',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4915639471823377748),
+            name: 'panelHeight',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 206618680349430669),
+            name: 'anchor',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 6366185305035022933),
+            name: 'layer',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 1233915687198706666),
+            name: 'autoExclusiveZone',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 8299087758558090198),
+            name: 'monitor',
             type: 6,
             flags: 0)
       ],
@@ -80,13 +125,30 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 3788243437098786057),
+      lastEntityId: const obx_int.IdUid(4, 8940013296113580543),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [319117083580890393, 1126114942859790230],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [
+        2675071161574506234,
+        3129198010321662728,
+        1579901511205958056,
+        9199787774691584598,
+        1152300156546259865,
+        9084938709976948883,
+        5341313148448273751,
+        8027046667706280950,
+        1061687093147552787,
+        4326268487275303151,
+        3715440438204611605,
+        1280734593217253853,
+        9054602213563610987,
+        4153294262211589001,
+        3344042603675330834,
+        5844917907412048726
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -122,6 +184,49 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
 
           return object;
+        }),
+    LayerShellDb: obx_int.EntityDefinition<LayerShellDb>(
+        model: _entities[1],
+        toOneRelations: (LayerShellDb object) => [],
+        toManyRelations: (LayerShellDb object) => {},
+        getId: (LayerShellDb object) => object.id,
+        setId: (LayerShellDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (LayerShellDb object, fb.Builder fbb) {
+          final anchorOffset = fbb.writeString(object.anchor);
+          final layerOffset = fbb.writeString(object.layer);
+          fbb.startTable(8);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.panelWidth);
+          fbb.addInt64(2, object.panelHeight);
+          fbb.addOffset(3, anchorOffset);
+          fbb.addOffset(4, layerOffset);
+          fbb.addBool(5, object.autoExclusiveZone);
+          fbb.addInt64(6, object.monitor);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = LayerShellDb()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..panelWidth =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
+            ..panelHeight =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0)
+            ..anchor = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 10, '')
+            ..layer = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 12, '')
+            ..autoExclusiveZone =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false)
+            ..monitor = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 16);
+
+          return object;
         })
   };
 
@@ -141,4 +246,35 @@ class LookAndFeelDb_ {
   /// See [LookAndFeelDb.color].
   static final color =
       obx.QueryIntegerProperty<LookAndFeelDb>(_entities[0].properties[2]);
+}
+
+/// [LayerShellDb] entity fields to define ObjectBox queries.
+class LayerShellDb_ {
+  /// See [LayerShellDb.id].
+  static final id =
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[0]);
+
+  /// See [LayerShellDb.panelWidth].
+  static final panelWidth =
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[1]);
+
+  /// See [LayerShellDb.panelHeight].
+  static final panelHeight =
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[2]);
+
+  /// See [LayerShellDb.anchor].
+  static final anchor =
+      obx.QueryStringProperty<LayerShellDb>(_entities[1].properties[3]);
+
+  /// See [LayerShellDb.layer].
+  static final layer =
+      obx.QueryStringProperty<LayerShellDb>(_entities[1].properties[4]);
+
+  /// See [LayerShellDb.autoExclusiveZone].
+  static final autoExclusiveZone =
+      obx.QueryBooleanProperty<LayerShellDb>(_entities[1].properties[5]);
+
+  /// See [LayerShellDb.monitor].
+  static final monitor =
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[6]);
 }
