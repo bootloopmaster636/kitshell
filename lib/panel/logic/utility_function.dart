@@ -48,7 +48,11 @@ void showToast({
 }
 
 void pushExpandedSubmenu(
-    {required BuildContext context, required WidgetRef ref, required String title, required Widget child}) {
+    {required BuildContext context,
+    required WidgetRef ref,
+    required String title,
+    required Widget child,
+    List<Widget>? actions}) {
   ref.read(layerShellLogicProvider.notifier).setHeightExpanded();
   Navigator.push(
     context,
@@ -59,6 +63,7 @@ void pushExpandedSubmenu(
       curve: Curves.easeOutExpo,
       child: ExpandedSubmenu(
         title: title,
+        actions: actions,
         child: child,
       ),
     ),

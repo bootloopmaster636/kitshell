@@ -2,6 +2,8 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/main/hyprland.dart';
@@ -116,10 +118,10 @@ class Main extends ConsumerWidget {
           width: 200,
           child: ColoredBox(
             color: Theme.of(context).colorScheme.secondaryContainer,
-            child: const Stack(
+            child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Row(
+                const Row(
                   children: [
                     TimeWidget(),
                     QuickSettingsContainer(),
@@ -127,12 +129,38 @@ class Main extends ConsumerWidget {
                     Mpris(),
                   ],
                 ),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Hyprland(),
-                  ),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FilledButton(
+                      onPressed: () {
+                        pushExpandedSubmenu(
+                          context: context,
+                          ref: ref,
+                          title: 'Apps',
+                          child: Placeholder(),
+                        );
+                      },
+                      child: const Row(
+                        children: [
+                          FaIcon(FontAwesomeIcons.boxesStacked, size: 12),
+                          Gap(8),
+                          Text('Apps'),
+                        ],
+                      ),
+                    ),
+                    const Gap(8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: Hyprland(),
+                    ),
+                  ],
+                ).animate(delay: 800.ms).scaleX(
+                      begin: 0,
+                      end: 1,
+                      duration: 800.ms,
+                      curve: Curves.easeOutExpo,
+                    ),
               ],
             ),
           ),

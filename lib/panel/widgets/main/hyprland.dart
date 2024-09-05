@@ -76,12 +76,7 @@ class Hyprland extends HookConsumerWidget {
             ),
           ],
         ),
-      ).animate(delay: 800.ms).scaleX(
-            begin: 0,
-            end: 1,
-            duration: 800.ms,
-            curve: Curves.easeOutExpo,
-          ),
+      ),
     );
   }
 }
