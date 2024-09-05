@@ -10,6 +10,7 @@ import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/logic/wifi/wifi.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/src/rust/api/wifi.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
@@ -64,7 +65,7 @@ class WifiSubmenu extends ConsumerWidget {
   }
 }
 
-class WlanStationTile extends StatelessWidget {
+class WlanStationTile extends ConsumerWidget {
   const WlanStationTile({required this.ssid, required this.signalStrength, required this.isConnected, super.key});
 
   final String ssid;
@@ -72,7 +73,10 @@ class WlanStationTile extends StatelessWidget {
   final bool isConnected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth;
+
     return SizedBox(
       width: panelWidth / 6,
       height: panelHeight,
@@ -144,6 +148,8 @@ class ConnectionSubmenu extends HookConsumerWidget {
     final passwordCtl = useTextEditingController();
     final isPasswordObscured = useState(true);
     final isLoading = useState(false);
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
 
     return Submenu(
       title: 'Connect to $ssid',
@@ -154,7 +160,7 @@ class ConnectionSubmenu extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: TextField(
               controller: passwordCtl,
-              style: const TextStyle(fontSize: panelHeight / 3),
+              style: TextStyle(fontSize: panelHeight / 3),
               obscureText: isPasswordObscured.value,
               decoration: InputDecoration(
                 hintText: 'Enter password',
@@ -202,18 +208,18 @@ class ConnectionSubmenu extends HookConsumerWidget {
       try {
         final result = await connectToWifi(ssid: ssid, password: passwordCtl.value.text);
         if (result) {
-          showToast(context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
+          showToast(ref: ref, context: context, message: 'Connected to $ssid', icon: Icons.check_circle);
           unawaited(ref.read(wifiListProvider.notifier).scanWifi());
           Future.delayed(toastDuration + const Duration(milliseconds: 500), () {
             Navigator.pop(context);
           });
         } else {
-          showToast(context: context, message: 'Failed to connect to $ssid', icon: Icons.error);
+          showToast(ref: ref, context: context, message: 'Failed to connect to $ssid', icon: Icons.error);
         }
 
         isLoading.value = false;
       } catch (e) {
-        showToast(context: context, message: 'Failed to connect, wrong password?', icon: Icons.error);
+        showToast(ref: ref, context: context, message: 'Failed to connect, wrong password?', icon: Icons.error);
         isLoading.value = false;
       }
     }

@@ -8,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:toastification/toastification.dart';
 
 void showToast({
+  required WidgetRef ref,
   required BuildContext context,
   required String message,
   IconData? icon,
@@ -29,7 +30,7 @@ void showToast({
     },
     builder: (BuildContext context, ToastificationItem holder) {
       return Container(
-        height: panelHeight,
+        height: ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble(),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),

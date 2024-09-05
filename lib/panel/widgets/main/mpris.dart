@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/mpris/mpris.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/src/rust/api/mpris.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -18,6 +18,8 @@ class Mpris extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mprisData = ref.watch(mprisLogicProvider);
     final isHovered = useState(false);
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
 
     return RepaintBoundary(
       child: MouseRegion(
@@ -35,6 +37,7 @@ class Mpris extends HookConsumerWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
+              height: ref.watch(layerShellLogicProvider).value?.panelHeight.toDouble(),
               width: isHovered.value ? panelWidth / 5 : panelWidth / 6,
               decoration: BoxDecoration(
                 boxShadow: [
@@ -56,8 +59,8 @@ class Mpris extends HookConsumerWidget {
                             ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
                             : NetworkImage(mprisData.value?.imageUrl ?? ''),
                         fit: BoxFit.cover,
-                        memCacheHeight: panelHeight.toInt(),
-                        memCacheWidth: panelHeight.toInt(),
+                        memCacheHeight: panelHeight,
+                        memCacheWidth: panelHeight,
                       ),
                     ),
                   ),
@@ -89,6 +92,7 @@ class MprisContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mprisData = ref.watch(mprisLogicProvider);
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
 
     return Row(
       children: [
@@ -109,8 +113,8 @@ class MprisContent extends ConsumerWidget {
                 image: (mprisData.value!.imageUrl.startsWith('file://'))
                     ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
                     : NetworkImage(mprisData.value?.imageUrl ?? ''),
-                memCacheHeight: panelHeight.toInt() * 2,
-                memCacheWidth: panelHeight.toInt() * 2,
+                memCacheHeight: panelHeight * 2,
+                memCacheWidth: panelHeight * 2,
                 progressIndicatorBuilder: (context, event) {
                   return Container(
                     color: Theme.of(context).colorScheme.surfaceContainerHigh,
@@ -165,7 +169,7 @@ class MprisContent extends ConsumerWidget {
   }
 }
 
-class PlayerControls extends StatelessWidget {
+class PlayerControls extends ConsumerWidget {
   const PlayerControls({
     required this.isHovered,
     required this.mprisData,
@@ -176,7 +180,9 @@ class PlayerControls extends StatelessWidget {
   final AsyncValue<MprisData> mprisData;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+
     return AnimatedCrossFade(
       crossFadeState: isHovered.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       duration: const Duration(milliseconds: 500),
@@ -185,7 +191,7 @@ class PlayerControls extends StatelessWidget {
       firstChild: Row(
         children: [
           IconButton(
-            icon: const FaIcon(
+            icon: FaIcon(
               FontAwesomeIcons.backward,
               size: panelHeight / 4,
             ),
@@ -202,7 +208,10 @@ class PlayerControls extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const FaIcon(FontAwesomeIcons.forward, size: panelHeight / 4),
+            icon: FaIcon(
+              FontAwesomeIcons.forward,
+              size: panelHeight / 4,
+            ),
             onPressed: mprisData.value!.canNext
                 ? () async {
                     await playerNext();
@@ -216,14 +225,14 @@ class PlayerControls extends StatelessWidget {
   }
 }
 
-class NoPlayer extends StatelessWidget {
+class NoPlayer extends ConsumerWidget {
   const NoPlayer({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.tertiaryContainer,
-      height: panelHeight,
+      height: ref.watch(layerShellLogicProvider).value?.panelHeight.toDouble(),
       padding: const EdgeInsets.all(8),
       child: Icon(
         Icons.music_off_outlined,

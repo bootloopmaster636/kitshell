@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/main/hyprland.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
@@ -63,7 +62,9 @@ class App extends ConsumerWidget {
           curve: Curves.easeInOut,
         ),
         home: Init(
-          child: ref.watch(settingsLookAndFeelProvider).isLoading ? const LoadingScreen() : const Main(),
+          child: ref.watch(settingsLookAndFeelProvider).isLoading || ref.watch(layerShellLogicProvider).isLoading
+              ? const LoadingScreen()
+              : const Main(),
         ),
       ),
     );
@@ -112,7 +113,7 @@ class Main extends ConsumerWidget {
             ];
           },
           verticalPadding: 0,
-          width: panelWidth / 6,
+          width: ref.watch(layerShellLogicProvider).value!.panelHeight / 6,
           child: ColoredBox(
             color: Theme.of(context).colorScheme.secondaryContainer,
             child: const Stack(

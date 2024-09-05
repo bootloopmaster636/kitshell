@@ -1,14 +1,16 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/time/time.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 
-class TimeWidget extends StatelessWidget {
+class TimeWidget extends ConsumerWidget {
   const TimeWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+
     return RepaintBoundary(
       child: Container(
         height: panelHeight,

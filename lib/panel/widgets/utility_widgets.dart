@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/const.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 
-class Submenu extends HookWidget {
+class Submenu extends HookConsumerWidget {
   const Submenu({
     required this.title,
     required this.body,
@@ -24,8 +24,10 @@ class Submenu extends HookWidget {
   final Widget body;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isExitHovered = useState(false);
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
 
     return Material(
       child: ColoredBox(
@@ -81,7 +83,7 @@ class Submenu extends HookWidget {
               width: panelWidth / 4,
               height: panelHeight,
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: panelHeight / 3,
               ),
               child: Row(
@@ -95,7 +97,7 @@ class Submenu extends HookWidget {
                   if (icon != null) const Gap(8),
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: panelHeight / 3,
                     ),
@@ -144,7 +146,7 @@ class Submenu extends HookWidget {
   }
 }
 
-class HoverRevealer extends HookWidget {
+class HoverRevealer extends HookConsumerWidget {
   const HoverRevealer({
     required this.icon,
     required this.widget,
@@ -163,8 +165,11 @@ class HoverRevealer extends HookWidget {
   final void Function()? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isHovered = useState(false);
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: MouseRegion(
@@ -279,21 +284,23 @@ class HoverRevealer extends HookWidget {
   }
 }
 
-class LoadingSpinner extends StatelessWidget {
+class LoadingSpinner extends ConsumerWidget {
   const LoadingSpinner({this.customLoadingMessage, super.key});
 
   final String? customLoadingMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [
-          const SizedBox(
+          SizedBox(
             height: panelHeight / 2,
             width: panelHeight / 2,
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           ),
           const Gap(16),
           Text(
@@ -317,12 +324,16 @@ class ExpandedSubmenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final expandedPanelHeight =
+        (ref.watch(layerShellLogicProvider).value!.panelHeight * expandedSubmenuHeightMultiplier).toDouble();
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+
     return Material(
       child: Container(
         height: expandedPanelHeight,
         width: panelWidth,
         color: Theme.of(context).colorScheme.surfaceContainer,
-        padding: const EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: panelWidth / 6, vertical: 8),
         child: Column(
           children: [
             Row(
@@ -379,21 +390,21 @@ class ExpandedSubmenu extends ConsumerWidget {
   }
 }
 
-class LoadingScreen extends StatelessWidget {
+class LoadingScreen extends ConsumerWidget {
   const LoadingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: Container(
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.surfaceContainerLowest,
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               'assets/logoV1.svg',
-              width: panelHeight - 8,
+              width: 48,
             ),
             const Gap(4),
             Text(
@@ -405,13 +416,13 @@ class LoadingScreen extends StatelessWidget {
             ),
             const Gap(64),
             const SizedBox(
-              width: panelWidth / 6,
+              width: 200,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Initializing...'),
-                  const Gap(4),
+                  Gap(4),
                   LinearProgressIndicator(),
                 ],
               ),

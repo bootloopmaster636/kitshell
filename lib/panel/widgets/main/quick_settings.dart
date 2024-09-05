@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/logic/brightness/brightness.dart';
 import 'package:kitshell/panel/logic/sound/sound.dart';
@@ -11,6 +10,7 @@ import 'package:kitshell/panel/logic/wifi/wifi.dart';
 import 'package:kitshell/panel/widgets/submenu/battery_submenu.dart';
 import 'package:kitshell/panel/widgets/submenu/wifi_submenu.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/src/rust/api/battery.dart';
 import 'package:kitshell/src/rust/api/brightness.dart';
 import 'package:kitshell/src/rust/api/wireplumber.dart';
@@ -30,14 +30,10 @@ class QuickSettingsContainer extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Gap(4),
-            BatteryPanel(),
-            // Gap(8),
-            VolumePanel(),
-            // Gap(8),
-            BrightnessPanel(),
-            // Gap(8),
-            WifiPanel(),
+            const BatteryPanel(),
+            const VolumePanel(),
+            const BrightnessPanel(),
+            const WifiPanel(),
           ]
               .map((e) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -65,6 +61,7 @@ class WifiPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wifi = ref.watch(wifiListProvider);
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
 
     return HoverRevealer(
       icon: (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 75

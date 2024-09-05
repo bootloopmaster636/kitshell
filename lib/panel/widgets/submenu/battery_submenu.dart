@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/battery/battery.dart';
 import 'package:kitshell/panel/widgets/utility_widgets.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/src/rust/api/battery.dart';
 
-class BatterySubmenu extends StatelessWidget {
+class BatterySubmenu extends ConsumerWidget {
   const BatterySubmenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Submenu(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
+
+    return Submenu(
       icon: FontAwesomeIcons.batteryThreeQuarters,
       title: 'Battery',
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: panelHeight / 4),
-        child: PowerProfilesSettings(),
+        child: const PowerProfilesSettings(),
       ),
     );
   }

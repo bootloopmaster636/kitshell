@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:kitshell/const.dart';
 import 'package:kitshell/settings/persistence/layer_shell_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wayland_layer_shell/types.dart';
@@ -23,8 +24,9 @@ class LayerShellData with _$LayerShellData {
 class LayerShellLogic extends _$LayerShellLogic {
   @override
   Future<LayerShellData> build() async {
-    final data = getLayerShellSettings();
+    final state = AsyncLoading();
 
+    final data = getLayerShellSettings();
     final waylandLayerShellPlugin = WaylandLayerShell();
     await waylandLayerShellPlugin.setKeyboardMode(ShellKeyboardMode.keyboardModeOnDemand);
 
@@ -71,7 +73,8 @@ class LayerShellLogic extends _$LayerShellLogic {
 
   Future<void> setHeightExpanded() async {
     final waylandLayerShellPlugin = WaylandLayerShell();
-    await waylandLayerShellPlugin.initialize(state.value?.panelWidth ?? 1366, state.value!.panelHeight * 8);
+    await waylandLayerShellPlugin.initialize(
+        state.value?.panelWidth ?? 1366, state.value!.panelHeight * expandedSubmenuHeightMultiplier);
   }
 
   Future<void> setPanelWidth(int width) async {

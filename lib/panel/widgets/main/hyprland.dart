@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kitshell/const.dart';
 import 'package:kitshell/panel/logic/hyprland/hyprland.dart';
+import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/src/rust/api/hyprland.dart';
 
 class Hyprland extends HookConsumerWidget {
@@ -14,6 +14,8 @@ class Hyprland extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final activeWindowTitle = ref.watch(hyprlandLogicProvider).value?.activeWindowTitle;
     final isHovered = useState(false);
+    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
 
     return MouseRegion(
       onHover: (_) => isHovered.value = true,
@@ -63,7 +65,7 @@ class Hyprland extends HookConsumerWidget {
               duration: 400.ms,
               sizeCurve: Curves.easeOutExpo,
               crossFadeState: isHovered.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              firstChild: const IconButton(
+              firstChild: IconButton(
                 onPressed: dispatchKillActive,
                 icon: FaIcon(
                   FontAwesomeIcons.circleXmark,
@@ -92,6 +94,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeWorkspace = ref.watch(hyprlandLogicProvider).value?.activeWorkspace;
+    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
 
     return Container(
       decoration: BoxDecoration(
@@ -106,7 +109,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
             duration: 400.ms,
             sizeCurve: Curves.easeOutExpo,
             crossFadeState: isHovered.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            firstChild: const IconButton(
+            firstChild: IconButton(
               onPressed: dispatchSwitchWorkspacePrevious,
               visualDensity: VisualDensity.compact,
               icon: FaIcon(
@@ -124,7 +127,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
             duration: 400.ms,
             sizeCurve: Curves.easeOutExpo,
             crossFadeState: isHovered.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            firstChild: const IconButton(
+            firstChild: IconButton(
               onPressed: dispatchSwitchWorkspaceNext,
               visualDensity: VisualDensity.compact,
               icon: FaIcon(
