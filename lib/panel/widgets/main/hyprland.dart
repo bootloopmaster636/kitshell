@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kitshell/panel/logic/hyprland/hyprland.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
@@ -12,7 +13,6 @@ class Hyprland extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeWindowTitle = ref.watch(hyprlandLogicProvider).value?.activeWindowTitle;
     final isHovered = useState(false);
     final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
     final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
@@ -27,7 +27,7 @@ class Hyprland extends HookConsumerWidget {
         width: isHovered.value ? panelWidth / 3 : panelWidth / 4,
         height: panelHeight,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
             BoxShadow(
@@ -46,20 +46,10 @@ class Hyprland extends HookConsumerWidget {
                 isHovered: isHovered,
               ),
             ),
-            Flexible(
+            const Gap(4),
+            const Flexible(
               flex: 5,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    activeWindowTitle ?? 'Unknown',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ),
+              child: WindowTitle(),
             ),
             AnimatedCrossFade(
               duration: 400.ms,
@@ -75,6 +65,35 @@ class Hyprland extends HookConsumerWidget {
               secondChild: const SizedBox(),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class WindowTitle extends ConsumerWidget {
+  const WindowTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeWindowTitle = ref.watch(hyprlandLogicProvider).value?.activeWindowTitle;
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            activeWindowTitle ?? 'Unknown',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
       ),
     );
