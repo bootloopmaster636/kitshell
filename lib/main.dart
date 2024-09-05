@@ -113,7 +113,7 @@ class Main extends ConsumerWidget {
             ];
           },
           verticalPadding: 0,
-          width: ref.watch(layerShellLogicProvider).value!.panelHeight / 6,
+          width: 200,
           child: ColoredBox(
             color: Theme.of(context).colorScheme.secondaryContainer,
             child: const Stack(
