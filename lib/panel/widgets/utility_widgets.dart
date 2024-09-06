@@ -357,15 +357,15 @@ class ExpandedSubmenu extends ConsumerWidget {
                   if (actions != null) ...actions!,
                 ],
               )
-                  .animate(delay: 400.ms)
+                  .animate(delay: 250.ms)
                   .fadeIn(
-                    duration: 800.ms,
+                    duration: 600.ms,
                     curve: Curves.easeOutExpo,
                   )
                   .slideY(
                     begin: 0.4,
                     end: 0,
-                    duration: 800.ms,
+                    duration: 600.ms,
                     curve: Curves.easeOutExpo,
                   ),
             ),
@@ -375,16 +375,16 @@ class ExpandedSubmenu extends ConsumerWidget {
                 width: expandedSubmenuContentWidth,
                 child: child
                     .animate(
-                      delay: 450.ms,
+                      delay: 250.ms,
                     )
                     .fadeIn(
-                      duration: 800.ms,
+                      duration: 600.ms,
                       curve: Curves.easeOutExpo,
                     )
                     .slideY(
                       begin: 0.2,
                       end: 0,
-                      duration: 800.ms,
+                      duration: 600.ms,
                       curve: Curves.easeOutExpo,
                     ),
               ),

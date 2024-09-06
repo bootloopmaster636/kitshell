@@ -58,8 +58,7 @@ void pushExpandedSubmenu(
     context,
     PageTransition(
       type: PageTransitionType.bottomToTop,
-      duration: const Duration(milliseconds: 250),
-      reverseDuration: const Duration(milliseconds: 250),
+      reverseDuration: const Duration(milliseconds: 300),
       curve: Curves.easeOutExpo,
       child: ExpandedSubmenu(
         title: title,
