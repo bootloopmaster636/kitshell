@@ -5,3 +5,4 @@ pub mod battery;
 pub mod mpris;
 pub mod wifi;
 pub mod hyprland;
+pub mod appmenu;

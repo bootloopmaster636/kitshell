@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
+import 'package:kitshell/panel/widgets/appmenu/appmenu.dart';
 import 'package:kitshell/panel/widgets/main/hyprland.dart';
 import 'package:kitshell/panel/widgets/main/mpris.dart';
 import 'package:kitshell/panel/widgets/main/quick_settings.dart';
@@ -132,13 +133,13 @@ class Main extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FilledButton(
+                    ElevatedButton(
                       onPressed: () {
                         pushExpandedSubmenu(
                           context: context,
                           ref: ref,
                           title: 'Apps',
-                          child: Placeholder(),
+                          child: const AppMenuContent(),
                         );
                       },
                       child: const Row(

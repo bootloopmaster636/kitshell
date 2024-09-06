@@ -3,6 +3,7 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
+import 'api/appmenu.dart';
 import 'api/battery.dart';
 import 'api/brightness.dart';
 import 'api/hyprland.dart';
@@ -44,6 +45,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  AppData dco_decode_app_data(dynamic raw);
+
+  @protected
   BatteryData dco_decode_battery_data(dynamic raw);
 
   @protected
@@ -66,6 +70,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
+
+  @protected
+  List<AppData> dco_decode_list_app_data(dynamic raw);
 
   @protected
   List<BatteryState> dco_decode_list_battery_state(dynamic raw);
@@ -129,6 +136,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  AppData sse_decode_app_data(SseDeserializer deserializer);
+
+  @protected
   BatteryData sse_decode_battery_data(SseDeserializer deserializer);
 
   @protected
@@ -151,6 +161,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
+
+  @protected
+  List<AppData> sse_decode_list_app_data(SseDeserializer deserializer);
 
   @protected
   List<BatteryState> sse_decode_list_battery_state(
@@ -216,6 +229,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_app_data(AppData self, SseSerializer serializer);
+
+  @protected
   void sse_encode_battery_data(BatteryData self, SseSerializer serializer);
 
   @protected
@@ -239,6 +255,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_app_data(List<AppData> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_battery_state(
