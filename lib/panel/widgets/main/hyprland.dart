@@ -27,7 +27,7 @@ class Hyprland extends HookConsumerWidget {
         width: isHovered.value ? panelWidth / 3 : panelWidth / 4,
         height: panelHeight,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
             BoxShadow(
