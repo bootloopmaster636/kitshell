@@ -189,11 +189,11 @@ class AppmenuFavItem extends ConsumerWidget {
       child: Card(
         elevation: 4,
         child: InkWell(
-          onTap: () {
-            launchApp(exec: app.exec);
+          onTap: () async {
+            await launchApp(exec: app.exec);
             incrementFrequency(app.id);
             Navigator.pop(context);
-            ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+            await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -239,11 +239,11 @@ class AppmenuNoFavItem extends ConsumerWidget {
       child: Card(
         elevation: 4,
         child: InkWell(
-          onTap: () {
-            launchApp(exec: app.exec);
+          onTap: () async {
+            await launchApp(exec: app.exec);
             incrementFrequency(app.id);
             Navigator.pop(context);
-            ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+            await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
           },
           child: Padding(
             padding: const EdgeInsets.all(8),
