@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/appmenu/appmenu.dart';
@@ -38,6 +39,8 @@ Future<void> main() async {
     runApp(const MaterialApp(home: Center(child: Text('Not supported'))));
     return;
   }
+
+  await hotKeyManager.unregisterAll();
 
   runApp(const ProviderScope(child: App()));
 }

@@ -2,52 +2,62 @@ import 'dart:io';
 
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/settings/persistence/appmenu_model.dart';
 import 'package:kitshell/src/rust/api/appmenu.dart';
 
-class AppmenuOpenBtn extends HookConsumerWidget {
+class AppmenuOpenBtn extends ConsumerStatefulWidget {
   const AppmenuOpenBtn({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final searchTerm = useState('');
+  ConsumerState<AppmenuOpenBtn> createState() => _AppmenuOpenBtnState();
+}
+
+class _AppmenuOpenBtnState extends ConsumerState<AppmenuOpenBtn> {
+  ValueNotifier<String> searchTerm = ValueNotifier('');
+  ValueNotifier<bool> isMenuOpen = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    final openAppmenu = HotKey(
+      key: LogicalKeyboardKey.keyR,
+      modifiers: [HotKeyModifier.control],
+      scope: HotKeyScope.inapp,
+    );
+    final closeAppmenu = HotKey(
+      key: LogicalKeyboardKey.escape,
+      scope: HotKeyScope.inapp,
+    );
+
+    hotKeyManager
+      ..register(
+        openAppmenu,
+        keyDownHandler: (hotKey) {
+          if (!isMenuOpen.value) openMenu(context, ref, searchTerm);
+        },
+      )
+      ..register(
+        closeAppmenu,
+        keyDownHandler: (hotKey) {
+          if (isMenuOpen.value) closeMenu(context);
+        },
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        pushExpandedSubmenu(
-          context: context,
-          ref: ref,
-          title: 'Apps',
-          child: AppMenuContent(
-            searchTerm: searchTerm,
-          ),
-          actions: [
-            SizedBox(
-              width: 200,
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(999),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  filled: true,
-                  hintText: 'Search...',
-                  prefixIcon: const Icon(Icons.search),
-                ),
-                autofocus: true,
-                onChanged: (newValue) => searchTerm.value = newValue,
-              ),
-            ),
-          ],
-        );
+        openMenu(context, ref, searchTerm);
       },
       child: const Row(
         children: [
@@ -57,6 +67,43 @@ class AppmenuOpenBtn extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  void openMenu(BuildContext context, WidgetRef ref, ValueNotifier<String> searchTerm) {
+    isMenuOpen.value = true;
+    pushExpandedSubmenu(
+      context: context,
+      ref: ref,
+      title: 'Apps',
+      child: AppMenuContent(
+        searchTerm: searchTerm,
+      ),
+      actions: [
+        SizedBox(
+          width: 200,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999),
+                borderSide: BorderSide.none,
+              ),
+              fillColor: Theme.of(context).colorScheme.surface,
+              filled: true,
+              hintText: 'Search...',
+              prefixIcon: const Icon(Icons.search),
+            ),
+            autofocus: true,
+            onChanged: (newValue) => searchTerm.value = newValue,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void closeMenu(BuildContext context) {
+    isMenuOpen.value = false;
+    Navigator.pop(context);
+    ref.read(layerShellLogicProvider.notifier).setHeightNormal();
   }
 }
 

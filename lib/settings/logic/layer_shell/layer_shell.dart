@@ -24,7 +24,7 @@ class LayerShellData with _$LayerShellData {
 class LayerShellLogic extends _$LayerShellLogic {
   @override
   Future<LayerShellData> build() async {
-    final state = AsyncLoading();
+    const state = AsyncLoading();
 
     final data = getLayerShellSettings();
     final waylandLayerShellPlugin = WaylandLayerShell();

@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  hotkey_manager_linux
   objectbox_flutter_libs
   url_launcher_linux
   wayland_layer_shell
