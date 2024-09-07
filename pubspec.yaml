@@ -2,7 +2,7 @@ name: kitshell
 description: "A modern shell for WLroots based compositor."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.0
+version: 0.3.0
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -39,6 +39,8 @@ dependencies:
   objectbox: ^4.0.2
   objectbox_flutter_libs: ^4.0.2
   tinycolor2: ^3.0.1
+  package_info_plus: ^8.0.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

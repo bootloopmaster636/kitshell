@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:kitshell/main.dart';
+import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/settings/settings_section.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final List<Widget> settingsSectionContents = [
   const SectionLookAndFeel(),
@@ -56,6 +61,7 @@ class SettingsSectionContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SettingsSectionTile(
           index: 0,
@@ -69,6 +75,8 @@ class SettingsSectionContent extends StatelessWidget {
           icon: Icons.layers_outlined,
           notifier: notifier,
         ),
+        const Spacer(),
+        const GithubButton(),
       ],
     );
   }
@@ -101,12 +109,39 @@ class SettingsSectionTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: TextStyle(fontSize: 14),
+          style: const TextStyle(fontSize: 14),
         ),
         onTap: () {
           notifier.value = index;
         },
       ),
     );
+  }
+}
+
+class GithubButton extends ConsumerWidget {
+  const GithubButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return TextButton(
+        onPressed: () {
+          final Uri kitshellRepo = Uri.parse('https://github.com/bootloopmaster636/kitshell');
+          try {
+            launchUrl(kitshellRepo);
+          } catch (e) {
+            showToast(ref: ref, context: context, message: 'Failed to open Kitshell repo');
+          }
+        },
+        child: Row(
+          children: [
+            const FaIcon(
+              FontAwesomeIcons.github,
+              size: 16,
+            ),
+            const Gap(8),
+            Text("You're running Kitshell v${version}"),
+          ],
+        ));
   }
 }

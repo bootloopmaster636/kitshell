@@ -2,7 +2,6 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
@@ -18,15 +17,20 @@ import 'package:kitshell/settings/logic/look_and_feel/look_and_feel.dart';
 import 'package:kitshell/settings/persistence/objectbox.dart';
 import 'package:kitshell/settings/settings_screen.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:toastification/toastification.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
 
 late ObjectBox objectbox;
+late String version;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RustLib.init();
   objectbox = await ObjectBox.create();
+
+  final packageInfo = await PackageInfo.fromPlatform();
+  version = packageInfo.version;
 
   final waylandLayerShellPlugin = WaylandLayerShell();
   final isSupported = await waylandLayerShellPlugin.initialize(1, 1);
