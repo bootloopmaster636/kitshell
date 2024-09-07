@@ -1,9 +1,11 @@
-# Kitshell  
+# Kitshell
+
 <img src="https://github.com/user-attachments/assets/27ebc89e-01f4-4b81-903a-e21312aa9a3e" width="100" height="100">  
 
 **A modern shell for WLroots based compositor.**
 
 ## Screenshots
+
 ![image](https://github.com/user-attachments/assets/a9d98b27-c8f6-40eb-a6dd-2cc628408fc2)  
 (more coming soon)
 
@@ -26,5 +28,5 @@ Feature/To-do list:
 - [X] Wi-Fi
 - [X] Kitshell settings
 - [X] Hyprland related stuff (workspaces, etc.)
-- [ ] App launcher
+- [X] App launcher
 - [ ] Notifications
