@@ -6,7 +6,7 @@ part of 'layer_shell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$layerShellLogicHash() => r'b57a58004d410f7aa8b4da93d6bdb58ac7eb1e15';
+String _$layerShellLogicHash() => r'c478fa676ba0b2a1af304514f27c40d6167b2a77';
 
 /// See also [LayerShellLogic].
 @ProviderFor(LayerShellLogic)
