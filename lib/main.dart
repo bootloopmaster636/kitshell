@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
 import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/panel/widgets/appmenu/appmenu.dart';
 import 'package:kitshell/panel/widgets/main/hyprland.dart';
@@ -65,7 +66,9 @@ class App extends ConsumerWidget {
           curve: Curves.easeInOut,
         ),
         home: Init(
-          child: ref.watch(settingsLookAndFeelProvider).isLoading || ref.watch(layerShellLogicProvider).isLoading
+          child: ref.watch(settingsLookAndFeelProvider).isLoading ||
+                  ref.watch(layerShellLogicProvider).isLoading ||
+                  ref.watch(appmenuLogicProvider).isLoading
               ? const LoadingScreen()
               : const Main(),
         ),
@@ -130,28 +133,12 @@ class Main extends ConsumerWidget {
                     Mpris(),
                   ],
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        pushExpandedSubmenu(
-                          context: context,
-                          ref: ref,
-                          title: 'Apps',
-                          child: const AppMenuContent(),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          FaIcon(FontAwesomeIcons.boxesStacked, size: 12),
-                          Gap(8),
-                          Text('Apps'),
-                        ],
-                      ),
-                    ),
-                    const Gap(8),
-                    const Padding(
+                    AppmenuOpenBtn(),
+                    Gap(8),
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 4),
                       child: Hyprland(),
                     ),

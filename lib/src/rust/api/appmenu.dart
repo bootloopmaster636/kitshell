@@ -9,19 +9,25 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<List<AppData>> getAllApps() =>
     RustLib.instance.api.crateApiAppmenuGetAllApps();
 
+Future<void> launchApp({required List<String> exec}) =>
+    RustLib.instance.api.crateApiAppmenuLaunchApp(exec: exec);
+
 class AppData {
   final String name;
-  final String exec;
+  final List<String> exec;
   final String icon;
+  final bool useTerminal;
 
   const AppData({
     required this.name,
     required this.exec,
     required this.icon,
+    required this.useTerminal,
   });
 
   @override
-  int get hashCode => name.hashCode ^ exec.hashCode ^ icon.hashCode;
+  int get hashCode =>
+      name.hashCode ^ exec.hashCode ^ icon.hashCode ^ useTerminal.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -30,5 +36,6 @@ class AppData {
           runtimeType == other.runtimeType &&
           name == other.name &&
           exec == other.exec &&
-          icon == other.icon;
+          icon == other.icon &&
+          useTerminal == other.useTerminal;
 }

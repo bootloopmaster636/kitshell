@@ -354,6 +354,7 @@ class ExpandedSubmenu extends ConsumerWidget {
                       fontSize: 20,
                     ),
                   ),
+                  const Spacer(),
                   if (actions != null) ...actions!,
                 ],
               )
@@ -369,7 +370,7 @@ class ExpandedSubmenu extends ConsumerWidget {
                     curve: Curves.easeOutExpo,
                   ),
             ),
-            const Gap(4),
+            const Gap(8),
             Expanded(
               child: SizedBox(
                 width: expandedSubmenuContentWidth,

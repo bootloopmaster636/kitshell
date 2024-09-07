@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1126094410;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -562446833;
 
 // Section: executor
 
@@ -73,6 +73,44 @@ fn wire__crate__api__appmenu__get_all_apps_impl(
                     (move || async move {
                         let output_ok =
                             Result::<_, ()>::Ok(crate::api::appmenu::get_all_apps().await)?;
+                        Ok(output_ok)
+                    })()
+                        .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__appmenu__launch_app_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "launch_app",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_exec = <Vec<String>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok({
+                            crate::api::appmenu::launch_app(api_exec).await;
+                        })?;
                         Ok(output_ok)
                     })()
                         .await,
@@ -883,12 +921,14 @@ impl SseDecode for crate::api::appmenu::AppData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_name = <String>::sse_decode(deserializer);
-        let mut var_exec = <String>::sse_decode(deserializer);
+        let mut var_exec = <Vec<String>>::sse_decode(deserializer);
         let mut var_icon = <String>::sse_decode(deserializer);
+        let mut var_useTerminal = <bool>::sse_decode(deserializer);
         return crate::api::appmenu::AppData {
             name: var_name,
             exec: var_exec,
             icon: var_icon,
+            use_terminal: var_useTerminal,
         };
     }
 }
@@ -1170,53 +1210,54 @@ fn pde_ffi_dispatcher_primary_impl(
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
         1 => wire__crate__api__appmenu__get_all_apps_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__crate__api__battery__get_battery_data_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__battery__get_power_profile_impl(port, ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__battery__set_power_profile_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
-        6 => {
+        2 => wire__crate__api__appmenu__launch_app_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__battery__get_battery_data_impl(port, ptr, rust_vec_len, data_len),
+        4 => wire__crate__api__battery__get_power_profile_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__battery__set_power_profile_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
+        7 => {
             wire__crate__api__brightness__set_brightness_all_impl(port, ptr, rust_vec_len, data_len)
         }
-        7 => {
+        8 => {
             wire__crate__api__hyprland__dispatch_kill_active_impl(port, ptr, rust_vec_len, data_len)
         }
-        8 => wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
+        9 => wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
+        10 => wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__hyprland__get_active_window_title_impl(
+        11 => wire__crate__api__hyprland__get_active_window_title_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__hyprland__get_active_workspace_number_impl(
+        12 => wire__crate__api__hyprland__get_active_workspace_number_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__hyprland__get_hyprland_data_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__hyprland__get_workspaces_impl(port, ptr, rust_vec_len, data_len),
-        14 => {
+        13 => wire__crate__api__hyprland__get_hyprland_data_impl(port, ptr, rust_vec_len, data_len),
+        14 => wire__crate__api__hyprland__get_workspaces_impl(port, ptr, rust_vec_len, data_len),
+        15 => {
             wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len)
         }
-        15 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
+        16 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
+        21 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
+        22 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
+        23 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1257,6 +1298,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::appmenu::AppData {
             self.name.into_into_dart().into_dart(),
             self.exec.into_into_dart().into_dart(),
             self.icon.into_into_dart().into_dart(),
+            self.use_terminal.into_into_dart().into_dart(),
         ]
             .into_dart()
     }
@@ -1489,8 +1531,9 @@ impl SseEncode for crate::api::appmenu::AppData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.name, serializer);
-        <String>::sse_encode(self.exec, serializer);
+        <Vec<String>>::sse_encode(self.exec, serializer);
         <String>::sse_encode(self.icon, serializer);
+        <bool>::sse_encode(self.use_terminal, serializer);
     }
 }
 

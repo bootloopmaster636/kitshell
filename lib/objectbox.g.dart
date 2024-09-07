@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'settings/persistence/appmenu_model.dart';
 import 'settings/persistence/layer_shell_model.dart';
 import 'settings/persistence/look_and_feel_model.dart';
 
@@ -87,6 +88,50 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(14, 5685582794958984055),
+      name: 'AppmenuDb',
+      lastPropertyId: const obx_int.IdUid(7, 5490496020832796856),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 7283187386563811092),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1450065873914545458),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 8909693100632014138),
+            name: 'exec',
+            type: 30,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 7239406807466709785),
+            name: 'icon',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2704471997840777149),
+            name: 'useTerminal',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 911923785092416984),
+            name: 'isFavorite',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 5490496020832796856),
+            name: 'frequency',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -125,11 +170,23 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 8940013296113580543),
+      lastEntityId: const obx_int.IdUid(14, 5685582794958984055),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [319117083580890393, 1126114942859790230],
+      retiredEntityUids: const [
+        319117083580890393,
+        1126114942859790230,
+        7801215960238994675,
+        767822255377245092,
+        3051909342032818286,
+        8487335206731081285,
+        3589525900076403544,
+        836173557497343389,
+        4030948908917277486,
+        5280337695291759145,
+        4038000598734131669
+      ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
         2675071161574506234,
@@ -147,7 +204,70 @@ obx_int.ModelDefinition getObjectBoxModel() {
         9054602213563610987,
         4153294262211589001,
         3344042603675330834,
-        5844917907412048726
+        5844917907412048726,
+        7595138127903138769,
+        6713283092622659882,
+        3082797427787759093,
+        128611430234463427,
+        7771813703721772200,
+        4560234688236727197,
+        103883656919499179,
+        124213993684306376,
+        1625307788128119976,
+        6130531308671405255,
+        2482234456326213549,
+        8352200315961380337,
+        2143895815910046792,
+        8539287721948848192,
+        1300675985474307462,
+        1739668108463492501,
+        6901065895873189243,
+        284729684098264706,
+        6163823524900475367,
+        7724745489980447872,
+        1903808385262803314,
+        6423638197890235341,
+        8094748591201797524,
+        7464523356331283254,
+        3866357760362272951,
+        3741001142510001784,
+        7612774893540536091,
+        3035927003138409725,
+        6292796747363445381,
+        7706934545765417819,
+        6447523794537451002,
+        8852762629075086255,
+        8964894336619031280,
+        7276696964874555392,
+        7916381764782980910,
+        5789636187245035345,
+        8078284466146502475,
+        737020703305549694,
+        8731294081891112024,
+        2340033288262091088,
+        5942695850833084126,
+        8955828897935970176,
+        4428058910227961541,
+        394777338939353483,
+        5247123286970047822,
+        1862201738698567024,
+        5238954489050569856,
+        6396701882356830523,
+        5380076008519344286,
+        8633021608873762323,
+        6499154069186422060,
+        1337926377149161336,
+        7178943836230337843,
+        6255543527387045558,
+        1949088619121603133,
+        107975795535047071,
+        875114048558070891,
+        8944251822661608755,
+        5558274685445044478,
+        6822610630372388257,
+        8827752014125243401,
+        3521319541923724129,
+        1202754159213941190
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -227,6 +347,53 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 .vTableGetNullable(buffer, rootOffset, 16);
 
           return object;
+        }),
+    AppmenuDb: obx_int.EntityDefinition<AppmenuDb>(
+        model: _entities[2],
+        toOneRelations: (AppmenuDb object) => [],
+        toManyRelations: (AppmenuDb object) => {},
+        getId: (AppmenuDb object) => object.id,
+        setId: (AppmenuDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (AppmenuDb object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          final execOffset = fbb.writeList(
+              object.exec.map(fbb.writeString).toList(growable: false));
+          final iconOffset = fbb.writeString(object.icon);
+          fbb.startTable(8);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addOffset(2, execOffset);
+          fbb.addOffset(3, iconOffset);
+          fbb.addBool(4, object.useTerminal);
+          fbb.addBool(5, object.isFavorite);
+          fbb.addInt64(6, object.frequency);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = AppmenuDb()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..name = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '')
+            ..exec = const fb.ListReader<String>(
+                    fb.StringReader(asciiOptimization: true),
+                    lazy: false)
+                .vTableGet(buffer, rootOffset, 8, [])
+            ..icon = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 10, '')
+            ..useTerminal =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false)
+            ..isFavorite =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false)
+            ..frequency =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+
+          return object;
         })
   };
 
@@ -277,4 +444,35 @@ class LayerShellDb_ {
   /// See [LayerShellDb.monitor].
   static final monitor =
       obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[6]);
+}
+
+/// [AppmenuDb] entity fields to define ObjectBox queries.
+class AppmenuDb_ {
+  /// See [AppmenuDb.id].
+  static final id =
+      obx.QueryIntegerProperty<AppmenuDb>(_entities[2].properties[0]);
+
+  /// See [AppmenuDb.name].
+  static final name =
+      obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[1]);
+
+  /// See [AppmenuDb.exec].
+  static final exec =
+      obx.QueryStringVectorProperty<AppmenuDb>(_entities[2].properties[2]);
+
+  /// See [AppmenuDb.icon].
+  static final icon =
+      obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[3]);
+
+  /// See [AppmenuDb.useTerminal].
+  static final useTerminal =
+      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[4]);
+
+  /// See [AppmenuDb.isFavorite].
+  static final isFavorite =
+      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[5]);
+
+  /// See [AppmenuDb.frequency].
+  static final frequency =
+      obx.QueryIntegerProperty<AppmenuDb>(_entities[2].properties[6]);
 }
