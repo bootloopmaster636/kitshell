@@ -12,41 +12,20 @@ import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/settings/persistence/appmenu_model.dart';
 import 'package:kitshell/src/rust/api/appmenu.dart';
+import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
-class AppmenuOpenBtn extends HookConsumerWidget {
+class AppmenuOpenBtn extends ConsumerWidget {
   const AppmenuOpenBtn({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchTerm = useState('');
     return ElevatedButton(
       onPressed: () {
         pushExpandedSubmenu(
           context: context,
           ref: ref,
-          title: 'Apps',
-          child: AppMenuContent(
-            searchTerm: searchTerm,
-          ),
-          actions: [
-            SizedBox(
-              width: 200,
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(999),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  filled: true,
-                  hintText: 'Search...',
-                  prefixIcon: const Icon(Icons.search),
-                ),
-                autofocus: true,
-                onChanged: (newValue) => searchTerm.value = newValue,
-              ),
-            ),
-          ],
+          title: 'My apps',
+          child: const AppMenuContent(),
         );
       },
       child: const Row(
@@ -60,10 +39,8 @@ class AppmenuOpenBtn extends HookConsumerWidget {
   }
 }
 
-class AppMenuContent extends HookConsumerWidget {
-  const AppMenuContent({required this.searchTerm, super.key});
-
-  final ValueNotifier<String> searchTerm;
+class AppMenuContent extends ConsumerWidget {
+  const AppMenuContent({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +51,7 @@ class AppMenuContent extends HookConsumerWidget {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: data.isLoading
           ? const Center(
               child: Column(
@@ -85,43 +62,55 @@ class AppMenuContent extends HookConsumerWidget {
                 ],
               ),
             )
-          : AppmenuList(data: data, searchTerm: searchTerm),
+          : AppmenuList(data: data),
     );
   }
 }
 
-class AppmenuList extends ConsumerWidget {
+class AppmenuList extends HookConsumerWidget {
   const AppmenuList({
     super.key,
     required this.data,
-    required this.searchTerm,
   });
 
   final AsyncValue<AppmenuData> data;
-  final ValueNotifier<String> searchTerm;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth;
+    final searchTerm = useState('');
 
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        const SliverToBoxAdapter(
-          child: Text(
-            'Favorites',
+    return DynMouseScroll(
+      durationMS: 200,
+      animationCurve: Curves.easeOutQuad,
+      builder: (context, controller, physics) => CustomScrollView(
+        physics: physics,
+        controller: controller,
+        slivers: [
+          SliverToBoxAdapter(
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(999),
+                  borderSide: BorderSide.none,
+                ),
+                fillColor: Theme.of(context).colorScheme.surface,
+                filled: true,
+                hintText: 'Search for apps...',
+                prefixIcon: const Icon(Icons.search),
+              ),
+              autofocus: true,
+              onChanged: (newValue) => searchTerm.value = newValue,
+            ),
           ),
-        ),
-        const SliverGap(8),
-        ValueListenableBuilder(
-          valueListenable: searchTerm,
-          builder: (context, text, widget) => SliverGrid.builder(
+          const SliverGap(8),
+          SliverGrid.builder(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: panelWidth / 8,
               mainAxisExtent: panelWidth / 16,
               childAspectRatio: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
             ),
             itemCount: data.value!.appmenuFav
                 .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
@@ -133,35 +122,32 @@ class AppmenuList extends ConsumerWidget {
               return AppmenuFavItem(app: app);
             },
           ),
-        ),
-        const SliverGap(12),
-        const SliverToBoxAdapter(
-          child: Text(
-            'All apps',
+          const SliverGap(12),
+          const SliverToBoxAdapter(
+            child: Text(
+              'All apps',
+            ),
           ),
-        ),
-        const SliverGap(8),
-        ValueListenableBuilder(
-          valueListenable: searchTerm,
-          builder: (context, text, widget) => SliverGrid.builder(
+          const SliverGap(8),
+          SliverGrid.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: panelWidth ~/ 320,
+              crossAxisCount: panelWidth ~/ 280,
               childAspectRatio: 4,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
             ),
             itemCount: data.value!.appmenuNoFav
-                .where((element) => element.name.toLowerCase().contains(text.toLowerCase()))
+                .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
                 .length,
             itemBuilder: (context, index) {
               final app = data.value!.appmenuNoFav
-                  .where((element) => element.name.toLowerCase().contains(text.toLowerCase()))
+                  .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
                   .toList()[index];
               return AppmenuNoFavItem(app: app);
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -195,20 +181,23 @@ class AppmenuFavItem extends ConsumerWidget {
             Navigator.pop(context);
             await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
           },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 32,
-                height: 32,
-                child: AppIcon(path: app.icon),
-              ),
-              const Gap(8),
-              Text(
-                app.name,
-                style: const TextStyle(overflow: TextOverflow.ellipsis),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: AppIcon(path: app.icon),
+                ),
+                const Gap(8),
+                Text(
+                  app.name,
+                  style: const TextStyle(overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
           ),
         ),
       ),
