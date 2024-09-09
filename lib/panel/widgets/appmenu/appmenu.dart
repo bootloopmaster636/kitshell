@@ -101,6 +101,23 @@ class AppmenuList extends HookConsumerWidget {
               ),
               autofocus: true,
               onChanged: (newValue) => searchTerm.value = newValue,
+              onSubmitted: (onSubmitted) async {
+                final AppmenuInfo app;
+                if (data.value!.appmenuFav.isNotEmpty) {
+                  app = data.value!.appmenuFav
+                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+                      .first;
+                } else {
+                  app = data.value!.appmenuNoFav
+                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+                      .first;
+                }
+
+                await launchApp(exec: app.exec);
+                incrementFrequency(app.id);
+                await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+                if (context.mounted) Navigator.pop(context);
+              },
             ),
           ),
           const SliverGap(8),
