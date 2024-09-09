@@ -335,6 +335,26 @@ class ExpandedSubmenu extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           children: [
+            Expanded(
+              child: SizedBox(
+                width: expandedSubmenuContentWidth,
+                child: child
+                    .animate(
+                      delay: 250.ms,
+                    )
+                    .fadeIn(
+                      duration: 600.ms,
+                      curve: Curves.easeOutExpo,
+                    )
+                    .slideY(
+                      begin: 0.2,
+                      end: 0,
+                      duration: 600.ms,
+                      curve: Curves.easeOutExpo,
+                    ),
+              ),
+            ),
+            const Gap(8),
             SizedBox(
               width: expandedSubmenuContentWidth,
               child: Row(
@@ -358,7 +378,7 @@ class ExpandedSubmenu extends ConsumerWidget {
                   if (actions != null) ...actions!,
                 ],
               )
-                  .animate(delay: 250.ms)
+                  .animate(delay: 350.ms)
                   .fadeIn(
                     duration: 600.ms,
                     curve: Curves.easeOutExpo,
@@ -369,26 +389,6 @@ class ExpandedSubmenu extends ConsumerWidget {
                     duration: 600.ms,
                     curve: Curves.easeOutExpo,
                   ),
-            ),
-            const Gap(8),
-            Expanded(
-              child: SizedBox(
-                width: expandedSubmenuContentWidth,
-                child: child
-                    .animate(
-                      delay: 250.ms,
-                    )
-                    .fadeIn(
-                      duration: 600.ms,
-                      curve: Curves.easeOutExpo,
-                    )
-                    .slideY(
-                      begin: 0.2,
-                      end: 0,
-                      duration: 600.ms,
-                      curve: Curves.easeOutExpo,
-                    ),
-              ),
             ),
           ],
         ),
