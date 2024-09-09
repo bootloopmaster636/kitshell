@@ -27,6 +27,12 @@ class SettingsContent extends HookWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                ),
+              ],
             ),
             padding: const EdgeInsets.all(8),
             child: SettingsSectionContent(
@@ -42,6 +48,12 @@ class SettingsContent extends HookWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                ),
+              ],
             ),
             height: double.infinity,
             padding: const EdgeInsets.all(16),

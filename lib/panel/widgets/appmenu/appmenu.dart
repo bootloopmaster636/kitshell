@@ -50,6 +50,12 @@ class AppMenuContent extends ConsumerWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+          ),
+        ],
       ),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: data.isLoading
