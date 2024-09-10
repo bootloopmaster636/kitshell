@@ -13,6 +13,7 @@ import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/settings/persistence/appmenu_model.dart';
 import 'package:kitshell/src/rust/api/appmenu.dart';
+import 'package:kitshell/src/rust/api/battery.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
 class AppmenuOpenBtn extends ConsumerWidget {
@@ -83,22 +84,24 @@ class PowerButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Material(
-      elevation: 4,
+      elevation: 2,
       color: Theme.of(context).colorScheme.surface,
       borderRadius: BorderRadius.circular(999),
       type: MaterialType.button,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTapDown: (detail) {
+        onTapUp: (detail) {
           showContextMenu(
             detail.globalPosition,
             context,
             (context) => [
               InkWell(
                 onTap: () {
-                  showToast(ref: ref, context: context, message: 'Hold button to confirm poweroff');
+                  showToast(ref: ref, context: context, message: 'Hold the button to confirm power off');
                 },
-                onLongPress: () {},
+                onLongPress: () {
+                  powerControl(selection: PowerState.poweroff);
+                },
                 child: const ListTile(
                   title: Text('Power off'),
                   leading: Icon(Icons.power_settings_new_outlined),
@@ -106,16 +109,21 @@ class PowerButton extends ConsumerWidget {
               ),
               InkWell(
                 onTap: () {
-                  showToast(ref: ref, context: context, message: 'Hold button to confirm reboot');
+                  showToast(ref: ref, context: context, message: 'Hold the button to confirm reboot');
                 },
-                onLongPress: () {},
+                onLongPress: () {
+                  powerControl(selection: PowerState.reboot);
+                },
                 child: const ListTile(
                   title: Text('Reboot'),
                   leading: Icon(Icons.restart_alt_rounded),
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  powerControl(selection: PowerState.suspend);
+                },
                 child: const ListTile(
                   title: Text('Sleep'),
                   leading: Icon(Icons.nights_stay_outlined),

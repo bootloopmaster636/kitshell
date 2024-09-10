@@ -98,6 +98,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PowerProfiles dco_decode_power_profiles(dynamic raw);
 
   @protected
+  PowerState dco_decode_power_state(dynamic raw);
+
+  @protected
   int dco_decode_u_32(dynamic raw);
 
   @protected
@@ -188,6 +191,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PowerProfiles sse_decode_power_profiles(SseDeserializer deserializer);
+
+  @protected
+  PowerState sse_decode_power_state(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_32(SseDeserializer deserializer);
@@ -285,6 +291,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_power_profiles(PowerProfiles self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_power_state(PowerState self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_32(int self, SseSerializer serializer);

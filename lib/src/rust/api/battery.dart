@@ -15,6 +15,9 @@ Future<PowerProfiles> getPowerProfile() =>
 Future<void> setPowerProfile({required PowerProfiles profile}) =>
     RustLib.instance.api.crateApiBatterySetPowerProfile(profile: profile);
 
+Future<void> powerControl({required PowerState selection}) =>
+    RustLib.instance.api.crateApiBatteryPowerControl(selection: selection);
+
 class BatteryData {
   final Uint8List capacityPercent;
   final Float32List drainRateWatt;
@@ -53,5 +56,14 @@ enum PowerProfiles {
   powersave,
   balanced,
   performance,
+  ;
+}
+
+enum PowerState {
+  on_,
+  poweroff,
+  suspend,
+  hibernate,
+  reboot,
   ;
 }

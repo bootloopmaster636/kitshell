@@ -10,6 +10,14 @@ pub enum BatteryState {
     Unknown,
 }
 
+pub enum PowerState {
+    On,
+    Poweroff,
+    Suspend,
+    Hibernate,
+    Reboot,
+}
+
 pub enum PowerProfiles {
     Powersave,
     Balanced,
@@ -78,4 +86,24 @@ pub async fn set_power_profile(profile: PowerProfiles) {
         .args(["set", profile_string])
         .output()
         .expect("failed to execute process");
+}
+
+pub async fn power_control(selection: PowerState) {
+    match selection {
+        PowerState::Poweroff => {
+            system_shutdown::shutdown().unwrap();
+        }
+        PowerState::Suspend => {
+            system_shutdown::sleep().unwrap();
+        }
+        PowerState::Hibernate => {
+            system_shutdown::hibernate().unwrap();
+        }
+        PowerState::Reboot => {
+            system_shutdown::reboot().unwrap();
+        }
+        _ => {
+            panic!("Unknown power state");
+        }
+    }
 }

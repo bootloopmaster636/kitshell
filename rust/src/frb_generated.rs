@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -562446833;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -368638285;
 
 // Section: executor
 
@@ -184,6 +184,44 @@ fn wire__crate__api__battery__get_power_profile_impl(
                     (move || async move {
                         let output_ok =
                             Result::<_, ()>::Ok(crate::api::battery::get_power_profile().await)?;
+                        Ok(output_ok)
+                    })()
+                        .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__battery__power_control_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "power_control",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_selection = <crate::api::battery::PowerState>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok({
+                            crate::api::battery::power_control(api_selection).await;
+                        })?;
                         Ok(output_ok)
                     })()
                         .await,
@@ -1134,6 +1172,21 @@ impl SseDecode for crate::api::battery::PowerProfiles {
     }
 }
 
+impl SseDecode for crate::api::battery::PowerState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::battery::PowerState::On,
+            1 => crate::api::battery::PowerState::Poweroff,
+            2 => crate::api::battery::PowerState::Suspend,
+            3 => crate::api::battery::PowerState::Hibernate,
+            4 => crate::api::battery::PowerState::Reboot,
+            _ => unreachable!("Invalid variant for PowerState: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for u32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1214,51 +1267,52 @@ fn pde_ffi_dispatcher_primary_impl(
         2 => wire__crate__api__appmenu__launch_app_impl(port, ptr, rust_vec_len, data_len),
         3 => wire__crate__api__battery__get_battery_data_impl(port, ptr, rust_vec_len, data_len),
         4 => wire__crate__api__battery__get_power_profile_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__battery__set_power_profile_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
-        7 => {
+        5 => wire__crate__api__battery__power_control_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__battery__set_power_profile_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__brightness__get_brightness_impl(port, ptr, rust_vec_len, data_len),
+        8 => {
             wire__crate__api__brightness__set_brightness_all_impl(port, ptr, rust_vec_len, data_len)
         }
-        8 => {
+        9 => {
             wire__crate__api__hyprland__dispatch_kill_active_impl(port, ptr, rust_vec_len, data_len)
         }
-        9 => wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
+        10 => wire__crate__api__hyprland__dispatch_switch_workspace_next_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
+        11 => wire__crate__api__hyprland__dispatch_switch_workspace_previous_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__hyprland__get_active_window_title_impl(
+        12 => wire__crate__api__hyprland__get_active_window_title_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__hyprland__get_active_workspace_number_impl(
+        13 => wire__crate__api__hyprland__get_active_workspace_number_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__hyprland__get_hyprland_data_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__hyprland__get_workspaces_impl(port, ptr, rust_vec_len, data_len),
-        15 => {
+        14 => wire__crate__api__hyprland__get_hyprland_data_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__hyprland__get_workspaces_impl(port, ptr, rust_vec_len, data_len),
+        16 => {
             wire__crate__api__init__enable_rust_stacktrace_impl(port, ptr, rust_vec_len, data_len)
         }
-        16 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
-        23 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__mpris__get_mpris_data_impl(port, ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__mpris__player_next_impl(port, ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__mpris__player_previous_impl(port, ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__mpris__player_toggle_pause_impl(port, ptr, rust_vec_len, data_len),
+        21 => wire__crate__api__wifi__connect_to_wifi_impl(port, ptr, rust_vec_len, data_len),
+        22 => wire__crate__api__wifi__get_wifi_list_impl(port, ptr, rust_vec_len, data_len),
+        23 => wire__crate__api__wireplumber__get_volume_impl(port, ptr, rust_vec_len, data_len),
+        24 => wire__crate__api__wireplumber__set_volume_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1439,6 +1493,29 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::PowerProfiles>
 for crate::api::battery::PowerProfiles
 {
     fn into_into_dart(self) -> crate::api::battery::PowerProfiles {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::battery::PowerState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::On => 0.into_dart(),
+            Self::Poweroff => 1.into_dart(),
+            Self::Suspend => 2.into_dart(),
+            Self::Hibernate => 3.into_dart(),
+            Self::Reboot => 4.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+for crate::api::battery::PowerState
+{}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::battery::PowerState>
+for crate::api::battery::PowerState
+{
+    fn into_into_dart(self) -> crate::api::battery::PowerState {
         self
     }
 }
@@ -1696,6 +1773,25 @@ impl SseEncode for crate::api::battery::PowerProfiles {
                 crate::api::battery::PowerProfiles::Powersave => 0,
                 crate::api::battery::PowerProfiles::Balanced => 1,
                 crate::api::battery::PowerProfiles::Performance => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::battery::PowerState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::battery::PowerState::On => 0,
+                crate::api::battery::PowerState::Poweroff => 1,
+                crate::api::battery::PowerState::Suspend => 2,
+                crate::api::battery::PowerState::Hibernate => 3,
+                crate::api::battery::PowerState::Reboot => 4,
                 _ => {
                     unimplemented!("");
                 }
