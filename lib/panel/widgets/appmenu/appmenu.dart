@@ -27,6 +27,9 @@ class AppmenuOpenBtn extends ConsumerWidget {
           ref: ref,
           title: 'My apps',
           child: const AppMenuContent(),
+          actions: [
+            const PowerButton(),
+          ],
         );
       },
       child: const Row(
@@ -70,6 +73,67 @@ class AppMenuContent extends ConsumerWidget {
               ),
             )
           : AppmenuList(data: data),
+    );
+  }
+}
+
+class PowerButton extends ConsumerWidget {
+  const PowerButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Material(
+      elevation: 4,
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(999),
+      type: MaterialType.button,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTapDown: (detail) {
+          showContextMenu(
+            detail.globalPosition,
+            context,
+            (context) => [
+              InkWell(
+                onTap: () {
+                  showToast(ref: ref, context: context, message: 'Hold button to confirm poweroff');
+                },
+                onLongPress: () {},
+                child: const ListTile(
+                  title: Text('Power off'),
+                  leading: Icon(Icons.power_settings_new_outlined),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  showToast(ref: ref, context: context, message: 'Hold button to confirm reboot');
+                },
+                onLongPress: () {},
+                child: const ListTile(
+                  title: Text('Reboot'),
+                  leading: Icon(Icons.restart_alt_rounded),
+                ),
+              ),
+              InkWell(
+                onTap: () {},
+                child: const ListTile(
+                  title: Text('Sleep'),
+                  leading: Icon(Icons.nights_stay_outlined),
+                ),
+              ),
+            ],
+            8.0,
+            200.0,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Icon(
+            Icons.power_settings_new_outlined,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ),
     );
   }
 }
