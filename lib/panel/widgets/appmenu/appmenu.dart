@@ -200,23 +200,22 @@ class AppmenuList extends HookConsumerWidget {
             ),
           ),
           const SliverGap(8),
-          SliverGrid.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: panelWidth / 8,
-              mainAxisExtent: panelWidth / 16,
-              childAspectRatio: 2,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: data.value!.appmenuFav
+                    .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+                    .length,
+                itemBuilder: (context, index) {
+                  final app = data.value!.appmenuFav
+                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+                      .toList()[index];
+                  return SizedBox(width: 160, child: AppmenuFavItem(app: app));
+                },
+              ),
             ),
-            itemCount: data.value!.appmenuFav
-                .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                .length,
-            itemBuilder: (context, index) {
-              final app = data.value!.appmenuFav
-                  .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                  .toList()[index];
-              return AppmenuFavItem(app: app);
-            },
           ),
           const SliverGap(12),
           const SliverToBoxAdapter(
@@ -269,7 +268,8 @@ class AppmenuFavItem extends ConsumerWidget {
         ];
       },
       child: Card(
-        elevation: 4,
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        elevation: 2,
         child: InkWell(
           onTap: () async {
             unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
@@ -322,7 +322,7 @@ class AppmenuNoFavItem extends ConsumerWidget {
         ];
       },
       child: Card(
-        elevation: 4,
+        elevation: 2,
         child: InkWell(
           onTap: () async {
             unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
