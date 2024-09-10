@@ -2,7 +2,7 @@ name: kitshell
 description: "A modern shell for WLroots based compositor."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.3.1
+version: 0.3.2
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
