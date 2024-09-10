@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:contextmenu/contextmenu.dart';
@@ -119,7 +120,7 @@ class AppmenuList extends HookConsumerWidget {
                       .first;
                 }
 
-                await launchApp(exec: app.exec);
+                unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
                 incrementFrequency(app.id);
                 await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
                 if (context.mounted) Navigator.pop(context);
@@ -199,7 +200,7 @@ class AppmenuFavItem extends ConsumerWidget {
         elevation: 4,
         child: InkWell(
           onTap: () async {
-            await launchApp(exec: app.exec);
+            unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
             incrementFrequency(app.id);
             Navigator.pop(context);
             await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
@@ -252,7 +253,7 @@ class AppmenuNoFavItem extends ConsumerWidget {
         elevation: 4,
         child: InkWell(
           onTap: () async {
-            await launchApp(exec: app.exec);
+            unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
             incrementFrequency(app.id);
             Navigator.pop(context);
             await ref.read(layerShellLogicProvider.notifier).setHeightNormal();

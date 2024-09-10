@@ -104,12 +104,13 @@ fn wire__crate__api__appmenu__launch_app_impl(
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_exec = <Vec<String>>::sse_decode(&mut deserializer);
+            let api_use_terminal = <bool>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::appmenu::launch_app(api_exec).await;
+                            crate::api::appmenu::launch_app(api_exec, api_use_terminal).await;
                         })?;
                         Ok(output_ok)
                     })()

@@ -1,7 +1,10 @@
 use freedesktop_desktop_entry::{
     default_paths, get_languages_from_env, DesktopEntry, Iter,
 };
+use nix::sys::wait::waitpid;
+use nix::unistd::{fork, ForkResult};
 use std::fs;
+use std::os::unix::process::CommandExt;
 use std::process::Command;
 use xdgkit::icon_finder;
 
@@ -41,9 +44,27 @@ pub async fn get_all_apps() -> Vec<AppData> {
     apps
 }
 
-pub async fn launch_app(exec: Vec<String>) {
+pub async fn launch_app(exec: Vec<String>, use_terminal: bool) {
     let mut command = exec.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
-    Command::new(command.remove(0))
-        .args(command)
-        .spawn().unwrap();
+
+    if use_terminal {
+        command.insert(0, "xterm");
+        command.insert(1, "-e");
+    }
+
+    let app = command.remove(0);
+    let args = command;
+
+    unsafe {
+        match fork() {
+            Ok(ForkResult::Parent { child, .. }) => {
+                waitpid(child, None).unwrap();
+            }
+            Ok(ForkResult::Child) => {
+                Command::new(app).args(args).exec();
+                libc::_exit(0);
+            }
+            Err(_) => println!("Fork failed"),
+        }
+    }
 }

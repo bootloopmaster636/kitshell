@@ -9,8 +9,10 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<List<AppData>> getAllApps() =>
     RustLib.instance.api.crateApiAppmenuGetAllApps();
 
-Future<void> launchApp({required List<String> exec}) =>
-    RustLib.instance.api.crateApiAppmenuLaunchApp(exec: exec);
+Future<void> launchApp(
+        {required List<String> exec, required bool useTerminal}) =>
+    RustLib.instance.api
+        .crateApiAppmenuLaunchApp(exec: exec, useTerminal: useTerminal);
 
 class AppData {
   final String name;

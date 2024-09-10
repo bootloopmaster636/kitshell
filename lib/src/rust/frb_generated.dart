@@ -86,7 +86,8 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 abstract class RustLibApi extends BaseApi {
   Future<List<AppData>> crateApiAppmenuGetAllApps();
 
-  Future<void> crateApiAppmenuLaunchApp({required List<String> exec});
+  Future<void> crateApiAppmenuLaunchApp(
+      {required List<String> exec, required bool useTerminal});
 
   Future<BatteryData> crateApiBatteryGetBatteryData();
 
@@ -172,11 +173,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiAppmenuLaunchApp({required List<String> exec}) {
+  Future<void> crateApiAppmenuLaunchApp(
+      {required List<String> exec, required bool useTerminal}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_String(exec, serializer);
+        sse_encode_bool(useTerminal, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 2, port: port_);
       },
@@ -185,14 +188,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta: kCrateApiAppmenuLaunchAppConstMeta,
-      argValues: [exec],
+      argValues: [exec, useTerminal],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiAppmenuLaunchAppConstMeta => const TaskConstMeta(
         debugName: "launch_app",
-        argNames: ["exec"],
+        argNames: ["exec", "useTerminal"],
       );
 
   @override
