@@ -196,9 +196,9 @@ class BatteryPanel extends ConsumerWidget {
                       ? FontAwesomeIcons.batteryQuarter
                       : FontAwesomeIcons.batteryEmpty,
       iconOverlay: batteryInfo.value != null && batteryInfo.value!.status.isNotEmpty
-          ? ((batteryInfo.value?.capacityPercent.first ?? 0) < 20)
-              ? FontAwesomeIcons.triangleExclamation
-              : (batteryInfo.value?.status.first == BatteryState.charging ? FontAwesomeIcons.bolt : null)
+          ? (batteryInfo.value?.status.first == BatteryState.charging)
+              ? FontAwesomeIcons.bolt
+              : ((batteryInfo.value?.capacityPercent.first ?? 0) <= 20 ? FontAwesomeIcons.triangleExclamation : null)
           : null,
       value: batteryInfo.value?.capacityPercent.first.toInt(),
       onTap: () {
