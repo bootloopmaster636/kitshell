@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:kitshell/const.dart';
@@ -19,12 +20,19 @@ void showToast({
     alignment: Alignment.centerRight,
     animationDuration: const Duration(milliseconds: 800),
     animationBuilder: (context, animation, alignment, child) {
-      return SlideTransition(
-        position: animation.drive(
-          Tween(begin: const Offset(0, 1), end: Offset.zero).chain(
-            CurveTween(curve: Curves.easeOutExpo),
+      return Animate(
+        effects: const [
+          FadeEffect(
+            begin: 0,
+            end: 1,
+            duration: Duration(milliseconds: 300),
           ),
-        ),
+          SlideEffect(
+            begin: Offset(0, 0.4),
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeOutExpo,
+          ),
+        ],
         child: child,
       );
     },
