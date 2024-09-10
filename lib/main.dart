@@ -132,6 +132,7 @@ class Main extends ConsumerWidget {
                 const Row(
                   children: [
                     TimeWidget(),
+                    Gap(2),
                     QuickSettingsContainer(),
                     Spacer(),
                     Mpris(),

@@ -36,7 +36,7 @@ class QuickSettingsContainer extends StatelessWidget {
             const WifiPanel(),
           ]
               .map((e) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: e,
                   ))
               .toList()
