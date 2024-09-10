@@ -64,11 +64,13 @@ class WifiPanel extends ConsumerWidget {
     final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
 
     return HoverRevealer(
-      icon: (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 75
-          ? Icons.wifi
-          : (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 50
-              ? Icons.wifi_2_bar_outlined
-              : Icons.wifi_1_bar_rounded,
+      icon: wifi.isLoading
+          ? Icons.hourglass_bottom_outlined
+          : (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 75
+              ? Icons.wifi
+              : (wifi.value?.where((e) => e.isConnected).first.signalStrength ?? 0) > 50
+                  ? Icons.wifi_2_bar_outlined
+                  : Icons.wifi_1_bar_rounded,
       iconSize: panelHeight / 2.5,
       onTap: () {
         Navigator.push(
@@ -84,13 +86,9 @@ class WifiPanel extends ConsumerWidget {
       },
       widget: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            Text(
-              '${wifi.value?.where((element) => element.isConnected == true).first.ssid ?? 'Unknown'}'
-              ' (${wifi.value?.where((element) => element.isConnected == true).first.signalStrength ?? 0}%)',
-            ),
-          ],
+        child: Text(
+          '${wifi.value?.where((element) => element.isConnected == true).first.ssid ?? 'Loading'}'
+          ' (${wifi.value?.where((element) => element.isConnected == true).first.signalStrength ?? 0}%)',
         ),
       ),
     );

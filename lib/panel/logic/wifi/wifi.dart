@@ -9,7 +9,7 @@ class WifiList extends _$WifiList {
   Future<List<WifiData>> build() async {
     state = const AsyncLoading();
     try {
-      final data = await getWifiList(rescan: false);
+      final data = await getWifiList(rescan: true);
       return data;
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
