@@ -162,13 +162,13 @@ class AppmenuList extends HookConsumerWidget {
       () => data.value!.appmenuFav
           .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
           .toList(),
-      [searchTerm.value],
+      [searchTerm.value, data.value!.appmenuFav],
     );
     final filteredNonFav = useMemoized(
       () => data.value!.appmenuNoFav
           .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
           .toList(),
-      [searchTerm.value],
+      [searchTerm.value, data.value!.appmenuNoFav],
     );
 
     return DynMouseScroll(
@@ -212,12 +212,18 @@ class AppmenuList extends HookConsumerWidget {
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 100,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: filteredFav.length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(width: 160, child: AppmenuFavItem(app: filteredFav[index]));
-                  },
+                child: DynMouseScroll(
+                  durationMS: 200,
+                  animationCurve: Curves.easeOutQuad,
+                  builder: (context, controller, physics) => ListView.builder(
+                    controller: controller,
+                    physics: physics,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: filteredFav.length,
+                    itemBuilder: (context, index) {
+                      return SizedBox(width: 160, child: AppmenuFavItem(app: filteredFav[index]));
+                    },
+                  ),
                 ),
               ),
             ),
