@@ -194,7 +194,9 @@ class HoverRevealer extends HookConsumerWidget {
                 width: isHovered.value ? panelHeight : panelHeight - 16,
                 height: panelHeight,
                 decoration: BoxDecoration(
-                  color: isHovered.value ? Theme.of(context).colorScheme.surface : Colors.transparent,
+                  color: isHovered.value
+                      ? Theme.of(context).colorScheme.surface
+                      : Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(999),
                     bottomLeft: Radius.circular(999),
