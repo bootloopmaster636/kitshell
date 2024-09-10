@@ -158,6 +158,18 @@ class AppmenuList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth;
     final searchTerm = useState('');
+    final filteredFav = useMemoized(
+      () => data.value!.appmenuFav
+          .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+          .toList(),
+      [searchTerm.value],
+    );
+    final filteredNonFav = useMemoized(
+      () => data.value!.appmenuNoFav
+          .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+          .toList(),
+      [searchTerm.value],
+    );
 
     return DynMouseScroll(
       durationMS: 200,
@@ -183,13 +195,9 @@ class AppmenuList extends HookConsumerWidget {
               onSubmitted: (onSubmitted) async {
                 final AppmenuInfo app;
                 if (data.value!.appmenuFav.isNotEmpty) {
-                  app = data.value!.appmenuFav
-                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                      .first;
+                  app = filteredFav[0];
                 } else {
-                  app = data.value!.appmenuNoFav
-                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                      .first;
+                  app = filteredNonFav[0];
                 }
 
                 unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
@@ -200,23 +208,19 @@ class AppmenuList extends HookConsumerWidget {
             ),
           ),
           const SliverGap(8),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: data.value!.appmenuFav
-                    .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                    .length,
-                itemBuilder: (context, index) {
-                  final app = data.value!.appmenuFav
-                      .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                      .toList()[index];
-                  return SizedBox(width: 160, child: AppmenuFavItem(app: app));
-                },
+          if (filteredFav.isNotEmpty)
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filteredFav.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(width: 160, child: AppmenuFavItem(app: filteredFav[index]));
+                  },
+                ),
               ),
             ),
-          ),
           const SliverGap(12),
           const SliverToBoxAdapter(
             child: Text(
@@ -231,16 +235,17 @@ class AppmenuList extends HookConsumerWidget {
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),
-            itemCount: data.value!.appmenuNoFav
-                .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                .length,
+            itemCount: filteredNonFav.length,
             itemBuilder: (context, index) {
-              final app = data.value!.appmenuNoFav
-                  .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
-                  .toList()[index];
-              return AppmenuNoFavItem(app: app);
+              return AppmenuNoFavItem(app: filteredNonFav[index]);
             },
           ),
+          if (filteredFav.isEmpty && filteredNonFav.isEmpty)
+            const SliverToBoxAdapter(
+              child: Center(
+                child: Text('No apps found'),
+              ),
+            ),
         ],
       ),
     );
