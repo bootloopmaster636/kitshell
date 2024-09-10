@@ -82,7 +82,10 @@ class WindowTitle extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(999),
+          bottomRight: Radius.circular(999),
+        ),
       ),
       child: Center(
         child: Padding(
@@ -112,8 +115,11 @@ class WorkspaceSwitcher extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.circular(999),
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(999),
+          bottomLeft: Radius.circular(999),
+        ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
