@@ -61,10 +61,19 @@ pub async fn launch_app(exec: Vec<String>, use_terminal: bool) {
                 waitpid(child, None).unwrap();
             }
             Ok(ForkResult::Child) => {
-                Command::new(app).args(args).exec();
+                match fork() {
+                    Ok(ForkResult::Parent { child, .. }) => {
+                        println!("PID {} successfully detached from Kitshell", child);
+                    }
+                    Ok(ForkResult::Child) => {
+                        Command::new(app).args(args).exec();
+                        libc::_exit(0);
+                    }
+                    Err(_) => println!("Second fork failed"),
+                }
                 libc::_exit(0);
             }
-            Err(_) => println!("Fork failed"),
+            Err(_) => println!("First fork failed"),
         }
     }
 }
