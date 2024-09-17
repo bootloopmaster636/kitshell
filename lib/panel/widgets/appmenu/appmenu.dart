@@ -97,7 +97,10 @@ class PowerButton extends ConsumerWidget {
             (context) => [
               InkWell(
                 onTap: () {
-                  showToast(ref: ref, context: context, message: 'Hold the button to confirm power off');
+                  showToast(
+                      ref: ref,
+                      context: context,
+                      message: 'Hold the button to confirm power off');
                 },
                 onLongPress: () {
                   powerControl(selection: PowerState.poweroff);
@@ -109,7 +112,10 @@ class PowerButton extends ConsumerWidget {
               ),
               InkWell(
                 onTap: () {
-                  showToast(ref: ref, context: context, message: 'Hold the button to confirm reboot');
+                  showToast(
+                      ref: ref,
+                      context: context,
+                      message: 'Hold the button to confirm reboot');
                 },
                 onLongPress: () {
                   powerControl(selection: PowerState.reboot);
@@ -160,13 +166,29 @@ class AppmenuList extends HookConsumerWidget {
     final searchTerm = useState('');
     final filteredFav = useMemoized(
       () => data.value!.appmenuFav
-          .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+          .where(
+            (element) =>
+                element.name
+                    .toLowerCase()
+                    .contains(searchTerm.value.toLowerCase()) ||
+                element.description
+                    .toLowerCase()
+                    .contains(searchTerm.value.toLowerCase()),
+          )
           .toList(),
       [searchTerm.value, data.value!.appmenuFav],
     );
     final filteredNonFav = useMemoized(
       () => data.value!.appmenuNoFav
-          .where((element) => element.name.toLowerCase().contains(searchTerm.value.toLowerCase()))
+          .where(
+            (element) =>
+                element.name
+                    .toLowerCase()
+                    .contains(searchTerm.value.toLowerCase()) ||
+                element.description
+                    .toLowerCase()
+                    .contains(searchTerm.value.toLowerCase()),
+          )
           .toList(),
       [searchTerm.value, data.value!.appmenuNoFav],
     );
@@ -200,9 +222,12 @@ class AppmenuList extends HookConsumerWidget {
                   app = filteredNonFav[0];
                 }
 
-                unawaited(launchApp(exec: app.exec, useTerminal: app.useTerminal));
+                unawaited(
+                    launchApp(exec: app.exec, useTerminal: app.useTerminal));
                 incrementFrequency(app.id);
-                await ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+                await ref
+                    .read(layerShellLogicProvider.notifier)
+                    .setHeightNormal();
                 if (context.mounted) Navigator.pop(context);
               },
             ),
@@ -221,7 +246,9 @@ class AppmenuList extends HookConsumerWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: filteredFav.length,
                     itemBuilder: (context, index) {
-                      return SizedBox(width: 160, child: AppmenuFavItem(app: filteredFav[index]));
+                      return SizedBox(
+                          width: 160,
+                          child: AppmenuFavItem(app: filteredFav[index]));
                     },
                   ),
                 ),
@@ -267,16 +294,7 @@ class AppmenuFavItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuArea(
       builder: (BuildContext context) {
-        return [
-          ListTile(
-            title: Text('Remove "${app.name}" to favorites'),
-            onTap: () {
-              changeFavorite(app.id, isFavorite: false);
-              ref.read(appmenuLogicProvider.notifier).refreshList(deleteExisting: false, rescanApps: false);
-              Navigator.pop(context);
-            },
-          ),
-        ];
+        return buildAppInfoContextMenu(context, ref, app);
       },
       child: Card(
         color: Theme.of(context).colorScheme.surfaceContainerHigh,
@@ -321,16 +339,7 @@ class AppmenuNoFavItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuArea(
       builder: (BuildContext context) {
-        return [
-          ListTile(
-            title: Text('Add "${app.name}" to favorites'),
-            onTap: () {
-              changeFavorite(app.id, isFavorite: true);
-              ref.read(appmenuLogicProvider.notifier).refreshList(deleteExisting: false, rescanApps: false);
-              Navigator.pop(context);
-            },
-          ),
-        ];
+        return buildAppInfoContextMenu(context, ref, app);
       },
       child: Card(
         elevation: 2,
@@ -381,4 +390,53 @@ class AppIcon extends StatelessWidget {
       return const Icon(Icons.apps);
     }
   }
+}
+
+List<Widget> buildAppInfoContextMenu(
+  BuildContext context,
+  WidgetRef ref,
+  AppmenuInfo app,
+) {
+  return [
+    Card(
+      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+      child: ListTile(
+        leading: Container(
+          width: 48,
+          height: 48,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: AppIcon(path: app.icon),
+        ),
+        title: Text(app.name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(app.description),
+            Text(app.exec.join(' '), style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+      ),
+    ),
+    ListTile(
+      title: app.isFavorite
+          ? const Text('Remove from favorites')
+          : const Text('Add to favorites'),
+      onTap: () {
+        if (app.isFavorite) {
+          changeFavorite(app.id, isFavorite: false);
+        } else {
+          changeFavorite(app.id, isFavorite: true);
+        }
+
+        ref
+            .read(appmenuLogicProvider.notifier)
+            .refreshList(deleteExisting: false, rescanApps: false);
+        Navigator.pop(context);
+      },
+    ),
+  ];
 }
