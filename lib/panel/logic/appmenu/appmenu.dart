@@ -4,7 +4,6 @@ import 'package:kitshell/src/rust/api/appmenu.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'appmenu.freezed.dart';
-
 part 'appmenu.g.dart';
 
 @freezed
@@ -12,6 +11,7 @@ class AppmenuInfo with _$AppmenuInfo {
   const factory AppmenuInfo({
     required int id,
     required String name,
+    required String description,
     required List<String> exec,
     required String icon,
     required bool useTerminal,
@@ -39,7 +39,7 @@ class AppmenuLogic extends _$AppmenuLogic {
     // when cache is empty, scan for apps and add to cache
     if (dataNoFav.isEmpty && dataFav.isEmpty) {
       final newData = await getAllApps();
-      addToAppmenuDb(newData);
+      await addToAppmenuDb(newData);
       dataNoFav = getAllAppsFromCache(isFavorite: false);
       dataFav = getAllAppsFromCache(isFavorite: true);
     }
@@ -50,13 +50,16 @@ class AppmenuLogic extends _$AppmenuLogic {
     );
   }
 
-  Future<void> refreshList({required bool deleteExisting, required bool rescanApps}) async {
+  Future<void> refreshList({
+    required bool deleteExisting,
+    required bool rescanApps,
+  }) async {
     state = const AsyncLoading();
 
     if (deleteExisting) deleteAll();
     if (rescanApps) {
       final newData = await getAllApps();
-      addToAppmenuDb(newData);
+      await addToAppmenuDb(newData);
     }
 
     final dataNoFav = getAllAppsFromCache(isFavorite: false);

@@ -6,7 +6,7 @@ part of 'wifi.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wifiListHash() => r'5be2b8884fb78d2e652a64788067ec16a14fd97a';
+String _$wifiListHash() => r'36213ab999ff8bbc593f046e814239825473b1c7';
 
 /// See also [WifiList].
 @ProviderFor(WifiList)

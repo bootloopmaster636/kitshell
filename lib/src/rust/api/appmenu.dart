@@ -20,12 +20,14 @@ Future<void> launchApp(
 
 class AppData {
   final String name;
+  final String description;
   final List<String> exec;
   final String icon;
   final bool useTerminal;
 
   const AppData({
     required this.name,
+    required this.description,
     required this.exec,
     required this.icon,
     required this.useTerminal,
@@ -33,7 +35,11 @@ class AppData {
 
   @override
   int get hashCode =>
-      name.hashCode ^ exec.hashCode ^ icon.hashCode ^ useTerminal.hashCode;
+      name.hashCode ^
+      description.hashCode ^
+      exec.hashCode ^
+      icon.hashCode ^
+      useTerminal.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -41,6 +47,7 @@ class AppData {
       other is AppData &&
           runtimeType == other.runtimeType &&
           name == other.name &&
+          description == other.description &&
           exec == other.exec &&
           icon == other.icon &&
           useTerminal == other.useTerminal;

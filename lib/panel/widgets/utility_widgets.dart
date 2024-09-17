@@ -26,8 +26,10 @@ class Submenu extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isExitHovered = useState(false);
-    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
-    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+    final panelHeight =
+        ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelWidth =
+        ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
 
     return Material(
       child: ColoredBox(
@@ -167,8 +169,10 @@ class HoverRevealer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isHovered = useState(false);
-    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
-    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+    final panelHeight =
+        ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelWidth =
+        ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -224,13 +228,15 @@ class HoverRevealer extends HookConsumerWidget {
                   backgroundColor: Theme.of(context).colorScheme.tertiary,
                   smallSize: 0,
                   largeSize: 10,
-                  textStyle: const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
+                  textStyle:
+                      const TextStyle(fontSize: 6, fontWeight: FontWeight.bold),
                   offset: const Offset(6, -6),
                   child: iconOverlay == null
                       ? FaIcon(
                           icon,
                           size: iconSize ?? panelHeight / 3,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                         )
                       : Stack(
                           clipBehavior: Clip.none,
@@ -238,7 +244,9 @@ class HoverRevealer extends HookConsumerWidget {
                             FaIcon(
                               icon,
                               size: iconSize ?? panelHeight / 3,
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                             ),
                             Positioned(
                               bottom: 0,
@@ -246,7 +254,9 @@ class HoverRevealer extends HookConsumerWidget {
                               child: FaIcon(
                                 iconOverlay,
                                 size: panelHeight / 6,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                             ),
                           ],
@@ -293,7 +303,8 @@ class LoadingSpinner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelHeight =
+        ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -319,7 +330,8 @@ class LoadingSpinner extends ConsumerWidget {
 }
 
 class ExpandedSubmenu extends ConsumerWidget {
-  const ExpandedSubmenu({required this.title, required this.child, this.actions, super.key});
+  const ExpandedSubmenu(
+      {required this.title, required this.child, this.actions, super.key});
 
   final String title;
   final Widget child;
@@ -328,7 +340,9 @@ class ExpandedSubmenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final expandedPanelHeight =
-        (ref.watch(layerShellLogicProvider).value!.panelHeight * expandedSubmenuHeightMultiplier).toDouble();
+        (ref.watch(layerShellLogicProvider).value!.panelHeight *
+                expandedSubmenuHeightMultiplier)
+            .toDouble();
 
     return Material(
       child: Container(
@@ -363,7 +377,9 @@ class ExpandedSubmenu extends ConsumerWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      ref.read(layerShellLogicProvider.notifier).setHeightNormal();
+                      ref
+                          .read(layerShellLogicProvider.notifier)
+                          .setHeightNormal();
                       Navigator.pop(context);
                     },
                     icon: const Icon(Icons.keyboard_arrow_down_rounded),
@@ -406,7 +422,7 @@ class LoadingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       child: Container(
-        color: Theme.of(context).colorScheme.surfaceContainerLowest,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

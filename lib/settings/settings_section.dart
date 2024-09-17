@@ -5,6 +5,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
+import 'package:kitshell/panel/logic/utility_function.dart';
 import 'package:kitshell/settings/dropdown_value.dart';
 import 'package:kitshell/settings/logic/layer_shell/layer_shell.dart';
 import 'package:kitshell/settings/logic/look_and_feel/look_and_feel.dart';
@@ -15,10 +17,10 @@ class SectionLayerShell extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final panelWidthCtl =
-        useTextEditingController(text: ref.watch(layerShellLogicProvider).value?.panelWidth.toString());
-    final panelHeightCtl =
-        useTextEditingController(text: ref.watch(layerShellLogicProvider).value?.panelHeight.toString());
+    final panelWidthCtl = useTextEditingController(
+        text: ref.watch(layerShellLogicProvider).value?.panelWidth.toString());
+    final panelHeightCtl = useTextEditingController(
+        text: ref.watch(layerShellLogicProvider).value?.panelHeight.toString());
 
     return SingleChildScrollView(
       child: Column(
@@ -40,7 +42,9 @@ class SectionLayerShell extends HookConsumerWidget {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChanged: (value) {
-                    ref.read(layerShellLogicProvider.notifier).setPanelWidth(int.tryParse(value) ?? 1366);
+                    ref
+                        .read(layerShellLogicProvider.notifier)
+                        .setPanelWidth(int.tryParse(value) ?? 1366);
                   },
                 ),
               ),
@@ -50,7 +54,8 @@ class SectionLayerShell extends HookConsumerWidget {
           Card(
             child: ListTile(
               title: const Text('Panel height'),
-              subtitle: const Text('⚠️ Experimental, might not work as expected'),
+              subtitle:
+                  const Text('⚠️ Experimental, might not work as expected'),
               visualDensity: VisualDensity.standard,
               trailing: SizedBox(
                 width: 100,
@@ -65,7 +70,9 @@ class SectionLayerShell extends HookConsumerWidget {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChanged: (value) {
-                    ref.read(layerShellLogicProvider.notifier).setPanelHeight(int.tryParse(value) ?? 48);
+                    ref
+                        .read(layerShellLogicProvider.notifier)
+                        .setPanelHeight(int.tryParse(value) ?? 48);
                   },
                 ),
               ),
@@ -75,12 +82,19 @@ class SectionLayerShell extends HookConsumerWidget {
           Card(
             child: ListTile(
               title: const Text('Auto exclusive zone'),
-              subtitle: const Text('If disabled, the window will not be pushed when expanded menu shows up.'),
+              subtitle: const Text(
+                  'If disabled, the window will not be pushed when expanded menu shows up.'),
               visualDensity: VisualDensity.standard,
               trailing: Switch(
-                value: ref.watch(layerShellLogicProvider).value?.autoExclusiveZone ?? true,
+                value: ref
+                        .watch(layerShellLogicProvider)
+                        .value
+                        ?.autoExclusiveZone ??
+                    true,
                 onChanged: (value) {
-                  ref.read(layerShellLogicProvider.notifier).setAutoExclusiveZone(value);
+                  ref
+                      .read(layerShellLogicProvider.notifier)
+                      .setAutoExclusiveZone(value);
                 },
               ),
             ),
@@ -89,12 +103,15 @@ class SectionLayerShell extends HookConsumerWidget {
           Card(
             child: ListTile(
               title: const Text('Shell layer'),
-              subtitle: const Text('Select the layer where the panel should be placed'),
+              subtitle: const Text(
+                  'Select the layer where the panel should be placed'),
               visualDensity: VisualDensity.standard,
               trailing: DropdownMenu<ShellLayerOption>(
                 initialSelection: ShellLayerOption.layerTop,
                 onSelected: (option) {
-                  ref.read(layerShellLogicProvider.notifier).setLayer(option?.value ?? ShellLayer.layerTop);
+                  ref
+                      .read(layerShellLogicProvider.notifier)
+                      .setLayer(option?.value ?? ShellLayer.layerTop);
                 },
                 dropdownMenuEntries: ShellLayerOption.values.map((option) {
                   return DropdownMenuEntry(
@@ -109,7 +126,10 @@ class SectionLayerShell extends HookConsumerWidget {
           const Gap(8),
           FilledButton(
             onPressed: () async {
-              await ref.read(layerShellLogicProvider.notifier).applySettings().then((val) {
+              await ref
+                  .read(layerShellLogicProvider.notifier)
+                  .applySettings()
+                  .then((val) {
                 ref.read(layerShellLogicProvider.notifier).setHeightExpanded();
               });
             },
@@ -144,9 +164,13 @@ class SectionLookAndFeel extends HookConsumerWidget {
                 child: Text('Accent Color'),
               ),
               expanded: MaterialPicker(
-                pickerColor: ref.watch(settingsLookAndFeelProvider).value?.color ?? Colors.purple,
+                pickerColor:
+                    ref.watch(settingsLookAndFeelProvider).value?.color ??
+                        Colors.purple,
                 onColorChanged: (color) {
-                  ref.read(settingsLookAndFeelProvider.notifier).changeColor(color);
+                  ref
+                      .read(settingsLookAndFeelProvider.notifier)
+                      .changeColor(color);
                 },
               ),
               collapsed: const SizedBox(),
@@ -161,10 +185,16 @@ class SectionLookAndFeel extends HookConsumerWidget {
                   const Text('Theme mode'),
                   const Spacer(),
                   DropdownMenu<ThemeModeOption>(
-                    initialSelection: ref.watch(settingsLookAndFeelProvider).value?.themeMode ?? ThemeModeOption.system,
+                    initialSelection: ref
+                            .watch(settingsLookAndFeelProvider)
+                            .value
+                            ?.themeMode ??
+                        ThemeModeOption.system,
                     controller: themeModeController,
                     onSelected: (option) {
-                      ref.read(settingsLookAndFeelProvider.notifier).changeThemeMode(option);
+                      ref
+                          .read(settingsLookAndFeelProvider.notifier)
+                          .changeThemeMode(option);
                     },
                     dropdownMenuEntries: ThemeModeOption.values.map((option) {
                       return DropdownMenuEntry(
@@ -172,12 +202,83 @@ class SectionLookAndFeel extends HookConsumerWidget {
                         label: option.label,
                       );
                     }).toList(growable: false),
-                    textStyle: const TextStyle(fontSize: 14),
                   ),
                 ],
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class SectionAppmenu extends HookConsumerWidget {
+  const SectionAppmenu({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appData = ref.watch(appmenuLogicProvider);
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Card(
+            child: ListTile(
+              title: const Text('Refresh list'),
+              subtitle: const Text(
+                'Got new apps? You can rescan it to add to the list.',
+              ),
+              trailing: FilledButton(
+                onPressed: () {
+                  ref
+                      .read(appmenuLogicProvider.notifier)
+                      .refreshList(deleteExisting: false, rescanApps: true);
+                },
+                child: const Text('Refresh'),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: const Text('Reset list'),
+              subtitle: const Text(
+                'Something bad happened or gone wrong? Reset the app list '
+                'to rebuild the app database. THIS WILL REMOVE YOUR FAVORITES '
+                'AND FREQUENCY DATA.',
+              ),
+              trailing: FilledButton(
+                onPressed: () {
+                  showToast(
+                    ref: ref,
+                    context: context,
+                    message: 'Long press '
+                        'the button to confirm reset',
+                  );
+                },
+                onLongPress: () {
+                  ref
+                      .read(appmenuLogicProvider.notifier)
+                      .refreshList(deleteExisting: true, rescanApps: true);
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                child: const Text('Reset'),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: const Text('Status'),
+              subtitle: appData.isLoading
+                  ? const Text('Loading...')
+                  : Text(
+                      'You have ${appData.value?.appmenuFav.length.toString()} favorited apps and '
+                      '${appData.value?.appmenuNoFav.length.toString()} non favorited apps'),
+            ),
+          )
         ],
       ),
     );

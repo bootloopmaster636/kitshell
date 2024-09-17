@@ -10,6 +10,7 @@ use xdgkit::icon_finder;
 
 pub struct AppData {
     pub name: String,
+    pub description: String,
     pub exec: Vec<String>,
     pub icon: String,
     pub use_terminal: bool,
@@ -24,12 +25,14 @@ pub async fn get_all_apps() -> Vec<AppData> {
             if let Ok(entry) = DesktopEntry::from_str(&path, &bytes, Some(&locales)) {
                 // get app name, exec and icon
                 let name = entry.name(&[locales.first().unwrap()]);
+                let description = entry.comment(&[locales.first().unwrap()]);
                 let terminal = entry.terminal();
                 let exec = entry.parse_exec().unwrap_or(vec!["".to_string()]);
                 let icon = entry.icon().unwrap_or("");
 
                 apps.push(AppData {
                     name: name.unwrap().to_string(),
+                    description: description.unwrap_or_default().to_string(),
                     exec,
                     icon: String::from(icon),
                     use_terminal: terminal,

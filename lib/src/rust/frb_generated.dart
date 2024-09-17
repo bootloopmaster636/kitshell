@@ -803,13 +803,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AppData dco_decode_app_data(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return AppData(
       name: dco_decode_String(arr[0]),
-      exec: dco_decode_list_String(arr[1]),
-      icon: dco_decode_String(arr[2]),
-      useTerminal: dco_decode_bool(arr[3]),
+      description: dco_decode_String(arr[1]),
+      exec: dco_decode_list_String(arr[2]),
+      icon: dco_decode_String(arr[3]),
+      useTerminal: dco_decode_bool(arr[4]),
     );
   }
 
@@ -1049,11 +1050,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AppData sse_decode_app_data(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_name = sse_decode_String(deserializer);
+    var var_description = sse_decode_String(deserializer);
     var var_exec = sse_decode_list_String(deserializer);
     var var_icon = sse_decode_String(deserializer);
     var var_useTerminal = sse_decode_bool(deserializer);
     return AppData(
         name: var_name,
+        description: var_description,
         exec: var_exec,
         icon: var_icon,
         useTerminal: var_useTerminal);
@@ -1314,6 +1317,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_app_data(AppData self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
+    sse_encode_String(self.description, serializer);
     sse_encode_list_String(self.exec, serializer);
     sse_encode_String(self.icon, serializer);
     sse_encode_bool(self.useTerminal, serializer);

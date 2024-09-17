@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 final List<Widget> settingsSectionContents = [
   const SectionLookAndFeel(),
   const SectionLayerShell(),
+  const SectionAppmenu(),
 ];
 
 class SettingsContent extends HookWidget {
@@ -75,19 +76,32 @@ class SettingsSectionContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SettingsSectionTile(
-          index: 0,
-          title: 'Look and feel',
-          icon: Icons.format_paint_outlined,
-          notifier: notifier,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SettingsSectionTile(
+                  index: 0,
+                  title: 'Look and feel',
+                  icon: Icons.format_paint_outlined,
+                  notifier: notifier,
+                ),
+                SettingsSectionTile(
+                  index: 1,
+                  title: 'Layer shell',
+                  icon: Icons.layers_outlined,
+                  notifier: notifier,
+                ),
+                SettingsSectionTile(
+                  index: 2,
+                  title: 'App menu',
+                  icon: Icons.apps_rounded,
+                  notifier: notifier,
+                ),
+              ],
+            ),
+          ),
         ),
-        SettingsSectionTile(
-          index: 1,
-          title: 'Layer shell',
-          icon: Icons.layers_outlined,
-          notifier: notifier,
-        ),
-        const Spacer(),
         const GithubButton(),
       ],
     );
@@ -138,11 +152,15 @@ class GithubButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
         onPressed: () {
-          final Uri kitshellRepo = Uri.parse('https://github.com/bootloopmaster636/kitshell');
+          final Uri kitshellRepo =
+              Uri.parse('https://github.com/bootloopmaster636/kitshell');
           try {
             launchUrl(kitshellRepo);
           } catch (e) {
-            showToast(ref: ref, context: context, message: 'Failed to open Kitshell repo');
+            showToast(
+                ref: ref,
+                context: context,
+                message: 'Failed to open Kitshell repo');
           }
         },
         child: Row(

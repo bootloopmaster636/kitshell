@@ -995,11 +995,13 @@ impl SseDecode for crate::api::appmenu::AppData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_name = <String>::sse_decode(deserializer);
+        let mut var_description = <String>::sse_decode(deserializer);
         let mut var_exec = <Vec<String>>::sse_decode(deserializer);
         let mut var_icon = <String>::sse_decode(deserializer);
         let mut var_useTerminal = <bool>::sse_decode(deserializer);
         return crate::api::appmenu::AppData {
             name: var_name,
+            description: var_description,
             exec: var_exec,
             icon: var_icon,
             use_terminal: var_useTerminal,
@@ -1392,6 +1394,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::appmenu::AppData {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.name.into_into_dart().into_dart(),
+            self.description.into_into_dart().into_dart(),
             self.exec.into_into_dart().into_dart(),
             self.icon.into_into_dart().into_dart(),
             self.use_terminal.into_into_dart().into_dart(),
@@ -1650,6 +1653,7 @@ impl SseEncode for crate::api::appmenu::AppData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.name, serializer);
+        <String>::sse_encode(self.description, serializer);
         <Vec<String>>::sse_encode(self.exec, serializer);
         <String>::sse_encode(self.icon, serializer);
         <bool>::sse_encode(self.use_terminal, serializer);

@@ -6,7 +6,7 @@ part of 'appmenu.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appmenuLogicHash() => r'1453e5b6711399cbc8a165dac37eecec64e951d8';
+String _$appmenuLogicHash() => r'c920f5ddc61a8440d8af3e21325fd3689f820be6';
 
 /// See also [AppmenuLogic].
 @ProviderFor(AppmenuLogic)

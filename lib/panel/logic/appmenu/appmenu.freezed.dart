@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppmenuInfo {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   List<String> get exec => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
   bool get useTerminal => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $AppmenuInfoCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
+      String description,
       List<String> exec,
       String icon,
       bool useTerminal,
@@ -64,6 +66,7 @@ class _$AppmenuInfoCopyWithImpl<$Res, $Val extends AppmenuInfo>
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? description = null,
     Object? exec = null,
     Object? icon = null,
     Object? useTerminal = null,
@@ -78,6 +81,10 @@ class _$AppmenuInfoCopyWithImpl<$Res, $Val extends AppmenuInfo>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       exec: null == exec
           ? _value.exec
@@ -114,6 +121,7 @@ abstract class _$$AppmenuInfoImplCopyWith<$Res>
   $Res call(
       {int id,
       String name,
+      String description,
       List<String> exec,
       String icon,
       bool useTerminal,
@@ -136,6 +144,7 @@ class __$$AppmenuInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? description = null,
     Object? exec = null,
     Object? icon = null,
     Object? useTerminal = null,
@@ -150,6 +159,10 @@ class __$$AppmenuInfoImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       exec: null == exec
           ? _value._exec
@@ -181,6 +194,7 @@ class _$AppmenuInfoImpl implements _AppmenuInfo {
   const _$AppmenuInfoImpl(
       {required this.id,
       required this.name,
+      required this.description,
       required final List<String> exec,
       required this.icon,
       required this.useTerminal,
@@ -192,6 +206,8 @@ class _$AppmenuInfoImpl implements _AppmenuInfo {
   final int id;
   @override
   final String name;
+  @override
+  final String description;
   final List<String> _exec;
   @override
   List<String> get exec {
@@ -211,7 +227,7 @@ class _$AppmenuInfoImpl implements _AppmenuInfo {
 
   @override
   String toString() {
-    return 'AppmenuInfo(id: $id, name: $name, exec: $exec, icon: $icon, useTerminal: $useTerminal, isFavorite: $isFavorite, frequency: $frequency)';
+    return 'AppmenuInfo(id: $id, name: $name, description: $description, exec: $exec, icon: $icon, useTerminal: $useTerminal, isFavorite: $isFavorite, frequency: $frequency)';
   }
 
   @override
@@ -221,6 +237,8 @@ class _$AppmenuInfoImpl implements _AppmenuInfo {
             other is _$AppmenuInfoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             const DeepCollectionEquality().equals(other._exec, _exec) &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.useTerminal, useTerminal) ||
@@ -236,6 +254,7 @@ class _$AppmenuInfoImpl implements _AppmenuInfo {
       runtimeType,
       id,
       name,
+      description,
       const DeepCollectionEquality().hash(_exec),
       icon,
       useTerminal,
@@ -255,6 +274,7 @@ abstract class _AppmenuInfo implements AppmenuInfo {
   const factory _AppmenuInfo(
       {required final int id,
       required final String name,
+      required final String description,
       required final List<String> exec,
       required final String icon,
       required final bool useTerminal,
@@ -265,6 +285,8 @@ abstract class _AppmenuInfo implements AppmenuInfo {
   int get id;
   @override
   String get name;
+  @override
+  String get description;
   @override
   List<String> get exec;
   @override

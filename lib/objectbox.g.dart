@@ -22,67 +22,43 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 3788243437098786057),
-      name: 'LookAndFeelDb',
-      lastPropertyId: const obx_int.IdUid(3, 6726522371956204320),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 517200956690617650),
-            name: 'id',
-            type: 6,
-            flags: 129),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 2300499174825082259),
-            name: 'themeMode',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 6726522371956204320),
-            name: 'color',
-            type: 6,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 8940013296113580543),
+      id: const obx_int.IdUid(1, 1263182219572807415),
       name: 'LayerShellDb',
-      lastPropertyId: const obx_int.IdUid(7, 8299087758558090198),
+      lastPropertyId: const obx_int.IdUid(7, 4255286580257234853),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5223792960823788867),
+            id: const obx_int.IdUid(1, 8366536221261636654),
             name: 'id',
             type: 6,
             flags: 129),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3488201430492500299),
+            id: const obx_int.IdUid(2, 7616755413779612559),
             name: 'panelWidth',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 4915639471823377748),
+            id: const obx_int.IdUid(3, 3415541208451183539),
             name: 'panelHeight',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 206618680349430669),
+            id: const obx_int.IdUid(4, 789773468822869044),
             name: 'anchor',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 6366185305035022933),
+            id: const obx_int.IdUid(5, 2025958618046492694),
             name: 'layer',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 1233915687198706666),
+            id: const obx_int.IdUid(6, 2104884751753657870),
             name: 'autoExclusiveZone',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 8299087758558090198),
+            id: const obx_int.IdUid(7, 4255286580257234853),
             name: 'monitor',
             type: 6,
             flags: 0)
@@ -90,43 +66,72 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(14, 5685582794958984055),
-      name: 'AppmenuDb',
-      lastPropertyId: const obx_int.IdUid(7, 5490496020832796856),
+      id: const obx_int.IdUid(2, 6698587999003702616),
+      name: 'LookAndFeelDb',
+      lastPropertyId: const obx_int.IdUid(3, 5025405412599255850),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 7283187386563811092),
+            id: const obx_int.IdUid(1, 8777950951146970592),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 6331721569767958672),
+            name: 'themeMode',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5025405412599255850),
+            name: 'color',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(3, 4569210074074232104),
+      name: 'AppmenuDb',
+      lastPropertyId: const obx_int.IdUid(8, 4147787053919600039),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1329298343516116),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1450065873914545458),
+            id: const obx_int.IdUid(2, 4603414675459261097),
             name: 'name',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8909693100632014138),
+            id: const obx_int.IdUid(3, 248660992109610847),
+            name: 'description',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 2828949804232505180),
             name: 'exec',
             type: 30,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 7239406807466709785),
+            id: const obx_int.IdUid(5, 5767165134830188555),
             name: 'icon',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 2704471997840777149),
+            id: const obx_int.IdUid(6, 7816627468165187452),
             name: 'useTerminal',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 911923785092416984),
+            id: const obx_int.IdUid(7, 8609341211948754274),
             name: 'isFavorite',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 5490496020832796856),
+            id: const obx_int.IdUid(8, 4147787053919600039),
             name: 'frequency',
             type: 6,
             flags: 0)
@@ -170,143 +175,21 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(14, 5685582794958984055),
+      lastEntityId: const obx_int.IdUid(3, 4569210074074232104),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [
-        319117083580890393,
-        1126114942859790230,
-        7801215960238994675,
-        767822255377245092,
-        3051909342032818286,
-        8487335206731081285,
-        3589525900076403544,
-        836173557497343389,
-        4030948908917277486,
-        5280337695291759145,
-        4038000598734131669
-      ],
+      retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [
-        2675071161574506234,
-        3129198010321662728,
-        1579901511205958056,
-        9199787774691584598,
-        1152300156546259865,
-        9084938709976948883,
-        5341313148448273751,
-        8027046667706280950,
-        1061687093147552787,
-        4326268487275303151,
-        3715440438204611605,
-        1280734593217253853,
-        9054602213563610987,
-        4153294262211589001,
-        3344042603675330834,
-        5844917907412048726,
-        7595138127903138769,
-        6713283092622659882,
-        3082797427787759093,
-        128611430234463427,
-        7771813703721772200,
-        4560234688236727197,
-        103883656919499179,
-        124213993684306376,
-        1625307788128119976,
-        6130531308671405255,
-        2482234456326213549,
-        8352200315961380337,
-        2143895815910046792,
-        8539287721948848192,
-        1300675985474307462,
-        1739668108463492501,
-        6901065895873189243,
-        284729684098264706,
-        6163823524900475367,
-        7724745489980447872,
-        1903808385262803314,
-        6423638197890235341,
-        8094748591201797524,
-        7464523356331283254,
-        3866357760362272951,
-        3741001142510001784,
-        7612774893540536091,
-        3035927003138409725,
-        6292796747363445381,
-        7706934545765417819,
-        6447523794537451002,
-        8852762629075086255,
-        8964894336619031280,
-        7276696964874555392,
-        7916381764782980910,
-        5789636187245035345,
-        8078284466146502475,
-        737020703305549694,
-        8731294081891112024,
-        2340033288262091088,
-        5942695850833084126,
-        8955828897935970176,
-        4428058910227961541,
-        394777338939353483,
-        5247123286970047822,
-        1862201738698567024,
-        5238954489050569856,
-        6396701882356830523,
-        5380076008519344286,
-        8633021608873762323,
-        6499154069186422060,
-        1337926377149161336,
-        7178943836230337843,
-        6255543527387045558,
-        1949088619121603133,
-        107975795535047071,
-        875114048558070891,
-        8944251822661608755,
-        5558274685445044478,
-        6822610630372388257,
-        8827752014125243401,
-        3521319541923724129,
-        1202754159213941190
-      ],
+      retiredPropertyUids: const [],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    LookAndFeelDb: obx_int.EntityDefinition<LookAndFeelDb>(
-        model: _entities[0],
-        toOneRelations: (LookAndFeelDb object) => [],
-        toManyRelations: (LookAndFeelDb object) => {},
-        getId: (LookAndFeelDb object) => object.id,
-        setId: (LookAndFeelDb object, int id) {
-          object.id = id;
-        },
-        objectToFB: (LookAndFeelDb object, fb.Builder fbb) {
-          final themeModeOffset = fbb.writeString(object.themeMode);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, themeModeOffset);
-          fbb.addInt64(2, object.color);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = LookAndFeelDb()
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..themeMode = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '')
-            ..color =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-
-          return object;
-        }),
     LayerShellDb: obx_int.EntityDefinition<LayerShellDb>(
-        model: _entities[1],
+        model: _entities[0],
         toOneRelations: (LayerShellDb object) => [],
         toManyRelations: (LayerShellDb object) => {},
         getId: (LayerShellDb object) => object.id,
@@ -348,6 +231,36 @@ obx_int.ModelDefinition getObjectBoxModel() {
 
           return object;
         }),
+    LookAndFeelDb: obx_int.EntityDefinition<LookAndFeelDb>(
+        model: _entities[1],
+        toOneRelations: (LookAndFeelDb object) => [],
+        toManyRelations: (LookAndFeelDb object) => {},
+        getId: (LookAndFeelDb object) => object.id,
+        setId: (LookAndFeelDb object, int id) {
+          object.id = id;
+        },
+        objectToFB: (LookAndFeelDb object, fb.Builder fbb) {
+          final themeModeOffset = fbb.writeString(object.themeMode);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, themeModeOffset);
+          fbb.addInt64(2, object.color);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = LookAndFeelDb()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..themeMode = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '')
+            ..color =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+
+          return object;
+        }),
     AppmenuDb: obx_int.EntityDefinition<AppmenuDb>(
         model: _entities[2],
         toOneRelations: (AppmenuDb object) => [],
@@ -358,17 +271,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (AppmenuDb object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
+          final descriptionOffset = fbb.writeString(object.description);
           final execOffset = fbb.writeList(
               object.exec.map(fbb.writeString).toList(growable: false));
           final iconOffset = fbb.writeString(object.icon);
-          fbb.startTable(8);
+          fbb.startTable(9);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, execOffset);
-          fbb.addOffset(3, iconOffset);
-          fbb.addBool(4, object.useTerminal);
-          fbb.addBool(5, object.isFavorite);
-          fbb.addInt64(6, object.frequency);
+          fbb.addOffset(2, descriptionOffset);
+          fbb.addOffset(3, execOffset);
+          fbb.addOffset(4, iconOffset);
+          fbb.addBool(5, object.useTerminal);
+          fbb.addBool(6, object.isFavorite);
+          fbb.addInt64(7, object.frequency);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -380,18 +295,20 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..name = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 6, '')
+            ..description = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 8, '')
             ..exec = const fb.ListReader<String>(
                     fb.StringReader(asciiOptimization: true),
                     lazy: false)
-                .vTableGet(buffer, rootOffset, 8, [])
+                .vTableGet(buffer, rootOffset, 10, [])
             ..icon = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 10, '')
+                .vTableGet(buffer, rootOffset, 12, '')
             ..useTerminal =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false)
-            ..isFavorite =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false)
+            ..isFavorite =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 16, false)
             ..frequency =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
 
           return object;
         })
@@ -400,50 +317,50 @@ obx_int.ModelDefinition getObjectBoxModel() {
   return obx_int.ModelDefinition(model, bindings);
 }
 
-/// [LookAndFeelDb] entity fields to define ObjectBox queries.
-class LookAndFeelDb_ {
-  /// See [LookAndFeelDb.id].
-  static final id =
-      obx.QueryIntegerProperty<LookAndFeelDb>(_entities[0].properties[0]);
-
-  /// See [LookAndFeelDb.themeMode].
-  static final themeMode =
-      obx.QueryStringProperty<LookAndFeelDb>(_entities[0].properties[1]);
-
-  /// See [LookAndFeelDb.color].
-  static final color =
-      obx.QueryIntegerProperty<LookAndFeelDb>(_entities[0].properties[2]);
-}
-
 /// [LayerShellDb] entity fields to define ObjectBox queries.
 class LayerShellDb_ {
   /// See [LayerShellDb.id].
   static final id =
-      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[0]);
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[0].properties[0]);
 
   /// See [LayerShellDb.panelWidth].
   static final panelWidth =
-      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[1]);
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[0].properties[1]);
 
   /// See [LayerShellDb.panelHeight].
   static final panelHeight =
-      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[2]);
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[0].properties[2]);
 
   /// See [LayerShellDb.anchor].
   static final anchor =
-      obx.QueryStringProperty<LayerShellDb>(_entities[1].properties[3]);
+      obx.QueryStringProperty<LayerShellDb>(_entities[0].properties[3]);
 
   /// See [LayerShellDb.layer].
   static final layer =
-      obx.QueryStringProperty<LayerShellDb>(_entities[1].properties[4]);
+      obx.QueryStringProperty<LayerShellDb>(_entities[0].properties[4]);
 
   /// See [LayerShellDb.autoExclusiveZone].
   static final autoExclusiveZone =
-      obx.QueryBooleanProperty<LayerShellDb>(_entities[1].properties[5]);
+      obx.QueryBooleanProperty<LayerShellDb>(_entities[0].properties[5]);
 
   /// See [LayerShellDb.monitor].
   static final monitor =
-      obx.QueryIntegerProperty<LayerShellDb>(_entities[1].properties[6]);
+      obx.QueryIntegerProperty<LayerShellDb>(_entities[0].properties[6]);
+}
+
+/// [LookAndFeelDb] entity fields to define ObjectBox queries.
+class LookAndFeelDb_ {
+  /// See [LookAndFeelDb.id].
+  static final id =
+      obx.QueryIntegerProperty<LookAndFeelDb>(_entities[1].properties[0]);
+
+  /// See [LookAndFeelDb.themeMode].
+  static final themeMode =
+      obx.QueryStringProperty<LookAndFeelDb>(_entities[1].properties[1]);
+
+  /// See [LookAndFeelDb.color].
+  static final color =
+      obx.QueryIntegerProperty<LookAndFeelDb>(_entities[1].properties[2]);
 }
 
 /// [AppmenuDb] entity fields to define ObjectBox queries.
@@ -456,23 +373,27 @@ class AppmenuDb_ {
   static final name =
       obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[1]);
 
+  /// See [AppmenuDb.description].
+  static final description =
+      obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[2]);
+
   /// See [AppmenuDb.exec].
   static final exec =
-      obx.QueryStringVectorProperty<AppmenuDb>(_entities[2].properties[2]);
+      obx.QueryStringVectorProperty<AppmenuDb>(_entities[2].properties[3]);
 
   /// See [AppmenuDb.icon].
   static final icon =
-      obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[3]);
+      obx.QueryStringProperty<AppmenuDb>(_entities[2].properties[4]);
 
   /// See [AppmenuDb.useTerminal].
   static final useTerminal =
-      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[4]);
+      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[5]);
 
   /// See [AppmenuDb.isFavorite].
   static final isFavorite =
-      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[5]);
+      obx.QueryBooleanProperty<AppmenuDb>(_entities[2].properties[6]);
 
   /// See [AppmenuDb.frequency].
   static final frequency =
-      obx.QueryIntegerProperty<AppmenuDb>(_entities[2].properties[6]);
+      obx.QueryIntegerProperty<AppmenuDb>(_entities[2].properties[7]);
 }
