@@ -18,7 +18,8 @@ class Mpris extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mprisData = ref.watch(mprisLogicProvider);
     final isHovered = useState(false);
-    final panelWidth = ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
+    final panelWidth =
+        ref.watch(layerShellLogicProvider).value!.panelWidth.toDouble();
     final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight;
 
     return RepaintBoundary(
@@ -37,7 +38,11 @@ class Mpris extends HookConsumerWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeOutExpo,
-              height: ref.watch(layerShellLogicProvider).value?.panelHeight.toDouble(),
+              height: ref
+                  .watch(layerShellLogicProvider)
+                  .value
+                  ?.panelHeight
+                  .toDouble(),
               width: isHovered.value ? panelWidth / 5 : panelWidth / 6,
               decoration: BoxDecoration(
                 boxShadow: [
@@ -53,10 +58,14 @@ class Mpris extends HookConsumerWidget {
                   ClipRect(
                     clipBehavior: Clip.antiAlias,
                     child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                      imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                       child: OctoImage(
                         image: (mprisData.value!.imageUrl.startsWith('file://'))
-                            ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
+                            ? FileImage(
+                                File(mprisData.value?.imageUrl
+                                        .replaceFirst('file://', '') ??
+                                    ''),
+                              )
                             : NetworkImage(mprisData.value?.imageUrl ?? ''),
                         fit: BoxFit.cover,
                         memCacheHeight: panelHeight,
@@ -65,7 +74,10 @@ class Mpris extends HookConsumerWidget {
                     ),
                   ),
                   ColoredBox(
-                    color: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.8),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withOpacity(0.6),
                     child: MprisContent(isHovered: isHovered),
                   ),
                 ],
@@ -111,7 +123,9 @@ class MprisContent extends ConsumerWidget {
               borderRadius: BorderRadius.circular(6),
               child: OctoImage(
                 image: (mprisData.value!.imageUrl.startsWith('file://'))
-                    ? FileImage(File(mprisData.value?.imageUrl.replaceFirst('file://', '') ?? ''))
+                    ? FileImage(File(
+                        mprisData.value?.imageUrl.replaceFirst('file://', '') ??
+                            ''))
                     : NetworkImage(mprisData.value?.imageUrl ?? ''),
                 memCacheHeight: panelHeight * 2,
                 memCacheWidth: panelHeight * 2,
@@ -146,16 +160,19 @@ class MprisContent extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (mprisData.value != null && mprisData.value?.duration != BigInt.zero)
+              if (mprisData.value != null &&
+                  mprisData.value?.duration != BigInt.zero)
                 Column(
                   children: [
                     const Gap(4),
                     LinearProgressIndicator(
-                      value: mprisData.value!.position / mprisData.value!.duration,
+                      value:
+                          mprisData.value!.position / mprisData.value!.duration,
                       borderRadius: BorderRadius.circular(999),
                       minHeight: 2,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer,
-                      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
                     ),
                   ],
                 ),
@@ -181,10 +198,13 @@ class PlayerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final panelHeight = ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
+    final panelHeight =
+        ref.watch(layerShellLogicProvider).value!.panelHeight.toDouble();
 
     return AnimatedCrossFade(
-      crossFadeState: isHovered.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState: isHovered.value
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
       duration: const Duration(milliseconds: 500),
       sizeCurve: Curves.easeOutExpo,
       alignment: Alignment.centerLeft,
@@ -202,7 +222,9 @@ class PlayerControls extends ConsumerWidget {
                 : null,
           ),
           IconButton(
-            icon: FaIcon(mprisData.value!.isPlaying ? FontAwesomeIcons.pause : FontAwesomeIcons.play),
+            icon: FaIcon(mprisData.value!.isPlaying
+                ? FontAwesomeIcons.pause
+                : FontAwesomeIcons.play),
             onPressed: () async {
               await playerTogglePause();
             },
