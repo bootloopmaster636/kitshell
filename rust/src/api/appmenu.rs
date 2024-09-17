@@ -5,7 +5,6 @@ use nix::sys::wait::waitpid;
 use nix::unistd::{fork, ForkResult};
 use std::fs;
 use std::os::unix::process::CommandExt;
-use std::path::PathBuf;
 use std::process::Command;
 use xdgkit::icon_finder;
 
@@ -29,13 +28,10 @@ pub async fn get_all_apps() -> Vec<AppData> {
                 let exec = entry.parse_exec().unwrap_or(vec!["".to_string()]);
                 let icon = entry.icon().unwrap_or("");
 
-                // resolve icon absolute path
-                let icon_path = find_icon_from_app_name(icon.to_string());
-
                 apps.push(AppData {
                     name: name.unwrap().to_string(),
                     exec,
-                    icon: String::from(icon_path.to_str().unwrap()),
+                    icon: String::from(icon),
                     use_terminal: terminal,
                 });
             }
@@ -45,8 +41,9 @@ pub async fn get_all_apps() -> Vec<AppData> {
     apps
 }
 
-pub fn find_icon_from_app_name(app_name: String) -> PathBuf {
-    icon_finder::find_icon(app_name, 48, 1).unwrap_or_default()
+pub fn find_icon_path_from_icon_name(icon_name: String) -> String {
+    let path = icon_finder::find_icon(icon_name, 48, 1).unwrap_or_default();
+    String::from(path.to_str().unwrap())
 }
 
 pub async fn launch_app(exec: Vec<String>, use_terminal: bool) {

@@ -9,16 +9,14 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<List<AppData>> getAllApps() =>
     RustLib.instance.api.crateApiAppmenuGetAllApps();
 
-Future<PathBuf> findIconFromAppName({required String appName}) =>
-    RustLib.instance.api.crateApiAppmenuFindIconFromAppName(appName: appName);
+Future<String> findIconPathFromIconName({required String iconName}) =>
+    RustLib.instance.api
+        .crateApiAppmenuFindIconPathFromIconName(iconName: iconName);
 
 Future<void> launchApp(
         {required List<String> exec, required bool useTerminal}) =>
     RustLib.instance.api
         .crateApiAppmenuLaunchApp(exec: exec, useTerminal: useTerminal);
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PathBuf>>
-abstract class PathBuf implements RustOpaqueInterface {}
 
 class AppData {
   final String name;

@@ -1,9 +1,7 @@
 import 'package:kitshell/main.dart';
-import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:kitshell/objectbox.g.dart'; //ignore: unused_import
+import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
 import 'package:kitshell/src/rust/api/appmenu.dart';
-import 'package:logger/logger.dart';
 
 @Entity()
 class AppmenuDb {
@@ -18,7 +16,7 @@ class AppmenuDb {
   late int frequency;
 }
 
-void addToAppmenuDb(List<AppData> appDataList) {
+Future<void> addToAppmenuDb(List<AppData> appDataList) async {
   final box = objectbox.store.box<AppmenuDb>();
 
   for (final appData in appDataList) {
@@ -33,6 +31,7 @@ void addToAppmenuDb(List<AppData> appDataList) {
     //check for existing app in db so we don't have to reset db everytime we add new apps
     final queryApp = box.query(AppmenuDb_.name.equals(newData.name)).build();
     if (queryApp.find().isEmpty) {
+      newData.icon = await findIconPathFromIconName(iconName: newData.icon);
       box.put(newData);
     }
   }
