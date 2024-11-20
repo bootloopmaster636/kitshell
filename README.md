@@ -16,8 +16,6 @@
 - NetworkManager for Wi-Fi.
 - PowerProfilesCtl for power profile selection.
 
-## ⚠️⚠️ Under heavy development ⚠️⚠️
-
 Feature/To-do list:
 
 - [X] Battery
@@ -30,3 +28,19 @@ Feature/To-do list:
 - [X] Hyprland related stuff (workspaces, etc.)
 - [X] App launcher
 - [ ] Notifications
+
+## State of this project
+
+This project is currently in maintenance state, stable enough to daily drive.
+However, no major feature will be added yet.
+
+I have a plan in coming month to rewrite this from scratch (maybe with more planning),
+because the current implementation is just a proof of concept of what can be done with Flutter.
+
+The rework will have more features and less bugs. I **will** rewrite this, as soon as I finish my internship (around
+late January 2025),
+because I don't have much of free time right now.
+
+Thanks to all who contributed, download, and/or use this project.  
+Best regards,  
+christo
