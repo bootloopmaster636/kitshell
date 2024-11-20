@@ -411,12 +411,25 @@ List<Widget> buildAppInfoContextMenu(
           ),
           child: AppIcon(path: app.icon),
         ),
-        title: Text(app.name),
+        title: Text(
+          app.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(app.description),
-            Text(app.exec.join(' '), style: const TextStyle(fontSize: 12)),
+            Text(
+              app.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              app.exec.join(' '),
+              style: const TextStyle(fontSize: 12),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
