@@ -26,7 +26,10 @@ class MprisLogic extends _$MprisLogic {
   }
 
   @override
-  bool updateShouldNotify(AsyncValue<MprisData> previous, AsyncValue<MprisData> next) {
+  bool updateShouldNotify(
+    AsyncValue<MprisData> previous,
+    AsyncValue<MprisData> next,
+  ) {
     return previous.value?.position != next.value?.position ||
         previous.value?.title != next.value?.title ||
         previous.value?.imageUrl != next.value?.imageUrl;
