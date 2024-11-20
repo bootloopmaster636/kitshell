@@ -64,7 +64,7 @@ class Mpris extends HookConsumerWidget {
                             ? FileImage(
                                 File(mprisData.value?.imageUrl
                                         .replaceFirst('file://', '') ??
-                                    ''),
+                                    '',),
                               )
                             : NetworkImage(mprisData.value?.imageUrl ?? ''),
                         fit: BoxFit.cover,
@@ -125,7 +125,7 @@ class MprisContent extends ConsumerWidget {
                 image: (mprisData.value!.imageUrl.startsWith('file://'))
                     ? FileImage(File(
                         mprisData.value?.imageUrl.replaceFirst('file://', '') ??
-                            ''))
+                            '',),)
                     : NetworkImage(mprisData.value?.imageUrl ?? ''),
                 memCacheHeight: panelHeight * 2,
                 memCacheWidth: panelHeight * 2,
@@ -224,7 +224,7 @@ class PlayerControls extends ConsumerWidget {
           IconButton(
             icon: FaIcon(mprisData.value!.isPlaying
                 ? FontAwesomeIcons.pause
-                : FontAwesomeIcons.play),
+                : FontAwesomeIcons.play,),
             onPressed: () async {
               await playerTogglePause();
             },

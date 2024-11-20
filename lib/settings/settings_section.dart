@@ -18,9 +18,9 @@ class SectionLayerShell extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final panelWidthCtl = useTextEditingController(
-        text: ref.watch(layerShellLogicProvider).value?.panelWidth.toString());
+        text: ref.watch(layerShellLogicProvider).value?.panelWidth.toString(),);
     final panelHeightCtl = useTextEditingController(
-        text: ref.watch(layerShellLogicProvider).value?.panelHeight.toString());
+        text: ref.watch(layerShellLogicProvider).value?.panelHeight.toString(),);
 
     return SingleChildScrollView(
       child: Column(
@@ -83,7 +83,7 @@ class SectionLayerShell extends HookConsumerWidget {
             child: ListTile(
               title: const Text('Auto exclusive zone'),
               subtitle: const Text(
-                  'If disabled, the window will not be pushed when expanded menu shows up.'),
+                  'If disabled, the window will not be pushed when expanded menu shows up.',),
               visualDensity: VisualDensity.standard,
               trailing: Switch(
                 value: ref
@@ -104,7 +104,7 @@ class SectionLayerShell extends HookConsumerWidget {
             child: ListTile(
               title: const Text('Shell layer'),
               subtitle: const Text(
-                  'Select the layer where the panel should be placed'),
+                  'Select the layer where the panel should be placed',),
               visualDensity: VisualDensity.standard,
               trailing: DropdownMenu<ShellLayerOption>(
                 initialSelection: ShellLayerOption.layerTop,
@@ -275,10 +275,10 @@ class SectionAppmenu extends HookConsumerWidget {
               subtitle: appData.isLoading
                   ? const Text('Loading...')
                   : Text(
-                      'You have ${appData.value?.appmenuFav.length.toString()} favorited apps and '
-                      '${appData.value?.appmenuNoFav.length.toString()} non favorited apps'),
+                      'You have ${appData.value?.appmenuFav.length} favorited apps and '
+                      '${appData.value?.appmenuNoFav.length} non favorited apps'),
             ),
-          )
+          ),
         ],
       ),
     );

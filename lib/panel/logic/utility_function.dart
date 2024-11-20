@@ -60,7 +60,7 @@ void pushExpandedSubmenu(
     required WidgetRef ref,
     required String title,
     required Widget child,
-    List<Widget>? actions}) {
+    List<Widget>? actions,}) {
   ref.read(layerShellLogicProvider.notifier).setHeightExpanded();
   Navigator.push(
     context,

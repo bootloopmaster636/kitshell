@@ -14,7 +14,7 @@ Future<String> findIconPathFromIconName({required String iconName}) =>
         .crateApiAppmenuFindIconPathFromIconName(iconName: iconName);
 
 Future<void> launchApp(
-        {required List<String> exec, required bool useTerminal}) =>
+        {required List<String> exec, required bool useTerminal,}) =>
     RustLib.instance.api
         .crateApiAppmenuLaunchApp(exec: exec, useTerminal: useTerminal);
 

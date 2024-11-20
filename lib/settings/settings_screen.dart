@@ -15,7 +15,7 @@ final List<Widget> settingsSectionContents = [
 ];
 
 class SettingsContent extends HookWidget {
-  const SettingsContent({Key? key}) : super(key: key);
+  const SettingsContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +152,7 @@ class GithubButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return TextButton(
         onPressed: () {
-          final Uri kitshellRepo =
+          final kitshellRepo =
               Uri.parse('https://github.com/bootloopmaster636/kitshell');
           try {
             launchUrl(kitshellRepo);
@@ -160,7 +160,7 @@ class GithubButton extends ConsumerWidget {
             showToast(
                 ref: ref,
                 context: context,
-                message: 'Failed to open Kitshell repo');
+                message: 'Failed to open Kitshell repo',);
           }
         },
         child: Row(
@@ -170,8 +170,8 @@ class GithubButton extends ConsumerWidget {
               size: 16,
             ),
             const Gap(8),
-            Text("You're running Kitshell v${version}"),
+            Text("You're running Kitshell v$version"),
           ],
-        ));
+        ),);
   }
 }

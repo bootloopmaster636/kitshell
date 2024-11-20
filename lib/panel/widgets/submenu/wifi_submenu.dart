@@ -202,7 +202,7 @@ class ConnectionSubmenu extends HookConsumerWidget {
   }
 
   Future<void> connect(ValueNotifier<bool> isLoading, BuildContext context, WidgetRef ref, String ssid,
-      TextEditingController passwordCtl) async {
+      TextEditingController passwordCtl,) async {
     isLoading.value = true;
     if (context.mounted) {
       try {

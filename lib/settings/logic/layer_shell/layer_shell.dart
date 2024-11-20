@@ -24,7 +24,7 @@ class LayerShellData with _$LayerShellData {
 class LayerShellLogic extends _$LayerShellLogic {
   @override
   Future<LayerShellData> build() async {
-    final state = AsyncLoading();
+    const state = AsyncLoading();
 
     final data = getLayerShellSettings();
     final waylandLayerShellPlugin = WaylandLayerShell();
@@ -62,7 +62,7 @@ class LayerShellLogic extends _$LayerShellLogic {
               panelHeight: 768,
               anchor: ShellEdge.edgeBottom,
               layer: ShellLayer.layerTop,
-              autoExclusiveZone: false),
+              autoExclusiveZone: false,),
     );
   }
 
@@ -74,7 +74,7 @@ class LayerShellLogic extends _$LayerShellLogic {
   Future<void> setHeightExpanded() async {
     final waylandLayerShellPlugin = WaylandLayerShell();
     await waylandLayerShellPlugin.initialize(
-        state.value?.panelWidth ?? 1366, state.value!.panelHeight * expandedSubmenuHeightMultiplier);
+        state.value?.panelWidth ?? 1366, state.value!.panelHeight * expandedSubmenuHeightMultiplier,);
   }
 
   Future<void> setPanelWidth(int width) async {

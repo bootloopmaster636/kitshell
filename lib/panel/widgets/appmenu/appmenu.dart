@@ -100,7 +100,7 @@ class PowerButton extends ConsumerWidget {
                   showToast(
                       ref: ref,
                       context: context,
-                      message: 'Hold the button to confirm power off');
+                      message: 'Hold the button to confirm power off',);
                 },
                 onLongPress: () {
                   powerControl(selection: PowerState.poweroff);
@@ -115,7 +115,7 @@ class PowerButton extends ConsumerWidget {
                   showToast(
                       ref: ref,
                       context: context,
-                      message: 'Hold the button to confirm reboot');
+                      message: 'Hold the button to confirm reboot',);
                 },
                 onLongPress: () {
                   powerControl(selection: PowerState.reboot);
@@ -154,8 +154,7 @@ class PowerButton extends ConsumerWidget {
 
 class AppmenuList extends HookConsumerWidget {
   const AppmenuList({
-    super.key,
-    required this.data,
+    required this.data, super.key,
   });
 
   final AsyncValue<AppmenuData> data;
@@ -223,7 +222,7 @@ class AppmenuList extends HookConsumerWidget {
                 }
 
                 unawaited(
-                    launchApp(exec: app.exec, useTerminal: app.useTerminal));
+                    launchApp(exec: app.exec, useTerminal: app.useTerminal),);
                 incrementFrequency(app.id);
                 await ref
                     .read(layerShellLogicProvider.notifier)
@@ -248,7 +247,7 @@ class AppmenuList extends HookConsumerWidget {
                     itemBuilder: (context, index) {
                       return SizedBox(
                           width: 160,
-                          child: AppmenuFavItem(app: filteredFav[index]));
+                          child: AppmenuFavItem(app: filteredFav[index]),);
                     },
                   ),
                 ),

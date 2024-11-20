@@ -37,12 +37,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   Workspaces
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          dynamic raw);
+          dynamic raw,);
 
   @protected
   Workspaces
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          dynamic raw);
+          dynamic raw,);
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -131,12 +131,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   Workspaces
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          SseDeserializer deserializer);
+          SseDeserializer deserializer,);
 
   @protected
   Workspaces
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          SseDeserializer deserializer);
+          SseDeserializer deserializer,);
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
@@ -173,7 +173,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<BatteryState> sse_decode_list_battery_state(
-      SseDeserializer deserializer);
+      SseDeserializer deserializer,);
 
   @protected
   Float32List sse_decode_list_prim_f_32_strict(SseDeserializer deserializer);
@@ -222,17 +222,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_AnyhowException(
-      AnyhowException self, SseSerializer serializer);
+      AnyhowException self, SseSerializer serializer,);
 
   @protected
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          Workspaces self, SseSerializer serializer);
+          Workspaces self, SseSerializer serializer,);
 
   @protected
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          Workspaces self, SseSerializer serializer);
+          Workspaces self, SseSerializer serializer,);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -251,7 +251,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_brightness_data(
-      BrightnessData self, SseSerializer serializer);
+      BrightnessData self, SseSerializer serializer,);
 
   @protected
   void sse_encode_f_32(double self, SseSerializer serializer);
@@ -270,19 +270,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_list_battery_state(
-      List<BatteryState> self, SseSerializer serializer);
+      List<BatteryState> self, SseSerializer serializer,);
 
   @protected
   void sse_encode_list_prim_f_32_strict(
-      Float32List self, SseSerializer serializer);
+      Float32List self, SseSerializer serializer,);
 
   @protected
   void sse_encode_list_prim_u_32_strict(
-      Uint32List self, SseSerializer serializer);
+      Uint32List self, SseSerializer serializer,);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
-      Uint8List self, SseSerializer serializer);
+      Uint8List self, SseSerializer serializer,);
 
   @protected
   void sse_encode_list_wifi_data(List<WifiData> self, SseSerializer serializer);
@@ -316,7 +316,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_wireplumber_data(
-      WireplumberData self, SseSerializer serializer);
+      WireplumberData self, SseSerializer serializer,);
 
   @protected
   void sse_encode_workspace_data(WorkspaceData self, SseSerializer serializer);
@@ -328,16 +328,16 @@ class RustLibWire implements BaseWire {
   RustLibWire.fromExternalLibrary();
 
   void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          int ptr) =>
+          int ptr,) =>
       wasmModule
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-              ptr);
+              ptr,);
 
   void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          int ptr) =>
+          int ptr,) =>
       wasmModule
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-              ptr);
+              ptr,);
 }
 
 @JS('wasm_bindgen')
@@ -348,9 +348,9 @@ external RustLibWasmModule get wasmModule;
 extension type RustLibWasmModule._(JSObject _) implements JSObject {
   external void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          int ptr);
+          int ptr,);
 
   external void
       rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWorkspaces(
-          int ptr);
+          int ptr,);
 }

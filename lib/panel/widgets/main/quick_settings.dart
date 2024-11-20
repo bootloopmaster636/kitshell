@@ -38,7 +38,7 @@ class QuickSettingsContainer extends StatelessWidget {
               .map((e) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: e,
-                  ))
+                  ),)
               .toList()
               .animate(interval: 100.ms, delay: 600.ms)
               .slideY(
@@ -200,7 +200,7 @@ class BatteryPanel extends ConsumerWidget {
               ? FontAwesomeIcons.bolt
               : ((batteryInfo.value?.capacityPercent.first ?? 0) <= 20 ? FontAwesomeIcons.triangleExclamation : null)
           : null,
-      value: batteryInfo.value?.capacityPercent.first.toInt(),
+      value: batteryInfo.value?.capacityPercent.first,
       onTap: () {
         Navigator.push(
           context,
@@ -232,7 +232,7 @@ class BatteryPanel extends ConsumerWidget {
                         : batteryInfo.value?.status.first == BatteryState.charging
                             ? 'Charging'
                             : batteryInfo.value?.status.first == BatteryState.discharging
-                                ? '${batteryInfo.value?.capacityPercent.first.toInt()}%'
+                                ? '${batteryInfo.value?.capacityPercent.first}%'
                                 : batteryInfo.value?.status.first == BatteryState.empty
                                     ? 'Empty'
                                     : 'Unknown',

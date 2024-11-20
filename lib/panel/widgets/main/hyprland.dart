@@ -140,7 +140,7 @@ class WorkspaceSwitcher extends ConsumerWidget {
             secondChild: const SizedBox(),
           ),
           Text(
-            'Desktop ${activeWorkspace?.id.toString()}',
+            'Desktop ${activeWorkspace?.id}',
             overflow: TextOverflow.ellipsis,
           ),
           AnimatedCrossFade(

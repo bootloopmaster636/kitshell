@@ -37,11 +37,14 @@ LayerShellData getLayerShellSettings() {
   final layerShellBox = objectbox.store.box<LayerShellDb>();
   final object = layerShellBox.get(1);
 
-  final anchorConverted =
-      object != null ? ShellEdge.values.firstWhere((e) => e.toString() == object?.anchor) : ShellEdge.edgeBottom;
-  final layerConverted =
-      object != null ? ShellLayer.values.firstWhere((e) => e.toString() == object?.layer) : ShellLayer.layerTop;
-  final monitorConverted = object?.monitor != null ? Monitor(object!.monitor ?? 0, '') : null;
+  final anchorConverted = object != null
+      ? ShellEdge.values.firstWhere((e) => e.toString() == object.anchor)
+      : ShellEdge.edgeBottom;
+  final layerConverted = object != null
+      ? ShellLayer.values.firstWhere((e) => e.toString() == object.layer)
+      : ShellLayer.layerTop;
+  final monitorConverted =
+      object?.monitor != null ? Monitor(object!.monitor ?? 0, '') : null;
 
   return LayerShellData(
     panelWidth: object?.panelWidth ?? 1366,

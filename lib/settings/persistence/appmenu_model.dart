@@ -2,7 +2,7 @@ import 'package:kitshell/main.dart';
 import 'package:kitshell/objectbox.g.dart'; //ignore: unused_import
 import 'package:kitshell/panel/logic/appmenu/appmenu.dart';
 import 'package:kitshell/src/rust/api/appmenu.dart';
-import 'package:objectbox/objectbox.dart'; // ignore: unused_import
+// ignore: unused_import
 
 @Entity()
 class AppmenuDb {

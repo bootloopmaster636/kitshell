@@ -331,7 +331,7 @@ class LoadingSpinner extends ConsumerWidget {
 
 class ExpandedSubmenu extends ConsumerWidget {
   const ExpandedSubmenu(
-      {required this.title, required this.child, this.actions, super.key});
+      {required this.title, required this.child, this.actions, super.key,});
 
   final String title;
   final Widget child;
