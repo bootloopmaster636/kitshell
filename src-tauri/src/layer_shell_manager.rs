@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use std::sync::Mutex;
 
+use display_info::DisplayInfo;
 use gtk::{
     traits::{ContainerExt, GtkWindowExt, WidgetExt},
     ApplicationWindow,
@@ -34,12 +35,14 @@ unsafe impl Sync for LayerShellData {}
 
 impl LayerShellData {
     pub fn init(&mut self, app: &mut App, label: &str) {
+        // Get main window from Tauri
         self.main_window = Some(
             app.get_webview_window(label)
                 .expect("Webview window is not provided!"),
         );
         self.main_window.as_mut().unwrap().hide().unwrap();
 
+        // Add new GTK window to be a layer shell
         self.shell_window = Some(gtk::ApplicationWindow::new(
             &self
                 .main_window
@@ -50,8 +53,10 @@ impl LayerShellData {
                 .application()
                 .unwrap(),
         ));
+        // Set the newly created GTK window to paintable, to prevent black screen
         self.shell_window.as_mut().unwrap().set_app_paintable(true);
 
+        // Move Tauri's content to newly created GTK window(?)
         let vbox = self.main_window.as_mut().unwrap().default_vbox().unwrap();
         self.main_window
             .as_mut()
@@ -61,10 +66,19 @@ impl LayerShellData {
             .remove(&vbox);
         self.shell_window.as_mut().unwrap().add(&vbox);
 
+        // Init layer shell
         self.shell_window.as_mut().unwrap().init_layer_shell();
 
-        self.shell_window.as_mut().unwrap().set_width_request(1366);
+        // Set layer shell size
+        let display_info = DisplayInfo::all().unwrap();
+        let first_monitor = display_info.first();
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .set_width_request(first_monitor.unwrap().width as i32);
         self.shell_window.as_mut().unwrap().set_height_request(48);
+
+        // Set layer shell positions
         self.shell_window
             .as_mut()
             .unwrap()
@@ -74,22 +88,23 @@ impl LayerShellData {
             .unwrap()
             .auto_exclusive_zone_enable();
 
+        // Show layer shell
         self.shell_window.as_mut().unwrap().show_all();
     }
 
-    pub fn change_margin(&mut self, h_padding: i32, bottom_padding: i32) {
+    pub fn change_margin(&mut self, horizontal_padding: i32, bottom_padding: i32) {
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .set_layer_shell_margin(Edge::Left, horizontal_padding);
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .set_layer_shell_margin(Edge::Right, horizontal_padding);
         self.shell_window
             .as_mut()
             .unwrap()
             .set_layer_shell_margin(Edge::Bottom, bottom_padding);
-        self.shell_window
-            .as_mut()
-            .unwrap()
-            .set_layer_shell_margin(Edge::Left, h_padding);
-        self.shell_window
-            .as_mut()
-            .unwrap()
-            .set_layer_shell_margin(Edge::Right, h_padding);
     }
 }
 
@@ -99,10 +114,8 @@ pub fn change_shell_margin(
     h_padding: i32,
     bottom_padding: i32,
 ) {
-    println!("Changing margin");
     layer_shell_state
         .lock()
         .unwrap()
         .change_margin(h_padding, bottom_padding);
-    println!("Should be changed by now");
 }

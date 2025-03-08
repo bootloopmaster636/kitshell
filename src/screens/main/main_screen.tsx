@@ -15,18 +15,6 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { invoke } from "@tauri-apps/api/core";
-import { Slider } from "antd";
-
 export default function MainScreen() {
-  const changeMargin = (value: number) => {
-    invoke("change_shell_margin", { hPadding: value, bottomPadding: value });
-  };
-
-  return (
-    <div>
-      <p>margin</p>
-      <Slider min={0} max={16} onChangeComplete={changeMargin} />
-    </div>
-  );
+  return <div></div>;
 }
