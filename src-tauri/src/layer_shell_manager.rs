@@ -81,15 +81,15 @@ impl LayerShellData {
         self.shell_window
             .as_mut()
             .unwrap()
-            .set_margin_start(h_padding);
+            .set_layer_shell_margin(Edge::Bottom, bottom_padding);
         self.shell_window
             .as_mut()
             .unwrap()
-            .set_margin_end(h_padding);
+            .set_layer_shell_margin(Edge::Left, h_padding);
         self.shell_window
             .as_mut()
             .unwrap()
-            .set_margin_bottom(bottom_padding);
+            .set_layer_shell_margin(Edge::Right, h_padding);
     }
 }
 
@@ -99,8 +99,10 @@ pub fn change_shell_margin(
     h_padding: i32,
     bottom_padding: i32,
 ) {
+    println!("Changing margin");
     layer_shell_state
         .lock()
         .unwrap()
         .change_margin(h_padding, bottom_padding);
+    println!("Should be changed by now");
 }
