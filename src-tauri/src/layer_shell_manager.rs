@@ -21,7 +21,7 @@ use gtk::{
     traits::{ContainerExt, GtkWindowExt, WidgetExt},
     ApplicationWindow,
 };
-use gtk_layer_shell::LayerShell;
+use gtk_layer_shell::{Edge, LayerShell};
 use tauri::{App, Manager, State, WebviewWindow};
 
 pub struct LayerShellData {
@@ -65,6 +65,14 @@ impl LayerShellData {
 
         self.shell_window.as_mut().unwrap().set_width_request(1366);
         self.shell_window.as_mut().unwrap().set_height_request(48);
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .set_anchor(Edge::Bottom, true);
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .auto_exclusive_zone_enable();
 
         self.shell_window.as_mut().unwrap().show_all();
     }
