@@ -15,22 +15,27 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-use layer_shell_manager::LayerShellData;
+use std::sync::Mutex;
+
+use layer_shell_manager::{change_shell_margin, LayerShellData};
+use tauri::{generate_handler, Manager};
 
 mod layer_shell_manager;
 
 pub unsafe fn run() {
-    let mut layer_shell = LayerShellData {
+    let mut layer_shell_state = LayerShellData {
         main_window: None,
         shell_window: None,
     };
 
     tauri::Builder::default()
         .setup(move |app| {
-            layer_shell.init(app, "main");
+            layer_shell_state.init(app, "main");
 
+            app.manage(Mutex::new(layer_shell_state));
             Ok(())
         })
+        .invoke_handler(generate_handler![change_shell_margin])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
