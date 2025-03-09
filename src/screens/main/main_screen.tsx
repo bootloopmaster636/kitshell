@@ -15,6 +15,26 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+  argbFromHex,
+  argbFromLinrgb,
+  hexFromArgb,
+} from "@material/material-color-utilities";
+import { useMaterialColor } from "../../logic/color_theme";
+import Color from "color";
+
 export default function MainScreen() {
-  return <div></div>;
+  const theme = useMaterialColor((state) => state.colorSchemeLight);
+  return (
+    <div
+      className="flex h-screen w-screen flex-row"
+      style={{
+        backgroundColor: Color(hexFromArgb(theme.background))
+          .alpha(0.8)
+          .string(),
+      }}
+    >
+      <p className="">aaa</p>
+    </div>
+  );
 }

@@ -22,7 +22,7 @@ use gtk::{
     traits::{ContainerExt, GtkWindowExt, WidgetExt},
     ApplicationWindow,
 };
-use gtk_layer_shell::{Edge, LayerShell};
+use gtk_layer_shell::{Edge, KeyboardMode, LayerShell};
 use tauri::{App, Manager, State, WebviewWindow};
 
 pub struct LayerShellData {
@@ -87,6 +87,10 @@ impl LayerShellData {
             .as_mut()
             .unwrap()
             .auto_exclusive_zone_enable();
+        self.shell_window
+            .as_mut()
+            .unwrap()
+            .set_keyboard_mode(KeyboardMode::OnDemand);
 
         // Show layer shell
         self.shell_window.as_mut().unwrap().show_all();
