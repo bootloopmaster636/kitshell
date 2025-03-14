@@ -15,26 +15,55 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-  argbFromHex,
-  argbFromLinrgb,
-  hexFromArgb,
-} from "@material/material-color-utilities";
+import { hexFromArgb } from "@material/material-color-utilities";
 import { useMaterialColor } from "../../logic/color_theme";
 import Color from "color";
+import { centerWidgets, leftWidgets, rightWidgets } from "./panel_contents";
+import { Alignment } from "../utils/widgets";
 
 export default function MainScreen() {
   const theme = useMaterialColor((state) => state.colorSchemeLight);
   return (
     <div
-      className="flex h-screen w-screen flex-row"
+      className="flex h-screen w-screen flex-row justify-evenly overflow-clip select-none"
       style={{
         backgroundColor: Color(hexFromArgb(theme.background))
           .alpha(0.8)
           .string(),
+        fontFamily: "'Inter', sans-serif",
       }}
     >
-      <p className="">aaa</p>
+      <LeftPanel />
+      <CenterPanel />
+      <RightPanel />
+    </div>
+  );
+}
+
+function LeftPanel() {
+  return (
+    <div className="flex w-full flex-row justify-start">
+      {leftWidgets.map((widget) =>
+        widget.build({ alignment: Alignment.start }),
+      )}
+    </div>
+  );
+}
+
+function CenterPanel() {
+  return (
+    <div className="flex w-full flex-row justify-center">
+      {centerWidgets.map((widget) =>
+        widget.build({ alignment: Alignment.center }),
+      )}
+    </div>
+  );
+}
+
+function RightPanel() {
+  return (
+    <div className="flex w-full flex-row justify-end">
+      {rightWidgets.map((widget) => widget.build({ alignment: Alignment.end }))}
     </div>
   );
 }
