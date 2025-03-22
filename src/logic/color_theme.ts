@@ -1,4 +1,4 @@
-import { argbFromHex, Scheme, Theme, themeFromSourceColor } from '@material/material-color-utilities';
+import { argbFromHex, Scheme, themeFromSourceColor } from '@material/material-color-utilities';
 import {create} from 'zustand';
 
 interface ColorThemeState {

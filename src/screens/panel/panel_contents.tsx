@@ -1,5 +1,5 @@
 import { Widget } from "../utils/widgets";
-import { Clock } from "../widgets/clock/display";
+import { Clock } from "./widgets/clock/clock_widget";
 
 export const leftWidgets: Widget[] = [];
 export const centerWidgets: Widget[] = [];

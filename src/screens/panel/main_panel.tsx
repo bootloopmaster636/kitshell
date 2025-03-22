@@ -23,6 +23,7 @@ import { Alignment } from "../utils/widgets";
 
 export default function MainScreen() {
   const theme = useMaterialColor((state) => state.colorSchemeLight);
+
   return (
     <div
       className="flex h-screen w-screen flex-row justify-evenly overflow-clip select-none"
@@ -43,8 +44,8 @@ export default function MainScreen() {
 function LeftPanel() {
   return (
     <div className="flex w-full flex-row justify-start">
-      {leftWidgets.map((widget) =>
-        widget.build({ alignment: Alignment.start }),
+      {leftWidgets.map((widget, index) =>
+        widget.build({ alignment: Alignment.start, key: index.toString() }),
       )}
     </div>
   );
@@ -53,8 +54,8 @@ function LeftPanel() {
 function CenterPanel() {
   return (
     <div className="flex w-full flex-row justify-center">
-      {centerWidgets.map((widget) =>
-        widget.build({ alignment: Alignment.center }),
+      {centerWidgets.map((widget, index) =>
+        widget.build({ alignment: Alignment.center, key: index.toString() }),
       )}
     </div>
   );
@@ -63,7 +64,9 @@ function CenterPanel() {
 function RightPanel() {
   return (
     <div className="flex w-full flex-row justify-end">
-      {rightWidgets.map((widget) => widget.build({ alignment: Alignment.end }))}
+      {rightWidgets.map((widget, index) =>
+        widget.build({ alignment: Alignment.end, key: index.toString() }),
+      )}
     </div>
   );
 }

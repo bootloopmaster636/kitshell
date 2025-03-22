@@ -1,9 +1,13 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Alignment, GetAlignment, Widget } from "../../utils/widgets";
-import { useMaterialColor } from "../../../logic/color_theme";
+import { Alignment, GetAlignment, Widget } from "../../../utils/widgets";
+import { useMaterialColor } from "../../../../logic/color_theme";
 import { hexFromArgb } from "@material/material-color-utilities";
 import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
-import { TransitionCurve, TransitionDuration } from "../../utils/transitions";
+import {
+  TransitionCurve,
+  TransitionDuration,
+} from "../../../utils/transitions";
+import { hidePopup, PopupPosition, showPopup } from "../../../popup/popup";
 
 interface DateComponent {
   year: number;
@@ -15,7 +19,7 @@ interface DateComponent {
 }
 
 export class Clock extends Widget {
-  build({ alignment }: { alignment: Alignment }): ReactNode {
+  build({ alignment, key }: { alignment: Alignment; key: string }): ReactNode {
     const [time, setTime] = useState<DateComponent>();
     const theme = useMaterialColor((state) => state.colorSchemeLight);
 
@@ -36,10 +40,20 @@ export class Clock extends Widget {
 
     return (
       <div
+        key={key}
         className="flex cursor-default flex-col justify-center px-3"
         style={{
           alignItems: GetAlignment(alignment),
         }}
+        onClick={() =>
+          showPopup({
+            position: PopupPosition.Right,
+            width: 400,
+            height: 400,
+            path: "calendar",
+          })
+        }
+        onDoubleClick={() => hidePopup()}
       >
         {/* time */}
         <div

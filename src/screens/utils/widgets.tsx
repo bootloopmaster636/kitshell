@@ -7,9 +7,15 @@ export enum Alignment {
 }
 
 export class Widget {
-  build({ alignment }: { alignment: Alignment }): ReactNode {
+  build({ alignment, key }: { alignment: Alignment; key: string }): ReactNode {
     return (
-      <div className="flex items-center bg-red-600 px-4 text-yellow-300">
+      <div
+        key={key}
+        className="flex items-center bg-red-600 px-4 text-yellow-300"
+        style={{
+          alignItems: GetAlignment(alignment),
+        }}
+      >
         Please implement build method!
       </div>
     );

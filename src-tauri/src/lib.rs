@@ -17,25 +17,81 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use std::sync::Mutex;
 
-use layer_shell_manager::{change_shell_margin, LayerShellData};
+use display_info::DisplayInfo;
+use gtk_layer_shell::Edge;
+use layer_shell_manager::{change_shell_margin, hide_popup, show_popup, LayerShellData};
 use tauri::{generate_handler, Manager};
 
 mod layer_shell_manager;
+pub mod widgets;
+
+struct AppState {
+    main_panel_state: Mutex<LayerShellData>,
+    popup_panel_state: Mutex<LayerShellData>,
+}
 
 pub unsafe fn run() {
-    let mut layer_shell_state = LayerShellData {
+    let main_panel_state = LayerShellData {
+        webview: None,
+        main_window: None,
+        shell_window: None,
+    };
+    let popup_panel_state = LayerShellData {
+        webview: None,
         main_window: None,
         shell_window: None,
     };
 
+    let app_state = AppState {
+        main_panel_state: Mutex::new(main_panel_state),
+        popup_panel_state: Mutex::new(popup_panel_state),
+    };
+
     tauri::Builder::default()
         .setup(move |app| {
-            layer_shell_state.init(app, "main");
+            // Build window
+            let shell_url = tauri::WebviewUrl::App("/".into());
+            let popup_url = tauri::WebviewUrl::App("/popup".into());
+            tauri::WebviewWindowBuilder::new(app, "shell", shell_url)
+                .transparent(true)
+                .build()?;
+            tauri::WebviewWindowBuilder::new(app, "popup", popup_url)
+                .transparent(true)
+                .visible(false)
+                .build()?;
 
-            app.manage(Mutex::new(layer_shell_state));
+            let display_info = DisplayInfo::all().unwrap();
+            let first_monitor = display_info.first();
+
+            app_state.main_panel_state.lock().unwrap().init(
+                app,
+                "shell",
+                first_monitor.unwrap().width as i32,
+                48,
+                Edge::Bottom,
+                true,
+                true,
+            );
+
+            app_state.popup_panel_state.lock().unwrap().init(
+                app,
+                "popup",
+                200,
+                60,
+                Edge::Bottom,
+                true,
+                false,
+            );
+
+            widgets::init::init_widgets_data();
+            app.manage(app_state);
             Ok(())
         })
-        .invoke_handler(generate_handler![change_shell_margin])
+        .invoke_handler(generate_handler![
+            change_shell_margin,
+            show_popup,
+            hide_popup
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -10,14 +10,6 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-      {
-        "title": "kitshell",
-        "width": 1280,
-        "height": 48,
-        "transparent": true
-      }
-    ],
     "security": {
       "csp": null
     }
