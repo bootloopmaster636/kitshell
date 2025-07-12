@@ -1,0 +1,5 @@
+base_locale: id
+input_directory: lib/i18n
+input_file_pattern: .i18n.yaml
+output_directory: lib/i18n
+output_file_name: strings.g.dart

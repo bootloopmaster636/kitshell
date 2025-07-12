@@ -1,6 +1,6 @@
 name: kitshell
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -9,11 +9,35 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  bloc: ^9.0.0
+  flutter_bloc: ^9.1.1
+  freezed_annotation: ^3.1.0
+  slang: ^4.7.3
+  slang_flutter: ^4.7.0
+  rust_lib_kitshell:
+    path: rust_builder
+  flutter_rust_bridge: 2.11.1
+  wayland_layer_shell: ^1.0.1
+  get_it: ^8.0.3
+  injectable: ^2.5.0
+  flutter_hooks: ^0.21.2
+  flutter_animate: ^4.5.2
+  bloc_concurrency: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+  build_runner: ^2.5.4
+  freezed: ^3.1.0
+  very_good_analysis: ^9.0.0
+  integration_test:
+    sdk: flutter
+  injectable_generator: ^2.7.0
+  json_serializable: ^6.9.5
+  json_annotation: ^4.9.0
 
 flutter:
   uses-material-design: true

@@ -1,3 +1,3 @@
 # kitshell
 
-A new Flutter project.
+Let me cook :)
