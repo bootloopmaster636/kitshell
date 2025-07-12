@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated dart file
+*.freezed.dart
+*.g.dart
+
+# Flutter CLI PID file
+pid
