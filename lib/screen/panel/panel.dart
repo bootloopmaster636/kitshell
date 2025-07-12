@@ -19,45 +19,48 @@ class MainPanel extends StatelessWidget {
           bloc: get<PanelManagerBloc>(),
           builder: (context, state) {
             if (state is! PanelManagerStateLoaded) return const SizedBox();
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                // Left section
-                SectionRow(
-                  position: WidgetPosition.left,
-                  components: state.componentsLeft,
-                ).animate().slideX(
-                  begin: -1,
-                  end: 0,
-                  delay: Durations.long3,
-                  duration: Durations.long4,
-                  curve: Easing.emphasizedDecelerate,
-                ),
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Left section
+                  SectionRow(
+                    position: WidgetPosition.left,
+                    components: state.componentsLeft,
+                  ).animate().slideX(
+                    begin: -1,
+                    end: 0,
+                    delay: Durations.long3,
+                    duration: Durations.long4,
+                    curve: Easing.emphasizedDecelerate,
+                  ),
 
-                // Mid section
-                SectionRow(
-                  position: WidgetPosition.center,
-                  components: state.componentsCenter,
-                ).animate().slideY(
-                  begin: 1,
-                  end: 0,
-                  delay: Durations.long3,
-                  duration: Durations.long4,
-                  curve: Easing.emphasizedDecelerate,
-                ),
+                  // Mid section
+                  SectionRow(
+                    position: WidgetPosition.center,
+                    components: state.componentsCenter,
+                  ).animate().slideY(
+                    begin: 1,
+                    end: 0,
+                    delay: Durations.long3,
+                    duration: Durations.long4,
+                    curve: Easing.emphasizedDecelerate,
+                  ),
 
-                // Right section
-                SectionRow(
-                  position: WidgetPosition.right,
-                  components: state.componentsRight,
-                ).animate().slideX(
-                  begin: 1,
-                  end: 0,
-                  delay: Durations.long3,
-                  duration: Durations.long4,
-                  curve: Easing.emphasizedDecelerate,
-                ),
-              ],
+                  // Right section
+                  SectionRow(
+                    position: WidgetPosition.right,
+                    components: state.componentsRight,
+                  ).animate().slideX(
+                    begin: 1,
+                    end: 0,
+                    delay: Durations.long3,
+                    duration: Durations.long4,
+                    curve: Easing.emphasizedDecelerate,
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -90,6 +93,7 @@ class SectionRow extends StatelessWidget {
           WidgetPosition.center => MainAxisAlignment.center,
           WidgetPosition.right => MainAxisAlignment.end,
         },
+        mainAxisSize: MainAxisSize.min,
         children: components,
       ),
     );

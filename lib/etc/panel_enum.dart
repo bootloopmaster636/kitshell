@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kitshell/screen/popup/components/calendar_and_notif.dart';
 
 enum PopupWidget {
   /// App menu popup
   appMenu(Placeholder()),
 
   // Calendar and notification popup
-  calendar(Placeholder()),
+  calendar(CalendarAndNotifPopup()),
 
   // Quick setting popup
   quickSettings(Placeholder());

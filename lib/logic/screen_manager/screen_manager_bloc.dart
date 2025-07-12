@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kitshell/data/model/runtime/screen_state/screen_state_model.dart';
 import 'package:kitshell/etc/config.dart';
 import 'package:kitshell/etc/panel_enum.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
@@ -16,8 +16,8 @@ part 'screen_manager_state.dart';
 class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
   ScreenManagerBloc() : super(const ScreenManagerStateInitial()) {
     on<ScreenManagerEventStarted>(_onStarted);
-    on<ScreenManagerEventOpenPopup>(_onOpenPopup);
-    on<ScreenManagerEventClosePopup>(_onClosePopup);
+    on<ScreenManagerEventOpenPopup>(_onOpenPopup, transformer: restartable());
+    on<ScreenManagerEventClosePopup>(_onClosePopup, transformer: restartable());
   }
 
   final layerShellManager = WaylandLayerShell();
@@ -48,7 +48,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     // Set exclusive mode to only bottom panel
     await layerShellManager.setExclusiveZone(panelDefaultHeightPx);
 
-    emit(const ScreenManagerStateLoaded(ScreenStateModel(isPopupShown: false)));
+    emit(const ScreenManagerStateLoaded(isPopupShown: false));
   }
 
   Future<void> _onOpenPopup(
@@ -63,7 +63,9 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     );
     emit(
       ScreenManagerStateLoaded(
-        ScreenStateModel(isPopupShown: true, popupShown: event.popupToShow),
+        isPopupShown: true,
+        popupShown: event.popupToShow,
+        position: event.position,
       ),
     );
   }
@@ -78,7 +80,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     // Do closing animation and etc
     emit(
       const ScreenManagerStateLoaded(
-        ScreenStateModel(isPopupShown: false),
+        isPopupShown: false,
       ),
     );
     await Future<void>.delayed(popupOpenCloseDuration);

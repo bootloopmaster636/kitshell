@@ -25,6 +25,9 @@ dependencies:
   flutter_hooks: ^0.21.2
   flutter_animate: ^4.5.2
   bloc_concurrency: ^0.3.0
+  animated_flip_counter: ^0.3.4
+  iconify_flutter_plus: ^1.0.4
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
