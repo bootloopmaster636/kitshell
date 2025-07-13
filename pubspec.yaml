@@ -28,6 +28,8 @@ dependencies:
   animated_flip_counter: ^0.3.4
   iconify_flutter_plus: ^1.0.4
   gap: ^3.0.1
+  intl: ^0.20.2
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:

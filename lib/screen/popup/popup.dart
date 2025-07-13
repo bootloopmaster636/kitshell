@@ -20,11 +20,6 @@ class PopupContainer extends StatelessWidget {
         return Stack(
           fit: StackFit.expand,
           children: [
-            ColoredBox(
-                  color: context.colorScheme.shadow.withValues(alpha: 0.1),
-                )
-                .animate(target: state.isPopupShown ? 1 : 0)
-                .fade(begin: 0, end: 1, duration: popupOpenCloseDuration),
             GestureDetector(
               onTap: () {
                 get<ScreenManagerBloc>().add(
@@ -50,19 +45,24 @@ class PopupContent extends HookWidget {
 
     return BlocConsumer<ScreenManagerBloc, ScreenManagerState>(
       bloc: get<ScreenManagerBloc>(),
-      listener: (context, state) {
+      listener: (context, state) async {
         // This is to prevent widget suddenly disappear when closing
         if (state is! ScreenManagerStateLoaded) return;
 
-        if (state.popupShown?.widget != null) {
+        if (state.popupShown != null) {
           widgetShown.value = state.popupShown!.widget;
           popupPosition.value = state.position!;
+        } else {
+          await Future<void>.delayed(popupOpenCloseDuration);
+          widgetShown.value = const SizedBox();
         }
       },
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
 
-        return Align(
+        return AnimatedAlign(
+              duration: popupOpenCloseDuration,
+              curve: Curves.easeInOutCubicEmphasized,
               alignment: switch (popupPosition.value) {
                 WidgetPosition.left => Alignment.bottomLeft,
                 WidgetPosition.center => Alignment.bottomCenter,
@@ -70,7 +70,13 @@ class PopupContent extends HookWidget {
               },
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: widgetShown.value,
+                child: Material(
+                  color: Colors.transparent,
+                  child: AnimatedSwitcher(
+                    duration: popupOpenCloseDuration,
+                    child: widgetShown.value,
+                  ),
+                ),
               ),
             )
             .animate(target: state.isPopupShown ? 1 : 0)
