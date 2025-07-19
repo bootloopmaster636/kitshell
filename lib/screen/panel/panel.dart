@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitshell/etc/buildcontext_extension.dart';
-import 'package:kitshell/etc/panel_enum.dart';
+import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart';
 

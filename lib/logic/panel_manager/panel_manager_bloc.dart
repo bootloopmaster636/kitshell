@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/screen/panel/components/clock.dart';
+import 'package:kitshell/screen/panel/components/statusbar.dart';
 
 part 'panel_manager_bloc.freezed.dart';
 part 'panel_manager_event.dart';
@@ -23,7 +24,7 @@ class PanelManagerBloc extends Bloc<PanelManagerEvent, PanelManagerState> {
       const PanelManagerStateLoaded(
         componentsLeft: [ClockComponent()],
         componentsCenter: [Placeholder(color: Colors.green)],
-        componentsRight: [Placeholder(color: Colors.blue)],
+        componentsRight: [StatusbarComponent()],
       ),
     );
   }

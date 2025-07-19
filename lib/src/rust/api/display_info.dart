@@ -11,20 +11,23 @@ DispInfo getPrimaryDisplaySize() =>
 
 class DispInfo {
   const DispInfo({
+    required this.name,
     required this.widthPx,
     required this.heightPx,
   });
+  final String name;
   final int widthPx;
   final int heightPx;
 
   @override
-  int get hashCode => widthPx.hashCode ^ heightPx.hashCode;
+  int get hashCode => name.hashCode ^ widthPx.hashCode ^ heightPx.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DispInfo &&
           runtimeType == other.runtimeType &&
+          name == other.name &&
           widthPx == other.widthPx &&
           heightPx == other.heightPx;
 }

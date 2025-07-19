@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:kitshell/etc/buildcontext_extension.dart';
-import 'package:kitshell/etc/custom_inkwell.dart';
-import 'package:kitshell/etc/panel_enum.dart';
+import 'package:kitshell/etc/component/clickable_panel_component.dart';
+import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart';
-import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 import 'package:kitshell/screen/panel/panel.dart';
 
 class ClockComponent extends HookWidget {
@@ -22,57 +21,21 @@ class ClockComponent extends HookWidget {
       return () => get<DatetimeCubit>().stopTimer();
     }, []);
 
-    final isHovering = useState(false);
-
-    return MouseRegion(
-      onEnter: (_) {
-        isHovering.value = true;
-      },
-      onExit: (_) {
-        isHovering.value = false;
-      },
-      child: CustomInkwell(
-        onTap: () {
-          final screenManagerBloc = get<ScreenManagerBloc>();
-
-          if (screenManagerBloc.state is! ScreenManagerStateLoaded) return;
-          final screenState =
-              screenManagerBloc.state as ScreenManagerStateLoaded;
-
-          if (screenState.isPopupShown) {
-            screenManagerBloc.add(const ScreenManagerEventClosePopup());
-          } else {
-            screenManagerBloc.add(
-              ScreenManagerEventOpenPopup(
-                popupToShow: PopupWidget.calendar,
-                position: InheritedAlignment.of(context).position,
-              ),
-            );
-          }
+    return ClickablePanelComponent(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: switch (InheritedAlignment.of(context).position) {
+          WidgetPosition.left => CrossAxisAlignment.start,
+          WidgetPosition.center => CrossAxisAlignment.center,
+          WidgetPosition.right => CrossAxisAlignment.end,
         },
-        decoration: BoxDecoration(
-          color: isHovering.value
-              ? context.colorScheme.surfaceContainer
-              : Colors.white.withValues(alpha: 0),
-          borderRadius: BorderRadius.circular(8),
-          border: isHovering.value
-              ? Border.all(color: context.colorScheme.outline)
-              : Border.all(color: Colors.transparent),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: switch (InheritedAlignment.of(context).position) {
-            WidgetPosition.left => CrossAxisAlignment.start,
-            WidgetPosition.center => CrossAxisAlignment.center,
-            WidgetPosition.right => CrossAxisAlignment.end,
-          },
-          children: const [
-            ClockPart(),
-            DatePart(),
-          ],
-        ),
+        children: const [
+          ClockPart(),
+          DatePart(),
+        ],
       ),
+      popupPosition: InheritedAlignment.of(context).position,
+      popupToShow: PopupWidget.calendar,
     );
   }
 }

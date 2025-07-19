@@ -1,2 +1,2 @@
 pub mod display_info;
-pub mod misc;
+pub mod quick_settings;

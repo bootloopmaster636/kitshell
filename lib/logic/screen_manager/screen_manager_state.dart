@@ -5,7 +5,7 @@ sealed class ScreenManagerState with _$ScreenManagerState {
   const factory ScreenManagerState.initial() = ScreenManagerStateInitial;
   const factory ScreenManagerState.loaded({
     required bool isPopupShown,
-    PopupWidget? popupShown,
-    WidgetPosition? position,
+    required PopupWidget popupShown,
+    required WidgetPosition position,
   }) = ScreenManagerStateLoaded;
 }

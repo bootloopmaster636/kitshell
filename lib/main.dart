@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart';
@@ -39,7 +40,33 @@ class MainApp extends StatelessWidget {
       locale: TranslationProvider.of(context).flutterLocale,
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: const ScreenManager(),
     );
   }
 }
+
+// TODO(bootloopmaster636): Add dynamic theme support
+ThemeData lightTheme = ThemeData(
+  colorSchemeSeed: Colors.lightBlue,
+  brightness: Brightness.light,
+  fontFamily: GoogleFonts.nunitoSans().fontFamily,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
+  sliderTheme: const SliderThemeData(
+    year2023: false,
+    padding: EdgeInsets.zero,
+  ),
+);
+
+ThemeData darkTheme = ThemeData(
+  colorSchemeSeed: Colors.lightBlue,
+  brightness: Brightness.dark,
+  fontFamily: GoogleFonts.nunitoSans().fontFamily,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
+  sliderTheme: const SliderThemeData(
+    year2023: false,
+    padding: EdgeInsets.zero,
+  ),
+);

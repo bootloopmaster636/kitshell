@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:kitshell/etc/buildcontext_extension.dart';
-import 'package:kitshell/etc/config.dart';
-import 'package:kitshell/etc/panel_enum.dart';
+import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
@@ -35,35 +33,19 @@ class PopupContainer extends StatelessWidget {
   }
 }
 
-class PopupContent extends HookWidget {
+class PopupContent extends StatelessWidget {
   const PopupContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final widgetShown = useState<Widget>(const Placeholder());
-    final popupPosition = useState(WidgetPosition.center);
-
-    return BlocConsumer<ScreenManagerBloc, ScreenManagerState>(
+    return BlocBuilder<ScreenManagerBloc, ScreenManagerState>(
       bloc: get<ScreenManagerBloc>(),
-      listener: (context, state) async {
-        // This is to prevent widget suddenly disappear when closing
-        if (state is! ScreenManagerStateLoaded) return;
-
-        if (state.popupShown != null) {
-          widgetShown.value = state.popupShown!.widget;
-          popupPosition.value = state.position!;
-        } else {
-          await Future<void>.delayed(popupOpenCloseDuration);
-          widgetShown.value = const SizedBox();
-        }
-      },
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-
         return AnimatedAlign(
-              duration: popupOpenCloseDuration,
-              curve: Curves.easeInOutCubicEmphasized,
-              alignment: switch (popupPosition.value) {
+              duration: Durations.medium4,
+              curve: Curves.easeOutQuart,
+              alignment: switch (state.position) {
                 WidgetPosition.left => Alignment.bottomLeft,
                 WidgetPosition.center => Alignment.bottomCenter,
                 WidgetPosition.right => Alignment.bottomRight,
@@ -73,18 +55,18 @@ class PopupContent extends HookWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: AnimatedSwitcher(
-                    duration: popupOpenCloseDuration,
-                    child: widgetShown.value,
+                    duration: Durations.long1,
+                    child: state.popupShown.widget,
                   ),
                 ),
               ),
             )
             .animate(target: state.isPopupShown ? 1 : 0)
             .slideY(
-              begin: 0.8,
+              begin: 0.2,
               end: 0,
               duration: popupOpenCloseDuration,
-              curve: Curves.easeInOutCubicEmphasized,
+              curve: Curves.easeOutQuart,
             )
             .fade(
               begin: 0,

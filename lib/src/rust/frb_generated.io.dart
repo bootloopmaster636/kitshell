@@ -9,6 +9,9 @@ import 'dart:ffi' as ffi;
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
+import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
+import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
+import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -20,22 +23,80 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   });
 
   @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw);
+
+  @protected
+  RustStreamSink<List<BacklightInfo>>
+  dco_decode_StreamSink_list_backlight_info_Sse(dynamic raw);
+
+  @protected
+  String dco_decode_String(dynamic raw);
+
+  @protected
+  BacklightInfo dco_decode_backlight_info(dynamic raw);
+
+  @protected
   DispInfo dco_decode_disp_info(dynamic raw);
+
+  @protected
+  List<BacklightInfo> dco_decode_list_backlight_info(dynamic raw);
+
+  @protected
+  Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  int dco_decode_u_16(dynamic raw);
 
   @protected
   int dco_decode_u_32(dynamic raw);
 
   @protected
+  int dco_decode_u_8(dynamic raw);
+
+  @protected
   void dco_decode_unit(dynamic raw);
+
+  @protected
+  UserInfo dco_decode_user_info(dynamic raw);
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
+
+  @protected
+  RustStreamSink<List<BacklightInfo>>
+  sse_decode_StreamSink_list_backlight_info_Sse(SseDeserializer deserializer);
+
+  @protected
+  String sse_decode_String(SseDeserializer deserializer);
+
+  @protected
+  BacklightInfo sse_decode_backlight_info(SseDeserializer deserializer);
 
   @protected
   DispInfo sse_decode_disp_info(SseDeserializer deserializer);
 
   @protected
+  List<BacklightInfo> sse_decode_list_backlight_info(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_u_16(SseDeserializer deserializer);
+
+  @protected
   int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
+  int sse_decode_u_8(SseDeserializer deserializer);
+
+  @protected
   void sse_decode_unit(SseDeserializer deserializer);
+
+  @protected
+  UserInfo sse_decode_user_info(SseDeserializer deserializer);
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -44,13 +105,52 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  void sse_encode_AnyhowException(
+    AnyhowException self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_list_backlight_info_Sse(
+    RustStreamSink<List<BacklightInfo>> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_String(String self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_backlight_info(BacklightInfo self, SseSerializer serializer);
+
+  @protected
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_backlight_info(
+    List<BacklightInfo> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_list_prim_u_8_strict(
+    Uint8List self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_u_16(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_32(int self, SseSerializer serializer);
 
   @protected
+  void sse_encode_u_8(int self, SseSerializer serializer);
+
+  @protected
   void sse_encode_unit(void self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_user_info(UserInfo self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);

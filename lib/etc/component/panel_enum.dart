@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitshell/screen/popup/components/calendar_and_notif.dart';
+import 'package:kitshell/screen/popup/components/quick_settings/quick_settings.dart';
 
 enum PopupWidget {
   /// App menu popup
@@ -9,7 +10,7 @@ enum PopupWidget {
   calendar(CalendarAndNotifPopup()),
 
   // Quick setting popup
-  quickSettings(Placeholder());
+  quickSettings(QuickSettingsPopup());
 
   const PopupWidget(this.widget);
   final Widget widget;

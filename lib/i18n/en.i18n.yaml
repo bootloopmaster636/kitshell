@@ -2,3 +2,7 @@ locale: en_US
 appName: Kitshell
 general:
   loading: Loading...
+
+quickSettings:
+  brightness:
+    title: Brightness

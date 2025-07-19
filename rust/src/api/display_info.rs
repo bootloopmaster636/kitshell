@@ -1,6 +1,7 @@
 use display_info::DisplayInfo;
 
 pub struct DispInfo {
+    pub name: String,
     pub width_px: u32,
     pub height_px: u32,
 }
@@ -15,12 +16,17 @@ pub fn get_primary_display_size() -> DispInfo {
 
     match primary_display {
         Some(display) => DispInfo {
+            name: display.name,
             width_px: display.width,
             height_px: display.height,
         },
-        None => DispInfo {
-            width_px: display_info.clone()[0].width,
-            height_px: display_info.clone()[0].height,
-        },
+        None => {
+            let first_display = &display_info[0];
+            DispInfo {
+                name: first_display.clone().name,
+                width_px: first_display.width,
+                height_px: first_display.height,
+            }
+        }
     }
 }

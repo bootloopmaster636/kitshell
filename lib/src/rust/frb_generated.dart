@@ -8,6 +8,9 @@ import 'dart:convert';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
+import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
+import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
+import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
@@ -58,9 +61,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
       RustLibWire.fromExternalLibrary;
 
   @override
-  Future<void> executeRustInitializers() async {
-    await api.crateApiMiscInitApp();
-  }
+  Future<void> executeRustInitializers() async {}
 
   @override
   ExternalLibraryLoaderConfig get defaultExternalLibraryLoaderConfig =>
@@ -70,7 +71,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1922798709;
+  int get rustContentHash => -1164867149;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -81,9 +82,19 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<void> crateApiQuickSettingsDisplayBrightnessChangeBrightness({
+    required String name,
+    required int value,
+  });
+
   DispInfo crateApiDisplayInfoGetPrimaryDisplaySize();
 
-  Future<void> crateApiMiscInitApp();
+  Future<UserInfo> crateApiQuickSettingsWhoamiGetUserInfo();
+
+  Stream<List<BacklightInfo>>
+  crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent();
+
+  Stream<List<BacklightInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -95,12 +106,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  Future<void> crateApiQuickSettingsDisplayBrightnessChangeBrightness({
+    required String name,
+    required int value,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(name, serializer);
+          sse_encode_u_16(value, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 1,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsDisplayBrightnessChangeBrightnessConstMeta,
+        argValues: [name, value],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsDisplayBrightnessChangeBrightnessConstMeta =>
+      const TaskConstMeta(
+        debugName: 'change_brightness',
+        argNames: ['name', 'value'],
+      );
+
+  @override
   DispInfo crateApiDisplayInfoGetPrimaryDisplaySize() {
     return handler.executeSync(
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_disp_info,
@@ -120,7 +168,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiMiscInitApp() {
+  Future<UserInfo> crateApiQuickSettingsWhoamiGetUserInfo() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -128,40 +176,171 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 3,
             port: port_,
           );
         },
         codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
+          decodeSuccessData: sse_decode_user_info,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiMiscInitAppConstMeta,
+        constMeta: kCrateApiQuickSettingsWhoamiGetUserInfoConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiMiscInitAppConstMeta => const TaskConstMeta(
-    debugName: 'init_app',
-    argNames: [],
-  );
+  TaskConstMeta get kCrateApiQuickSettingsWhoamiGetUserInfoConstMeta =>
+      const TaskConstMeta(
+        debugName: 'get_user_info',
+        argNames: [],
+      );
+
+  @override
+  Stream<List<BacklightInfo>>
+  crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent() {
+    final sink = RustStreamSink<List<BacklightInfo>>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_StreamSink_list_backlight_info_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 4,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta:
+              kCrateApiQuickSettingsDisplayBrightnessWatchBacklightEventConstMeta,
+          argValues: [sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsDisplayBrightnessWatchBacklightEventConstMeta =>
+      const TaskConstMeta(
+        debugName: 'watch_backlight_event',
+        argNames: ['sink'],
+      );
+
+  @override
+  Stream<List<BacklightInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent() {
+    final sink = RustStreamSink<List<BacklightInfo>>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_StreamSink_list_backlight_info_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 5,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta: kCrateApiQuickSettingsBatteryWatchBatteryEventConstMeta,
+          argValues: [sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiQuickSettingsBatteryWatchBatteryEventConstMeta =>
+      const TaskConstMeta(
+        debugName: 'watch_battery_event',
+        argNames: ['sink'],
+      );
+
+  @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return AnyhowException(raw as String);
+  }
+
+  @protected
+  RustStreamSink<List<BacklightInfo>>
+  dco_decode_StreamSink_list_backlight_info_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  String dco_decode_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as String;
+  }
+
+  @protected
+  BacklightInfo dco_decode_backlight_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return BacklightInfo(
+      name: dco_decode_String(arr[0]),
+      brightness: dco_decode_u_16(arr[1]),
+      maxBrightness: dco_decode_u_16(arr[2]),
+    );
+  }
 
   @protected
   DispInfo dco_decode_disp_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return DispInfo(
-      widthPx: dco_decode_u_32(arr[0]),
-      heightPx: dco_decode_u_32(arr[1]),
+      name: dco_decode_String(arr[0]),
+      widthPx: dco_decode_u_32(arr[1]),
+      heightPx: dco_decode_u_32(arr[2]),
     );
   }
 
   @protected
+  List<BacklightInfo> dco_decode_list_backlight_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_backlight_info).toList();
+  }
+
+  @protected
+  Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as Uint8List;
+  }
+
+  @protected
+  int dco_decode_u_16(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
   int dco_decode_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  int dco_decode_u_8(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
   }
@@ -173,11 +352,90 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  UserInfo dco_decode_user_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return UserInfo(
+      fullname: dco_decode_String(arr[0]),
+      username: dco_decode_String(arr[1]),
+      hostname: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_String(deserializer);
+    return AnyhowException(inner);
+  }
+
+  @protected
+  RustStreamSink<List<BacklightInfo>>
+  sse_decode_StreamSink_list_backlight_info_Sse(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
+  String sse_decode_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_list_prim_u_8_strict(deserializer);
+    return utf8.decoder.convert(inner);
+  }
+
+  @protected
+  BacklightInfo sse_decode_backlight_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_name = sse_decode_String(deserializer);
+    final var_brightness = sse_decode_u_16(deserializer);
+    final var_maxBrightness = sse_decode_u_16(deserializer);
+    return BacklightInfo(
+      name: var_name,
+      brightness: var_brightness,
+      maxBrightness: var_maxBrightness,
+    );
+  }
+
+  @protected
   DispInfo sse_decode_disp_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_name = sse_decode_String(deserializer);
     final var_widthPx = sse_decode_u_32(deserializer);
     final var_heightPx = sse_decode_u_32(deserializer);
-    return DispInfo(widthPx: var_widthPx, heightPx: var_heightPx);
+    return DispInfo(
+      name: var_name,
+      widthPx: var_widthPx,
+      heightPx: var_heightPx,
+    );
+  }
+
+  @protected
+  List<BacklightInfo> sse_decode_list_backlight_info(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <BacklightInfo>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_backlight_info(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  int sse_decode_u_16(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint16();
   }
 
   @protected
@@ -187,8 +445,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  int sse_decode_u_8(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8();
+  }
+
+  @protected
   void sse_decode_unit(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  UserInfo sse_decode_user_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_fullname = sse_decode_String(deserializer);
+    final var_username = sse_decode_String(deserializer);
+    final var_hostname = sse_decode_String(deserializer);
+    return UserInfo(
+      fullname: var_fullname,
+      username: var_username,
+      hostname: var_hostname,
+    );
   }
 
   @protected
@@ -204,10 +481,79 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_AnyhowException(
+    AnyhowException self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.message, serializer);
+  }
+
+  @protected
+  void sse_encode_StreamSink_list_backlight_info_Sse(
+    RustStreamSink<List<BacklightInfo>> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_backlight_info,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
+      serializer,
+    );
+  }
+
+  @protected
+  void sse_encode_String(String self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_backlight_info(BacklightInfo self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.name, serializer);
+    sse_encode_u_16(self.brightness, serializer);
+    sse_encode_u_16(self.maxBrightness, serializer);
+  }
+
+  @protected
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.name, serializer);
     sse_encode_u_32(self.widthPx, serializer);
     sse_encode_u_32(self.heightPx, serializer);
+  }
+
+  @protected
+  void sse_encode_list_backlight_info(
+    List<BacklightInfo> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_backlight_info(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_prim_u_8_strict(
+    Uint8List self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_u_16(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint16(self);
   }
 
   @protected
@@ -217,8 +563,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_u_8(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self);
+  }
+
+  @protected
   void sse_encode_unit(void self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  void sse_encode_user_info(UserInfo self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.fullname, serializer);
+    sse_encode_String(self.username, serializer);
+    sse_encode_String(self.hostname, serializer);
   }
 
   @protected

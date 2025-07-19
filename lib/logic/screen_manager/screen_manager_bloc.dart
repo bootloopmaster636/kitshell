@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kitshell/etc/config.dart';
-import 'package:kitshell/etc/panel_enum.dart';
+import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
@@ -48,13 +48,29 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     // Set exclusive mode to only bottom panel
     await layerShellManager.setExclusiveZone(panelDefaultHeightPx);
 
-    emit(const ScreenManagerStateLoaded(isPopupShown: false));
+    emit(
+      const ScreenManagerStateLoaded(
+        isPopupShown: false,
+        popupShown: PopupWidget.appMenu,
+        position: WidgetPosition.center,
+      ),
+    );
   }
 
   Future<void> _onOpenPopup(
     ScreenManagerEventOpenPopup event,
     Emitter<ScreenManagerState> emit,
   ) async {
+    if (state is! ScreenManagerStateLoaded) return;
+    final loadedState = state as ScreenManagerStateLoaded;
+
+    // Close panel if user clicked on the same component/widget, then return
+    if (loadedState.popupShown == event.popupToShow &&
+        loadedState.isPopupShown) {
+      add(const ScreenManagerEventClosePopup());
+      return;
+    }
+
     // Get display resolution info
     final displayInfo = getPrimaryDisplaySize();
     await layerShellManager.initialize(
@@ -74,15 +90,14 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     ScreenManagerEventClosePopup event,
     Emitter<ScreenManagerState> emit,
   ) async {
+    if (state is! ScreenManagerStateLoaded) return;
+
     // Get display resolution info
     final displayInfo = getPrimaryDisplaySize();
 
     // Do closing animation and etc
-    emit(
-      const ScreenManagerStateLoaded(
-        isPopupShown: false,
-      ),
-    );
+    final loadedState = state as ScreenManagerStateLoaded;
+    emit(loadedState.copyWith(isPopupShown: false));
     await Future<void>.delayed(popupOpenCloseDuration);
 
     // Reset layer state
