@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
-import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart';

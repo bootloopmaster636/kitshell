@@ -13,6 +13,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart'
     as _i797;
+import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart'
+    as _i917;
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart'
     as _i993;
 import 'package:kitshell/logic/panel_components/quick_settings/qs_routing/qs_routing_cubit.dart'
@@ -33,6 +35,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
     gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
     gh.singleton<_i652.QsRoutingCubit>(() => _i652.QsRoutingCubit());
+    gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
     return this;
   }
 }

@@ -15,6 +15,8 @@ notify = "8.1.0"
 display-info = "0.5.4"
 brightness = "0.5.0"
 whoami = "=1.6.0"
+battery = "0.7.8"
+chrono = "0.4.41"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

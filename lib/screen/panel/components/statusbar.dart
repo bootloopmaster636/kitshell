@@ -6,11 +6,13 @@ import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
-import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/math.dart';
 import 'package:kitshell/injectable.dart';
+import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart';
 import 'package:kitshell/screen/panel/panel.dart';
+import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 
 class StatusbarComponent extends HookWidget {
   const StatusbarComponent({super.key});
@@ -20,6 +22,7 @@ class StatusbarComponent extends HookWidget {
     // Initialize qs/statusbar feature watcher
     useEffect(() {
       get<QsBrightnessBloc>().add(const QsBrightnessEventStarted());
+      get<QsBatteryBloc>().add(const QsBatteryEventStarted());
       return () {};
     }, []);
 
@@ -39,6 +42,7 @@ class StatusbarContent extends StatelessWidget {
     return const Row(
       children: [
         BrightnessStatus(),
+        BatteryStatus(),
       ],
     );
   }
@@ -65,20 +69,47 @@ class BrightnessStatus extends StatelessWidget {
           Ic.twotone_brightness_6,
           Ic.twotone_brightness_7,
         ];
-
-        // Get value
         final brightnessValue = getPercent(
           firstBrightness.brightness,
           firstBrightness.maxBrightness,
         );
-        final index = (brightnessValue / 100 * iconList.length)
-            .clamp(0, 6)
-            .toInt();
-        final icon = iconList[index];
 
         return StatusComponent(
-          icon: icon,
+          icon: getIconFromValue(iconList, brightnessValue),
           value: brightnessValue,
+        );
+      },
+    );
+  }
+}
+
+class BatteryStatus extends StatelessWidget {
+  const BatteryStatus({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QsBatteryBloc, QsBatteryState>(
+      bloc: get<QsBatteryBloc>(),
+      builder: (context, state) {
+        if (state is! QsBatteryStateLoaded) return const SizedBox();
+        final firstBattery = state.batteryInfos.first;
+
+        const iconList = [
+          Ic.twotone_battery_0_bar,
+          Ic.twotone_battery_1_bar,
+          Ic.twotone_battery_3_bar,
+          Ic.twotone_battery_4_bar,
+          Ic.twotone_battery_5_bar,
+          Ic.twotone_battery_6_bar,
+          Ic.twotone_battery_std,
+        ];
+
+        return StatusComponent(
+          icon: getIconFromValue(iconList, firstBattery.capacity.toInt()),
+          value: firstBattery.capacity.toInt(),
+          cornerIcon: firstBattery.isCharging == BatteryState.charging
+              ? Ic.round_bolt
+              : null,
         );
       },
     );
@@ -151,10 +182,13 @@ class StatusComponent extends HookWidget {
             if (cornerIcon != null)
               Align(
                 alignment: Alignment.bottomRight,
-                child: Iconify(
-                  cornerIcon!,
-                  color: context.colorScheme.secondary,
-                  size: 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Iconify(
+                    cornerIcon!,
+                    color: context.colorScheme.secondary,
+                    size: 10,
+                  ),
                 ),
               ),
           ],

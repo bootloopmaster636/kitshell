@@ -4,8 +4,51 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-Stream<List<BacklightInfo>> watchBatteryEvent() =>
+// These functions are ignored because they are not marked as `pub`: `get_battery_info`
+
+Stream<List<BatteryInfo>> watchBatteryEvent() =>
     RustLib.instance.api.crateApiQuickSettingsBatteryWatchBatteryEvent();
+
+class BatteryInfo {
+  const BatteryInfo({
+    required this.name,
+    required this.capacity,
+    required this.isCharging,
+    this.timeToFullSecs,
+    this.timeToEmptySecs,
+  });
+  final String name;
+  final double capacity;
+  final BatteryState isCharging;
+  final double? timeToFullSecs;
+  final double? timeToEmptySecs;
+
+  @override
+  int get hashCode =>
+      name.hashCode ^
+      capacity.hashCode ^
+      isCharging.hashCode ^
+      timeToFullSecs.hashCode ^
+      timeToEmptySecs.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatteryInfo &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          capacity == other.capacity &&
+          isCharging == other.isCharging &&
+          timeToFullSecs == other.timeToFullSecs &&
+          timeToEmptySecs == other.timeToEmptySecs;
+}
+
+enum BatteryState {
+  unknown,
+  charging,
+  discharging,
+  empty,
+  full,
+}

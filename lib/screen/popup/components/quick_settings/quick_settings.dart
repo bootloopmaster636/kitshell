@@ -5,14 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
+import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
-import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/math.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
+import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/qs_routing/qs_routing_cubit.dart';
+import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
 
@@ -75,7 +78,10 @@ class QsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [BrightnessSlider()]);
+    return Column(
+      spacing: Gaps.sm.value,
+      children: const [BatteryProgress(), BrightnessSlider()],
+    );
   }
 }
 

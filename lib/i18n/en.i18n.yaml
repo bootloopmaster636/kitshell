@@ -2,7 +2,20 @@ locale: en_US
 appName: Kitshell
 general:
   loading: Loading...
-
+  time:
+    xHours: $hour hour(s)
+    xMins: $min minute(s)
 quickSettings:
   brightness:
     title: Brightness
+  battery:
+    title: Battery
+    status:
+      charging: Charging
+      discharging: Discharging
+      full: Full
+      empty: Empty
+    estimation:
+      remaining: $time remaining
+      timeToFull: Time until fully charged
+      timeToEmpty: Time until battery is empty

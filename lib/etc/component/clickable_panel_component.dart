@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
-import 'package:kitshell/etc/utitity/buildcontext_extension.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
