@@ -7,6 +7,7 @@ import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
+import 'package:kitshell/etc/utitity/hooks/callback_debounce_hook.dart';
 import 'package:kitshell/etc/utitity/math.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart';
@@ -130,11 +131,12 @@ class StatusComponent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    useValueChanged(value, (_, _) async {
-      isHovered.value = true;
-      await Future<void>.delayed(1000.ms);
-      isHovered.value = false;
-    });
+    useCallbackDebounced(
+      duration: 1500.ms,
+      keys: [value ?? 0],
+      onStart: () => isHovered.value = true,
+      onEnd: () => isHovered.value = false,
+    );
 
     return SizedBox(
       height: 32,
