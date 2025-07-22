@@ -171,14 +171,15 @@ class StatusComponent extends HookWidget {
                             value.toString(),
                             style: context.textTheme.labelSmall?.copyWith(
                               fontSize: 8,
+                              fontWeight: FontWeight.bold,
                               color: context.colorScheme.onPrimary,
                             ),
                           ),
                         )
                         .animate(target: isHovered.value ? 1 : 0)
                         .scaleXY(
-                          duration: Durations.short4,
-                          curve: Easing.standard,
+                          duration: Durations.short2,
+                          curve: Easing.standardDecelerate,
                         ),
               ),
             if (cornerIcon != null)
