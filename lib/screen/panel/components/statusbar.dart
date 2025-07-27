@@ -1,3 +1,4 @@
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,9 +109,13 @@ class BatteryStatus extends StatelessWidget {
         return StatusComponent(
           icon: getIconFromValue(iconList, firstBattery.capacity.toInt()),
           value: firstBattery.capacity.toInt(),
-          cornerIcon: firstBattery.isCharging == BatteryState.charging
-              ? Ic.round_bolt
-              : null,
+          cornerIcon: switch (firstBattery.battState) {
+            BatteryState.discharging => null,
+            BatteryState.charging => Ic.round_bolt,
+            BatteryState.empty => Ic.round_sentiment_dissatisfied,
+            BatteryState.full => Ic.round_check,
+            BatteryState.unknown => Ic.round_question_mark,
+          },
         );
       },
     );
@@ -132,7 +137,7 @@ class StatusComponent extends HookWidget {
   Widget build(BuildContext context) {
     final isHovered = useState(false);
     useCallbackDebounced(
-      duration: 1500.ms,
+      duration: 2500.ms,
       keys: [value ?? 0],
       onStart: () => isHovered.value = true,
       onEnd: () => isHovered.value = false,
@@ -157,7 +162,7 @@ class StatusComponent extends HookWidget {
             ),
             if (value != null)
               Align(
-                alignment: Alignment.topRight,
+                alignment: Alignment.topLeft,
                 child:
                     Container(
                           width: 16,
@@ -167,13 +172,15 @@ class StatusComponent extends HookWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           alignment: Alignment.center,
-                          child: Text(
-                            value.toString(),
-                            style: context.textTheme.labelSmall?.copyWith(
+                          child: AnimatedFlipCounter(
+                            value: value ?? 0,
+                            textStyle: context.textTheme.labelMedium?.copyWith(
                               fontSize: 8,
                               fontWeight: FontWeight.bold,
                               color: context.colorScheme.onPrimary,
                             ),
+                            duration: Durations.short2,
+                            curve: Easing.standard,
                           ),
                         )
                         .animate(target: isHovered.value ? 1 : 0)

@@ -58,7 +58,7 @@ class BatteryProgress extends StatelessWidget {
 
             return QsProgressBarComponent(
               title: t.quickSettings.battery.title,
-              subtitle: switch (info.isCharging) {
+              subtitle: switch (info.battState) {
                 BatteryState.unknown => '',
                 BatteryState.charging =>
                   '${t.quickSettings.battery.status.charging} '

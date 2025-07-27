@@ -319,7 +319,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return BatteryInfo(
       name: dco_decode_String(arr[0]),
       capacity: dco_decode_f_32(arr[1]),
-      isCharging: dco_decode_battery_state(arr[2]),
+      battState: dco_decode_battery_state(arr[2]),
       timeToFullSecs: dco_decode_opt_box_autoadd_f_32(arr[3]),
       timeToEmptySecs: dco_decode_opt_box_autoadd_f_32(arr[4]),
     );
@@ -470,13 +470,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_name = sse_decode_String(deserializer);
     final var_capacity = sse_decode_f_32(deserializer);
-    final var_isCharging = sse_decode_battery_state(deserializer);
+    final var_battState = sse_decode_battery_state(deserializer);
     final var_timeToFullSecs = sse_decode_opt_box_autoadd_f_32(deserializer);
     final var_timeToEmptySecs = sse_decode_opt_box_autoadd_f_32(deserializer);
     return BatteryInfo(
       name: var_name,
       capacity: var_capacity,
-      isCharging: var_isCharging,
+      battState: var_battState,
       timeToFullSecs: var_timeToFullSecs,
       timeToEmptySecs: var_timeToEmptySecs,
     );
@@ -668,7 +668,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
     sse_encode_f_32(self.capacity, serializer);
-    sse_encode_battery_state(self.isCharging, serializer);
+    sse_encode_battery_state(self.battState, serializer);
     sse_encode_opt_box_autoadd_f_32(self.timeToFullSecs, serializer);
     sse_encode_opt_box_autoadd_f_32(self.timeToEmptySecs, serializer);
   }

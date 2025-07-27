@@ -4,14 +4,13 @@ use battery::{
     units::{ratio::percent, time::second},
     State,
 };
-use chrono::Duration;
 use notify::{Config, PollWatcher, RecursiveMode, Watcher};
 use std::{fs::read_dir, path::Path, time::Duration as StdDuration};
 
 pub struct BatteryInfo {
     pub name: String,
     pub capacity: f32,
-    pub is_charging: BatteryState,
+    pub batt_state: BatteryState,
     pub time_to_full_secs: Option<f32>,
     pub time_to_empty_secs: Option<f32>,
 }
@@ -84,7 +83,7 @@ fn get_battery_info() -> Result<Vec<BatteryInfo>, Error> {
         batteries.push(BatteryInfo {
             name: bat.model().unwrap_or("").to_string(),
             capacity: bat.state_of_charge().get::<percent>(),
-            is_charging: match bat.state() {
+            batt_state: match bat.state() {
                 State::Unknown => BatteryState::Unknown,
                 State::Charging => BatteryState::Charging,
                 State::Discharging => BatteryState::Discharging,

@@ -294,14 +294,14 @@ impl SseDecode for crate::api::quick_settings::battery::BatteryInfo {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_name = <String>::sse_decode(deserializer);
         let mut var_capacity = <f32>::sse_decode(deserializer);
-        let mut var_isCharging =
+        let mut var_battState =
             <crate::api::quick_settings::battery::BatteryState>::sse_decode(deserializer);
         let mut var_timeToFullSecs = <Option<f32>>::sse_decode(deserializer);
         let mut var_timeToEmptySecs = <Option<f32>>::sse_decode(deserializer);
         return crate::api::quick_settings::battery::BatteryInfo {
             name: var_name,
             capacity: var_capacity,
-            is_charging: var_isCharging,
+            batt_state: var_battState,
             time_to_full_secs: var_timeToFullSecs,
             time_to_empty_secs: var_timeToEmptySecs,
         };
@@ -536,7 +536,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::battery::Batt
         [
             self.name.into_into_dart().into_dart(),
             self.capacity.into_into_dart().into_dart(),
-            self.is_charging.into_into_dart().into_dart(),
+            self.batt_state.into_into_dart().into_dart(),
             self.time_to_full_secs.into_into_dart().into_dart(),
             self.time_to_empty_secs.into_into_dart().into_dart(),
         ]
@@ -676,7 +676,7 @@ impl SseEncode for crate::api::quick_settings::battery::BatteryInfo {
         <String>::sse_encode(self.name, serializer);
         <f32>::sse_encode(self.capacity, serializer);
         <crate::api::quick_settings::battery::BatteryState>::sse_encode(
-            self.is_charging,
+            self.batt_state,
             serializer,
         );
         <Option<f32>>::sse_encode(self.time_to_full_secs, serializer);

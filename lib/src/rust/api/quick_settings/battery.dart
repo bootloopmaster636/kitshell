@@ -15,13 +15,13 @@ class BatteryInfo {
   const BatteryInfo({
     required this.name,
     required this.capacity,
-    required this.isCharging,
+    required this.battState,
     this.timeToFullSecs,
     this.timeToEmptySecs,
   });
   final String name;
   final double capacity;
-  final BatteryState isCharging;
+  final BatteryState battState;
   final double? timeToFullSecs;
   final double? timeToEmptySecs;
 
@@ -29,7 +29,7 @@ class BatteryInfo {
   int get hashCode =>
       name.hashCode ^
       capacity.hashCode ^
-      isCharging.hashCode ^
+      battState.hashCode ^
       timeToFullSecs.hashCode ^
       timeToEmptySecs.hashCode;
 
@@ -40,7 +40,7 @@ class BatteryInfo {
           runtimeType == other.runtimeType &&
           name == other.name &&
           capacity == other.capacity &&
-          isCharging == other.isCharging &&
+          battState == other.battState &&
           timeToFullSecs == other.timeToFullSecs &&
           timeToEmptySecs == other.timeToEmptySecs;
 }
