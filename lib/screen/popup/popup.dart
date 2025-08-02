@@ -61,12 +61,14 @@ class PopupContent extends StatelessWidget {
                 ),
               ),
             )
-            .animate(target: state.isPopupShown ? 1 : 0)
+            .animate(
+              target: state.isPopupShown ? 1 : 0,
+            )
             .slideY(
               begin: 0.2,
               end: 0,
               duration: popupOpenCloseDuration,
-              curve: Curves.easeOutQuart,
+              curve: Easing.standard,
             )
             .fade(
               begin: 0,
