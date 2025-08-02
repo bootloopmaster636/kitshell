@@ -14,7 +14,7 @@ class MainPanel extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: ColoredBox(
-        color: context.colorScheme.surface.withValues(alpha: 0.9),
+        color: context.colorScheme.surface.withValues(alpha: 0.6),
         child: BlocBuilder<PanelManagerBloc, PanelManagerState>(
           bloc: get<PanelManagerBloc>(),
           builder: (context, state) {

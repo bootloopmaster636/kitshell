@@ -9,6 +9,7 @@ import 'dart:ffi' as ffi;
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
+import 'package:kitshell/src/rust/api/notifications.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
@@ -26,11 +27,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException dco_decode_AnyhowException(dynamic raw);
 
   @protected
+  DateTime dco_decode_Chrono_Local(dynamic raw);
+
+  @protected
+  Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
+
+  @protected
   RustStreamSink<List<BacklightInfo>>
   dco_decode_StreamSink_list_backlight_info_Sse(dynamic raw);
 
   @protected
   RustStreamSink<List<BatteryInfo>> dco_decode_StreamSink_list_battery_info_Sse(
+    dynamic raw,
+  );
+
+  @protected
+  RustStreamSink<NotificationData> dco_decode_StreamSink_notification_data_Sse(
     dynamic raw,
   );
 
@@ -59,6 +71,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_i_32(dynamic raw);
 
   @protected
+  PlatformInt64 dco_decode_i_64(dynamic raw);
+
+  @protected
+  List<String> dco_decode_list_String(dynamic raw);
+
+  @protected
   List<BacklightInfo> dco_decode_list_backlight_info(dynamic raw);
 
   @protected
@@ -68,7 +86,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  List<(String, String)> dco_decode_list_record_string_string(dynamic raw);
+
+  @protected
+  NotificationData dco_decode_notification_data(dynamic raw);
+
+  @protected
   double? dco_decode_opt_box_autoadd_f_32(dynamic raw);
+
+  @protected
+  (String, String) dco_decode_record_string_string(dynamic raw);
 
   @protected
   int dco_decode_u_16(dynamic raw);
@@ -89,11 +116,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
+  DateTime sse_decode_Chrono_Local(SseDeserializer deserializer);
+
+  @protected
+  Map<String, String> sse_decode_Map_String_String_None(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   RustStreamSink<List<BacklightInfo>>
   sse_decode_StreamSink_list_backlight_info_Sse(SseDeserializer deserializer);
 
   @protected
   RustStreamSink<List<BatteryInfo>> sse_decode_StreamSink_list_battery_info_Sse(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  RustStreamSink<NotificationData> sse_decode_StreamSink_notification_data_Sse(
     SseDeserializer deserializer,
   );
 
@@ -122,6 +162,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
+  PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
+
+  @protected
+  List<String> sse_decode_list_String(SseDeserializer deserializer);
+
+  @protected
   List<BacklightInfo> sse_decode_list_backlight_info(
     SseDeserializer deserializer,
   );
@@ -133,7 +179,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  List<(String, String)> sse_decode_list_record_string_string(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  NotificationData sse_decode_notification_data(SseDeserializer deserializer);
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_32(SseDeserializer deserializer);
+
+  @protected
+  (String, String) sse_decode_record_string_string(
+    SseDeserializer deserializer,
+  );
 
   @protected
   int sse_decode_u_16(SseDeserializer deserializer);
@@ -160,6 +219,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_Chrono_Local(DateTime self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_String_None(
+    Map<String, String> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_StreamSink_list_backlight_info_Sse(
     RustStreamSink<List<BacklightInfo>> self,
     SseSerializer serializer,
@@ -168,6 +236,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_StreamSink_list_battery_info_Sse(
     RustStreamSink<List<BatteryInfo>> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_notification_data_Sse(
+    RustStreamSink<NotificationData> self,
     SseSerializer serializer,
   );
 
@@ -196,6 +270,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_i_32(int self, SseSerializer serializer);
 
   @protected
+  void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_String(List<String> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_backlight_info(
     List<BacklightInfo> self,
     SseSerializer serializer,
@@ -214,7 +294,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_record_string_string(
+    List<(String, String)> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_notification_data(
+    NotificationData self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_opt_box_autoadd_f_32(double? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_string(
+    (String, String) self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_u_16(int self, SseSerializer serializer);

@@ -29,11 +29,11 @@ dependencies:
   iconify_flutter_plus: ^1.0.4
   gap: ^3.0.1
   intl: ^0.20.2
-  table_calendar: ^3.2.0
   logger: ^2.6.0
   animated_switcher_plus: ^1.1.1
   google_fonts: ^6.2.1
-
+  flutter_html: ^3.0.0
+  diffutil_dart: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

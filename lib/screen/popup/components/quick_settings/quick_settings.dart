@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
+import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/math.dart';
@@ -32,7 +33,9 @@ class QuickSettingsPopup extends StatelessWidget {
           width: 380,
           height: 520,
           decoration: BoxDecoration(
-            color: context.colorScheme.surfaceContainer.withValues(alpha: 0.9),
+            color: context.colorScheme.surfaceContainer.withValues(
+              alpha: popupBgOpacity,
+            ),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: context.colorScheme.outlineVariant),
           ),
@@ -62,7 +65,20 @@ class QuickSettingsMainScreen extends StatelessWidget {
 
         Flexible(
           child: Container(
-            decoration: BoxDecoration(color: context.colorScheme.surface),
+            decoration: BoxDecoration(
+              color: context.colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: context.colorScheme.shadow.withValues(alpha: 0.2),
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
             padding: const EdgeInsets.all(8),
             child: const QsContent(),
           ),

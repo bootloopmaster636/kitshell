@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1164867149;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1578948583;
 
 // Section: executor
 
@@ -79,6 +79,43 @@ fn wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
                             )
                             .await;
                         })?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__notifications__dismiss_notification_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dismiss_notification",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_id = <u32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::notifications::dismiss_notification(api_id).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -230,6 +267,46 @@ fn wire__crate__api__quick_settings__battery__watch_battery_event_impl(
         },
     )
 }
+fn wire__crate__api__notifications__watch_notification_bus_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "watch_notification_bus",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                crate::api::notifications::NotificationData,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::notifications::watch_notification_bus(api_sink).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 
 // Section: dart2rust
 
@@ -238,6 +315,29 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <String>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::anyhow::anyhow!("{}", inner);
+    }
+}
+
+impl SseDecode for chrono::DateTime<chrono::Local> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i64>::sse_decode(deserializer);
+        return chrono::DateTime::<chrono::Local>::from(
+            chrono::DateTime::<chrono::Utc>::from_naive_utc_and_offset(
+                chrono::DateTime::from_timestamp_micros(inner)
+                    .expect("invalid or out-of-range datetime")
+                    .naive_utc(),
+                chrono::Utc,
+            ),
+        );
+    }
+}
+
+impl SseDecode for std::collections::HashMap<String, String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <Vec<(String, String)>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
     }
 }
 
@@ -257,6 +357,19 @@ impl SseDecode
 impl SseDecode
     for StreamSink<
         Vec<crate::api::quick_settings::battery::BatteryInfo>,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
+    }
+}
+
+impl SseDecode
+    for StreamSink<
+        crate::api::notifications::NotificationData,
         flutter_rust_bridge::for_generated::SseCodec,
     >
 {
@@ -351,6 +464,25 @@ impl SseDecode for i32 {
     }
 }
 
+impl SseDecode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i64::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for Vec<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<String>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::api::quick_settings::display_brightness::BacklightInfo> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -391,6 +523,46 @@ impl SseDecode for Vec<u8> {
     }
 }
 
+impl SseDecode for Vec<(String, String)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<(String, String)>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for crate::api::notifications::NotificationData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <u32>::sse_decode(deserializer);
+        let mut var_appName = <String>::sse_decode(deserializer);
+        let mut var_replacesId = <u32>::sse_decode(deserializer);
+        let mut var_appIcon = <String>::sse_decode(deserializer);
+        let mut var_summary = <String>::sse_decode(deserializer);
+        let mut var_body = <String>::sse_decode(deserializer);
+        let mut var_actions = <Vec<String>>::sse_decode(deserializer);
+        let mut var_expireTimeout = <i32>::sse_decode(deserializer);
+        let mut var_hints = <std::collections::HashMap<String, String>>::sse_decode(deserializer);
+        let mut var_addedAt = <chrono::DateTime<chrono::Local>>::sse_decode(deserializer);
+        return crate::api::notifications::NotificationData {
+            id: var_id,
+            app_name: var_appName,
+            replaces_id: var_replacesId,
+            app_icon: var_appIcon,
+            summary: var_summary,
+            body: var_body,
+            actions: var_actions,
+            expire_timeout: var_expireTimeout,
+            hints: var_hints,
+            added_at: var_addedAt,
+        };
+    }
+}
+
 impl SseDecode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -399,6 +571,15 @@ impl SseDecode for Option<f32> {
         } else {
             return None;
         }
+    }
+}
+
+impl SseDecode for (String, String) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <String>::sse_decode(deserializer);
+        return (var_field0, var_field1);
     }
 }
 
@@ -464,19 +645,31 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
+        2 => wire__crate__api__notifications__dismiss_notification_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        4 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        5 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        5 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        6 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        7 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -494,7 +687,7 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        2 => wire__crate__api__display_info__get_primary_display_size_impl(
+        3 => wire__crate__api__display_info__get_primary_display_size_impl(
             ptr,
             rust_vec_len,
             data_len,
@@ -601,6 +794,35 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::display_info::DispInfo>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::notifications::NotificationData {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.app_name.into_into_dart().into_dart(),
+            self.replaces_id.into_into_dart().into_dart(),
+            self.app_icon.into_into_dart().into_dart(),
+            self.summary.into_into_dart().into_dart(),
+            self.body.into_into_dart().into_dart(),
+            self.actions.into_into_dart().into_dart(),
+            self.expire_timeout.into_into_dart().into_dart(),
+            self.hints.into_into_dart().into_dart(),
+            self.added_at.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::notifications::NotificationData
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::notifications::NotificationData>
+    for crate::api::notifications::NotificationData
+{
+    fn into_into_dart(self) -> crate::api::notifications::NotificationData {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::whoami::UserInfo {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -630,6 +852,20 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
+impl SseEncode for chrono::DateTime<chrono::Local> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i64>::sse_encode(self.timestamp_micros(), serializer);
+    }
+}
+
+impl SseEncode for std::collections::HashMap<String, String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(String, String)>>::sse_encode(self.into_iter().collect(), serializer);
+    }
+}
+
 impl SseEncode
     for StreamSink<
         Vec<crate::api::quick_settings::display_brightness::BacklightInfo>,
@@ -645,6 +881,18 @@ impl SseEncode
 impl SseEncode
     for StreamSink<
         Vec<crate::api::quick_settings::battery::BatteryInfo>,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
+    }
+}
+
+impl SseEncode
+    for StreamSink<
+        crate::api::notifications::NotificationData,
         flutter_rust_bridge::for_generated::SseCodec,
     >
 {
@@ -726,6 +974,23 @@ impl SseEncode for i32 {
     }
 }
 
+impl SseEncode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for Vec<String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <String>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::api::quick_settings::display_brightness::BacklightInfo> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -758,6 +1023,32 @@ impl SseEncode for Vec<u8> {
     }
 }
 
+impl SseEncode for Vec<(String, String)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(String, String)>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for crate::api::notifications::NotificationData {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <u32>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.app_name, serializer);
+        <u32>::sse_encode(self.replaces_id, serializer);
+        <String>::sse_encode(self.app_icon, serializer);
+        <String>::sse_encode(self.summary, serializer);
+        <String>::sse_encode(self.body, serializer);
+        <Vec<String>>::sse_encode(self.actions, serializer);
+        <i32>::sse_encode(self.expire_timeout, serializer);
+        <std::collections::HashMap<String, String>>::sse_encode(self.hints, serializer);
+        <chrono::DateTime<chrono::Local>>::sse_encode(self.added_at, serializer);
+    }
+}
+
 impl SseEncode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -765,6 +1056,14 @@ impl SseEncode for Option<f32> {
         if let Some(value) = self {
             <f32>::sse_encode(value, serializer);
         }
+    }
+}
+
+impl SseEncode for (String, String) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <String>::sse_encode(self.1, serializer);
     }
 }
 

@@ -58,6 +58,7 @@ ThemeData lightTheme = ThemeData(
     year2023: false,
     padding: EdgeInsets.zero,
   ),
+  splashFactory: InkSparkle.splashFactory,
 );
 
 ThemeData darkTheme = ThemeData(
@@ -69,4 +70,5 @@ ThemeData darkTheme = ThemeData(
     year2023: false,
     padding: EdgeInsets.zero,
   ),
+  splashFactory: InkSparkle.splashFactory,
 );

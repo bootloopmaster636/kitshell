@@ -5,6 +5,14 @@ general:
   time:
     xHours: $hour hour(s)
     xMins: $min minute(s)
+    short:
+      now: now
+      xMins: ${min}m
+      xHours: ${hour}h
+      xDays: ${day}d
+dateTimeNotif:
+  notification:
+    noNotification: No notifications
 quickSettings:
   brightness:
     title: Brightness

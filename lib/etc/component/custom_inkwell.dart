@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 /// Custom inkwell component to simplify creating custom button
@@ -11,10 +12,13 @@ class CustomInkwell extends StatelessWidget {
     this.onTapUp,
     this.onTapDown,
     this.onTapCancel,
+    this.onPointerEnter,
+    this.onPointerExit,
     this.onHover,
     this.padding,
     this.height,
     this.width,
+    this.hoverColor,
     super.key,
   });
 
@@ -24,11 +28,14 @@ class CustomInkwell extends StatelessWidget {
   final void Function(TapDownDetails)? onTapDown;
   final void Function(bool)? onHover;
   final VoidCallback? onTapCancel;
+  final void Function(PointerEnterEvent)? onPointerEnter;
+  final void Function(PointerExitEvent)? onPointerExit;
   final BoxDecoration? decoration;
   final EdgeInsets? padding;
   final Widget child;
   final double? height;
   final double? width;
+  final Color? hoverColor;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +48,21 @@ class CustomInkwell extends StatelessWidget {
           width: width,
           height: height,
           decoration: decoration,
-          child: InkWell(
-            onTap: onTap?.call,
-            onLongPress: onLongPress?.call,
-            onTapUp: onTapUp?.call,
-            onTapDown: onTapDown?.call,
-            onTapCancel: onTapCancel?.call,
-            onHover: onHover?.call,
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(8),
-              child: child,
+          child: MouseRegion(
+            onEnter: onPointerEnter?.call,
+            onExit: onPointerExit?.call,
+            child: InkWell(
+              onTap: onTap?.call,
+              onLongPress: onLongPress?.call,
+              onTapUp: onTapUp?.call,
+              onTapDown: onTapDown?.call,
+              onTapCancel: onTapCancel?.call,
+              onHover: onHover?.call,
+              hoverColor: hoverColor,
+              child: Padding(
+                padding: padding ?? const EdgeInsets.all(8),
+                child: child,
+              ),
             ),
           ),
         ),

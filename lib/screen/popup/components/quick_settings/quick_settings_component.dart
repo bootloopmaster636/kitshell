@@ -139,20 +139,16 @@ class QsSliderComponent extends HookWidget {
     return MouseRegion(
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
-      child: AnimatedContainer(
-        duration: Durations.short2,
+      child: Container(
         decoration: BoxDecoration(
-          color: isHovered.value
-              ? context.colorScheme.surfaceContainerLowest
-              : context.colorScheme.surface,
+          color: context.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
-            if (isHovered.value)
-              BoxShadow(
-                color: context.colorScheme.shadow.withValues(alpha: 0.2),
-                blurRadius: 2,
-                offset: const Offset(0, 1),
-              ),
+            BoxShadow(
+              color: context.colorScheme.shadow.withValues(alpha: 0.1),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
           ],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -223,20 +219,16 @@ class QsProgressBarComponent extends HookWidget {
     return MouseRegion(
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
-      child: AnimatedContainer(
-        duration: Durations.short2,
+      child: Container(
         decoration: BoxDecoration(
-          color: isHovered.value
-              ? context.colorScheme.surfaceContainerLowest
-              : context.colorScheme.surface,
+          color: context.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
-            if (isHovered.value)
-              BoxShadow(
-                color: context.colorScheme.shadow.withValues(alpha: 0.2),
-                blurRadius: 2,
-                offset: const Offset(0, 1),
-              ),
+            BoxShadow(
+              color: context.colorScheme.shadow.withValues(alpha: 0.1),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
           ],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
