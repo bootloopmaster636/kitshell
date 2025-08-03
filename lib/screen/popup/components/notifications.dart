@@ -12,7 +12,6 @@ import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/hooks/periodic_hooks.dart';
-import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart';
@@ -99,6 +98,7 @@ class NotificationContent extends HookWidget {
             insert: (int position, int count) {
               listKey.value.currentState?.insertItem(
                 position,
+                duration: Durations.long1,
               );
             },
             remove: (int position, int count) {
@@ -106,6 +106,7 @@ class NotificationContent extends HookWidget {
                 position,
                 (context, animation) =>
                     listBuilder(context, position, animation, items.value),
+                duration: Durations.long1,
               );
             },
             change: (int position, Object? payload) {},
@@ -156,7 +157,7 @@ class NotificationContent extends HookWidget {
     if (items.isEmpty) return const SizedBox.shrink();
     return SizeTransition(
       sizeFactor: animation.drive(
-        CurveTween(curve: Curves.easeInOutQuart),
+        CurveTween(curve: Curves.easeInOutCubic),
       ),
       axisAlignment: -1,
       child: Padding(
@@ -234,25 +235,22 @@ class NotificationTile extends HookWidget {
               ),
               const Spacer(),
               SizedBox.square(
-                    dimension: 20,
-                    child: IconButton(
-                      icon: Iconify(
-                        Ic.round_close,
-                        size: 12,
-                        color: context.colorScheme.onSurface,
-                      ),
-                      style: IconButton.styleFrom(
-                        backgroundColor:
-                            context.colorScheme.surfaceContainerHigh,
-                      ),
-                      padding: EdgeInsets.zero,
-                      onPressed: () => get<NotificationBloc>().add(
-                        NotificationEventClosed(data.id),
-                      ),
-                    ),
-                  )
-                  .animate(target: isExpanded.value ? 1 : 0)
-                  .fade(begin: 0.2, end: 1, duration: Durations.medium1),
+                dimension: 20,
+                child: IconButton(
+                  icon: Iconify(
+                    Ic.round_close,
+                    size: 12,
+                    color: context.colorScheme.onSurface,
+                  ),
+                  style: IconButton.styleFrom(
+                    backgroundColor: context.colorScheme.surfaceContainerHigh,
+                  ),
+                  padding: EdgeInsets.zero,
+                  onPressed: () => get<NotificationBloc>().add(
+                    NotificationEventClosed(data.id),
+                  ),
+                ),
+              ),
             ],
           ),
 
@@ -273,26 +271,22 @@ class NotificationTile extends HookWidget {
           ),
 
           // Content
-          AnimatedCrossFade(
-            duration: Durations.medium1,
-            sizeCurve: Easing.standard,
-            alignment: Alignment.topLeft,
-            crossFadeState: isExpanded.value
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            firstChild: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Html(
-                  data: data.body,
-                ),
-              ),
-            ),
-            secondChild: const SizedBox(width: double.infinity, height: 0),
+          AnimatedSize(
+            duration: Durations.medium2,
+            curve: Curves.easeInOutCubic,
+            alignment: Alignment.topCenter,
+            child: isExpanded.value
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Html(data: data.body),
+                    ),
+                  )
+                : const SizedBox(width: double.infinity, height: 0),
           ),
         ],
       ),

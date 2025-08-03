@@ -112,6 +112,7 @@ pub async fn watch_notification_bus(sink: StreamSink<NotificationData>) -> Resul
     Ok(())
 }
 
+#[deprecated]
 pub async fn dismiss_notification(id: u32) -> Result<(), Error> {
     // Connect to the D-Bus session
     let connection = zbus::Connection::session().await?;

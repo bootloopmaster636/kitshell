@@ -20,7 +20,7 @@ class MainPanel extends StatelessWidget {
           builder: (context, state) {
             if (state is! PanelManagerStateLoaded) return const SizedBox();
             return Padding(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Stack(
                 fit: StackFit.expand,
                 children: [

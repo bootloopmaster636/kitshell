@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/hooks/callback_debounce_hook.dart';
@@ -28,10 +29,25 @@ class ClockComponent extends HookWidget {
     }, []);
 
     return ClickablePanelComponent(
-      content: const Row(
+      content: Stack(
         children: [
-          NotificationDataSource(),
-          DateTimeComponent(),
+          // Date time and notif count
+          const Row(
+            children: [
+              NotificationCount(),
+              DateTimeComponent(),
+            ],
+          ),
+
+          // Notif toast
+          Align(
+            alignment: switch (InheritedAlignment.of(context).position) {
+              WidgetPosition.left => Alignment.centerLeft,
+              WidgetPosition.center => Alignment.center,
+              WidgetPosition.right => Alignment.centerRight,
+            },
+            child: const NotificationOverlay(),
+          ),
         ],
       ),
       popupPosition: InheritedAlignment.of(context).position,
@@ -40,8 +56,8 @@ class ClockComponent extends HookWidget {
   }
 }
 
-class NotificationDataSource extends StatelessWidget {
-  const NotificationDataSource({super.key});
+class NotificationCount extends StatelessWidget {
+  const NotificationCount({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,104 +66,136 @@ class NotificationDataSource extends StatelessWidget {
       builder: (context, state) {
         if (state is! NotificationStateLoaded) return const SizedBox.shrink();
         if (state.notifications.isEmpty) return const SizedBox.shrink();
+
         return Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: NotificationComponent(notificationState: state),
+          padding: EdgeInsets.only(right: Gaps.sm.value),
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.colorScheme.primary,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            child: Text(
+              state.notifications.length.toString(),
+              style: context.textTheme.labelMedium?.copyWith(
+                color: context.colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         );
       },
     );
   }
 }
 
-class NotificationComponent extends HookWidget {
-  const NotificationComponent({required this.notificationState, super.key});
-  final NotificationStateLoaded notificationState;
+class NotificationOverlay extends HookWidget {
+  const NotificationOverlay({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isExpanded = useState(false);
+    final isShown = useState(false);
+    final count = useState(0);
+
     useCallbackDebounced(
-      duration: 3.seconds,
-      onStart: () => isExpanded.value = true,
-      onEnd: () => isExpanded.value = false,
-      keys: [notificationState.notifications.length],
+      duration: notificationToastDuration + Durations.medium1,
+      onStart: () => isShown.value = true,
+      onEnd: () => isShown.value = false,
+      keys: [count.value],
     );
 
-    return AnimatedCrossFade(
-      alignment: Alignment.centerLeft,
-      firstChild: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.primary,
-          borderRadius: BorderRadius.circular(999),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        child: Text(
-          notificationState.notifications.length.toString(),
-          style: context.textTheme.labelMedium?.copyWith(
-            color: context.colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      secondChild: NotificationDisplay(
-        data: notificationState.notifications.first,
-      ),
-      crossFadeState: isExpanded.value
-          ? CrossFadeState.showSecond
-          : CrossFadeState.showFirst,
-      duration: Durations.medium3,
-      sizeCurve: Easing.standard,
+    return BlocConsumer<NotificationBloc, NotificationState>(
+      bloc: get<NotificationBloc>(),
+      listenWhen: (old, now) {
+        if (old is! NotificationStateLoaded) return false;
+        if (now is! NotificationStateLoaded) return false;
+
+        // Prevent showing notification overlay when dismissing notif
+        return now.notifications.length > old.notifications.length;
+      },
+      listener: (context, state) {
+        if (state is! NotificationStateLoaded) return;
+        count.value = state.notifications.length;
+      },
+      builder: (context, state) {
+        if (state is! NotificationStateLoaded) return const SizedBox.shrink();
+        if (state.notifications.isEmpty) return const SizedBox.shrink();
+        final notifToShow = state.notifications.first;
+
+        return AnimatedCrossFade(
+          crossFadeState: isShown.value
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild:
+              Container(
+                    constraints: const BoxConstraints(maxWidth: 250),
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainerHigh,
+                      border: Border(
+                        left: BorderSide(
+                          color: context.colorScheme.primary,
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _notificationContent(context, notifToShow),
+                  )
+                  .animate(key: ValueKey(notifToShow.hashCode))
+                  .shimmer(
+                    duration: Durations.long2,
+                    color: context.colorScheme.primary.withValues(alpha: 0.6),
+                  )
+                  .then(delay: notificationToastDuration)
+                  .scaleXY(
+                    begin: 1,
+                    end: 0.8,
+                    duration: Durations.medium1,
+                    curve: Easing.standard,
+                  )
+                  .slideX(
+                    begin: 0,
+                    end: -0.4,
+                    duration: Durations.medium1,
+                    curve: Easing.standard,
+                  )
+                  .fade(
+                    begin: 1,
+                    end: 0,
+                    duration: Durations.medium1,
+                    curve: Easing.standard,
+                  ),
+          secondChild: const SizedBox(),
+          sizeCurve: Easing.standard,
+          duration: Durations.medium1,
+        );
+      },
     );
   }
-}
 
-class NotificationDisplay extends StatelessWidget {
-  const NotificationDisplay({required this.data, super.key});
-  final NotificationData data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 320),
-      decoration: BoxDecoration(
-        color: context.colorScheme.primaryContainer,
-        border: Border.all(color: context.colorScheme.primary),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: Gaps.sm.value,
-        children: [
-          SizedBox(
-            width: 8,
-            child: ColoredBox(color: context.colorScheme.primary),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
+  Widget _notificationContent(BuildContext context, NotificationData data) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+          [
                 Text(
                   data.appName,
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: context.colorScheme.onPrimaryContainer,
-                  ),
+                  style: context.textTheme.labelMedium,
                 ),
-                Text(
-                  data.summary,
-                  style: context.textTheme.labelLarge?.copyWith(
-                    color: context.colorScheme.onPrimaryContainer,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+                Text(data.summary, style: context.textTheme.labelLarge),
+              ]
+              .animate(delay: Durations.short4, interval: 60.ms)
+              .slideY(
+                begin: 1,
+                end: 0,
+                curve: Easing.standard,
+                duration: Durations.medium1,
+              )
+              .fadeIn(
+                curve: Easing.standard,
+                duration: Durations.medium1,
+              ),
     );
   }
 }
