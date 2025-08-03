@@ -92,6 +92,9 @@ class NotificationContent extends HookWidget {
           equalityChecker: (prev, now) => prev.id == now.id,
         ).getUpdates();
 
+        // Update this widget list
+        items.value = state.notifications;
+
         // Handle update event
         for (final update in diff) {
           update.when(
@@ -113,9 +116,6 @@ class NotificationContent extends HookWidget {
             move: (int from, int to) {},
           );
         }
-
-        // Update this widget list
-        items.value = state.notifications;
       },
       child: AnimatedSwitcher(
         duration: Durations.medium3,
