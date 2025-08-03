@@ -39,10 +39,19 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         if (data.replacesId == 0) {
           currentNotifList.insert(0, data);
         } else {
-          final index = currentNotifList.indexWhere(
-            (e) => e.id == data.replacesId,
-          );
-          currentNotifList[index] = data;
+          // Insert notification if not added yet (just in case...
+          // but it should not be possible to do)
+          if (loadedNotifState.notifications
+              .where((e) => e.id == data.id)
+              .toList()
+              .isEmpty) {
+            currentNotifList.insert(0, data);
+          } else {
+            final index = currentNotifList.indexWhere(
+              (e) => e.id == data.replacesId,
+            );
+            currentNotifList[index] = data;
+          }
         }
 
         return loadedNotifState.copyWith(notifications: currentNotifList);
