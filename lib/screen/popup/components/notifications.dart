@@ -76,7 +76,7 @@ class NotificationContent extends HookWidget {
     useEffect(() {
       get<NotificationBloc>().add(const NotificationEventRefreshed());
       return () {};
-    });
+    }, []);
 
     final listKey = useState(GlobalKey<AnimatedListState>());
     final items = useState<List<NotificationData>>([]);
@@ -93,15 +93,12 @@ class NotificationContent extends HookWidget {
           equalityChecker: (prev, now) => prev.id == now.id,
         ).getUpdates();
 
-        // Update this widget list
-        items.value = state.notifications;
-
         // Handle update event
         for (final update in diff) {
           update.when(
             insert: (int position, int count) {
               listKey.value.currentState?.insertItem(
-                0,
+                position,
               );
             },
             remove: (int position, int count) {
@@ -115,6 +112,9 @@ class NotificationContent extends HookWidget {
             move: (int from, int to) {},
           );
         }
+
+        // Update this widget list
+        items.value = state.notifications;
       },
       child: AnimatedSwitcher(
         duration: Durations.medium3,

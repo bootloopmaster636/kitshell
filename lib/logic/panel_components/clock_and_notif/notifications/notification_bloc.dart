@@ -56,10 +56,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   ) {
     if (state is! NotificationStateLoaded) return;
     final loadedState = state as NotificationStateLoaded;
+    final notifications = loadedState.notifications;
 
     // TODO(bootloopmaster636): fix this hacky way to emit new state
-    emit(loadedState.copyWith(dndEnabled: !loadedState.dndEnabled));
-    emit(loadedState.copyWith(dndEnabled: !loadedState.dndEnabled));
+    emit(loadedState.copyWith(notifications: []));
+    emit(loadedState.copyWith(notifications: notifications));
   }
 
   Future<void> _onClosedNotification(
