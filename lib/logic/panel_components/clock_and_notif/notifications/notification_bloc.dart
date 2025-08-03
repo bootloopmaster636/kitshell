@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
@@ -12,6 +13,7 @@ part 'notification_state.dart';
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc() : super(const NotificationStateInitial()) {
     on<NotificationEventStarted>(_onSubscribed);
+    on<NotificationEventRefreshed>(_onRefreshedNotification);
     on<NotificationEventClosed>(_onClosedNotification);
     on<NotificationEventCleared>(_onClearedNotification);
   }
@@ -20,13 +22,16 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     NotificationEventStarted event,
     Emitter<NotificationState> emit,
   ) async {
-    emit(const NotificationStateLoaded([]));
+    emit(const NotificationStateLoaded(notifications: [], dndEnabled: false));
+
     return emit.forEach(
       watchNotificationBus(),
       onData: (data) {
         logger.i('NotificationBloc: Notification received: $data');
+        final loadedNotifState = state as NotificationStateLoaded;
+
         final currentNotifList = <NotificationData>[
-          ...(state as NotificationStateLoaded).notifications,
+          ...loadedNotifState.notifications,
         ];
 
         // Replace notification if replaces ID is not 0
@@ -40,29 +45,44 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           currentNotifList[index] = data;
         }
 
-        return NotificationStateLoaded(currentNotifList);
+        return loadedNotifState.copyWith(notifications: currentNotifList);
       },
     );
+  }
+
+  void _onRefreshedNotification(
+    NotificationEventRefreshed event,
+    Emitter<NotificationState> emit,
+  ) {
+    if (state is! NotificationStateLoaded) return;
+    final loadedState = state as NotificationStateLoaded;
+
+    // TODO(bootloopmaster636): fix this hacky way to emit new state
+    emit(loadedState.copyWith(dndEnabled: !loadedState.dndEnabled));
+    emit(loadedState.copyWith(dndEnabled: !loadedState.dndEnabled));
   }
 
   Future<void> _onClosedNotification(
     NotificationEventClosed event,
     Emitter<NotificationState> emit,
   ) async {
-    // Send "notification closed" signal
-    // await dismissNotification(id: event.id);
+    if (state is! NotificationStateLoaded) return;
+    final loadedState = state as NotificationStateLoaded;
 
     // Remove specified notification from list
     final currentNotifList = <NotificationData>[
-      ...(state as NotificationStateLoaded).notifications,
+      ...loadedState.notifications,
     ]..removeWhere((e) => e.id == event.id);
-    emit(NotificationStateLoaded(currentNotifList));
+    emit(loadedState.copyWith(notifications: currentNotifList));
   }
 
   Future<void> _onClearedNotification(
     NotificationEventCleared event,
     Emitter<NotificationState> emit,
   ) async {
-    emit(const NotificationStateLoaded([]));
+    if (state is! NotificationStateLoaded) return;
+    final loadedState = state as NotificationStateLoaded;
+
+    emit(loadedState.copyWith(notifications: []));
   }
 }

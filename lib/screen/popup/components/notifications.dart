@@ -12,6 +12,7 @@ import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/hooks/periodic_hooks.dart';
+import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart';
@@ -71,6 +72,12 @@ class NotificationContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Reemit state to fill the list when widget rebuild
+    useEffect(() {
+      get<NotificationBloc>().add(const NotificationEventRefreshed());
+      return () {};
+    });
+
     final listKey = useState(GlobalKey<AnimatedListState>());
     final items = useState<List<NotificationData>>([]);
 
@@ -109,38 +116,33 @@ class NotificationContent extends HookWidget {
           );
         }
       },
-      child: Builder(
-        builder: (context) {
-          return AnimatedSwitcher(
-            duration: Durations.long1,
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeOutExpo,
-            transitionBuilder: (child, animation) {
-              return ScaleTransition(
-                scale: animation.drive(Tween(begin: 0.8, end: 1)),
-                child: FadeTransition(opacity: animation, child: child),
-              );
-            },
-            child: items.value.isEmpty
-                ? Center(
-                    child: Text(
-                      t.dateTimeNotif.notification.noNotification,
-                      style: context.textTheme.bodyMedium,
-                    ),
-                  )
-                : AnimatedList(
-                    key: listKey.value,
-                    initialItemCount: items.value.length,
-                    itemBuilder:
-                        (
-                          BuildContext context,
-                          int index,
-                          Animation<double> animation,
-                        ) =>
-                            listBuilder(context, index, animation, items.value),
-                  ),
+      child: AnimatedSwitcher(
+        duration: Durations.medium3,
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeOutExpo,
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(
+            scale: animation.drive(Tween(begin: 0.8, end: 1)),
+            child: FadeTransition(opacity: animation, child: child),
           );
         },
+        child: items.value.isEmpty
+            ? Center(
+                child: Text(
+                  t.dateTimeNotif.notification.noNotification,
+                  style: context.textTheme.bodyMedium,
+                ),
+              )
+            : AnimatedList(
+                key: listKey.value,
+                initialItemCount: items.value.length,
+                itemBuilder:
+                    (
+                      BuildContext context,
+                      int index,
+                      Animation<double> animation,
+                    ) => listBuilder(context, index, animation, items.value),
+              ),
       ),
     );
   }
