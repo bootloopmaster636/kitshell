@@ -13,6 +13,8 @@ general:
 dateTimeNotif:
   notification:
     noNotification: No notifications
+    doNotDisturbEnabled: Do not disturb is enabled
+    doNotDisturbDesc: disable it to see notifications
 quickSettings:
   brightness:
     title: Brightness

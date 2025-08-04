@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:diffutil_dart/diffutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -39,7 +41,7 @@ class NotificationsPopup extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.all(12),
-            child: ClockAndDate(),
+            child: NotifHeader(),
           ),
           Expanded(
             child: Container(
@@ -56,7 +58,6 @@ class NotificationsPopup extends StatelessWidget {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(4),
               child: const NotificationContent(),
             ),
           ),
@@ -80,10 +81,13 @@ class NotificationContent extends HookWidget {
     final listKey = useState(GlobalKey<AnimatedListState>());
     final items = useState<List<NotificationData>>([]);
 
+    final dndEnabled = useState(false);
+
     return BlocListener<NotificationBloc, NotificationState>(
       bloc: get<NotificationBloc>(),
       listener: (context, state) {
         if (state is! NotificationStateLoaded) return;
+        dndEnabled.value = state.dndEnabled;
 
         // Get previous list difference
         final diff = calculateListDiff<NotificationData>(
@@ -101,7 +105,7 @@ class NotificationContent extends HookWidget {
             insert: (int position, int count) {
               listKey.value.currentState?.insertItem(
                 position,
-                duration: Durations.long1,
+                duration: Durations.medium4,
               );
             },
             remove: (int position, int count) {
@@ -109,7 +113,7 @@ class NotificationContent extends HookWidget {
                 position,
                 (context, animation) =>
                     listBuilder(context, position, animation, items.value),
-                duration: Durations.long1,
+                duration: Durations.medium4,
               );
             },
             change: (int position, Object? payload) {},
@@ -134,15 +138,77 @@ class NotificationContent extends HookWidget {
                   style: context.textTheme.bodyMedium,
                 ),
               )
-            : AnimatedList(
-                key: listKey.value,
-                initialItemCount: items.value.length,
-                itemBuilder:
-                    (
-                      BuildContext context,
-                      int index,
-                      Animation<double> animation,
-                    ) => listBuilder(context, index, animation, items.value),
+            : Stack(
+                fit: StackFit.expand,
+                children: [
+                  AnimatedList(
+                    key: listKey.value,
+                    initialItemCount: items.value.length,
+                    itemBuilder:
+                        (
+                          BuildContext context,
+                          int index,
+                          Animation<double> animation,
+                        ) =>
+                            listBuilder(context, index, animation, items.value),
+                  ),
+                  if (dndEnabled.value)
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          color: context.colorScheme.surface.withValues(
+                            alpha: 0.6,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:
+                                [
+                                      Iconify(
+                                        Ic.outline_notifications_off,
+                                        size: 48,
+                                        color: context.colorScheme.onSurface,
+                                      ),
+                                      SizedBox(height: Gaps.sm.value),
+                                      Text(
+                                        t
+                                            .dateTimeNotif
+                                            .notification
+                                            .doNotDisturbEnabled,
+                                        style: context.textTheme.titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      Text(
+                                        t
+                                            .dateTimeNotif
+                                            .notification
+                                            .doNotDisturbDesc,
+                                        style: context.textTheme.bodyMedium,
+                                      ),
+                                    ]
+                                    .animate(interval: 60.ms)
+                                    .slideY(
+                                      begin: -0.6,
+                                      end: 0,
+                                      duration: Durations.medium1,
+                                      curve: Easing.standard,
+                                    )
+                                    .fadeIn(duration: Durations.medium1),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
       ),
     );
@@ -294,8 +360,8 @@ class NotificationTile extends HookWidget {
   }
 }
 
-class ClockAndDate extends StatelessWidget {
-  const ClockAndDate({super.key});
+class NotifHeader extends StatelessWidget {
+  const NotifHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -304,39 +370,106 @@ class ClockAndDate extends StatelessWidget {
       builder: (context, state) {
         if (state is! DatetimeLoaded) return const SizedBox();
 
-        return Row(
+        return const Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  DateFormat.Hms(t.locale).format(state.now),
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  DateFormat.yMMMMEEEEd(t.locale).format(state.now),
-                  style: context.textTheme.titleSmall,
-                ),
-              ],
+            DateTimeSection(),
+            Spacer(),
+            ActionsSection(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class DateTimeSection extends StatelessWidget {
+  const DateTimeSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DatetimeCubit, DatetimeState>(
+      bloc: get<DatetimeCubit>(),
+      builder: (context, state) {
+        if (state is! DatetimeLoaded) return const SizedBox();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              DateFormat.Hms(t.locale).format(state.now),
+              style: context.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const Spacer(),
+            Text(
+              DateFormat.yMMMMEEEEd(t.locale).format(state.now),
+              style: context.textTheme.titleSmall,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ActionsSection extends StatelessWidget {
+  const ActionsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NotificationBloc, NotificationState>(
+      bloc: get<NotificationBloc>(),
+      builder: (context, state) {
+        if (state is! NotificationStateLoaded) return const SizedBox();
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // DND button
             SizedBox.square(
               dimension: 32,
               child: IconButton(
                 icon: Iconify(
-                  Ic.round_clear_all,
+                  Ic.outline_notifications_off,
                   size: 16,
-                  color: context.colorScheme.onSurface,
+                  color: state.dndEnabled
+                      ? context.colorScheme.onPrimary
+                      : context.colorScheme.onSurface,
                 ),
                 style: IconButton.styleFrom(
-                  backgroundColor: context.colorScheme.surfaceContainerHighest,
+                  backgroundColor: state.dndEnabled
+                      ? context.colorScheme.primary
+                      : context.colorScheme.surfaceContainerHighest,
                 ),
                 padding: EdgeInsets.zero,
                 onPressed: () => get<NotificationBloc>().add(
-                  const NotificationEventCleared(),
+                  const NotificationEventDndToggled(),
+                ),
+              ),
+            ),
+
+            // Clear all button
+            if (state.notifications.isNotEmpty) Gaps.sm.gap,
+            AnimatedSize(
+              duration: Durations.medium1,
+              curve: Easing.emphasizedDecelerate,
+              child: SizedBox.square(
+                dimension: state.notifications.isNotEmpty ? 32 : 0,
+                child: IconButton(
+                  icon: Iconify(
+                    Ic.round_clear_all,
+                    size: 16,
+                    color: context.colorScheme.onSurface,
+                  ),
+                  style: IconButton.styleFrom(
+                    backgroundColor:
+                        context.colorScheme.surfaceContainerHighest,
+                  ),
+                  padding: EdgeInsets.zero,
+                  onPressed: () => get<NotificationBloc>().add(
+                    const NotificationEventCleared(),
+                  ),
                 ),
               ),
             ),
