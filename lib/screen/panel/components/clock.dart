@@ -46,7 +46,7 @@ class ClockComponent extends HookWidget {
               WidgetPosition.center => Alignment.center,
               WidgetPosition.right => Alignment.centerRight,
             },
-            child: const NotificationOverlay(),
+            child: const NotificationToast(),
           ),
         ],
       ),
@@ -89,8 +89,8 @@ class NotificationCount extends StatelessWidget {
   }
 }
 
-class NotificationOverlay extends HookWidget {
-  const NotificationOverlay({super.key});
+class NotificationToast extends HookWidget {
+  const NotificationToast({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -182,8 +182,15 @@ class NotificationOverlay extends HookWidget {
                 Text(
                   data.appName,
                   style: context.textTheme.labelMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Text(data.summary, style: context.textTheme.labelLarge),
+                Text(
+                  data.summary,
+                  style: context.textTheme.labelLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ]
               .animate(delay: Durations.short4, interval: 60.ms)
               .slideY(
