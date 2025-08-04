@@ -180,13 +180,13 @@ class NotificationToast extends HookWidget {
       children:
           [
                 Text(
-                  data.appName,
+                  '${data.summary} | ${data.appName}',
                   style: context.textTheme.labelMedium,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  data.summary,
+                  data.body,
                   style: context.textTheme.labelLarge,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
