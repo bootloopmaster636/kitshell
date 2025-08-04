@@ -112,7 +112,7 @@ class NotificationContent extends HookWidget {
               listKey.value.currentState?.removeItem(
                 position,
                 (context, animation) =>
-                    listBuilder(context, position, animation, items.value),
+                    _buildTile(context, position, animation, items.value),
                 duration: Durations.medium4,
               );
             },
@@ -138,83 +138,92 @@ class NotificationContent extends HookWidget {
                   style: context.textTheme.bodyMedium,
                 ),
               )
-            : Stack(
-                fit: StackFit.expand,
-                children: [
-                  AnimatedList(
-                    key: listKey.value,
-                    initialItemCount: items.value.length,
-                    itemBuilder:
-                        (
-                          BuildContext context,
-                          int index,
-                          Animation<double> animation,
-                        ) =>
-                            listBuilder(context, index, animation, items.value),
-                  ),
-                  if (dndEnabled.value)
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      ),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          color: context.colorScheme.surface.withValues(
-                            alpha: 0.6,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:
-                                [
-                                      Iconify(
-                                        Ic.outline_notifications_off,
-                                        size: 48,
-                                        color: context.colorScheme.onSurface,
-                                      ),
-                                      SizedBox(height: Gaps.sm.value),
-                                      Text(
-                                        t
-                                            .dateTimeNotif
-                                            .notification
-                                            .doNotDisturbEnabled,
-                                        style: context.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        t
-                                            .dateTimeNotif
-                                            .notification
-                                            .doNotDisturbDesc,
-                                        style: context.textTheme.bodyMedium,
-                                      ),
-                                    ]
-                                    .animate(interval: 60.ms)
-                                    .slideY(
-                                      begin: -0.6,
-                                      end: 0,
-                                      duration: Durations.medium1,
-                                      curve: Easing.standard,
-                                    )
-                                    .fadeIn(duration: Durations.medium1),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+            : _buildList(
+                context: context,
+                listKey: listKey,
+                items: items,
+                dndEnabled: dndEnabled,
               ),
       ),
     );
   }
 
-  Widget listBuilder(
+  Widget _buildList({
+    required BuildContext context,
+    required ValueNotifier<GlobalKey<AnimatedListState>> listKey,
+    required ValueNotifier<List<NotificationData>> items,
+    required ValueNotifier<bool> dndEnabled,
+  }) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        AnimatedList(
+          key: listKey.value,
+          initialItemCount: items.value.length,
+          padding: const EdgeInsets.all(8),
+          itemBuilder:
+              (
+                BuildContext context,
+                int index,
+                Animation<double> animation,
+              ) => _buildTile(context, index, animation, items.value),
+        ),
+        if (dndEnabled.value) _dndNoticeBuilder(context),
+      ],
+    );
+  }
+
+  Widget _dndNoticeBuilder(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(16),
+        topRight: Radius.circular(16),
+        bottomLeft: Radius.circular(8),
+        bottomRight: Radius.circular(8),
+      ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          width: double.infinity,
+          color: context.colorScheme.surface.withValues(
+            alpha: 0.6,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                [
+                      Iconify(
+                        Ic.outline_notifications_off,
+                        size: 48,
+                        color: context.colorScheme.onSurface,
+                      ),
+                      SizedBox(height: Gaps.sm.value),
+                      Text(
+                        t.dateTimeNotif.notification.doNotDisturbEnabled,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        t.dateTimeNotif.notification.doNotDisturbDesc,
+                        style: context.textTheme.bodyMedium,
+                      ),
+                    ]
+                    .animate(interval: 60.ms, delay: Durations.short1)
+                    .slideY(
+                      begin: -0.4,
+                      end: 0,
+                      duration: Durations.medium1,
+                      curve: Easing.standard,
+                    )
+                    .fadeIn(duration: Durations.medium1),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTile(
     BuildContext context,
     int index,
     Animation<double> animation,
@@ -346,7 +355,7 @@ class NotificationTile extends HookWidget {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: context.colorScheme.surfaceContainer,
+                        color: context.colorScheme.surfaceContainerLowest,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Html(data: data.body),
@@ -425,32 +434,9 @@ class ActionsSection extends StatelessWidget {
 
         return Row(
           mainAxisSize: MainAxisSize.min,
+          spacing: Gaps.sm.value,
           children: [
-            // DND button
-            SizedBox.square(
-              dimension: 32,
-              child: IconButton(
-                icon: Iconify(
-                  Ic.outline_notifications_off,
-                  size: 16,
-                  color: state.dndEnabled
-                      ? context.colorScheme.onPrimary
-                      : context.colorScheme.onSurface,
-                ),
-                style: IconButton.styleFrom(
-                  backgroundColor: state.dndEnabled
-                      ? context.colorScheme.primary
-                      : context.colorScheme.surfaceContainerHighest,
-                ),
-                padding: EdgeInsets.zero,
-                onPressed: () => get<NotificationBloc>().add(
-                  const NotificationEventDndToggled(),
-                ),
-              ),
-            ),
-
             // Clear all button
-            if (state.notifications.isNotEmpty) Gaps.sm.gap,
             AnimatedSize(
               duration: Durations.medium1,
               curve: Easing.emphasizedDecelerate,
@@ -470,6 +456,29 @@ class ActionsSection extends StatelessWidget {
                   onPressed: () => get<NotificationBloc>().add(
                     const NotificationEventCleared(),
                   ),
+                ),
+              ),
+            ),
+
+            // DND button
+            SizedBox.square(
+              dimension: 32,
+              child: IconButton(
+                icon: Iconify(
+                  Ic.outline_notifications_off,
+                  size: 16,
+                  color: state.dndEnabled
+                      ? context.colorScheme.onPrimary
+                      : context.colorScheme.onSurface,
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor: state.dndEnabled
+                      ? context.colorScheme.primary
+                      : context.colorScheme.surfaceContainerHighest,
+                ),
+                padding: EdgeInsets.zero,
+                onPressed: () => get<NotificationBloc>().add(
+                  const NotificationEventDndToggled(),
                 ),
               ),
             ),

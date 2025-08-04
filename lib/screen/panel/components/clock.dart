@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
+import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
@@ -69,18 +71,30 @@ class NotificationCount extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.only(right: Gaps.sm.value),
-          child: Container(
-            decoration: BoxDecoration(
-              color: context.colorScheme.primary,
-              borderRadius: BorderRadius.circular(999),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            child: Text(
-              state.notifications.length.toString(),
-              style: context.textTheme.labelMedium?.copyWith(
-                color: context.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
+          child: AnimatedCrossFade(
+            duration: Durations.medium1,
+            sizeCurve: Easing.standard,
+            crossFadeState: state.dndEnabled
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            firstChild: Container(
+              decoration: BoxDecoration(
+                color: context.colorScheme.primary,
+                borderRadius: BorderRadius.circular(999),
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Text(
+                state.notifications.length.toString(),
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            secondChild: Iconify(
+              Ic.outline_notifications_off,
+              size: 16,
+              color: context.colorScheme.onSurface,
             ),
           ),
         );
@@ -110,11 +124,14 @@ class NotificationToast extends HookWidget {
         if (old is! NotificationStateLoaded) return false;
         if (now is! NotificationStateLoaded) return false;
 
-        // Prevent showing notification overlay when dismissing notif
+        // Prevent showing notification toast when dismissing notif
         return now.notifications.length > old.notifications.length;
       },
       listener: (context, state) {
         if (state is! NotificationStateLoaded) return;
+
+        // Prevent showing toast when DND active
+        if (state.dndEnabled) return;
         count.value = state.notifications.length;
       },
       builder: (context, state) {
