@@ -105,15 +105,21 @@ class NotificationContent extends HookWidget {
             insert: (int position, int count) {
               listKey.value.currentState?.insertItem(
                 position,
-                duration: Durations.medium4,
+                duration: Durations.medium3,
               );
             },
             remove: (int position, int count) {
               listKey.value.currentState?.removeItem(
                 position,
-                (context, animation) =>
-                    _buildTile(context, position, animation, items.value),
-                duration: Durations.medium4,
+                (context, animation) => _buildTile(
+                  context,
+                  position,
+                  animation.drive(
+                    CurveTween(curve: Easing.emphasizedAccelerate),
+                  ),
+                  items.value,
+                ),
+                duration: Durations.medium1,
               );
             },
             change: (int position, Object? payload) {},
@@ -166,7 +172,12 @@ class NotificationContent extends HookWidget {
                 BuildContext context,
                 int index,
                 Animation<double> animation,
-              ) => _buildTile(context, index, animation, items.value),
+              ) => _buildTile(
+                context,
+                index,
+                animation.drive(CurveTween(curve: Easing.standard)),
+                items.value,
+              ),
         ),
         if (dndEnabled.value) _dndNoticeBuilder(context),
       ],
@@ -231,9 +242,7 @@ class NotificationContent extends HookWidget {
   ) {
     if (items.isEmpty) return const SizedBox.shrink();
     return SizeTransition(
-      sizeFactor: animation.drive(
-        CurveTween(curve: Curves.easeInOutCubic),
-      ),
+      sizeFactor: animation,
       axisAlignment: -1,
       child: Padding(
         key: ValueKey(items[index].hashCode),
