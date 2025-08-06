@@ -42,7 +42,10 @@ impl NotificationService {
         hints: HashMap<String, Value<'_>>,
         expire_timeout: i32,
     ) -> u32 {
-        let id = rand::random();
+        let mut id: u32 = rand::random();
+        while id == 0 {
+            id = rand::random();
+        }
 
         // Send notification data through the sink
         let notification_data = NotificationData {
@@ -81,11 +84,12 @@ impl NotificationService {
     /// Get capabilities of the notification daemon
     async fn get_capabilities(&self) -> Vec<String> {
         vec![
+            "actions".to_string(),
             "body".to_string(),
             "body-markup".to_string(),
             "body-hyperlinks".to_string(),
-            "actions".to_string(),
-            "persistence".to_string(),
+            "body-images".to_string(),
+            "icon-static".to_string(),
         ]
     }
 
