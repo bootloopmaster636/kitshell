@@ -130,66 +130,13 @@ class QsSliderComponent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    final memoizedVal = useMemoized(() => getPercent(value, maxVal), [value]);
-    final memoizedDoubleVal = useMemoized(value.toDouble, [
-      value,
-    ]);
-    final memoizedDoubleMaxVal = useMemoized(maxVal.toDouble, [maxVal]);
-
-    return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
-      onExit: (_) => isHovered.value = false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: Gaps.xs.value,
-          children: [
-            Row(
-              children: [
-                TextIcon(
-                  icon: Iconify(
-                    icon,
-                    size: 20,
-                    color: context.colorScheme.primary,
-                  ),
-                  text: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: context.textTheme.bodyMedium),
-                      if (subtitle != null)
-                        Text(subtitle!, style: context.textTheme.bodySmall),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                AnimatedFlipCounter(
-                  duration: Durations.short2,
-                  curve: Easing.standardDecelerate,
-                  value: memoizedVal,
-                  textStyle: context.textTheme.bodyLarge,
-                ),
-              ],
-            ),
-            Slider(
-              value: memoizedDoubleVal,
-              max: memoizedDoubleMaxVal,
-              onChanged: onValueChanged,
-            ),
-          ],
-        ),
-      ),
+    return LargeSlider(
+      insetIcon: Icons.brightness_4_outlined,
+      label: title,
+      onChanged: onValueChanged ?? (val) {},
+      value: value.toDouble(),
+      maxValue: maxVal.toDouble(),
+      textStyle: context.textTheme.bodySmall,
     );
   }
 }

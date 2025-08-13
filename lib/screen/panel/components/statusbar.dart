@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
+import 'package:kitshell/etc/component/large_slider.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/hooks/callback_debounce_hook.dart';
@@ -36,11 +37,13 @@ class StatusbarComponent extends HookWidget {
   }
 }
 
-class StatusbarContent extends StatelessWidget {
+class StatusbarContent extends HookWidget {
   const StatusbarContent({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sliderValue = useState<double>(0);
+
     return const Row(
       children: [
         BrightnessStatus(),

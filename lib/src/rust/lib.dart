@@ -6,5 +6,5 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Value < 'static >>>
-abstract class Value implements RustOpaqueInterface {}
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<:: SignalStream < 'static >>>
+abstract class SignalStream implements RustOpaqueInterface {}
