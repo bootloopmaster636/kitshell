@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
 
 /// Slider height
-const double largeSliderHeight = 56;
+const double largeSliderHeight = 40;
 
 /// How many scroll steps for the slider from min to max
 const double scrollStep = 30;
@@ -294,7 +294,7 @@ class LargeSliderRenderObject extends RenderBox {
       text: String.fromCharCode(_insetIcon.codePoint),
       style: _textStyle?.copyWith(
         fontFamily: _insetIcon.fontFamily,
-        fontSize: 20,
+        fontSize: 18,
         color: _colorScheme.onPrimary,
       ),
     );
@@ -445,7 +445,7 @@ class LargeSliderRenderObject extends RenderBox {
 
     // Draw the label
     if (_doesLabelFitInsideSlider) {
-      final labelOffsetX = offset.dx + largeSliderHeight - 8;
+      final labelOffsetX = offset.dx + largeSliderHeight;
       final labelOffsetY =
           offset.dy + (size.height - _labelPainter.size.height) / 2;
 

@@ -13,7 +13,7 @@ class BrightnessSlider extends StatelessWidget {
         return Column(
           children: state.brightness.map((info) {
             return QsSliderComponent(
-              icon: Ic.outline_brightness_medium,
+              icon: Icons.brightness_4_outlined,
               value: info.brightness,
               maxVal: info.maxBrightness,
               onValueChanged: (val) {
@@ -80,6 +80,24 @@ class BatteryProgress extends StatelessWidget {
   }
 }
 
+class PlaceholderSlider extends HookWidget {
+  const PlaceholderSlider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final value = useState(50);
+    return QsSliderComponent(
+      icon: Icons.volume_up_outlined,
+      value: value.value,
+      maxVal: 100,
+      onValueChanged: (val) {
+        value.value = val.toInt();
+      },
+      title: 'Placeholder',
+    );
+  }
+}
+
 class WhoAmI extends HookWidget {
   const WhoAmI({super.key});
 
@@ -120,7 +138,7 @@ class QsSliderComponent extends HookWidget {
     this.subtitle,
     super.key,
   });
-  final String icon;
+  final IconData icon;
   final String title;
   final String? subtitle;
   final int maxVal;
@@ -131,7 +149,7 @@ class QsSliderComponent extends HookWidget {
   Widget build(BuildContext context) {
     final isHovered = useState(false);
     return LargeSlider(
-      insetIcon: Icons.brightness_4_outlined,
+      insetIcon: icon,
       label: title,
       onChanged: onValueChanged ?? (val) {},
       value: value.toDouble(),

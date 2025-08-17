@@ -96,7 +96,11 @@ class QsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       spacing: Gaps.sm.value,
-      children: const [BatteryProgress(), BrightnessSlider()],
+      children: const [
+        BatteryProgress(),
+        BrightnessSlider(),
+        PlaceholderSlider(),
+      ],
     );
   }
 }
