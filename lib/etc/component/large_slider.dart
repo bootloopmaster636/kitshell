@@ -9,7 +9,7 @@ import 'package:kitshell/etc/utitity/logger.dart';
 const double largeSliderHeight = 56;
 
 /// How many scroll steps for the slider from min to max
-const double scrollStep = 40;
+const double scrollStep = 30;
 
 /// Material 3 styled slider with XL size, usually seen on volume panel
 /// of AOSP Android 15
@@ -338,11 +338,6 @@ class LargeSliderRenderObject extends RenderBox {
       'value must be between minValue and maxValue',
     );
 
-    // _activeTrackWidth =
-    //     (size.width * ((_value - _minValue) / (_maxValue - _minValue))).clamp(
-    //       _minValue + largeSliderHeight,
-    //       _maxValue - largeSliderHeight,
-    //     );
     final multiplier = (_value - _minValue) / (_maxValue - _minValue);
     _activeTrackWidth =
         largeSliderHeight + ((size.width - largeSliderHeight) * multiplier);
@@ -420,29 +415,58 @@ class LargeSliderRenderObject extends RenderBox {
         2,
         Paint()
           ..style = PaintingStyle.fill
-          ..color = _colorScheme.onPrimary.withValues(
-            alpha: _doesLabelFitInsideSlider
-                ? 1
-                : _activeTrackWidth - largeSliderHeight,
-          ),
+          ..color = _colorScheme.onPrimary,
       );
 
     // Draw the inset icon
+    final iconOffsetX =
+        offset.dx + (largeSliderHeight - _iconPainter.size.width) / 2;
+    final iconOffsetY =
+        offset.dy + (size.height - _iconPainter.size.height) / 2;
+
+    context.canvas.drawRect(
+      Rect.fromLTRB(
+        iconOffsetX,
+        iconOffsetY,
+        iconOffsetX + _iconPainter.width,
+        iconOffsetY + _iconPainter.height,
+      ),
+      Paint()
+        ..style = PaintingStyle.fill
+        ..color = _colorScheme.primary,
+    );
     _iconPainter.paint(
       context.canvas,
       Offset(
-        offset.dx + (largeSliderHeight - _iconPainter.size.width) / 2,
-        offset.dy + (size.height - _iconPainter.size.height) / 2,
+        iconOffsetX,
+        iconOffsetY,
       ),
     );
 
     // Draw the label
     if (_doesLabelFitInsideSlider) {
+      final labelOffsetX = offset.dx + largeSliderHeight - 8;
+      final labelOffsetY =
+          offset.dy + (size.height - _labelPainter.size.height) / 2;
+
+      // Draw label background
+      context.canvas.drawRect(
+        Rect.fromLTRB(
+          labelOffsetX,
+          labelOffsetY,
+          labelOffsetX + _labelPainter.width,
+          labelOffsetY + _labelPainter.size.height,
+        ),
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = _colorScheme.primary,
+      );
+
       _labelPainter.paint(
         context.canvas,
         Offset(
-          offset.dx + largeSliderHeight - 8,
-          offset.dy + (size.height - _labelPainter.size.height) / 2,
+          labelOffsetX,
+          labelOffsetY,
         ),
       );
     } else {
