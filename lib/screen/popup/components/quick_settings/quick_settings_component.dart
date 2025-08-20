@@ -56,9 +56,8 @@ class BatteryProgress extends StatelessWidget {
                   )
                 : null;
 
-            return QsProgressBarComponent(
-              title: t.quickSettings.battery.title,
-              subtitle: switch (info.battState) {
+            return QsMiniStatusComponent(
+              tooltipText: switch (info.battState) {
                 BatteryState.unknown => '',
                 BatteryState.charging =>
                   '${t.quickSettings.battery.status.charging} '
@@ -159,74 +158,67 @@ class QsSliderComponent extends HookWidget {
   }
 }
 
-class QsProgressBarComponent extends HookWidget {
-  const QsProgressBarComponent({
+class QsMiniStatusComponent extends HookWidget {
+  const QsMiniStatusComponent({
     required this.icon,
-    required this.title,
-    required this.value,
-    required this.maxVal,
-    this.subtitle,
+    this.value,
+    this.maxVal,
+    this.tooltipText,
     super.key,
   });
   final String icon;
-  final String title;
-  final String? subtitle;
-  final int value;
-  final int maxVal;
+  final String? tooltipText;
+  final int? value;
+  final int? maxVal;
 
   @override
   Widget build(BuildContext context) {
-    final isHovered = useState(false);
-    final normalizedValue = useMemoized(() => getNormalized(value, maxVal), [
-      value,
-    ]);
+    final normalizedValue = useMemoized(
+      () => getNormalized(value ?? 0, maxVal ?? 0),
+      [
+        value,
+        maxVal,
+      ],
+    );
 
-    return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
-      onExit: (_) => isHovered.value = false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
+    return CustomInkwell(
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: context.colorScheme.shadow.withValues(alpha: 0.1),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: TextIcon(
+        icon: Iconify(
+          icon,
+          size: 20,
+          color: context.colorScheme.primary,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            TextIcon(
-              icon: Iconify(
-                icon,
-                size: 20,
-                color: context.colorScheme.primary,
-              ),
-              text: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: context.textTheme.bodyMedium),
-                  if (subtitle != null)
-                    Text(subtitle!, style: context.textTheme.bodySmall),
-                ],
-              ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: 72,
-              child: LinearProgressIndicator(value: normalizedValue),
-            ),
-            Gaps.md.gap,
-            AnimatedFlipCounter(
-              duration: Durations.short2,
-              curve: Easing.standardDecelerate,
-              value: value,
-              textStyle: context.textTheme.bodyLarge,
-            ),
-          ],
+        spacing: Gaps.xs.value,
+        text: Tooltip(
+          message: tooltipText,
+          child: Column(
+            spacing: Gaps.xs.value,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (value != null)
+                Text(
+                  '${(normalizedValue * 100).toStringAsFixed(0)}%',
+                  style: context.textTheme.bodySmall,
+                ),
+              if (value != null)
+                SizedBox(
+                  width: 72,
+                  child: LinearProgressIndicator(value: normalizedValue),
+                ),
+            ],
+          ),
         ),
       ),
     );
