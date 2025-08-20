@@ -132,9 +132,9 @@ class LargeSliderRenderObject extends RenderBox {
   final _tapGestureDetector = TapGestureRecognizer();
   final _dragGestureDetector = HorizontalDragGestureRecognizer();
   void _calculateValueFromDrag() {
-    void onInteractionEvent(double dx) {
+    void onInteractionEvent(double delta) {
       final percent =
-          ((dx - largeSliderHeight / 2) / (size.width - largeSliderHeight))
+          ((delta - largeSliderHeight / 2) / (size.width - largeSliderHeight))
               .clamp(0, 1);
       final range = _maxValue - _minValue;
       final newValue = _minValue + (percent * range);
@@ -153,6 +153,19 @@ class LargeSliderRenderObject extends RenderBox {
 
   @override
   void handleEvent(PointerEvent event, covariant BoxHitTestEntry entry) {
+    void handleDelta(double delta) {
+      final range = _maxValue - _minValue;
+      final plusMinus = delta >= 0 ? 1 : -1;
+      final newValue = (_value + (plusMinus * range / scrollStep)).clamp(
+        _minValue,
+        _maxValue,
+      );
+      if (newValue != _value) {
+        _onChanged(newValue);
+        markNeedsPaint();
+      }
+    }
+
     switch (event) {
       case PointerDownEvent():
         // When pointer is down, we want to start tracking the gesture
@@ -163,18 +176,10 @@ class LargeSliderRenderObject extends RenderBox {
         _tapGestureDetector.handleEvent(event);
         _dragGestureDetector.handleEvent(event);
       case PointerScrollEvent():
-        if (event.scrollDelta.dy != 0) {
-          final range = _maxValue - _minValue;
-          final plusMinus = event.scrollDelta.dy >= 0 ? 1 : -1;
-          final newValue = (_value + (plusMinus * range / scrollStep)).clamp(
-            _minValue,
-            _maxValue,
-          );
-          if (newValue != _value) {
-            _onChanged(newValue);
-            markNeedsPaint();
-          }
-        }
+        if (event.scrollDelta.dy != 0) handleDelta(event.scrollDelta.dy);
+      case PointerPanZoomUpdateEvent():
+        if (event.localPanDelta.dx != 0) handleDelta(event.localPanDelta.dx);
+        if (event.localPanDelta.dy != 0) handleDelta(-event.localPanDelta.dy);
       default:
         // Ignore other pointer events
         break;
