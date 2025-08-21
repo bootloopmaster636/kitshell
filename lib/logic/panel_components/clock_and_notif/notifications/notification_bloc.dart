@@ -96,7 +96,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     emit(loadedState.copyWith(notifications: []));
   }
 
-  void _onToggleDnd(
+  Future<void> _onToggleDnd(
     NotificationEventDndToggled event,
     Emitter<NotificationState> emit,
   ) async {

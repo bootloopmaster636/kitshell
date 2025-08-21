@@ -161,15 +161,15 @@ class QsSliderComponent extends HookWidget {
 class QsMiniProgressComponent extends HookWidget {
   const QsMiniProgressComponent({
     required this.icon,
-    this.value,
-    this.maxVal,
+    required this.value,
+    required this.maxVal,
     this.tooltipText,
     super.key,
   });
   final String icon;
+  final int value;
+  final int maxVal;
   final String? tooltipText;
-  final int? value;
-  final int? maxVal;
 
   @override
   Widget build(BuildContext context) {
@@ -207,16 +207,14 @@ class QsMiniProgressComponent extends HookWidget {
             spacing: Gaps.xs.value,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (value != null)
-                Text(
-                  '${(normalizedValue * 100).toStringAsFixed(0)}%',
-                  style: context.textTheme.bodySmall,
-                ),
-              if (value != null)
-                SizedBox(
-                  width: 36,
-                  child: LinearProgressIndicator(value: normalizedValue),
-                ),
+              Text(
+                '${(normalizedValue * 100).toStringAsFixed(0)}%',
+                style: context.textTheme.bodySmall,
+              ),
+              SizedBox(
+                width: 36,
+                child: LinearProgressIndicator(value: normalizedValue),
+              ),
             ],
           ),
         ),
