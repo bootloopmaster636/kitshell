@@ -350,7 +350,8 @@ class LargeSliderRenderObject extends RenderBox {
     // Check if the label fits inside the slider (largeSliderHeight here
     // is also the icon size)
     _doesLabelFitInsideSlider =
-        _activeTrackWidth >= textWidth + largeSliderHeight;
+        _activeTrackWidth >=
+        textWidth + largeSliderHeight + 12; // 12 is padding
 
     // Change label color depending on where the label's position on
     // slider active track.
@@ -417,7 +418,7 @@ class LargeSliderRenderObject extends RenderBox {
         2,
         Paint()
           ..style = PaintingStyle.fill
-          ..color = _colorScheme.onPrimary,
+          ..color = _colorScheme.onPrimary.withValues(alpha: 0.6),
       );
 
     // Draw the inset icon
