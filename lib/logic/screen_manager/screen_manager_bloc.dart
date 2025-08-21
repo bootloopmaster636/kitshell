@@ -87,6 +87,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
       displayInfo.widthPx,
       displayInfo.heightPx,
     );
+    await layerShellManager.setLayer(ShellLayer.layerOverlay);
     emit(
       ScreenManagerStateLoaded(
         isPopupShown: true,
@@ -111,6 +112,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     await Future<void>.delayed(popupOpenCloseDuration);
 
     // Reset layer state
+    await layerShellManager.setLayer(ShellLayer.layerTop);
     await layerShellManager.initialize(
       displayInfo.widthPx,
       panelDefaultHeightPx,
