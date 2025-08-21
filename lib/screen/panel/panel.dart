@@ -89,11 +89,11 @@ class SectionRow extends StatelessWidget {
       position: position,
       child: Row(
         mainAxisAlignment: switch (position) {
-          WidgetPosition.left => .start,
-          WidgetPosition.center => .center,
-          WidgetPosition.right => .end,
+          WidgetPosition.left => MainAxisAlignment.start,
+          WidgetPosition.center => MainAxisAlignment.center,
+          WidgetPosition.right => MainAxisAlignment.end,
         },
-        mainAxisSize: .min,
+        mainAxisSize: MainAxisSize.min,
         children: components,
       ),
     );

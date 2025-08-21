@@ -15,7 +15,7 @@ class ScreenManager extends StatelessWidget {
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
         return const Column(
-          mainAxisAlignment: .end,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Expanded(child: PopupContainer()),
             MainPanel(),
