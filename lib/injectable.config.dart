@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:kitshell/logic/ipc/ipc_bloc.dart' as _i874;
 import 'package:kitshell/logic/panel_components/clock_and_notif/datetime/datetime_cubit.dart'
     as _i797;
 import 'package:kitshell/logic/panel_components/clock_and_notif/notifications/notification_bloc.dart'
@@ -39,6 +40,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
     gh.singleton<_i652.QsRoutingCubit>(() => _i652.QsRoutingCubit());
     gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
+    gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
     return this;
   }
 }
