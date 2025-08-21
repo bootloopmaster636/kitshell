@@ -7,3 +7,5 @@ linter:
 analyzer:
   plugins:
     - custom_lint
+  enable-experiment:
+    - dot-shorthands

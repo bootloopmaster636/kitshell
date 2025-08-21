@@ -50,3 +50,6 @@ app.*.map.json
 
 # Flutter CLI PID file
 pid
+
+# FVM Version Cache
+.fvm/
