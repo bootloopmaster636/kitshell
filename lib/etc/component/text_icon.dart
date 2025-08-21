@@ -21,14 +21,14 @@ class TextIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (axis) {
       Axis.horizontal => Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         spacing: spacing,
         children: iconFirst
             ? [icon, Flexible(child: text)]
             : [Flexible(child: text), icon],
       ),
       Axis.vertical => Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         spacing: spacing,
         children: iconFirst ? [icon, text] : [text, icon],
       ),

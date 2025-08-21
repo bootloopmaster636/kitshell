@@ -192,8 +192,8 @@ class NotificationToast extends HookWidget {
 
   Widget _notificationContent(BuildContext context, NotificationData data) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children:
           [
                 Text(
@@ -230,11 +230,11 @@ class DateTimeComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       crossAxisAlignment: switch (InheritedAlignment.of(context).position) {
-        WidgetPosition.left => CrossAxisAlignment.start,
-        WidgetPosition.center => CrossAxisAlignment.center,
-        WidgetPosition.right => CrossAxisAlignment.end,
+        WidgetPosition.left => .start,
+        WidgetPosition.center => .center,
+        WidgetPosition.right => .end,
       },
       children: const [
         ClockPart(),

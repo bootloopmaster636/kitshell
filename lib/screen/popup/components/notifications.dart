@@ -37,7 +37,7 @@ class NotificationsPopup extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           const Padding(
             padding: EdgeInsets.all(12),
@@ -200,7 +200,7 @@ class NotificationContent extends HookWidget {
             alpha: 0.6,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             children:
                 [
                       Iconify(
@@ -291,7 +291,7 @@ class NotificationTile extends HookWidget {
       onTap: () => isExpanded.value = !isExpanded.value,
       hoverColor: Colors.transparent,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           // Header
           Row(
@@ -411,8 +411,8 @@ class DateTimeSection extends StatelessWidget {
         if (state is! DatetimeLoaded) return const SizedBox();
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: .start,
+          mainAxisSize: .min,
           children: [
             Text(
               DateFormat.Hms(t.locale).format(state.now),
@@ -442,7 +442,7 @@ class ActionsSection extends StatelessWidget {
         if (state is! NotificationStateLoaded) return const SizedBox();
 
         return Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: Gaps.sm.value,
           children: [
             // Clear all button

@@ -106,8 +106,8 @@ class WhoAmI extends HookWidget {
     final userInfo = useFuture(userInfoFuture);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children: [
         Text(
           userInfo.data?.fullname ?? '-',
@@ -205,7 +205,7 @@ class QsMiniProgressComponent extends HookWidget {
           message: tooltipText,
           child: Column(
             spacing: Gaps.xs.value,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               Text(
                 '${(normalizedValue * 100).toStringAsFixed(0)}%',
