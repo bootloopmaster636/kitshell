@@ -56,7 +56,7 @@ class BatteryProgress extends StatelessWidget {
                   )
                 : null;
 
-            return QsMiniStatusComponent(
+            return QsMiniProgressComponent(
               tooltipText: switch (info.battState) {
                 BatteryState.unknown => '',
                 BatteryState.charging =>
@@ -68,7 +68,7 @@ class BatteryProgress extends StatelessWidget {
                 BatteryState.empty => t.quickSettings.battery.status.empty,
                 BatteryState.full => t.quickSettings.battery.status.full,
               },
-              icon: Ic.twotone_battery_50,
+              icon: Ic.baseline_battery_5_bar,
               value: info.capacity.toInt(),
               maxVal: 100,
             );
@@ -158,8 +158,8 @@ class QsSliderComponent extends HookWidget {
   }
 }
 
-class QsMiniStatusComponent extends HookWidget {
-  const QsMiniStatusComponent({
+class QsMiniProgressComponent extends HookWidget {
+  const QsMiniProgressComponent({
     required this.icon,
     this.value,
     this.maxVal,
@@ -214,7 +214,7 @@ class QsMiniStatusComponent extends HookWidget {
                 ),
               if (value != null)
                 SizedBox(
-                  width: 72,
+                  width: 36,
                   child: LinearProgressIndicator(value: normalizedValue),
                 ),
             ],
