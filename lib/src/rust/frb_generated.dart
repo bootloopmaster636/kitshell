@@ -72,7 +72,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1128272373;
+  int get rustContentHash => 320238429;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -98,7 +98,7 @@ abstract class RustLibApi extends BaseApi {
     required int value,
   });
 
-  DispInfo crateApiDisplayInfoGetPrimaryDisplaySize();
+  DispInfo crateApiDisplayInfoGetPrimaryDisplayInfo();
 
   Future<UserInfo> crateApiQuickSettingsWhoamiGetUserInfo();
 
@@ -239,7 +239,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  DispInfo crateApiDisplayInfoGetPrimaryDisplaySize() {
+  DispInfo crateApiDisplayInfoGetPrimaryDisplayInfo() {
     return handler.executeSync(
       SyncTask(
         callFfi: () {
@@ -250,16 +250,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_disp_info,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiDisplayInfoGetPrimaryDisplaySizeConstMeta,
+        constMeta: kCrateApiDisplayInfoGetPrimaryDisplayInfoConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiDisplayInfoGetPrimaryDisplaySizeConstMeta =>
+  TaskConstMeta get kCrateApiDisplayInfoGetPrimaryDisplayInfoConstMeta =>
       const TaskConstMeta(
-        debugName: 'get_primary_display_size',
+        debugName: 'get_primary_display_info',
         argNames: [],
       );
 
@@ -576,12 +576,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   DispInfo dco_decode_disp_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return DispInfo(
       name: dco_decode_String(arr[0]),
-      widthPx: dco_decode_u_32(arr[1]),
-      heightPx: dco_decode_u_32(arr[2]),
+      id: dco_decode_u_32(arr[1]),
+      widthPx: dco_decode_u_32(arr[2]),
+      heightPx: dco_decode_u_32(arr[3]),
     );
   }
 
@@ -874,10 +875,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   DispInfo sse_decode_disp_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_name = sse_decode_String(deserializer);
+    final var_id = sse_decode_u_32(deserializer);
     final var_widthPx = sse_decode_u_32(deserializer);
     final var_heightPx = sse_decode_u_32(deserializer);
     return DispInfo(
       name: var_name,
+      id: var_id,
       widthPx: var_widthPx,
       heightPx: var_heightPx,
     );
@@ -1238,6 +1241,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
+    sse_encode_u_32(self.id, serializer);
     sse_encode_u_32(self.widthPx, serializer);
     sse_encode_u_32(self.heightPx, serializer);
   }

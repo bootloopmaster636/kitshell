@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
+import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
@@ -27,7 +28,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     Emitter<ScreenManagerState> emit,
   ) async {
     // Get display resolution info
-    final displayInfo = getPrimaryDisplaySize();
+    final displayInfo = getPrimaryDisplayInfo();
     await layerShellManager.initialize(
       displayInfo.widthPx,
       panelDefaultHeightPx,
@@ -48,6 +49,15 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     // Set exclusive mode to only bottom panel
     await layerShellManager.setExclusiveZone(panelDefaultHeightPx);
 
+    // Set where shell appear. Shell will appear on primary monitor
+    await layerShellManager.setMonitor(
+      Monitor(displayInfo.id, displayInfo.name),
+    );
+
+    logger.i(
+      'Shell has appeared '
+      'on display ${displayInfo.name} (${displayInfo.id})',
+    );
     emit(
       const ScreenManagerStateLoaded(
         isPopupShown: false,
@@ -72,7 +82,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     }
 
     // Get display resolution info
-    final displayInfo = getPrimaryDisplaySize();
+    final displayInfo = getPrimaryDisplayInfo();
     await layerShellManager.initialize(
       displayInfo.widthPx,
       displayInfo.heightPx,
@@ -93,7 +103,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     if (state is! ScreenManagerStateLoaded) return;
 
     // Get display resolution info
-    final displayInfo = getPrimaryDisplaySize();
+    final displayInfo = getPrimaryDisplayInfo();
 
     // Do closing animation and etc
     final loadedState = state as ScreenManagerStateLoaded;
