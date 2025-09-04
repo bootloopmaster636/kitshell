@@ -34,6 +34,13 @@ dependencies:
   google_fonts: ^6.3.0
   flutter_html: ^3.0.0
   diffutil_dart: ^4.0.1
+  rxdart: ^0.28.0
+  hive_ce: ^2.11.3
+  hive_ce_flutter: ^2.3.1
+  fuzzywuzzy: ^1.2.0
+  path_provider: ^2.1.5
+  crypto: ^3.0.6
+  flutter_svg: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -46,6 +53,7 @@ dev_dependencies:
   injectable_generator: ^2.8.1
   json_serializable: ^6.10.0
   json_annotation: ^4.9.0
+  hive_ce_generator: ^1.9.3
 
 flutter:
   uses-material-design: true
