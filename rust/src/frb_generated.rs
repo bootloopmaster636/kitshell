@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 404931562;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -943103934;
 
 // Section: executor
 
@@ -366,6 +366,49 @@ fn wire__crate__api__notifications__invoke_notif_action_impl(
         },
     )
 }
+fn wire__crate__api__appmenu__appmenu_items__launch_app_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "launch_app",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_exec = <Vec<String>>::sse_decode(&mut deserializer);
+            let api_use_terminal = <bool>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let output_ok = Result::<_, ()>::Ok({
+                            crate::api::appmenu::appmenu_items::launch_app(
+                                api_exec,
+                                api_use_terminal,
+                            )
+                            .await;
+                        })?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -599,7 +642,7 @@ impl SseDecode for crate::api::appmenu::appmenu_items::AppEntry {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_name = <String>::sse_decode(deserializer);
         let mut var_desc = <String>::sse_decode(deserializer);
-        let mut var_exec = <String>::sse_decode(deserializer);
+        let mut var_exec = <Vec<String>>::sse_decode(deserializer);
         let mut var_workingDir = <String>::sse_decode(deserializer);
         let mut var_runInTerminal = <bool>::sse_decode(deserializer);
         let mut var_icon = <String>::sse_decode(deserializer);
@@ -930,19 +973,25 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        9 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        10 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__notifications__watch_notification_bus_impl(
+        11 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        12 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -1275,7 +1324,7 @@ impl SseEncode for crate::api::appmenu::appmenu_items::AppEntry {
         <String>::sse_encode(self.id, serializer);
         <String>::sse_encode(self.name, serializer);
         <String>::sse_encode(self.desc, serializer);
-        <String>::sse_encode(self.exec, serializer);
+        <Vec<String>>::sse_encode(self.exec, serializer);
         <String>::sse_encode(self.working_dir, serializer);
         <bool>::sse_encode(self.run_in_terminal, serializer);
         <String>::sse_encode(self.icon, serializer);

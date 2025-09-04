@@ -15,8 +15,12 @@ dateTimeNotif:
     noNotification: No notifications
     doNotDisturbEnabled: Do not disturb is enabled
     doNotDisturbDesc: disable it to see notifications
-appmenu:
+appMenu:
   apps: Apps
+  contextMenu:
+    pin: Pin to favorites
+    unpin: Unpin from favorites
+    resetRank: Reset ranking
 quickSettings:
   brightness:
     title: Brightness

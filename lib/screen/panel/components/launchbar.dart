@@ -43,7 +43,6 @@ class AppmenuButton extends HookWidget {
             position: InheritedAlignment.of(context).position,
           ),
         );
-        get<AppmenuBloc>().add(AppmenuLoad(t.locale));
       },
       onPointerEnter: (_) => isHovered.value = true,
       onPointerExit: (_) => isHovered.value = false,

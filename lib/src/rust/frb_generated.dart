@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 404931562;
+  int get rustContentHash => -943103934;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -112,6 +112,11 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiNotificationsInvokeNotifAction({
     required int id,
     required String actionKey,
+  });
+
+  Future<void> crateApiAppmenuAppmenuItemsLaunchApp({
+    required List<String> exec,
+    required bool useTerminal,
   });
 
   Stream<List<BacklightInfo>>
@@ -402,6 +407,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiAppmenuAppmenuItemsLaunchApp({
+    required List<String> exec,
+    required bool useTerminal,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_String(exec, serializer);
+          sse_encode_bool(useTerminal, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 9,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiAppmenuAppmenuItemsLaunchAppConstMeta,
+        argValues: [exec, useTerminal],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiAppmenuAppmenuItemsLaunchAppConstMeta =>
+      const TaskConstMeta(
+        debugName: 'launch_app',
+        argNames: ['exec', 'useTerminal'],
+      );
+
+  @override
   Stream<List<BacklightInfo>>
   crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent() {
     final sink = RustStreamSink<List<BacklightInfo>>();
@@ -414,7 +454,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 9,
+              funcId: 10,
               port: port_,
             );
           },
@@ -451,7 +491,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 10,
+              funcId: 11,
               port: port_,
             );
           },
@@ -486,7 +526,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 11,
+              funcId: 12,
               port: port_,
             );
           },
@@ -615,7 +655,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       id: dco_decode_String(arr[0]),
       name: dco_decode_String(arr[1]),
       desc: dco_decode_String(arr[2]),
-      exec: dco_decode_String(arr[3]),
+      exec: dco_decode_list_String(arr[3]),
       workingDir: dco_decode_String(arr[4]),
       runInTerminal: dco_decode_bool(arr[5]),
       icon: dco_decode_String(arr[6]),
@@ -936,7 +976,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_id = sse_decode_String(deserializer);
     final var_name = sse_decode_String(deserializer);
     final var_desc = sse_decode_String(deserializer);
-    final var_exec = sse_decode_String(deserializer);
+    final var_exec = sse_decode_list_String(deserializer);
     final var_workingDir = sse_decode_String(deserializer);
     final var_runInTerminal = sse_decode_bool(deserializer);
     final var_icon = sse_decode_String(deserializer);
@@ -1348,7 +1388,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.id, serializer);
     sse_encode_String(self.name, serializer);
     sse_encode_String(self.desc, serializer);
-    sse_encode_String(self.exec, serializer);
+    sse_encode_list_String(self.exec, serializer);
     sse_encode_String(self.workingDir, serializer);
     sse_encode_bool(self.runInTerminal, serializer);
     sse_encode_String(self.icon, serializer);

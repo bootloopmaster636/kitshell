@@ -14,6 +14,14 @@ Future<List<AppEntry>> getAppmenuItems({required String locale}) => RustLib
 Future<String> getIconPath({required String icon}) =>
     RustLib.instance.api.crateApiAppmenuAppmenuItemsGetIconPath(icon: icon);
 
+Future<void> launchApp({
+  required List<String> exec,
+  required bool useTerminal,
+}) => RustLib.instance.api.crateApiAppmenuAppmenuItemsLaunchApp(
+  exec: exec,
+  useTerminal: useTerminal,
+);
+
 class AppEntry {
   const AppEntry({
     required this.id,
@@ -27,7 +35,7 @@ class AppEntry {
   final String id;
   final String name;
   final String desc;
-  final String exec;
+  final List<String> exec;
   final String workingDir;
   final bool runInTerminal;
   final String icon;
