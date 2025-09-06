@@ -10,9 +10,5 @@ class AppmenuEvent with _$AppmenuEvent {
 
   const factory AppmenuEvent.search(String query) = AppmenuSearched;
 
-  const factory AppmenuEvent.open({
-    required List<String> exec,
-    required bool runInTerminal,
-    required String appId,
-  }) = AppmenuAppExecuted;
+  const factory AppmenuEvent.open(AppInfoModel app) = AppmenuAppExecuted;
 }

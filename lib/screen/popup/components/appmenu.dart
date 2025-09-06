@@ -59,7 +59,16 @@ class AppsList extends StatelessWidget {
 
         return CustomScrollView(
           slivers: [
-            if (state.pinnedEntries.isNotEmpty)
+            const PinnedHeaderSliver(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: SearchBarComponent(),
+              ),
+            ),
+            Gaps.md.sliverGap,
+
+            // Regular state
+            if (state.pinnedEntries.isNotEmpty && state.searchResult == null)
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 96,
@@ -75,19 +84,65 @@ class AppsList extends StatelessWidget {
                   ),
                 ),
               ),
-            SliverList.builder(
-              itemCount: state.entries.length,
-              itemBuilder: (context, index) {
-                return AppEntryTile(
-                  key: ValueKey(state.entries[index].hashCode),
-                  appInfo: state.entries[index],
-                );
-              },
-            ),
+
+            if (state.searchResult == null) Gaps.sm.sliverGap,
+            if (state.searchResult == null)
+              SliverList.builder(
+                itemCount: state.entries.length,
+                itemBuilder: (context, index) {
+                  return AppEntryTile(
+                    key: ValueKey(state.entries[index].hashCode),
+                    appInfo: state.entries[index],
+                  );
+                },
+              ),
+
+            // Searching state
+            if (state.searchResult != null)
+              SliverList.builder(
+                itemCount: state.searchResult?.length,
+                itemBuilder: (context, index) {
+                  return AppEntryTile(
+                    key: ValueKey(state.searchResult?[index].hashCode),
+                    appInfo: state.searchResult![index],
+                  );
+                },
+              ),
           ],
         );
       },
     );
+  }
+}
+
+class SearchBarComponent extends HookWidget {
+  const SearchBarComponent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchBar(
+      autoFocus: true,
+      onChanged: (val) {
+        get<AppmenuBloc>().add(AppmenuSearched(val));
+      },
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: Iconify(
+          Ic.baseline_search,
+          color: context.colorScheme.onSurfaceVariant,
+        ),
+      ),
+      hintText: t.appMenu.searchApps,
+    );
+  }
+}
+
+class SearchResultBuilder extends StatelessWidget {
+  const SearchResultBuilder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
 
@@ -98,17 +153,30 @@ class AppEntryTilePinned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ContextMenuRegion(
-      contextMenu: makeContextMenu(context, appInfo),
-      child: CustomInkwell(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-        onTap: () {},
-        child: Column(
-          spacing: Gaps.sm.value,
-          children: [
-            AppIcon(icon: appInfo.metadata.iconPath),
-            Text(appInfo.entry.name),
-          ],
+    return SizedBox(
+      width: 140,
+      child: ContextMenuRegion(
+        contextMenu: makeContextMenu(context, appInfo),
+        child: CustomInkwell(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          onTap: () {
+            get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+            get<AppmenuBloc>().add(
+              AppmenuAppExecuted(appInfo),
+            );
+          },
+          child: Column(
+            spacing: Gaps.sm.value,
+            children: [
+              AppIcon(icon: appInfo.metadata.iconPath),
+              Text(
+                appInfo.entry.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -129,11 +197,7 @@ class AppEntryTile extends StatelessWidget {
         onTap: () {
           get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
           get<AppmenuBloc>().add(
-            AppmenuAppExecuted(
-              exec: appInfo.entry.exec,
-              runInTerminal: appInfo.entry.runInTerminal,
-              appId: appInfo.entry.id,
-            ),
+            AppmenuAppExecuted(appInfo),
           );
         },
         child: Row(
