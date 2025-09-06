@@ -1,11 +1,6 @@
 use chrono::{DateTime, Local};
-use std::collections::HashMap;
-use zbus::{
-    blocking::{connection, Connection},
-    interface,
-    zvariant::Value,
-    Error,
-};
+use std::{collections::HashMap, future::pending};
+use zbus::{connection, interface, zvariant::Value, Connection, Error};
 
 use crate::frb_generated::StreamSink;
 
@@ -15,9 +10,9 @@ const NOTIFICATION_INTERFACE: &str = "org.freedesktop.Notifications";
 /// D-Bus path for desktop notifications.
 const NOTIFICATION_PATH: &str = "/org/freedesktop/Notifications";
 
-pub struct NotificationDbus {
+struct NotificationDbus {
     conn: Connection,
-    pub service: NotificationService,
+    service: NotificationService,
 }
 
 #[derive(Clone)]
@@ -41,11 +36,11 @@ pub struct NotificationService {
 
 #[interface(
     name = "org.freedesktop.Notifications",
-    proxy(
-        gen_blocking = false,
-        default_path = "/org/freedesktop/Notifications",
-        default_service = "org.freedesktop.Notifications"
-    )
+    // proxy(
+    //     gen_blocking = false,
+    //     default_path = "/org/freedesktop/Notifications",
+    //     default_service = "org.freedesktop.Notifications"
+    // )
 )]
 impl NotificationService {
     /// Handle the Notify method call
@@ -126,19 +121,21 @@ impl NotificationService {
     // async fn action_invoked(id: u32, action_key: String) -> Result<(), Error> {}
 }
 
-pub async fn watch_notification_bus(
-    sink: StreamSink<NotificationData>,
-) -> Result<NotificationDbus, Error> {
+pub async fn watch_notification_bus(sink: StreamSink<NotificationData>) -> Result<(), Error> {
+    println!("API | Notifications: Initializing notification service");
     let notif_service = NotificationService { sink };
-    let _conn = connection::Builder::session()?
-        .name(NOTIFICATION_INTERFACE)?
-        .serve_at(NOTIFICATION_PATH, notif_service.clone())?
-        .build();
 
-    Ok(NotificationDbus {
-        conn: _conn.unwrap(),
-        service: notif_service,
-    })
+    // Build the connection asynchronously
+    let conn = connection::Builder::session()?
+        .name(NOTIFICATION_INTERFACE)?
+        .serve_at(NOTIFICATION_PATH, notif_service)?
+        .build()
+        .await?;
+
+    println!("API | Notifications: Notification service initialized and registered on D-Bus!");
+
+    pending::<()>().await;
+    Ok(())
 }
 
 pub async fn invoke_notif_action(id: u32, action_key: String) {}

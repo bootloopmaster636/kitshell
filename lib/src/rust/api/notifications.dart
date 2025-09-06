@@ -7,9 +7,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `get_capabilities`, `get_server_information`, `notify`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `NotificationServiceProxy`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `as_mut`, `as_ref`, `builder`, `call_mut`, `call`, `clone`, `clone`, `clone`, `fmt`, `from`, `get_all`, `get`, `inner`, `into_inner`, `introspect_to_writer`, `name`, `serialize`, `set_mut`, `set`, `spawn_tasks_for_methods`
-// These functions are ignored (category: IgnoreBecauseOwnerTyShouldIgnore): `builder`, `get_capabilities`, `get_server_information`, `inner_mut`, `inner`, `into_inner`, `new`, `notify`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `NotificationDbus`, `NotificationService`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `call_mut`, `call`, `clone`, `clone`, `get_all`, `get`, `introspect_to_writer`, `name`, `set_mut`, `set`, `spawn_tasks_for_methods`
 
 Stream<NotificationData> watchNotificationBus() =>
     RustLib.instance.api.crateApiNotificationsWatchNotificationBus();
@@ -19,13 +18,6 @@ Future<void> invokeNotifAction({required int id, required String actionKey}) =>
       id: id,
       actionKey: actionKey,
     );
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NotificationDbus>>
-abstract class NotificationDbus implements RustOpaqueInterface {
-  NotificationService get service;
-
-  set service(NotificationService service);
-}
 
 class NotificationData {
   const NotificationData({
@@ -79,21 +71,4 @@ class NotificationData {
           expireTimeout == other.expireTimeout &&
           hints == other.hints &&
           addedAt == other.addedAt;
-}
-
-class NotificationService {
-  const NotificationService({
-    required this.sink,
-  });
-  final RustStreamSink<NotificationData> sink;
-
-  @override
-  int get hashCode => sink.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NotificationService &&
-          runtimeType == other.runtimeType &&
-          sink == other.sink;
 }
