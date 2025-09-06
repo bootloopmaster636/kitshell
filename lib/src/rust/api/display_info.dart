@@ -6,24 +6,24 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-DispInfo getPrimaryDisplayInfo() =>
-    RustLib.instance.api.crateApiDisplayInfoGetPrimaryDisplayInfo();
+Future<List<DispInfo>> getDisplayInfo() =>
+    RustLib.instance.api.crateApiDisplayInfoGetDisplayInfo();
 
 class DispInfo {
   const DispInfo({
     required this.name,
-    required this.id,
+    required this.idx,
     required this.widthPx,
     required this.heightPx,
   });
   final String name;
-  final int id;
+  final int idx;
   final int widthPx;
   final int heightPx;
 
   @override
   int get hashCode =>
-      name.hashCode ^ id.hashCode ^ widthPx.hashCode ^ heightPx.hashCode;
+      name.hashCode ^ idx.hashCode ^ widthPx.hashCode ^ heightPx.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -31,7 +31,7 @@ class DispInfo {
       other is DispInfo &&
           runtimeType == other.runtimeType &&
           name == other.name &&
-          id == other.id &&
+          idx == other.idx &&
           widthPx == other.widthPx &&
           heightPx == other.heightPx;
 }

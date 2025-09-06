@@ -121,6 +121,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<BatteryInfo> dco_decode_list_battery_info(dynamic raw);
 
   @protected
+  List<DispInfo> dco_decode_list_disp_info(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
@@ -251,6 +254,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<BatteryInfo> sse_decode_list_battery_info(SseDeserializer deserializer);
+
+  @protected
+  List<DispInfo> sse_decode_list_disp_info(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
@@ -405,6 +411,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     List<BatteryInfo> self,
     SseSerializer serializer,
   );
+
+  @protected
+  void sse_encode_list_disp_info(List<DispInfo> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(

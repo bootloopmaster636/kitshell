@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -943103934;
+  int get rustContentHash => 485465166;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -103,9 +103,9 @@ abstract class RustLibApi extends BaseApi {
     required String locale,
   });
 
-  Future<String> crateApiAppmenuAppmenuItemsGetIconPath({required String icon});
+  Future<List<DispInfo>> crateApiDisplayInfoGetDisplayInfo();
 
-  DispInfo crateApiDisplayInfoGetPrimaryDisplayInfo();
+  Future<String> crateApiAppmenuAppmenuItemsGetIconPath({required String icon});
 
   Future<UserInfo> crateApiQuickSettingsWhoamiGetUserInfo();
 
@@ -284,6 +284,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<List<DispInfo>> crateApiDisplayInfoGetDisplayInfo() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_disp_info,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiDisplayInfoGetDisplayInfoConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiDisplayInfoGetDisplayInfoConstMeta =>
+      const TaskConstMeta(
+        debugName: 'get_display_info',
+        argNames: [],
+      );
+
+  @override
   Future<String> crateApiAppmenuAppmenuItemsGetIconPath({
     required String icon,
   }) {
@@ -295,7 +325,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 6,
             port: port_,
           );
         },
@@ -314,31 +344,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(
         debugName: 'get_icon_path',
         argNames: ['icon'],
-      );
-
-  @override
-  DispInfo crateApiDisplayInfoGetPrimaryDisplayInfo() {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_disp_info,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiDisplayInfoGetPrimaryDisplayInfoConstMeta,
-        argValues: [],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiDisplayInfoGetPrimaryDisplayInfoConstMeta =>
-      const TaskConstMeta(
-        debugName: 'get_primary_display_info',
-        argNames: [],
       );
 
   @override
@@ -716,7 +721,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return DispInfo(
       name: dco_decode_String(arr[0]),
-      id: dco_decode_u_32(arr[1]),
+      idx: dco_decode_u_32(arr[1]),
       widthPx: dco_decode_u_32(arr[2]),
       heightPx: dco_decode_u_32(arr[3]),
     );
@@ -762,6 +767,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<BatteryInfo> dco_decode_list_battery_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_battery_info).toList();
+  }
+
+  @protected
+  List<DispInfo> dco_decode_list_disp_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_disp_info).toList();
   }
 
   @protected
@@ -1044,12 +1055,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   DispInfo sse_decode_disp_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_name = sse_decode_String(deserializer);
-    final var_id = sse_decode_u_32(deserializer);
+    final var_idx = sse_decode_u_32(deserializer);
     final var_widthPx = sse_decode_u_32(deserializer);
     final var_heightPx = sse_decode_u_32(deserializer);
     return DispInfo(
       name: var_name,
-      id: var_id,
+      idx: var_idx,
       widthPx: var_widthPx,
       heightPx: var_heightPx,
     );
@@ -1119,6 +1130,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final ans_ = <BatteryInfo>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_battery_info(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<DispInfo> sse_decode_list_disp_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <DispInfo>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_disp_info(deserializer));
     }
     return ans_;
   }
@@ -1434,7 +1457,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
-    sse_encode_u_32(self.id, serializer);
+    sse_encode_u_32(self.idx, serializer);
     sse_encode_u_32(self.widthPx, serializer);
     sse_encode_u_32(self.heightPx, serializer);
   }
@@ -1499,6 +1522,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_battery_info(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_disp_info(
+    List<DispInfo> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_disp_info(item, serializer);
     }
   }
 

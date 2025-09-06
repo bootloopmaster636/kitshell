@@ -28,7 +28,8 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     Emitter<ScreenManagerState> emit,
   ) async {
     // Get display resolution info
-    final displayInfo = getPrimaryDisplayInfo();
+    final displays = await getDisplayInfo();
+    final displayInfo = displays.last;
     await layerShellManager.initialize(
       displayInfo.widthPx,
       panelDefaultHeightPx,
@@ -51,18 +52,19 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
 
     // Set where shell appear. Shell will appear on primary monitor
     await layerShellManager.setMonitor(
-      Monitor(displayInfo.id, displayInfo.name),
+      Monitor(displayInfo.idx, displayInfo.name),
     );
 
     logger.i(
       'Shell has appeared '
-      'on display ${displayInfo.name} (${displayInfo.id})',
+      'on display ${displayInfo.name} (${displayInfo.idx})',
     );
     emit(
-      const ScreenManagerStateLoaded(
+      ScreenManagerStateLoaded(
         isPopupShown: false,
         popupShown: PopupWidget.appMenu,
         position: WidgetPosition.center,
+        displays: displays,
       ),
     );
   }
@@ -82,14 +84,14 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     }
 
     // Get display resolution info
-    final displayInfo = getPrimaryDisplayInfo();
+    final displayInfo = loadedState.displays.last;
     await layerShellManager.initialize(
       displayInfo.widthPx,
       displayInfo.heightPx,
     );
     await layerShellManager.setLayer(ShellLayer.layerOverlay);
     emit(
-      ScreenManagerStateLoaded(
+      loadedState.copyWith(
         isPopupShown: true,
         popupShown: event.popupToShow,
         position: event.position,
@@ -102,12 +104,12 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     Emitter<ScreenManagerState> emit,
   ) async {
     if (state is! ScreenManagerStateLoaded) return;
+    final loadedState = state as ScreenManagerStateLoaded;
 
     // Get display resolution info
-    final displayInfo = getPrimaryDisplayInfo();
+    final displayInfo = loadedState.displays.last;
 
     // Do closing animation and etc
-    final loadedState = state as ScreenManagerStateLoaded;
     emit(loadedState.copyWith(isPopupShown: false));
     await Future<void>.delayed(popupOpenCloseDuration);
 
