@@ -1,4 +1,4 @@
-use freedesktop_desktop_entry::{default_paths, Iter};
+use freedesktop_desktop_entry::{default_paths, desktop_entries, Iter};
 use freedesktop_icons::lookup;
 use nix::sys::wait::waitpid;
 use nix::unistd::{fork, ForkResult};

@@ -18,6 +18,7 @@ import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart';
+import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
 class AppmenuPopup extends HookWidget {
@@ -26,7 +27,7 @@ class AppmenuPopup extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      get<AppmenuBloc>().add(AppmenuLoad(t.locale));
+      get<AppmenuBloc>().add(AppmenuLoad(locale: t.locale));
       return () {};
     }, []);
 
@@ -229,13 +230,13 @@ class AppIcon extends StatelessWidget {
           File(icon ?? ''),
           height: iconSize,
           width: iconSize,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
         'svg' => SvgPicture.file(
           File(icon ?? ''),
           height: iconSize,
           width: iconSize,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
         null || _ => Container(
           height: iconSize,
@@ -323,6 +324,29 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
               appInfo.metadata.isPinned
                   ? Ic.outline_pin_off
                   : Ic.outline_push_pin,
+              size: 16,
+              color: context.colorScheme.onSurface,
+            ),
+          ),
+        ),
+      ),
+    ),
+
+    CustomContextMenuBuilder(
+      widget: CustomInkwell(
+        onTap: () {
+          get<LaunchbarBloc>().add(LaunchbarEventAdded(appInfo.entry.id));
+          Navigator.of(context).pop();
+        },
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TextIcon(
+            text: Text(
+              t.appMenu.contextMenu.add,
+              style: context.textTheme.bodyMedium,
+            ),
+            icon: Iconify(
+              Ic.outline_rocket_launch,
               size: 16,
               color: context.colorScheme.onSurface,
             ),

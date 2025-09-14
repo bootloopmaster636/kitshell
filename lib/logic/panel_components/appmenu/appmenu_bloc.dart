@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
+import 'package:kitshell/data/repository/appmenu/app_list_repo.dart';
 import 'package:kitshell/data/repository/appmenu/app_metadata_repo.dart';
 import 'package:kitshell/etc/utitity/bloc_transformer.dart';
 import 'package:kitshell/etc/utitity/config.dart';
@@ -17,9 +18,12 @@ part 'appmenu_state.dart';
 @singleton
 class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
   AppmenuBloc({
-    required AppMetadataRepo appIconCacheRepo,
-  }) : _appMetadataRepo = appIconCacheRepo,
+    required AppListRepo appListRepo,
+    required AppMetadataRepo appMetadataRepo,
+  }) : _appListRepo = appListRepo,
+       _appMetadataRepo = appMetadataRepo,
        super(const AppmenuInitial()) {
+    on<AppmenuSubscribed>(_subs, transformer: droppable());
     on<AppmenuLoad>(_load, transformer: droppable());
     on<AppmenuPinToggled>(_togglePin);
     on<AppmenuRankReset>(_resetRank);
@@ -31,58 +35,44 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
   }
 
   final AppMetadataRepo _appMetadataRepo;
+  final AppListRepo _appListRepo;
+
+  Future<void> _subs(
+    AppmenuSubscribed event,
+    Emitter<AppmenuState> emit,
+  ) async {
+    return emit.forEach(
+      _appListRepo.appsList,
+      onData: (apps) {
+        // Sort by alphabet
+        final completeApps = <AppInfoModel>[...apps]
+          ..sort(
+            (a, b) => a.entry.name.compareTo(b.entry.name),
+          );
+
+        // Separate between pinned and not pinned entry
+        final regularEntry = <AppInfoModel>[];
+        final pinnedEntry = <AppInfoModel>[];
+        for (final app in completeApps) {
+          if (app.metadata.isPinned) {
+            pinnedEntry.add(app);
+          } else {
+            regularEntry.add(app);
+          }
+        }
+
+        return AppmenuLoaded(
+          entries: regularEntry,
+          pinnedEntries: pinnedEntry,
+        );
+      },
+    );
+  }
 
   Future<void> _load(AppmenuLoad event, Emitter<AppmenuState> emit) async {
-    if (state is AppmenuInitial) {
-      await _appMetadataRepo.initDb();
-    }
-
-    logger.i('AppmenuBloc: Start loading apps');
-    final result = [...await getAppmenuItems(locale: event.locale)];
-
-    // Populate result with icon taken from cache (if theres any)
-    // Otherwise, find icon
-    logger.i('AppmenuBloc: Apps loaded, populating apps with metadata');
-    final completeApps = <AppInfoModel>[];
-    for (final app in result) {
-      var appMetadata = await _appMetadataRepo.searchById(app.id);
-
-      // Get icon and new metadata if metadata not found.
-      if (appMetadata == null) {
-        final iconPath = await getIconPath(icon: app.icon);
-        appMetadata = await _appMetadataRepo.addNew(
-          id: app.id,
-          iconPath: iconPath,
-        );
-      }
-
-      completeApps.add(AppInfoModel(entry: app, metadata: appMetadata));
-    }
-    logger.i('AppmenuBloc: Metadata loaded');
-
-    // Sort by alphabet
-    completeApps.sort(
-      (a, b) => a.entry.name.compareTo(b.entry.name),
-    );
-
-    // Separate between pinned and not pinned entry
-    final regularEntry = <AppInfoModel>[];
-    final pinnedEntry = <AppInfoModel>[];
-    for (final app in completeApps) {
-      if (app.metadata.isPinned) {
-        pinnedEntry.add(app);
-      } else {
-        regularEntry.add(app);
-      }
-    }
-
-    emit(
-      AppmenuLoaded(
-        entries: regularEntry,
-        pinnedEntries: pinnedEntry,
-        locale: event.locale,
-      ),
-    );
+    // TODO(bootloopmaster636): Use dynamic locale from front end
+    _appListRepo.locale = event.locale ?? 'en_US';
+    await _appListRepo.load();
   }
 
   Future<void> _open(
@@ -102,7 +92,7 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
   ) async {
     if (state is! AppmenuLoaded) return;
     await _appMetadataRepo.togglePin(event.id);
-    add(AppmenuLoad((state as AppmenuLoaded).locale));
+    add(const AppmenuLoad());
   }
 
   Future<void> _resetRank(
@@ -111,7 +101,7 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
   ) async {
     if (state is! AppmenuLoaded) return;
     await _appMetadataRepo.resetRank(event.id);
-    add(AppmenuLoad((state as AppmenuLoaded).locale));
+    add(const AppmenuLoad());
   }
 
   Future<void> _search(

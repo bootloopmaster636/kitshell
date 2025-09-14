@@ -2,7 +2,9 @@ part of 'appmenu_bloc.dart';
 
 @freezed
 class AppmenuEvent with _$AppmenuEvent {
-  const factory AppmenuEvent.load(String locale) = AppmenuLoad;
+  const factory AppmenuEvent.subscribe() = AppmenuSubscribed;
+
+  const factory AppmenuEvent.load({String? locale}) = AppmenuLoad;
 
   const factory AppmenuEvent.togglePin(String id) = AppmenuPinToggled;
 

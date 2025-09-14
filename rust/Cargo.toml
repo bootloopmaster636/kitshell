@@ -25,6 +25,7 @@ sha2 = "0.10.9"
 base16ct = { version = "0.3.0", features = ["alloc"] }
 nix = { version = "0.30.1", features = ["process"] }
 libc = "0.2.175"
+niri-ipc = "25.8.0"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

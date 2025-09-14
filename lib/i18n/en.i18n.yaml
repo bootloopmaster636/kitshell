@@ -22,6 +22,8 @@ appMenu:
     pin: Pin to favorites
     unpin: Unpin from favorites
     resetRank: Reset ranking
+    add: Add to launchbar
+    remove: Remove from launchbar
 quickSettings:
   brightness:
     title: Brightness
