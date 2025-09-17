@@ -10,11 +10,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
+import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
+import 'package:kitshell/src/rust/api/wm_interface/base.dart';
+import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -49,7 +52,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  RustStreamSink<WmState> dco_decode_StreamSink_wm_state_Sse(dynamic raw);
+
+  @protected
   String dco_decode_String(dynamic raw);
+
+  @protected
+  WmInterface dco_decode_TraitDef_WmInterface(dynamic raw);
+
+  @protected
+  AppEntry dco_decode_app_entry(dynamic raw);
 
   @protected
   BacklightInfo dco_decode_backlight_info(dynamic raw);
@@ -61,7 +73,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BatteryState dco_decode_battery_state(dynamic raw);
 
   @protected
+  bool dco_decode_bool(dynamic raw);
+
+  @protected
   double dco_decode_box_autoadd_f_32(dynamic raw);
+
+  @protected
+  int dco_decode_box_autoadd_i_32(dynamic raw);
+
+  @protected
+  BigInt dco_decode_box_autoadd_u_64(dynamic raw);
 
   @protected
   DispInfo dco_decode_disp_info(dynamic raw);
@@ -76,7 +97,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 dco_decode_i_64(dynamic raw);
 
   @protected
+  LaunchbarItemState dco_decode_launchbar_item_state(dynamic raw);
+
+  @protected
   List<String> dco_decode_list_String(dynamic raw);
+
+  @protected
+  List<AppEntry> dco_decode_list_app_entry(dynamic raw);
 
   @protected
   List<BacklightInfo> dco_decode_list_backlight_info(dynamic raw);
@@ -85,16 +112,37 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<BatteryInfo> dco_decode_list_battery_info(dynamic raw);
 
   @protected
+  List<DispInfo> dco_decode_list_disp_info(dynamic raw);
+
+  @protected
+  List<LaunchbarItemState> dco_decode_list_launchbar_item_state(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
   List<(String, String)> dco_decode_list_record_string_string(dynamic raw);
 
   @protected
+  List<WorkspaceItemState> dco_decode_list_workspace_item_state(dynamic raw);
+
+  @protected
+  Niri dco_decode_niri(dynamic raw);
+
+  @protected
   NotificationData dco_decode_notification_data(dynamic raw);
 
   @protected
+  String? dco_decode_opt_String(dynamic raw);
+
+  @protected
   double? dco_decode_opt_box_autoadd_f_32(dynamic raw);
+
+  @protected
+  int? dco_decode_opt_box_autoadd_i_32(dynamic raw);
+
+  @protected
+  BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
 
   @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
@@ -106,6 +154,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_u_32(dynamic raw);
 
   @protected
+  BigInt dco_decode_u_64(dynamic raw);
+
+  @protected
   int dco_decode_u_8(dynamic raw);
 
   @protected
@@ -113,6 +164,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   UserInfo dco_decode_user_info(dynamic raw);
+
+  @protected
+  WindowManager dco_decode_window_manager(dynamic raw);
+
+  @protected
+  WmState dco_decode_wm_state(dynamic raw);
+
+  @protected
+  WorkspaceItemState dco_decode_workspace_item_state(dynamic raw);
 
   @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
@@ -140,7 +200,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  RustStreamSink<WmState> sse_decode_StreamSink_wm_state_Sse(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer);
+
+  @protected
+  AppEntry sse_decode_app_entry(SseDeserializer deserializer);
 
   @protected
   BacklightInfo sse_decode_backlight_info(SseDeserializer deserializer);
@@ -152,7 +220,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BatteryState sse_decode_battery_state(SseDeserializer deserializer);
 
   @protected
+  bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
   double sse_decode_box_autoadd_f_32(SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
+  BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
   DispInfo sse_decode_disp_info(SseDeserializer deserializer);
@@ -167,7 +244,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
 
   @protected
+  LaunchbarItemState sse_decode_launchbar_item_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
+
+  @protected
+  List<AppEntry> sse_decode_list_app_entry(SseDeserializer deserializer);
 
   @protected
   List<BacklightInfo> sse_decode_list_backlight_info(
@@ -178,6 +263,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<BatteryInfo> sse_decode_list_battery_info(SseDeserializer deserializer);
 
   @protected
+  List<DispInfo> sse_decode_list_disp_info(SseDeserializer deserializer);
+
+  @protected
+  List<LaunchbarItemState> sse_decode_list_launchbar_item_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
@@ -186,10 +279,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  List<WorkspaceItemState> sse_decode_list_workspace_item_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  Niri sse_decode_niri(SseDeserializer deserializer);
+
+  @protected
   NotificationData sse_decode_notification_data(SseDeserializer deserializer);
 
   @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_32(SseDeserializer deserializer);
+
+  @protected
+  int? sse_decode_opt_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
+  BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
   (String, String) sse_decode_record_string_string(
@@ -203,6 +313,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
+  BigInt sse_decode_u_64(SseDeserializer deserializer);
+
+  @protected
   int sse_decode_u_8(SseDeserializer deserializer);
 
   @protected
@@ -212,7 +325,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   UserInfo sse_decode_user_info(SseDeserializer deserializer);
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
+  WindowManager sse_decode_window_manager(SseDeserializer deserializer);
+
+  @protected
+  WmState sse_decode_wm_state(SseDeserializer deserializer);
+
+  @protected
+  WorkspaceItemState sse_decode_workspace_item_state(
+    SseDeserializer deserializer,
+  );
 
   @protected
   void sse_encode_AnyhowException(
@@ -248,7 +369,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_StreamSink_wm_state_Sse(
+    RustStreamSink<WmState> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_app_entry(AppEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_backlight_info(BacklightInfo self, SseSerializer serializer);
@@ -260,7 +390,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_battery_state(BatteryState self, SseSerializer serializer);
 
   @protected
+  void sse_encode_bool(bool self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_f_32(double self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
 
   @protected
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer);
@@ -275,7 +414,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
 
   @protected
+  void sse_encode_launchbar_item_state(
+    LaunchbarItemState self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_app_entry(List<AppEntry> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_backlight_info(
@@ -286,6 +434,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_battery_info(
     List<BatteryInfo> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_list_disp_info(List<DispInfo> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_launchbar_item_state(
+    List<LaunchbarItemState> self,
     SseSerializer serializer,
   );
 
@@ -302,13 +459,31 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_workspace_item_state(
+    List<WorkspaceItemState> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_niri(Niri self, SseSerializer serializer);
+
+  @protected
   void sse_encode_notification_data(
     NotificationData self,
     SseSerializer serializer,
   );
 
   @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_f_32(double? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_i_32(int? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);
 
   @protected
   void sse_encode_record_string_string(
@@ -323,6 +498,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_u_32(int self, SseSerializer serializer);
 
   @protected
+  void sse_encode_u_64(BigInt self, SseSerializer serializer);
+
+  @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
 
   @protected
@@ -332,7 +510,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_user_info(UserInfo self, SseSerializer serializer);
 
   @protected
-  void sse_encode_bool(bool self, SseSerializer serializer);
+  void sse_encode_window_manager(WindowManager self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_wm_state(WmState self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_workspace_item_state(
+    WorkspaceItemState self,
+    SseSerializer serializer,
+  );
 }
 
 // Section: wire_class

@@ -1,10 +1,11 @@
-import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:animated_switcher_plus/animated_switcher_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
+import 'package:kitshell/etc/component/custom_inkwell.dart';
+import 'package:kitshell/etc/component/large_slider.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
@@ -95,7 +96,15 @@ class QsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       spacing: Gaps.sm.value,
-      children: const [BatteryProgress(), BrightnessSlider()],
+      children: const [
+        Row(
+          children: [
+            BatteryProgress(),
+          ],
+        ),
+        BrightnessSlider(),
+        PlaceholderSlider(),
+      ],
     );
   }
 }

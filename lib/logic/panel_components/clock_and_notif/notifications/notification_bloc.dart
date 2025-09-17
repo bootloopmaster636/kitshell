@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
@@ -16,6 +15,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<NotificationEventRefreshed>(_onRefreshedNotification);
     on<NotificationEventClosed>(_onClosedNotification);
     on<NotificationEventCleared>(_onClearedNotification);
+    on<NotificationEventDndToggled>(_onToggleDnd);
   }
 
   Future<void> _onSubscribed(
@@ -94,5 +94,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     final loadedState = state as NotificationStateLoaded;
 
     emit(loadedState.copyWith(notifications: []));
+  }
+
+  Future<void> _onToggleDnd(
+    NotificationEventDndToggled event,
+    Emitter<NotificationState> emit,
+  ) async {
+    if (state is! NotificationStateLoaded) return;
+    final loadedState = state as NotificationStateLoaded;
+
+    emit(loadedState.copyWith(dndEnabled: !loadedState.dndEnabled));
   }
 }

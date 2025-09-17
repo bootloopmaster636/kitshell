@@ -13,7 +13,7 @@ class BrightnessSlider extends StatelessWidget {
         return Column(
           children: state.brightness.map((info) {
             return QsSliderComponent(
-              icon: Ic.outline_brightness_medium,
+              icon: Icons.brightness_4_outlined,
               value: info.brightness,
               maxVal: info.maxBrightness,
               onValueChanged: (val) {
@@ -56,9 +56,8 @@ class BatteryProgress extends StatelessWidget {
                   )
                 : null;
 
-            return QsProgressBarComponent(
-              title: t.quickSettings.battery.title,
-              subtitle: switch (info.battState) {
+            return QsMiniProgressComponent(
+              tooltipText: switch (info.battState) {
                 BatteryState.unknown => '',
                 BatteryState.charging =>
                   '${t.quickSettings.battery.status.charging} '
@@ -69,13 +68,31 @@ class BatteryProgress extends StatelessWidget {
                 BatteryState.empty => t.quickSettings.battery.status.empty,
                 BatteryState.full => t.quickSettings.battery.status.full,
               },
-              icon: Ic.twotone_battery_50,
+              icon: Ic.baseline_battery_5_bar,
               value: info.capacity.toInt(),
               maxVal: 100,
             );
           }).toList(),
         );
       },
+    );
+  }
+}
+
+class PlaceholderSlider extends HookWidget {
+  const PlaceholderSlider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final value = useState(50);
+    return QsSliderComponent(
+      icon: Icons.volume_up_outlined,
+      value: value.value,
+      maxVal: 100,
+      onValueChanged: (val) {
+        value.value = val.toInt();
+      },
+      title: 'Placeholder',
     );
   }
 }
@@ -120,7 +137,7 @@ class QsSliderComponent extends HookWidget {
     this.subtitle,
     super.key,
   });
-  final String icon;
+  final IconData icon;
   final String title;
   final String? subtitle;
   final int maxVal;
@@ -130,138 +147,76 @@ class QsSliderComponent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    final memoizedVal = useMemoized(() => getPercent(value, maxVal), [value]);
-    final memoizedDoubleVal = useMemoized(value.toDouble, [
-      value,
-    ]);
-    final memoizedDoubleMaxVal = useMemoized(maxVal.toDouble, [maxVal]);
-
-    return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
-      onExit: (_) => isHovered.value = false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: Gaps.xs.value,
-          children: [
-            Row(
-              children: [
-                TextIcon(
-                  icon: Iconify(
-                    icon,
-                    size: 20,
-                    color: context.colorScheme.primary,
-                  ),
-                  text: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: context.textTheme.bodyMedium),
-                      if (subtitle != null)
-                        Text(subtitle!, style: context.textTheme.bodySmall),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                AnimatedFlipCounter(
-                  duration: Durations.short2,
-                  curve: Easing.standardDecelerate,
-                  value: memoizedVal,
-                  textStyle: context.textTheme.bodyLarge,
-                ),
-              ],
-            ),
-            Slider(
-              value: memoizedDoubleVal,
-              max: memoizedDoubleMaxVal,
-              onChanged: onValueChanged,
-            ),
-          ],
-        ),
-      ),
+    return LargeSlider(
+      insetIcon: icon,
+      label: title,
+      onChanged: onValueChanged ?? (val) {},
+      value: value.toDouble(),
+      maxValue: maxVal.toDouble(),
+      textStyle: context.textTheme.bodySmall,
     );
   }
 }
 
-class QsProgressBarComponent extends HookWidget {
-  const QsProgressBarComponent({
+class QsMiniProgressComponent extends HookWidget {
+  const QsMiniProgressComponent({
     required this.icon,
-    required this.title,
     required this.value,
     required this.maxVal,
-    this.subtitle,
+    this.tooltipText,
     super.key,
   });
   final String icon;
-  final String title;
-  final String? subtitle;
   final int value;
   final int maxVal;
+  final String? tooltipText;
 
   @override
   Widget build(BuildContext context) {
-    final isHovered = useState(false);
-    final normalizedValue = useMemoized(() => getNormalized(value, maxVal), [
-      value,
-    ]);
+    final normalizedValue = useMemoized(
+      () => getNormalized(value ?? 0, maxVal ?? 0),
+      [
+        value,
+        maxVal,
+      ],
+    );
 
-    return MouseRegion(
-      onEnter: (_) => isHovered.value = true,
-      onExit: (_) => isHovered.value = false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
+    return CustomInkwell(
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: context.colorScheme.shadow.withValues(alpha: 0.1),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: TextIcon(
+        icon: Iconify(
+          icon,
+          size: 20,
+          color: context.colorScheme.primary,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            TextIcon(
-              icon: Iconify(
-                icon,
-                size: 20,
-                color: context.colorScheme.primary,
+        spacing: Gaps.xs.value,
+        text: Tooltip(
+          message: tooltipText,
+          child: Column(
+            spacing: Gaps.xs.value,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${(normalizedValue * 100).toStringAsFixed(0)}%',
+                style: context.textTheme.bodySmall,
               ),
-              text: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: context.textTheme.bodyMedium),
-                  if (subtitle != null)
-                    Text(subtitle!, style: context.textTheme.bodySmall),
-                ],
+              SizedBox(
+                width: 36,
+                child: LinearProgressIndicator(value: normalizedValue),
               ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: 72,
-              child: LinearProgressIndicator(value: normalizedValue),
-            ),
-            Gaps.md.gap,
-            AnimatedFlipCounter(
-              duration: Durations.short2,
-              curve: Easing.standardDecelerate,
-              value: value,
-              textStyle: context.textTheme.bodyLarge,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

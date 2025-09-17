@@ -1,5 +1,5 @@
 /// Duration of open/close animation for popup
-Duration popupOpenCloseDuration = const Duration(milliseconds: 280);
+Duration popupOpenCloseDuration = const Duration(milliseconds: 320);
 
 Duration notificationToastDuration = const Duration(milliseconds: 5000);
 
@@ -8,3 +8,6 @@ int panelDefaultHeightPx = 48;
 
 /// Popup background opacity
 double popupBgOpacity = 0.9;
+
+/// Fuzzy search threshold
+double fuzzySearchThreshold = 90;

@@ -1,7 +1,6 @@
-use anyhow::Error;
 use chrono::{DateTime, Local};
 use std::{collections::HashMap, future::pending};
-use zbus::{blocking::connection, interface, zvariant::Value};
+use zbus::{connection, interface, zvariant::Value, Connection, Error};
 
 use crate::frb_generated::StreamSink;
 
@@ -11,6 +10,12 @@ const NOTIFICATION_INTERFACE: &str = "org.freedesktop.Notifications";
 /// D-Bus path for desktop notifications.
 const NOTIFICATION_PATH: &str = "/org/freedesktop/Notifications";
 
+struct NotificationDbus {
+    conn: Connection,
+    service: NotificationService,
+}
+
+#[derive(Clone)]
 pub struct NotificationData {
     pub id: u32,
     pub app_name: String,
@@ -24,11 +29,19 @@ pub struct NotificationData {
     pub added_at: DateTime<Local>,
 }
 
-struct NotificationService {
-    sink: StreamSink<NotificationData>,
+#[derive(Clone)]
+pub struct NotificationService {
+    pub sink: StreamSink<NotificationData>,
 }
 
-#[interface(name = "org.freedesktop.Notifications")]
+#[interface(
+    name = "org.freedesktop.Notifications",
+    // proxy(
+    //     gen_blocking = false,
+    //     default_path = "/org/freedesktop/Notifications",
+    //     default_service = "org.freedesktop.Notifications"
+    // )
+)]
 impl NotificationService {
     /// Handle the Notify method call
     async fn notify(
@@ -42,7 +55,10 @@ impl NotificationService {
         hints: HashMap<String, Value<'_>>,
         expire_timeout: i32,
     ) -> u32 {
-        let id = rand::random();
+        let mut id: u32 = rand::random();
+        while id == 0 {
+            id = rand::random();
+        }
 
         // Send notification data through the sink
         let notification_data = NotificationData {
@@ -81,11 +97,12 @@ impl NotificationService {
     /// Get capabilities of the notification daemon
     async fn get_capabilities(&self) -> Vec<String> {
         vec![
+            "actions".to_string(),
             "body".to_string(),
             "body-markup".to_string(),
             "body-hyperlinks".to_string(),
-            "actions".to_string(),
-            "persistence".to_string(),
+            "body-images".to_string(),
+            "icon-static".to_string(),
         ]
     }
 
@@ -98,34 +115,27 @@ impl NotificationService {
             "1.3".to_string(),               // spec_version
         )
     }
+
+    // Invoke actions
+    // #[zbus(signal)]
+    // async fn action_invoked(id: u32, action_key: String) -> Result<(), Error> {}
 }
 
 pub async fn watch_notification_bus(sink: StreamSink<NotificationData>) -> Result<(), Error> {
+    println!("API | Notifications: Initializing notification service");
     let notif_service = NotificationService { sink };
-    let _conn = connection::Builder::session()?
+
+    // Build the connection asynchronously
+    let conn = connection::Builder::session()?
         .name(NOTIFICATION_INTERFACE)?
         .serve_at(NOTIFICATION_PATH, notif_service)?
-        .build();
-
-    pending::<()>().await;
-
-    Ok(())
-}
-
-#[deprecated]
-pub async fn dismiss_notification(id: u32) -> Result<(), Error> {
-    // Connect to the D-Bus session
-    let connection = zbus::Connection::session().await?;
-
-    connection
-        .call_method(
-            Some(NOTIFICATION_INTERFACE),
-            NOTIFICATION_PATH,
-            Some(NOTIFICATION_INTERFACE),
-            "NotificationClosed",
-            &(id, 2), // 2 is notification dismissed by user
-        )
+        .build()
         .await?;
 
+    println!("API | Notifications: Notification service initialized and registered on D-Bus!");
+
+    pending::<()>().await;
     Ok(())
 }
+
+pub async fn invoke_notif_action(id: u32, action_key: String) {}

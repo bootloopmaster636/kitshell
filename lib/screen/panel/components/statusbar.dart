@@ -36,11 +36,13 @@ class StatusbarComponent extends HookWidget {
   }
 }
 
-class StatusbarContent extends StatelessWidget {
+class StatusbarContent extends HookWidget {
   const StatusbarContent({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sliderValue = useState<double>(0);
+
     return const Row(
       children: [
         BrightnessStatus(),

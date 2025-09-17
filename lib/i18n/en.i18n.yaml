@@ -13,6 +13,17 @@ general:
 dateTimeNotif:
   notification:
     noNotification: No notifications
+    doNotDisturbEnabled: Do not disturb is enabled
+    doNotDisturbDesc: disable it to see notifications
+appMenu:
+  apps: Apps
+  searchApps: Search your apps
+  contextMenu:
+    pin: Pin to favorites
+    unpin: Unpin from favorites
+    resetRank: Reset ranking
+    add: Add to launchbar
+    remove: Remove from launchbar
 quickSettings:
   brightness:
     title: Brightness

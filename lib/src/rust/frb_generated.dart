@@ -7,11 +7,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
+import 'package:kitshell/src/rust/api/wm_interface/base.dart';
+import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
@@ -72,7 +75,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1578948583;
+  int get rustContentHash => 1302838839;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -88,11 +91,41 @@ abstract class RustLibApi extends BaseApi {
     required int value,
   });
 
-  Future<void> crateApiNotificationsDismissNotification({required int id});
+  Future<WindowManager> crateApiWmInterfaceBaseDetectCurrentWm();
 
-  DispInfo crateApiDisplayInfoGetPrimaryDisplaySize();
+  Future<List<AppEntry>> crateApiAppmenuAppmenuItemsGetAppmenuItems({
+    required String locale,
+  });
+
+  Future<List<DispInfo>> crateApiDisplayInfoGetDisplayInfo();
+
+  Future<String> crateApiAppmenuAppmenuItemsGetIconPath({required String icon});
 
   Future<UserInfo> crateApiQuickSettingsWhoamiGetUserInfo();
+
+  Future<void> crateApiNotificationsInvokeNotifAction({
+    required int id,
+    required String actionKey,
+  });
+
+  Future<void> crateApiAppmenuAppmenuItemsLaunchApp({
+    required List<String> exec,
+    required bool useTerminal,
+  });
+
+  Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
+    required BigInt windowId,
+  });
+
+  Future<void> crateApiWmInterfaceNiriNiriFocusWindow({
+    required BigInt windowId,
+  });
+
+  Future<void> crateApiWmInterfaceNiriNiriSwitchWorkspace({
+    required BigInt workspaceId,
+  });
+
+  Stream<WmState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents();
 
   Stream<List<BacklightInfo>>
   crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent();
@@ -124,7 +157,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 1,
+            funcId: 5,
             port: port_,
           );
         },
@@ -148,59 +181,129 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiNotificationsDismissNotification({required int id}) {
+  Future<WindowManager> crateApiWmInterfaceBaseDetectCurrentWm() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_u_32(id, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 6,
             port: port_,
           );
         },
         codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
+          decodeSuccessData: sse_decode_window_manager,
           decodeErrorData: sse_decode_AnyhowException,
         ),
-        constMeta: kCrateApiNotificationsDismissNotificationConstMeta,
-        argValues: [id],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiNotificationsDismissNotificationConstMeta =>
-      const TaskConstMeta(
-        debugName: 'dismiss_notification',
-        argNames: ['id'],
-      );
-
-  @override
-  DispInfo crateApiDisplayInfoGetPrimaryDisplaySize() {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_disp_info,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiDisplayInfoGetPrimaryDisplaySizeConstMeta,
+        constMeta: kCrateApiWmInterfaceBaseDetectCurrentWmConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiDisplayInfoGetPrimaryDisplaySizeConstMeta =>
+  TaskConstMeta get kCrateApiWmInterfaceBaseDetectCurrentWmConstMeta =>
       const TaskConstMeta(
-        debugName: 'get_primary_display_size',
+        debugName: 'detect_current_wm',
         argNames: [],
+      );
+
+  @override
+  Future<List<AppEntry>> crateApiAppmenuAppmenuItemsGetAppmenuItems({
+    required String locale,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(locale, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 7,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_app_entry,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiAppmenuAppmenuItemsGetAppmenuItemsConstMeta,
+        argValues: [locale],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiAppmenuAppmenuItemsGetAppmenuItemsConstMeta =>
+      const TaskConstMeta(
+        debugName: 'get_appmenu_items',
+        argNames: ['locale'],
+      );
+
+  @override
+  Future<List<DispInfo>> crateApiDisplayInfoGetDisplayInfo() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 8,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_disp_info,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiDisplayInfoGetDisplayInfoConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiDisplayInfoGetDisplayInfoConstMeta =>
+      const TaskConstMeta(
+        debugName: 'get_display_info',
+        argNames: [],
+      );
+
+  @override
+  Future<String> crateApiAppmenuAppmenuItemsGetIconPath({
+    required String icon,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(icon, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 9,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiAppmenuAppmenuItemsGetIconPathConstMeta,
+        argValues: [icon],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiAppmenuAppmenuItemsGetIconPathConstMeta =>
+      const TaskConstMeta(
+        debugName: 'get_icon_path',
+        argNames: ['icon'],
       );
 
   @override
@@ -212,7 +315,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 4,
+            funcId: 10,
             port: port_,
           );
         },
@@ -234,6 +337,210 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiNotificationsInvokeNotifAction({
+    required int id,
+    required String actionKey,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_u_32(id, serializer);
+          sse_encode_String(actionKey, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 11,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiNotificationsInvokeNotifActionConstMeta,
+        argValues: [id, actionKey],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotificationsInvokeNotifActionConstMeta =>
+      const TaskConstMeta(
+        debugName: 'invoke_notif_action',
+        argNames: ['id', 'actionKey'],
+      );
+
+  @override
+  Future<void> crateApiAppmenuAppmenuItemsLaunchApp({
+    required List<String> exec,
+    required bool useTerminal,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_String(exec, serializer);
+          sse_encode_bool(useTerminal, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 12,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiAppmenuAppmenuItemsLaunchAppConstMeta,
+        argValues: [exec, useTerminal],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiAppmenuAppmenuItemsLaunchAppConstMeta =>
+      const TaskConstMeta(
+        debugName: 'launch_app',
+        argNames: ['exec', 'useTerminal'],
+      );
+
+  @override
+  Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
+    required BigInt windowId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_u_64(windowId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta: kCrateApiWmInterfaceNiriNiriCloseWindowConstMeta,
+        argValues: [windowId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWmInterfaceNiriNiriCloseWindowConstMeta =>
+      const TaskConstMeta(
+        debugName: 'niri_close_window',
+        argNames: ['windowId'],
+      );
+
+  @override
+  Future<void> crateApiWmInterfaceNiriNiriFocusWindow({
+    required BigInt windowId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_u_64(windowId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 14,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta: kCrateApiWmInterfaceNiriNiriFocusWindowConstMeta,
+        argValues: [windowId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWmInterfaceNiriNiriFocusWindowConstMeta =>
+      const TaskConstMeta(
+        debugName: 'niri_focus_window',
+        argNames: ['windowId'],
+      );
+
+  @override
+  Future<void> crateApiWmInterfaceNiriNiriSwitchWorkspace({
+    required BigInt workspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_u_64(workspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 15,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta: kCrateApiWmInterfaceNiriNiriSwitchWorkspaceConstMeta,
+        argValues: [workspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWmInterfaceNiriNiriSwitchWorkspaceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'niri_switch_workspace',
+        argNames: ['workspaceId'],
+      );
+
+  @override
+  Stream<WmState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents() {
+    final sink = RustStreamSink<WmState>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_StreamSink_wm_state_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 16,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta: kCrateApiWmInterfaceNiriNiriWatchLaunchbarEventsConstMeta,
+          argValues: [sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiWmInterfaceNiriNiriWatchLaunchbarEventsConstMeta =>
+      const TaskConstMeta(
+        debugName: 'niri_watch_launchbar_events',
+        argNames: ['sink'],
+      );
+
+  @override
   Stream<List<BacklightInfo>>
   crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent() {
     final sink = RustStreamSink<List<BacklightInfo>>();
@@ -246,7 +553,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 5,
+              funcId: 17,
               port: port_,
             );
           },
@@ -283,7 +590,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 6,
+              funcId: 18,
               port: port_,
             );
           },
@@ -318,7 +625,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 7,
+              funcId: 19,
               port: port_,
             );
           },
@@ -387,9 +694,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<WmState> dco_decode_StreamSink_wm_state_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
+  }
+
+  @protected
+  WmInterface dco_decode_TraitDef_WmInterface(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  AppEntry dco_decode_app_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    return AppEntry(
+      id: dco_decode_String(arr[0]),
+      appId: dco_decode_String(arr[1]),
+      name: dco_decode_String(arr[2]),
+      desc: dco_decode_String(arr[3]),
+      exec: dco_decode_list_String(arr[4]),
+      workingDir: dco_decode_String(arr[5]),
+      runInTerminal: dco_decode_bool(arr[6]),
+      icon: dco_decode_String(arr[7]),
+    );
   }
 
   @protected
@@ -427,21 +764,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool dco_decode_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as bool;
+  }
+
+  @protected
   double dco_decode_box_autoadd_f_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as double;
   }
 
   @protected
+  int dco_decode_box_autoadd_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  BigInt dco_decode_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_u_64(raw);
+  }
+
+  @protected
   DispInfo dco_decode_disp_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return DispInfo(
       name: dco_decode_String(arr[0]),
-      widthPx: dco_decode_u_32(arr[1]),
-      heightPx: dco_decode_u_32(arr[2]),
+      idx: dco_decode_u_32(arr[1]),
+      widthPx: dco_decode_u_32(arr[2]),
+      heightPx: dco_decode_u_32(arr[3]),
+      scale: dco_decode_f_32(arr[4]),
     );
   }
 
@@ -464,9 +821,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LaunchbarItemState dco_decode_launchbar_item_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    return LaunchbarItemState(
+      windowId: dco_decode_u_64(arr[0]),
+      windowTitle: dco_decode_opt_String(arr[1]),
+      appId: dco_decode_opt_String(arr[2]),
+      workspaceId: dco_decode_opt_box_autoadd_u_64(arr[3]),
+      processId: dco_decode_opt_box_autoadd_i_32(arr[4]),
+      isFocused: dco_decode_bool(arr[5]),
+    );
+  }
+
+  @protected
   List<String> dco_decode_list_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_String).toList();
+  }
+
+  @protected
+  List<AppEntry> dco_decode_list_app_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_app_entry).toList();
   }
 
   @protected
@@ -482,6 +861,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<DispInfo> dco_decode_list_disp_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_disp_info).toList();
+  }
+
+  @protected
+  List<LaunchbarItemState> dco_decode_list_launchbar_item_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_launchbar_item_state).toList();
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
@@ -491,6 +882,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<(String, String)> dco_decode_list_record_string_string(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_record_string_string).toList();
+  }
+
+  @protected
+  List<WorkspaceItemState> dco_decode_list_workspace_item_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_workspace_item_state).toList();
+  }
+
+  @protected
+  Niri dco_decode_niri(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.isNotEmpty)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return const Niri();
   }
 
   @protected
@@ -514,9 +920,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
   double? dco_decode_opt_box_autoadd_f_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_f_32(raw);
+  }
+
+  @protected
+  int? dco_decode_opt_box_autoadd_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_i_32(raw);
+  }
+
+  @protected
+  BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
   }
 
   @protected
@@ -545,6 +969,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
   int dco_decode_u_8(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
@@ -566,6 +996,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       fullname: dco_decode_String(arr[0]),
       username: dco_decode_String(arr[1]),
       hostname: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  WindowManager dco_decode_window_manager(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return WindowManager.values[raw as int];
+  }
+
+  @protected
+  WmState dco_decode_wm_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return WmState(
+      launchbar: dco_decode_list_launchbar_item_state(arr[0]),
+      workspaces: dco_decode_list_workspace_item_state(arr[1]),
+    );
+  }
+
+  @protected
+  WorkspaceItemState dco_decode_workspace_item_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WorkspaceItemState(
+      id: dco_decode_u_64(arr[0]),
+      name: dco_decode_opt_String(arr[1]),
+      isFocused: dco_decode_bool(arr[2]),
     );
   }
 
@@ -616,10 +1077,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<WmState> sse_decode_StreamSink_wm_state_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
+  }
+
+  @protected
+  AppEntry sse_decode_app_entry(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_id = sse_decode_String(deserializer);
+    final var_appId = sse_decode_String(deserializer);
+    final var_name = sse_decode_String(deserializer);
+    final var_desc = sse_decode_String(deserializer);
+    final var_exec = sse_decode_list_String(deserializer);
+    final var_workingDir = sse_decode_String(deserializer);
+    final var_runInTerminal = sse_decode_bool(deserializer);
+    final var_icon = sse_decode_String(deserializer);
+    return AppEntry(
+      id: var_id,
+      appId: var_appId,
+      name: var_name,
+      desc: var_desc,
+      exec: var_exec,
+      workingDir: var_workingDir,
+      runInTerminal: var_runInTerminal,
+      icon: var_icon,
+    );
   }
 
   @protected
@@ -660,21 +1152,43 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool sse_decode_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
   double sse_decode_box_autoadd_f_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return sse_decode_f_32(deserializer);
   }
 
   @protected
+  int sse_decode_box_autoadd_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return sse_decode_i_32(deserializer);
+  }
+
+  @protected
+  BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return sse_decode_u_64(deserializer);
+  }
+
+  @protected
   DispInfo sse_decode_disp_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_name = sse_decode_String(deserializer);
+    final var_idx = sse_decode_u_32(deserializer);
     final var_widthPx = sse_decode_u_32(deserializer);
     final var_heightPx = sse_decode_u_32(deserializer);
+    final var_scale = sse_decode_f_32(deserializer);
     return DispInfo(
       name: var_name,
+      idx: var_idx,
       widthPx: var_widthPx,
       heightPx: var_heightPx,
+      scale: var_scale,
     );
   }
 
@@ -697,6 +1211,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LaunchbarItemState sse_decode_launchbar_item_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_windowId = sse_decode_u_64(deserializer);
+    final var_windowTitle = sse_decode_opt_String(deserializer);
+    final var_appId = sse_decode_opt_String(deserializer);
+    final var_workspaceId = sse_decode_opt_box_autoadd_u_64(deserializer);
+    final var_processId = sse_decode_opt_box_autoadd_i_32(deserializer);
+    final var_isFocused = sse_decode_bool(deserializer);
+    return LaunchbarItemState(
+      windowId: var_windowId,
+      windowTitle: var_windowTitle,
+      appId: var_appId,
+      workspaceId: var_workspaceId,
+      processId: var_processId,
+      isFocused: var_isFocused,
+    );
+  }
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -704,6 +1239,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final ans_ = <String>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_String(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<AppEntry> sse_decode_list_app_entry(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <AppEntry>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_app_entry(deserializer));
     }
     return ans_;
   }
@@ -735,6 +1282,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<DispInfo> sse_decode_list_disp_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <DispInfo>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_disp_info(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<LaunchbarItemState> sse_decode_list_launchbar_item_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <LaunchbarItemState>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_launchbar_item_state(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final len_ = sse_decode_i_32(deserializer);
@@ -753,6 +1326,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ans_.add(sse_decode_record_string_string(deserializer));
     }
     return ans_;
+  }
+
+  @protected
+  List<WorkspaceItemState> sse_decode_list_workspace_item_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <WorkspaceItemState>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_workspace_item_state(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  Niri sse_decode_niri(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return const Niri();
   }
 
   @protected
@@ -783,11 +1376,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return sse_decode_String(deserializer);
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
       return sse_decode_box_autoadd_f_32(deserializer);
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  int? sse_decode_opt_box_autoadd_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return sse_decode_box_autoadd_i_32(deserializer);
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return sse_decode_box_autoadd_u_64(deserializer);
     } else {
       return null;
     }
@@ -816,6 +1442,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt sse_decode_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
   int sse_decode_u_8(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint8();
@@ -840,9 +1472,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer) {
+  WindowManager sse_decode_window_manager(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getUint8() != 0;
+    final inner = sse_decode_i_32(deserializer);
+    return WindowManager.values[inner];
+  }
+
+  @protected
+  WmState sse_decode_wm_state(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_launchbar = sse_decode_list_launchbar_item_state(deserializer);
+    final var_workspaces = sse_decode_list_workspace_item_state(deserializer);
+    return WmState(launchbar: var_launchbar, workspaces: var_workspaces);
+  }
+
+  @protected
+  WorkspaceItemState sse_decode_workspace_item_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_id = sse_decode_u_64(deserializer);
+    final var_name = sse_decode_opt_String(deserializer);
+    final var_isFocused = sse_decode_bool(deserializer);
+    return WorkspaceItemState(
+      id: var_id,
+      name: var_name,
+      isFocused: var_isFocused,
+    );
   }
 
   @protected
@@ -927,9 +1583,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_StreamSink_wm_state_Sse(
+    RustStreamSink<WmState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_wm_state,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
+      serializer,
+    );
+  }
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_app_entry(AppEntry self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_String(self.appId, serializer);
+    sse_encode_String(self.name, serializer);
+    sse_encode_String(self.desc, serializer);
+    sse_encode_list_String(self.exec, serializer);
+    sse_encode_String(self.workingDir, serializer);
+    sse_encode_bool(self.runInTerminal, serializer);
+    sse_encode_String(self.icon, serializer);
   }
 
   @protected
@@ -957,17 +1643,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self ? 1 : 0);
+  }
+
+  @protected
   void sse_encode_box_autoadd_f_32(double self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_f_32(self, serializer);
   }
 
   @protected
+  void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self, serializer);
+  }
+
+  @protected
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
+    sse_encode_u_32(self.idx, serializer);
     sse_encode_u_32(self.widthPx, serializer);
     sse_encode_u_32(self.heightPx, serializer);
+    sse_encode_f_32(self.scale, serializer);
   }
 
   @protected
@@ -989,11 +1695,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_launchbar_item_state(
+    LaunchbarItemState self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.windowId, serializer);
+    sse_encode_opt_String(self.windowTitle, serializer);
+    sse_encode_opt_String(self.appId, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.workspaceId, serializer);
+    sse_encode_opt_box_autoadd_i_32(self.processId, serializer);
+    sse_encode_bool(self.isFocused, serializer);
+  }
+
+  @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_String(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_app_entry(
+    List<AppEntry> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_app_entry(item, serializer);
     }
   }
 
@@ -1022,6 +1754,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_disp_info(
+    List<DispInfo> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_disp_info(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_launchbar_item_state(
+    List<LaunchbarItemState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_launchbar_item_state(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -1044,6 +1800,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_workspace_item_state(
+    List<WorkspaceItemState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_workspace_item_state(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_niri(Niri self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
   void sse_encode_notification_data(
     NotificationData self,
     SseSerializer serializer,
@@ -1062,12 +1835,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_f_32(double? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_f_32(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_i_32(int? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_i_32(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_64(self, serializer);
     }
   }
 
@@ -1094,6 +1897,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_u_64(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
   void sse_encode_u_8(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self);
@@ -1113,8 +1922,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_bool(bool self, SseSerializer serializer) {
+  void sse_encode_window_manager(WindowManager self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putUint8(self ? 1 : 0);
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_wm_state(WmState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_launchbar_item_state(self.launchbar, serializer);
+    sse_encode_list_workspace_item_state(self.workspaces, serializer);
+  }
+
+  @protected
+  void sse_encode_workspace_item_state(
+    WorkspaceItemState self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.id, serializer);
+    sse_encode_opt_String(self.name, serializer);
+    sse_encode_bool(self.isFocused, serializer);
   }
 }

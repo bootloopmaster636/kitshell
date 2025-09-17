@@ -7,14 +7,17 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `get_capabilities`, `get_server_information`, `notify`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `NotificationService`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `call_mut`, `call`, `get_all`, `get`, `introspect_to_writer`, `name`, `set_mut`, `set`, `spawn_tasks_for_methods`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `NotificationDbus`, `NotificationService`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `call_mut`, `call`, `clone`, `clone`, `get_all`, `get`, `introspect_to_writer`, `name`, `set_mut`, `set`, `spawn_tasks_for_methods`
 
 Stream<NotificationData> watchNotificationBus() =>
     RustLib.instance.api.crateApiNotificationsWatchNotificationBus();
 
-Future<void> dismissNotification({required int id}) =>
-    RustLib.instance.api.crateApiNotificationsDismissNotification(id: id);
+Future<void> invokeNotifAction({required int id, required String actionKey}) =>
+    RustLib.instance.api.crateApiNotificationsInvokeNotifAction(
+      id: id,
+      actionKey: actionKey,
+    );
 
 class NotificationData {
   const NotificationData({
