@@ -102,11 +102,12 @@ class LaunchBarPinnedAppsList extends StatelessWidget {
                         ),
                       )
                       .animate(key: ValueKey(idx))
-                      .slideY(
-                        begin: 1,
-                        end: 0,
+                      .scaleXY(
+                        begin: 0,
+                        end: 1,
+                        alignment: Alignment.center,
                         duration: Durations.medium1,
-                        curve: Easing.emphasizedDecelerate,
+                        curve: Easing.standard,
                       )
                       .fadeIn(duration: Durations.long1),
               ],
@@ -132,40 +133,80 @@ class LaunchbarItemComp extends HookWidget {
     final isOpened = useMemoized(() => data.windowInfo != null, [
       data.windowInfo,
     ]);
-    final isActive = useMemoized(() => data.windowInfo?.isFocused ?? false, [
+    final isFocused = useMemoized(() => data.windowInfo?.isFocused ?? false, [
       data.windowInfo,
     ]);
+    final showTitle = useMemoized(() => false);
 
-    return CustomInkwell(
-      width: panelDefaultHeightPx.toDouble(),
-      height: panelDefaultHeightPx.toDouble(),
-      onPointerEnter: (_) => isHovered.value = true,
-      onPointerExit: (_) => isHovered.value = false,
-      onTap: () {
-        if (data.windowInfo != null) {
-          get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
-        }
-      },
-      decoration: BoxDecoration(
-        color: context.colorScheme.primaryContainer.withValues(
-          alpha: isHovered.value ? 0.8 : 0,
+    return AnimatedSize(
+      duration: Durations.medium1,
+      curve: Easing.standard,
+      child: CustomInkwell(
+        width: showTitle ? 160 : panelDefaultHeightPx.toDouble(),
+        height: panelDefaultHeightPx.toDouble(),
+        onPointerEnter: (_) => isHovered.value = true,
+        onPointerExit: (_) => isHovered.value = false,
+        onTap: () {
+          if (data.windowInfo != null) {
+            get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
+          }
+        },
+        decoration: BoxDecoration(
+          color: isOpened
+              ? context.colorScheme.surfaceContainerLow
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(4),
+          border: isOpened
+              ? Border.all(
+                  color: context.colorScheme.outlineVariant,
+                )
+              : null,
         ),
-        borderRadius: BorderRadius.circular(4),
-        border: isOpened
-            ? Border(
-                bottom: BorderSide(
-                  width: isActive ? 4 : 2,
-                  color: context.colorScheme.primary,
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: Gaps.sm.value,
+                  children: [
+                    AppIcon(
+                      icon: data.appInfo?.metadata.iconPath,
+                      iconSize: 24,
+                    ),
+                    if (showTitle)
+                      Expanded(
+                        child: Text(
+                          data.windowInfo?.windowTitle ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
                 ),
-              )
-            : null,
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 12,
-      ),
-      child: AppIcon(
-        icon: data.appInfo?.metadata.iconPath,
+              ),
+            ),
+            if (isOpened)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AnimatedContainer(
+                  duration: Durations.medium1,
+                  curve: Easing.standard,
+                  width: isFocused ? 32 : 8,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.primary,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

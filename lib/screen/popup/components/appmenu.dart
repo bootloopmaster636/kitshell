@@ -214,35 +214,39 @@ class AppEntryTile extends StatelessWidget {
 }
 
 class AppIcon extends StatelessWidget {
-  const AppIcon({this.icon, super.key});
+  const AppIcon({this.icon, this.iconSize = 32, super.key});
 
   final String? icon;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 32;
-
     final fileExtension = icon?.split('.').last;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(4),
       child: switch (fileExtension) {
         'png' => Image.file(
           File(icon ?? ''),
           height: iconSize,
           width: iconSize,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         ),
         'svg' => SvgPicture.file(
           File(icon ?? ''),
           height: iconSize,
           width: iconSize,
-          fit: BoxFit.cover,
         ),
         null || _ => Container(
           height: iconSize,
           width: iconSize,
-          color: context.colorScheme.primaryContainer,
-          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: context.colorScheme.primaryContainer,
+            border: Border.all(
+              color: context.colorScheme.primary.withValues(alpha: 0.4),
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.all(6),
           child: Iconify(
             Bi.box_seam,
             color: context.colorScheme.onPrimaryContainer,

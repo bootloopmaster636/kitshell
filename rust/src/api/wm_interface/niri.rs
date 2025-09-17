@@ -125,7 +125,23 @@ impl WmInterface for Niri {
                                 .collect();
                             state.launchbar = new_list;
                         }
-                        None => {}
+                        None => {
+                            let launchbar_items = state.launchbar.clone();
+                            let new_list: Vec<LaunchbarItemState> = launchbar_items
+                                .iter()
+                                .map(|e| -> LaunchbarItemState {
+                                    return LaunchbarItemState {
+                                        window_id: e.window_id,
+                                        window_title: e.window_title.clone(),
+                                        app_id: e.app_id.clone(),
+                                        workspace_id: e.workspace_id,
+                                        process_id: e.process_id,
+                                        is_focused: false,
+                                    };
+                                })
+                                .collect();
+                            state.launchbar = new_list;
+                        }
                     }
                 }
                 Ok(Event::WorkspaceActiveWindowChanged {
