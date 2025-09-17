@@ -1,7 +1,7 @@
 import 'package:hive_ce/hive.dart';
 
-class LaunchbarItem extends HiveObject {
-  LaunchbarItem({
+class LaunchbarItemPersist extends HiveObject {
+  LaunchbarItemPersist({
     required this.appId,
     required this.idx,
   });

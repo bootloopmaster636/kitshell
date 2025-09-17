@@ -25,6 +25,7 @@ Future<void> launchApp({
 class AppEntry {
   const AppEntry({
     required this.id,
+    required this.appId,
     required this.name,
     required this.desc,
     required this.exec,
@@ -33,6 +34,7 @@ class AppEntry {
     required this.icon,
   });
   final String id;
+  final String appId;
   final String name;
   final String desc;
   final List<String> exec;
@@ -43,6 +45,7 @@ class AppEntry {
   @override
   int get hashCode =>
       id.hashCode ^
+      appId.hashCode ^
       name.hashCode ^
       desc.hashCode ^
       exec.hashCode ^
@@ -56,6 +59,7 @@ class AppEntry {
       other is AppEntry &&
           runtimeType == other.runtimeType &&
           id == other.id &&
+          appId == other.appId &&
           name == other.name &&
           desc == other.desc &&
           exec == other.exec &&

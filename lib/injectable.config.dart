@@ -16,6 +16,7 @@ import 'package:kitshell/data/repository/appmenu/app_metadata_repo.dart'
     as _i52;
 import 'package:kitshell/data/repository/launchbar/launchbar_repo.dart'
     as _i317;
+import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart' as _i980;
 import 'package:kitshell/logic/ipc/ipc_bloc.dart' as _i874;
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart'
     as _i81;
@@ -51,6 +52,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
     gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
     gh.singleton<_i52.AppMetadataRepo>(() => _i52.AppMetadataRepo());
+    gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
     gh.singleton<_i637.AppListRepo>(
       () => _i637.AppListRepo(appMetadataRepo: gh<_i52.AppMetadataRepo>()),
     );
@@ -64,7 +66,11 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i317.LaunchbarRepo(appListRepo: gh<_i637.AppListRepo>()),
     );
     gh.singleton<_i487.LaunchbarBloc>(
-      () => _i487.LaunchbarBloc(launcbarRepo: gh<_i317.LaunchbarRepo>()),
+      () => _i487.LaunchbarBloc(
+        launcbarRepo: gh<_i317.LaunchbarRepo>(),
+        wmIfaceRepo: gh<_i980.WmIfaceRepo>(),
+        appListRepo: gh<_i637.AppListRepo>(),
+      ),
     );
     return this;
   }

@@ -8,6 +8,7 @@ use std::process::Command;
 
 pub struct AppEntry {
     pub id: String,
+    pub app_id: String,
     pub name: String,
     pub desc: String,
     pub exec: Vec<String>,
@@ -40,6 +41,7 @@ pub async fn get_appmenu_items(locale: &str) -> Vec<AppEntry> {
 
         entries.push(AppEntry {
             id,
+            app_id: entry.appid.clone(),
             name,
             desc: String::from(entry.comment(&[locale][..]).unwrap_or_default()),
             exec,
@@ -49,7 +51,6 @@ pub async fn get_appmenu_items(locale: &str) -> Vec<AppEntry> {
         });
     }
 
-    println!("DEBUG: Generated {} app entries", entries.len());
     entries
 }
 

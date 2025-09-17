@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/bi.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
+import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
@@ -26,7 +27,8 @@ class LaunchBar extends HookWidget {
     useEffect(() {
       get<AppmenuBloc>().add(const AppmenuSubscribed());
       get<AppmenuBloc>().add(AppmenuLoad(locale: t.locale));
-      get<LaunchbarBloc>().add(const LaunchbarEventStarted());
+      get<LaunchbarBloc>().add(const LaunchbarEventApplistWatched());
+      get<LaunchbarBloc>().add(const LaunchbarEventWmEventsWatched());
       return () {};
     }, []);
 
@@ -80,8 +82,9 @@ class LaunchBarPinnedAppsList extends StatelessWidget {
         if (state is! LaunchbarStateLoaded) return const SizedBox.shrink();
 
         return AnimatedSize(
-          duration: Durations.medium1,
+          duration: Durations.medium2,
           curve: Easing.standard,
+          alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: ReorderableListView(
@@ -89,20 +92,20 @@ class LaunchBarPinnedAppsList extends StatelessWidget {
               buildDefaultDragHandles: false,
               shrinkWrap: true,
               children: [
-                for (int idx = 0; idx < state.pinned.length; idx++)
+                for (int idx = 0; idx < state.items.length; idx++)
                   Padding(
-                        key: ValueKey(idx),
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: ReorderableDelayedDragStartListener(
+                          enabled: state.items[idx].isPinned,
                           index: idx,
-                          child: LaunchbarItem(appInfo: state.pinned[idx]),
+                          child: LaunchbarItemComp(data: state.items[idx]),
                         ),
                       )
-                      .animate(delay: 120.ms * idx, key: ValueKey(idx))
+                      .animate(key: ValueKey(idx))
                       .slideY(
                         begin: 1,
                         end: 0,
-                        duration: Durations.long2,
+                        duration: Durations.medium1,
                         curve: Easing.emphasizedDecelerate,
                       )
                       .fadeIn(duration: Durations.long1),
@@ -118,32 +121,40 @@ class LaunchBarPinnedAppsList extends StatelessWidget {
   }
 }
 
-class LaunchbarItem extends HookWidget {
-  const LaunchbarItem({required this.appInfo, super.key});
+class LaunchbarItemComp extends HookWidget {
+  const LaunchbarItemComp({required this.data, super.key});
 
-  final AppInfoModel appInfo;
+  final LaunchbarItem data;
 
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    final isOpened = useState(false);
-    final isActive = useState(false);
+    final isOpened = useMemoized(() => data.windowInfo != null, [
+      data.windowInfo,
+    ]);
+    final isActive = useMemoized(() => data.windowInfo?.isFocused ?? false, [
+      data.windowInfo,
+    ]);
 
     return CustomInkwell(
       width: panelDefaultHeightPx.toDouble(),
       height: panelDefaultHeightPx.toDouble(),
       onPointerEnter: (_) => isHovered.value = true,
       onPointerExit: (_) => isHovered.value = false,
-      onTap: () {},
+      onTap: () {
+        if (data.windowInfo != null) {
+          get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
+        }
+      },
       decoration: BoxDecoration(
         color: context.colorScheme.primaryContainer.withValues(
           alpha: isHovered.value ? 0.8 : 0,
         ),
         borderRadius: BorderRadius.circular(4),
-        border: isOpened.value
+        border: isOpened
             ? Border(
                 bottom: BorderSide(
-                  width: isActive.value ? 4 : 2,
+                  width: isActive ? 4 : 2,
                   color: context.colorScheme.primary,
                 ),
               )
@@ -154,7 +165,7 @@ class LaunchbarItem extends HookWidget {
         horizontal: 12,
       ),
       child: AppIcon(
-        icon: appInfo.metadata.iconPath,
+        icon: data.appInfo?.metadata.iconPath,
       ),
     );
   }

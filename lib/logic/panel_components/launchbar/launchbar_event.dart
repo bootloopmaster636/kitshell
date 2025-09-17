@@ -3,7 +3,10 @@ part of 'launchbar_bloc.dart';
 @freezed
 class LaunchbarEvent with _$LaunchbarEvent {
   /// Subscribes to pinned app list in launchbar
-  const factory LaunchbarEvent.started() = LaunchbarEventStarted;
+  const factory LaunchbarEvent.watchApplist() = LaunchbarEventApplistWatched;
+
+  /// Subscribe to WM events
+  const factory LaunchbarEvent.watchWmEvents() = LaunchbarEventWmEventsWatched;
 
   /// Add app to the end of launchbar
   const factory LaunchbarEvent.add(String appId) = LaunchbarEventAdded;

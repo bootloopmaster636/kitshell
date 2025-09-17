@@ -1,7 +1,7 @@
-use super::base::{LaunchbarItemState, LaunchbarState, WmInterface, WorkspaceItemState};
+use super::base::{LaunchbarItemState, WmInterface, WmState, WorkspaceItemState};
 use crate::frb_generated::StreamSink;
 use anyhow::Error;
-use niri_ipc::{socket::Socket, Event};
+use niri_ipc::{socket::Socket, Action, Event, Request, WorkspaceReferenceArg};
 
 pub struct Niri {}
 
@@ -16,10 +16,12 @@ impl Niri {
 }
 
 impl WmInterface for Niri {
-    async fn watch_launchbar_events(sink: StreamSink<LaunchbarState>) -> Result<(), Error> {
-        let socket = Niri::get_socket()?;
+    async fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error> {
+        let mut socket = Niri::get_socket()?;
+        let reply = socket.send(Request::EventStream)?;
+
         let mut next = socket.read_events();
-        let mut state = LaunchbarState {
+        let mut state = WmState {
             launchbar: vec![],
             workspaces: vec![],
         };
@@ -28,8 +30,9 @@ impl WmInterface for Niri {
             // Update state
             match next() {
                 Ok(Event::WorkspacesChanged { workspaces }) => {
+                    println!("API | Niri: Workspaces Changed");
                     let mut workspaces_new: Vec<WorkspaceItemState> = Vec::new();
-                    workspaces.iter().map(|e| {
+                    workspaces.iter().for_each(|e| {
                         workspaces_new.push(WorkspaceItemState {
                             id: e.id,
                             name: e.name.clone(),
@@ -39,8 +42,9 @@ impl WmInterface for Niri {
                     state.workspaces = workspaces_new;
                 }
                 Ok(Event::WindowsChanged { windows }) => {
+                    println!("API | Niri: Windows Changed");
                     let mut windows_new: Vec<LaunchbarItemState> = Vec::new();
-                    windows.iter().map(|e| {
+                    windows.iter().for_each(|e| {
                         windows_new.push(LaunchbarItemState {
                             window_id: e.id,
                             app_id: e.app_id.clone(),
@@ -52,24 +56,161 @@ impl WmInterface for Niri {
                     });
                     state.launchbar = windows_new;
                 }
-                Ok(_) => (),
-                Err(_) => todo!(),
+                Ok(Event::WindowOpenedOrChanged { window }) => {
+                    println!("API | Niri: Window opened or changed");
+                    let mut launchbar_items = state.launchbar.clone();
+                    let window_exists = launchbar_items.iter().any(|e| e.window_id == window.id);
+                    let result: Vec<LaunchbarItemState>;
+
+                    if window_exists {
+                        result = launchbar_items
+                            .iter()
+                            .map(|e| -> LaunchbarItemState {
+                                if e.window_id == window.id {
+                                    return LaunchbarItemState {
+                                        window_id: window.id,
+                                        window_title: window.title.clone(),
+                                        app_id: window.app_id.clone(),
+                                        workspace_id: window.workspace_id,
+                                        process_id: window.pid,
+                                        is_focused: window.is_focused,
+                                    };
+                                } else {
+                                    return e.to_owned();
+                                }
+                            })
+                            .collect();
+                    } else {
+                        launchbar_items.push(LaunchbarItemState {
+                            window_id: window.id,
+                            window_title: window.title.clone(),
+                            app_id: window.app_id.clone(),
+                            workspace_id: window.workspace_id,
+                            process_id: window.pid,
+                            is_focused: window.is_focused,
+                        });
+                        result = launchbar_items;
+                    }
+
+                    state.launchbar = result;
+                }
+                Ok(Event::WindowFocusChanged { id }) => {
+                    println!("API | Niri: Window focus changed");
+                    match id {
+                        Some(val) => {
+                            let launchbar_items = state.launchbar.clone();
+                            let new_list: Vec<LaunchbarItemState> = launchbar_items
+                                .iter()
+                                .map(|e| -> LaunchbarItemState {
+                                    if e.window_id == val {
+                                        return LaunchbarItemState {
+                                            window_id: e.window_id,
+                                            window_title: e.window_title.clone(),
+                                            app_id: e.app_id.clone(),
+                                            workspace_id: e.workspace_id,
+                                            process_id: e.process_id,
+                                            is_focused: true,
+                                        };
+                                    } else {
+                                        return LaunchbarItemState {
+                                            window_id: e.window_id,
+                                            window_title: e.window_title.clone(),
+                                            app_id: e.app_id.clone(),
+                                            workspace_id: e.workspace_id,
+                                            process_id: e.process_id,
+                                            is_focused: false,
+                                        };
+                                    }
+                                })
+                                .collect();
+                            state.launchbar = new_list;
+                        }
+                        None => {}
+                    }
+                }
+                Ok(Event::WorkspaceActiveWindowChanged {
+                    workspace_id,
+                    active_window_id,
+                }) => {
+                    println!("API | Niri: Workspace active window changed");
+                    match active_window_id {
+                        Some(val) => {
+                            let launchbar_items = state.launchbar.clone();
+                            let new_list: Vec<LaunchbarItemState> = launchbar_items
+                                .iter()
+                                .map(|e| -> LaunchbarItemState {
+                                    if e.window_id == val {
+                                        return LaunchbarItemState {
+                                            window_id: e.window_id,
+                                            window_title: e.window_title.clone(),
+                                            app_id: e.app_id.clone(),
+                                            workspace_id: e.workspace_id,
+                                            process_id: e.process_id,
+                                            is_focused: true,
+                                        };
+                                    } else {
+                                        return LaunchbarItemState {
+                                            window_id: e.window_id,
+                                            window_title: e.window_title.clone(),
+                                            app_id: e.app_id.clone(),
+                                            workspace_id: e.workspace_id,
+                                            process_id: e.process_id,
+                                            is_focused: false,
+                                        };
+                                    }
+                                })
+                                .collect();
+                            state.launchbar = new_list;
+                        }
+                        None => {}
+                    }
+                }
+                Ok(Event::WindowClosed { id }) => {
+                    println!("API | Niri: Window closed");
+                    let mut result = state.launchbar.clone();
+
+                    let index = result.iter().position(|item| item.window_id == id);
+                    if let Some(index) = index {
+                        result.remove(index);
+                    }
+
+                    state.launchbar = result;
+                }
+                Ok(other_event) => {
+                    println!("API | Niri: got event {:?}", other_event);
+                }
+                Err(e) => {
+                    println!("API | Niri: got error {}", e.to_string());
+                }
             };
 
             // Send new state to flutter
-            sink.add(state.clone());
+            let _ = sink.add(state.clone());
         }
     }
 
-    fn focus_window(window_id: String) -> Result<(), Error> {
-        todo!()
+    fn focus_window(window_id: u64) -> Result<(), Error> {
+        let mut socket = Niri::get_socket()?;
+        let _ = socket.send(Request::Action(Action::FocusWindow { id: window_id }));
+
+        Ok(())
     }
 
-    fn close_window(window_id: String) -> Result<(), Error> {
-        todo!()
+    fn close_window(window_id: u64) -> Result<(), Error> {
+        let mut socket = Niri::get_socket()?;
+        let _ = socket.send(Request::Action(Action::CloseWindow {
+            id: Some(window_id),
+        }));
+
+        Ok(())
     }
 
-    fn switch_workspace(workspace_id: String) -> Result<(), Error> {
-        todo!()
+    fn switch_workspace(workspace_id: u64) -> Result<(), Error> {
+        let mut socket = Niri::get_socket()?;
+        let _ = socket.send(Request::Action(Action::FocusWorkspace {
+            reference: WorkspaceReferenceArg::Id(workspace_id),
+        }));
+
+        Ok(())
     }
 }

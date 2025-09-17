@@ -32,7 +32,9 @@ class LaunchbarRepo {
   }
 
   Future<void> startWatchingAppList() async {
-    List<AppInfoModel> fromDbToApplist(List<LaunchbarItem> launchbarItem) {
+    List<AppInfoModel> fromDbToApplist(
+      List<LaunchbarItemPersist> launchbarItem,
+    ) {
       final appList = _appListRepo.current;
       final result = <AppInfoModel>[];
 
@@ -55,14 +57,18 @@ class LaunchbarRepo {
 
     // Initialize with current app list
     _pinnedAppsController.add(
-      fromDbToApplist(_box.values.map((e) => e as LaunchbarItem).toList()),
+      fromDbToApplist(
+        _box.values.map((e) => e as LaunchbarItemPersist).toList(),
+      ),
     );
 
     // Add to stream on subsequent db event
     logger.i('LaunchbarRepo: Listening for changes in app list');
     _appListStream = _box.watch().listen((_) {
       _pinnedAppsController.add(
-        fromDbToApplist(_box.values.map((e) => e as LaunchbarItem).toList()),
+        fromDbToApplist(
+          _box.values.map((e) => e as LaunchbarItemPersist).toList(),
+        ),
       );
     });
   }
@@ -70,17 +76,17 @@ class LaunchbarRepo {
   Future<void> addNew(String appId) async {
     // Always add the new item after the last element in launchbar
     final length = _box.values.length;
-    await _box.put(appId, LaunchbarItem(appId: appId, idx: length));
+    await _box.put(appId, LaunchbarItemPersist(appId: appId, idx: length));
   }
 
   Future<void> changeIndex({
-    required String appId,
+    required String appHash,
     required int newIdx,
   }) async {
-    final item = _box.get(appId) as LaunchbarItem?;
+    final item = _box.get(appHash) as LaunchbarItemPersist?;
     if (item == null) return;
     item.idx = newIdx;
-    await _box.put(appId, item);
+    await _box.put(appHash, item);
   }
 
   Future<void> removeItem(String appId) async {

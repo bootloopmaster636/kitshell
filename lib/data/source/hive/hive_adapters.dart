@@ -4,6 +4,6 @@ import 'package:kitshell/data/model/hive/launchbar_items.dart';
 
 @GenerateAdapters([
   AdapterSpec<AppEntryMetadata>(),
-  AdapterSpec<LaunchbarItem>(),
+  AdapterSpec<LaunchbarItemPersist>(),
 ])
 part 'hive_adapters.g.dart';

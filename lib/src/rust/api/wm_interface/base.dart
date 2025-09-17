@@ -8,11 +8,9 @@ import 'package:kitshell/src/rust/frb_generated.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`
 
+/// Get current WM used
 Future<WindowManager> detectCurrentWm() =>
     RustLib.instance.api.crateApiWmInterfaceBaseDetectCurrentWm();
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>
-abstract class VarError implements RustOpaqueInterface {}
 
 abstract class WmInterface {}
 
@@ -54,8 +52,13 @@ class LaunchbarItemState {
           isFocused == other.isFocused;
 }
 
-class LaunchbarState {
-  const LaunchbarState({
+enum WindowManager {
+  niri,
+  unsupported,
+}
+
+class WmState {
+  const WmState({
     required this.launchbar,
     required this.workspaces,
   });
@@ -68,15 +71,10 @@ class LaunchbarState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LaunchbarState &&
+      other is WmState &&
           runtimeType == other.runtimeType &&
           launchbar == other.launchbar &&
           workspaces == other.workspaces;
-}
-
-enum WindowManager {
-  niri,
-  unsupported,
 }
 
 class WorkspaceItemState {

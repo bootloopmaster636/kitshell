@@ -15,15 +15,21 @@ class DispInfo {
     required this.idx,
     required this.widthPx,
     required this.heightPx,
+    required this.scale,
   });
   final String name;
   final int idx;
   final int widthPx;
   final int heightPx;
+  final double scale;
 
   @override
   int get hashCode =>
-      name.hashCode ^ idx.hashCode ^ widthPx.hashCode ^ heightPx.hashCode;
+      name.hashCode ^
+      idx.hashCode ^
+      widthPx.hashCode ^
+      heightPx.hashCode ^
+      scale.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -33,5 +39,6 @@ class DispInfo {
           name == other.name &&
           idx == other.idx &&
           widthPx == other.widthPx &&
-          heightPx == other.heightPx;
+          heightPx == other.heightPx &&
+          scale == other.scale;
 }

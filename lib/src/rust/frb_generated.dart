@@ -114,18 +114,18 @@ abstract class RustLibApi extends BaseApi {
   });
 
   Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
-    required String windowId,
+    required BigInt windowId,
   });
 
   Future<void> crateApiWmInterfaceNiriNiriFocusWindow({
-    required String windowId,
+    required BigInt windowId,
   });
 
   Future<void> crateApiWmInterfaceNiriNiriSwitchWorkspace({
-    required String workspaceId,
+    required BigInt workspaceId,
   });
 
-  Stream<LaunchbarState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents();
+  Stream<WmState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents();
 
   Stream<List<BacklightInfo>>
   crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent();
@@ -133,14 +133,6 @@ abstract class RustLibApi extends BaseApi {
   Stream<List<BatteryInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
 
   Stream<NotificationData> crateApiNotificationsWatchNotificationBus();
-
-  RustArcIncrementStrongCountFnType
-  get rust_arc_increment_strong_count_VarError;
-
-  RustArcDecrementStrongCountFnType
-  get rust_arc_decrement_strong_count_VarError;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_VarErrorPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -203,8 +195,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_window_manager,
-          decodeErrorData:
-              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError,
+          decodeErrorData: sse_decode_AnyhowException,
         ),
         constMeta: kCrateApiWmInterfaceBaseDetectCurrentWmConstMeta,
         argValues: [],
@@ -417,13 +408,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
-    required String windowId,
+    required BigInt windowId,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(windowId, serializer);
+          sse_encode_u_64(windowId, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -450,13 +441,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiWmInterfaceNiriNiriFocusWindow({
-    required String windowId,
+    required BigInt windowId,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(windowId, serializer);
+          sse_encode_u_64(windowId, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -483,13 +474,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiWmInterfaceNiriNiriSwitchWorkspace({
-    required String workspaceId,
+    required BigInt workspaceId,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(workspaceId, serializer);
+          sse_encode_u_64(workspaceId, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -515,14 +506,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Stream<LaunchbarState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents() {
-    final sink = RustStreamSink<LaunchbarState>();
+  Stream<WmState> crateApiWmInterfaceNiriNiriWatchLaunchbarEvents() {
+    final sink = RustStreamSink<WmState>();
     unawaited(
       handler.executeNormal(
         NormalTask(
           callFfi: (port_) {
             final serializer = SseSerializer(generalizedFrbRustBinding);
-            sse_encode_StreamSink_launchbar_state_Sse(sink, serializer);
+            sse_encode_StreamSink_wm_state_Sse(sink, serializer);
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
@@ -657,27 +648,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ['sink'],
       );
 
-  RustArcIncrementStrongCountFnType
-  get rust_arc_increment_strong_count_VarError => wire
-      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError;
-
-  RustArcDecrementStrongCountFnType
-  get rust_arc_decrement_strong_count_VarError => wire
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError;
-
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AnyhowException(raw as String);
-  }
-
-  @protected
-  VarError
-  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VarErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -694,23 +668,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         raw,
       ).map((e) => MapEntry(e.$1, e.$2)),
     );
-  }
-
-  @protected
-  VarError
-  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VarErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  RustStreamSink<LaunchbarState> dco_decode_StreamSink_launchbar_state_Sse(
-    dynamic raw,
-  ) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    throw UnimplementedError();
   }
 
   @protected
@@ -737,6 +694,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<WmState> dco_decode_StreamSink_wm_state_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
@@ -752,16 +715,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AppEntry dco_decode_app_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 7)
-      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
     return AppEntry(
       id: dco_decode_String(arr[0]),
-      name: dco_decode_String(arr[1]),
-      desc: dco_decode_String(arr[2]),
-      exec: dco_decode_list_String(arr[3]),
-      workingDir: dco_decode_String(arr[4]),
-      runInTerminal: dco_decode_bool(arr[5]),
-      icon: dco_decode_String(arr[6]),
+      appId: dco_decode_String(arr[1]),
+      name: dco_decode_String(arr[2]),
+      desc: dco_decode_String(arr[3]),
+      exec: dco_decode_list_String(arr[4]),
+      workingDir: dco_decode_String(arr[5]),
+      runInTerminal: dco_decode_bool(arr[6]),
+      icon: dco_decode_String(arr[7]),
     );
   }
 
@@ -827,13 +791,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   DispInfo dco_decode_disp_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return DispInfo(
       name: dco_decode_String(arr[0]),
       idx: dco_decode_u_32(arr[1]),
       widthPx: dco_decode_u_32(arr[2]),
       heightPx: dco_decode_u_32(arr[3]),
+      scale: dco_decode_f_32(arr[4]),
     );
   }
 
@@ -868,18 +833,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       workspaceId: dco_decode_opt_box_autoadd_u_64(arr[3]),
       processId: dco_decode_opt_box_autoadd_i_32(arr[4]),
       isFocused: dco_decode_bool(arr[5]),
-    );
-  }
-
-  @protected
-  LaunchbarState dco_decode_launchbar_state(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return LaunchbarState(
-      launchbar: dco_decode_list_launchbar_item_state(arr[0]),
-      workspaces: dco_decode_list_workspace_item_state(arr[1]),
     );
   }
 
@@ -1047,15 +1000,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt dco_decode_usize(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dcoDecodeU64(raw);
-  }
-
-  @protected
   WindowManager dco_decode_window_manager(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return WindowManager.values[raw as int];
+  }
+
+  @protected
+  WmState dco_decode_wm_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return WmState(
+      launchbar: dco_decode_list_launchbar_item_state(arr[0]),
+      workspaces: dco_decode_list_workspace_item_state(arr[1]),
+    );
   }
 
   @protected
@@ -1079,18 +1038,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VarError
-  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return VarErrorImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
-  }
-
-  @protected
   DateTime sse_decode_Chrono_Local(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_i_64(deserializer);
@@ -1104,26 +1051,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_list_record_string_string(deserializer);
     return Map.fromEntries(inner.map((e) => MapEntry(e.$1, e.$2)));
-  }
-
-  @protected
-  VarError
-  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return VarErrorImpl.frbInternalSseDecode(
-      sse_decode_usize(deserializer),
-      sse_decode_i_32(deserializer),
-    );
-  }
-
-  @protected
-  RustStreamSink<LaunchbarState> sse_decode_StreamSink_launchbar_state_Sse(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    throw UnimplementedError('Unreachable ()');
   }
 
   @protected
@@ -1150,6 +1077,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<WmState> sse_decode_StreamSink_wm_state_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -1160,6 +1095,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AppEntry sse_decode_app_entry(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_id = sse_decode_String(deserializer);
+    final var_appId = sse_decode_String(deserializer);
     final var_name = sse_decode_String(deserializer);
     final var_desc = sse_decode_String(deserializer);
     final var_exec = sse_decode_list_String(deserializer);
@@ -1168,6 +1104,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_icon = sse_decode_String(deserializer);
     return AppEntry(
       id: var_id,
+      appId: var_appId,
       name: var_name,
       desc: var_desc,
       exec: var_exec,
@@ -1245,11 +1182,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_idx = sse_decode_u_32(deserializer);
     final var_widthPx = sse_decode_u_32(deserializer);
     final var_heightPx = sse_decode_u_32(deserializer);
+    final var_scale = sse_decode_f_32(deserializer);
     return DispInfo(
       name: var_name,
       idx: var_idx,
       widthPx: var_widthPx,
       heightPx: var_heightPx,
+      scale: var_scale,
     );
   }
 
@@ -1290,14 +1229,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       processId: var_processId,
       isFocused: var_isFocused,
     );
-  }
-
-  @protected
-  LaunchbarState sse_decode_launchbar_state(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    final var_launchbar = sse_decode_list_launchbar_item_state(deserializer);
-    final var_workspaces = sse_decode_list_workspace_item_state(deserializer);
-    return LaunchbarState(launchbar: var_launchbar, workspaces: var_workspaces);
   }
 
   @protected
@@ -1541,16 +1472,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  BigInt sse_decode_usize(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getBigUint64();
-  }
-
-  @protected
   WindowManager sse_decode_window_manager(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_i_32(deserializer);
     return WindowManager.values[inner];
+  }
+
+  @protected
+  WmState sse_decode_wm_state(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_launchbar = sse_decode_list_launchbar_item_state(deserializer);
+    final var_workspaces = sse_decode_list_workspace_item_state(deserializer);
+    return WmState(launchbar: var_launchbar, workspaces: var_workspaces);
   }
 
   @protected
@@ -1578,19 +1511,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void
-  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    VarError self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-      (self as VarErrorImpl).frbInternalSseEncode(move: true),
-      serializer,
-    );
-  }
-
-  @protected
   void sse_encode_Chrono_Local(DateTime self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_64(
@@ -1607,33 +1527,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_record_string_string(
       self.entries.map((e) => (e.key, e.value)).toList(),
-      serializer,
-    );
-  }
-
-  @protected
-  void
-  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    VarError self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize((self as VarErrorImpl).frbInternalSseEncode(), serializer);
-  }
-
-  @protected
-  void sse_encode_StreamSink_launchbar_state_Sse(
-    RustStreamSink<LaunchbarState> self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(
-      self.setupAndSerialize(
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_launchbar_state,
-          decodeErrorData: sse_decode_AnyhowException,
-        ),
-      ),
       serializer,
     );
   }
@@ -1690,6 +1583,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_StreamSink_wm_state_Sse(
+    RustStreamSink<WmState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_wm_state,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
+      serializer,
+    );
+  }
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
@@ -1699,6 +1609,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_app_entry(AppEntry self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
+    sse_encode_String(self.appId, serializer);
     sse_encode_String(self.name, serializer);
     sse_encode_String(self.desc, serializer);
     sse_encode_list_String(self.exec, serializer);
@@ -1762,6 +1673,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_u_32(self.idx, serializer);
     sse_encode_u_32(self.widthPx, serializer);
     sse_encode_u_32(self.heightPx, serializer);
+    sse_encode_f_32(self.scale, serializer);
   }
 
   @protected
@@ -1794,16 +1706,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_box_autoadd_u_64(self.workspaceId, serializer);
     sse_encode_opt_box_autoadd_i_32(self.processId, serializer);
     sse_encode_bool(self.isFocused, serializer);
-  }
-
-  @protected
-  void sse_encode_launchbar_state(
-    LaunchbarState self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_list_launchbar_item_state(self.launchbar, serializer);
-    sse_encode_list_workspace_item_state(self.workspaces, serializer);
   }
 
   @protected
@@ -2020,15 +1922,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_usize(BigInt self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putBigUint64(self);
-  }
-
-  @protected
   void sse_encode_window_manager(WindowManager self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_wm_state(WmState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_launchbar_item_state(self.launchbar, serializer);
+    sse_encode_list_workspace_item_state(self.workspaces, serializer);
   }
 
   @protected
@@ -2041,24 +1944,4 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.name, serializer);
     sse_encode_bool(self.isFocused, serializer);
   }
-}
-
-@sealed
-class VarErrorImpl extends RustOpaque implements VarError {
-  // Not to be used by end users
-  VarErrorImpl.frbInternalDcoDecode(List<dynamic> wire)
-    : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  VarErrorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final RustArcStaticData _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_VarError,
-    rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_VarError,
-    rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_VarErrorPtr,
-  );
 }

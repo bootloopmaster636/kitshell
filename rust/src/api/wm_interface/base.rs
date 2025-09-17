@@ -1,4 +1,4 @@
-use std::env::{self, VarError};
+use std::env::{self};
 
 use anyhow::Error;
 
@@ -28,22 +28,23 @@ pub struct WorkspaceItemState {
 }
 
 #[derive(Clone)]
-pub struct LaunchbarState {
+pub struct WmState {
     pub launchbar: Vec<LaunchbarItemState>,
     pub workspaces: Vec<WorkspaceItemState>,
 }
 
 pub trait WmInterface {
-    async fn watch_launchbar_events(sink: StreamSink<LaunchbarState>) -> Result<(), Error>;
+    async fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error>;
 
-    fn focus_window(window_id: String) -> Result<(), Error>;
+    fn focus_window(window_id: u64) -> Result<(), Error>;
 
-    fn close_window(window_id: String) -> Result<(), Error>;
+    fn close_window(window_id: u64) -> Result<(), Error>;
 
-    fn switch_workspace(workspace_id: String) -> Result<(), Error>;
+    fn switch_workspace(workspace_id: u64) -> Result<(), Error>;
 }
 
-pub fn detect_current_wm() -> Result<WindowManager, VarError> {
+/// Get current WM used
+pub fn detect_current_wm() -> Result<WindowManager, Error> {
     let key = "XDG_CURRENT_DESKTOP";
     let result = match env::var(key) {
         Ok(val) => match val.as_str() {

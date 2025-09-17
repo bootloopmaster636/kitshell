@@ -26,7 +26,6 @@
 // Section: imports
 
 use crate::api::wm_interface::base::WmInterface;
-use crate::api::wm_interface::base::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -113,10 +112,12 @@ fn wire__crate__api__wm_interface__base__detect_current_wm_impl(
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             deserializer.end();
             move |context| {
-                transform_result_sse::<_, VarError>((move || {
-                    let output_ok = crate::api::wm_interface::base::detect_current_wm()?;
-                    Ok(output_ok)
-                })())
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::wm_interface::base::detect_current_wm()?;
+                        Ok(output_ok)
+                    })(),
+                )
             }
         },
     )
@@ -369,7 +370,7 @@ fn wire__crate__api__wm_interface__niri__niri_close_window_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_window_id = <String>::sse_decode(&mut deserializer);
+            let api_window_id = <u64>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
@@ -405,7 +406,7 @@ fn wire__crate__api__wm_interface__niri__niri_focus_window_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_window_id = <String>::sse_decode(&mut deserializer);
+            let api_window_id = <u64>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
@@ -441,7 +442,7 @@ fn wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_workspace_id = <String>::sse_decode(&mut deserializer);
+            let api_workspace_id = <u64>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
@@ -479,7 +480,7 @@ fn wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_sink = <StreamSink<
-                crate::api::wm_interface::base::LaunchbarState,
+                crate::api::wm_interface::base::WmState,
                 flutter_rust_bridge::for_generated::SseCodec,
             >>::sse_decode(&mut deserializer);
             deserializer.end();
@@ -618,12 +619,6 @@ fn wire__crate__api__notifications__watch_notification_bus_impl(
     )
 }
 
-// Section: related_funcs
-
-flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
-    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>
-);
-
 // Section: dart2rust
 
 impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
@@ -631,16 +626,6 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <String>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::anyhow::anyhow!("{}", inner);
-    }
-}
-
-impl SseDecode for VarError {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>,
-        >>::sse_decode(deserializer);
-        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
 }
 
@@ -664,29 +649,6 @@ impl SseDecode for std::collections::HashMap<String, String> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<(String, String)>>::sse_decode(deserializer);
         return inner.into_iter().collect();
-    }
-}
-
-impl SseDecode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <usize>::sse_decode(deserializer);
-        return decode_rust_opaque_moi(inner);
-    }
-}
-
-impl SseDecode
-    for StreamSink<
-        crate::api::wm_interface::base::LaunchbarState,
-        flutter_rust_bridge::for_generated::SseCodec,
-    >
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <String>::sse_decode(deserializer);
-        return StreamSink::deserialize(inner);
     }
 }
 
@@ -729,6 +691,19 @@ impl SseDecode
     }
 }
 
+impl SseDecode
+    for StreamSink<
+        crate::api::wm_interface::base::WmState,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
+    }
+}
+
 impl SseDecode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -741,6 +716,7 @@ impl SseDecode for crate::api::appmenu::appmenu_items::AppEntry {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_appId = <String>::sse_decode(deserializer);
         let mut var_name = <String>::sse_decode(deserializer);
         let mut var_desc = <String>::sse_decode(deserializer);
         let mut var_exec = <Vec<String>>::sse_decode(deserializer);
@@ -749,6 +725,7 @@ impl SseDecode for crate::api::appmenu::appmenu_items::AppEntry {
         let mut var_icon = <String>::sse_decode(deserializer);
         return crate::api::appmenu::appmenu_items::AppEntry {
             id: var_id,
+            app_id: var_appId,
             name: var_name,
             desc: var_desc,
             exec: var_exec,
@@ -821,11 +798,13 @@ impl SseDecode for crate::api::display_info::DispInfo {
         let mut var_idx = <u32>::sse_decode(deserializer);
         let mut var_widthPx = <u32>::sse_decode(deserializer);
         let mut var_heightPx = <u32>::sse_decode(deserializer);
+        let mut var_scale = <f32>::sse_decode(deserializer);
         return crate::api::display_info::DispInfo {
             name: var_name,
             idx: var_idx,
             width_px: var_widthPx,
             height_px: var_heightPx,
+            scale: var_scale,
         };
     }
 }
@@ -867,20 +846,6 @@ impl SseDecode for crate::api::wm_interface::base::LaunchbarItemState {
             workspace_id: var_workspaceId,
             process_id: var_processId,
             is_focused: var_isFocused,
-        };
-    }
-}
-
-impl SseDecode for crate::api::wm_interface::base::LaunchbarState {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_launchbar =
-            <Vec<crate::api::wm_interface::base::LaunchbarItemState>>::sse_decode(deserializer);
-        let mut var_workspaces =
-            <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_decode(deserializer);
-        return crate::api::wm_interface::base::LaunchbarState {
-            launchbar: var_launchbar,
-            workspaces: var_workspaces,
         };
     }
 }
@@ -1140,13 +1105,6 @@ impl SseDecode for crate::api::quick_settings::whoami::UserInfo {
     }
 }
 
-impl SseDecode for usize {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_u64::<NativeEndian>().unwrap() as _
-    }
-}
-
 impl SseDecode for crate::api::wm_interface::base::WindowManager {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1155,6 +1113,20 @@ impl SseDecode for crate::api::wm_interface::base::WindowManager {
             0 => crate::api::wm_interface::base::WindowManager::Niri,
             1 => crate::api::wm_interface::base::WindowManager::Unsupported,
             _ => unreachable!("Invalid variant for WindowManager: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::wm_interface::base::WmState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_launchbar =
+            <Vec<crate::api::wm_interface::base::LaunchbarItemState>>::sse_decode(deserializer);
+        let mut var_workspaces =
+            <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_decode(deserializer);
+        return crate::api::wm_interface::base::WmState {
+            launchbar: var_launchbar,
+            workspaces: var_workspaces,
         };
     }
 }
@@ -1288,25 +1260,11 @@ fn pde_ffi_dispatcher_sync_impl(
 // Section: rust2dart
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<VarError> {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
-            .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<VarError> {}
-
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VarError>> for VarError {
-    fn into_into_dart(self) -> FrbWrapper<VarError> {
-        self.into()
-    }
-}
-
-// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::appmenu::appmenu_items::AppEntry {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.id.into_into_dart().into_dart(),
+            self.app_id.into_into_dart().into_dart(),
             self.name.into_into_dart().into_dart(),
             self.desc.into_into_dart().into_dart(),
             self.exec.into_into_dart().into_dart(),
@@ -1409,6 +1367,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::display_info::DispInfo {
             self.idx.into_into_dart().into_dart(),
             self.width_px.into_into_dart().into_dart(),
             self.height_px.into_into_dart().into_dart(),
+            self.scale.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1446,27 +1405,6 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::Launchbar
     for crate::api::wm_interface::base::LaunchbarItemState
 {
     fn into_into_dart(self) -> crate::api::wm_interface::base::LaunchbarItemState {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::LaunchbarState {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.launchbar.into_into_dart().into_dart(),
-            self.workspaces.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::wm_interface::base::LaunchbarState
-{
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::LaunchbarState>
-    for crate::api::wm_interface::base::LaunchbarState
-{
-    fn into_into_dart(self) -> crate::api::wm_interface::base::LaunchbarState {
         self
     }
 }
@@ -1560,6 +1498,27 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::WindowMan
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::WmState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.launchbar.into_into_dart().into_dart(),
+            self.workspaces.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::wm_interface::base::WmState
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::WmState>
+    for crate::api::wm_interface::base::WmState
+{
+    fn into_into_dart(self) -> crate::api::wm_interface::base::WmState {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::WorkspaceItemState {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -1589,13 +1548,6 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
-impl SseEncode for VarError {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
-    }
-}
-
 impl SseEncode for chrono::DateTime<chrono::Local> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1607,29 +1559,6 @@ impl SseEncode for std::collections::HashMap<String, String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<(String, String)>>::sse_encode(self.into_iter().collect(), serializer);
-    }
-}
-
-impl SseEncode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        let (ptr, size) = self.sse_encode_raw();
-        <usize>::sse_encode(ptr, serializer);
-        <i32>::sse_encode(size, serializer);
-    }
-}
-
-impl SseEncode
-    for StreamSink<
-        crate::api::wm_interface::base::LaunchbarState,
-        flutter_rust_bridge::for_generated::SseCodec,
-    >
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        unimplemented!("")
     }
 }
 
@@ -1669,6 +1598,18 @@ impl SseEncode
     }
 }
 
+impl SseEncode
+    for StreamSink<
+        crate::api::wm_interface::base::WmState,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
+    }
+}
+
 impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1680,6 +1621,7 @@ impl SseEncode for crate::api::appmenu::appmenu_items::AppEntry {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.app_id, serializer);
         <String>::sse_encode(self.name, serializer);
         <String>::sse_encode(self.desc, serializer);
         <Vec<String>>::sse_encode(self.exec, serializer);
@@ -1745,6 +1687,7 @@ impl SseEncode for crate::api::display_info::DispInfo {
         <u32>::sse_encode(self.idx, serializer);
         <u32>::sse_encode(self.width_px, serializer);
         <u32>::sse_encode(self.height_px, serializer);
+        <f32>::sse_encode(self.scale, serializer);
     }
 }
 
@@ -1778,20 +1721,6 @@ impl SseEncode for crate::api::wm_interface::base::LaunchbarItemState {
         <Option<u64>>::sse_encode(self.workspace_id, serializer);
         <Option<i32>>::sse_encode(self.process_id, serializer);
         <bool>::sse_encode(self.is_focused, serializer);
-    }
-}
-
-impl SseEncode for crate::api::wm_interface::base::LaunchbarState {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Vec<crate::api::wm_interface::base::LaunchbarItemState>>::sse_encode(
-            self.launchbar,
-            serializer,
-        );
-        <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_encode(
-            self.workspaces,
-            serializer,
-        );
     }
 }
 
@@ -1998,16 +1927,6 @@ impl SseEncode for crate::api::quick_settings::whoami::UserInfo {
     }
 }
 
-impl SseEncode for usize {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer
-            .cursor
-            .write_u64::<NativeEndian>(self as _)
-            .unwrap();
-    }
-}
-
 impl SseEncode for crate::api::wm_interface::base::WindowManager {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2019,6 +1938,20 @@ impl SseEncode for crate::api::wm_interface::base::WindowManager {
                     unimplemented!("");
                 }
             },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::wm_interface::base::WmState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::wm_interface::base::LaunchbarItemState>>::sse_encode(
+            self.launchbar,
+            serializer,
+        );
+        <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_encode(
+            self.workspaces,
             serializer,
         );
     }
@@ -2042,7 +1975,6 @@ mod io {
 
     use super::*;
     use crate::api::wm_interface::base::WmInterface;
-    use crate::api::wm_interface::base::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -2052,20 +1984,6 @@ mod io {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_io!();
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_kitshell_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>::increment_strong_count(ptr as _);
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_kitshell_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>::decrement_strong_count(ptr as _);
-    }
 }
 #[cfg(not(target_family = "wasm"))]
 pub use io::*;
@@ -2080,7 +1998,6 @@ mod web {
 
     use super::*;
     use crate::api::wm_interface::base::WmInterface;
-    use crate::api::wm_interface::base::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -2092,20 +2009,6 @@ mod web {
     // Section: boilerplate
 
     flutter_rust_bridge::frb_generated_boilerplate_web!();
-
-    #[wasm_bindgen]
-    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>::increment_strong_count(ptr as _);
-    }
-
-    #[wasm_bindgen]
-    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VarError>>::decrement_strong_count(ptr as _);
-    }
 }
 #[cfg(target_family = "wasm")]
 pub use web::*;

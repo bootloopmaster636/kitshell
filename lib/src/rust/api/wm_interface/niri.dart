@@ -12,22 +12,22 @@ import 'package:kitshell/src/rust/frb_generated.dart';
 class Niri {
   const Niri();
 
-  static Future<void> closeWindow({required String windowId}) => RustLib
+  static Future<void> closeWindow({required BigInt windowId}) => RustLib
       .instance
       .api
       .crateApiWmInterfaceNiriNiriCloseWindow(windowId: windowId);
 
-  static Future<void> focusWindow({required String windowId}) => RustLib
+  static Future<void> focusWindow({required BigInt windowId}) => RustLib
       .instance
       .api
       .crateApiWmInterfaceNiriNiriFocusWindow(windowId: windowId);
 
-  static Future<void> switchWorkspace({required String workspaceId}) => RustLib
+  static Future<void> switchWorkspace({required BigInt workspaceId}) => RustLib
       .instance
       .api
       .crateApiWmInterfaceNiriNiriSwitchWorkspace(workspaceId: workspaceId);
 
-  static Stream<LaunchbarState> watchLaunchbarEvents() =>
+  static Stream<WmState> watchLaunchbarEvents() =>
       RustLib.instance.api.crateApiWmInterfaceNiriNiriWatchLaunchbarEvents();
 
   @override

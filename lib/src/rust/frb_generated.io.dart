@@ -26,35 +26,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.portManager,
   });
 
-  CrossPlatformFinalizerArg
-  get rust_arc_decrement_strong_count_VarErrorPtr => wire
-      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarErrorPtr;
-
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw);
-
-  @protected
-  VarError
-  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    dynamic raw,
-  );
 
   @protected
   DateTime dco_decode_Chrono_Local(dynamic raw);
 
   @protected
   Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
-
-  @protected
-  VarError
-  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    dynamic raw,
-  );
-
-  @protected
-  RustStreamSink<LaunchbarState> dco_decode_StreamSink_launchbar_state_Sse(
-    dynamic raw,
-  );
 
   @protected
   RustStreamSink<List<BacklightInfo>>
@@ -69,6 +48,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustStreamSink<NotificationData> dco_decode_StreamSink_notification_data_Sse(
     dynamic raw,
   );
+
+  @protected
+  RustStreamSink<WmState> dco_decode_StreamSink_wm_state_Sse(dynamic raw);
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -114,9 +96,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LaunchbarItemState dco_decode_launchbar_item_state(dynamic raw);
-
-  @protected
-  LaunchbarState dco_decode_launchbar_state(dynamic raw);
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
@@ -185,10 +164,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   UserInfo dco_decode_user_info(dynamic raw);
 
   @protected
-  BigInt dco_decode_usize(dynamic raw);
+  WindowManager dco_decode_window_manager(dynamic raw);
 
   @protected
-  WindowManager dco_decode_window_manager(dynamic raw);
+  WmState dco_decode_wm_state(dynamic raw);
 
   @protected
   WorkspaceItemState dco_decode_workspace_item_state(dynamic raw);
@@ -197,27 +176,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
-  VarError
-  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    SseDeserializer deserializer,
-  );
-
-  @protected
   DateTime sse_decode_Chrono_Local(SseDeserializer deserializer);
 
   @protected
   Map<String, String> sse_decode_Map_String_String_None(
-    SseDeserializer deserializer,
-  );
-
-  @protected
-  VarError
-  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    SseDeserializer deserializer,
-  );
-
-  @protected
-  RustStreamSink<LaunchbarState> sse_decode_StreamSink_launchbar_state_Sse(
     SseDeserializer deserializer,
   );
 
@@ -232,6 +194,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RustStreamSink<NotificationData> sse_decode_StreamSink_notification_data_Sse(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  RustStreamSink<WmState> sse_decode_StreamSink_wm_state_Sse(
     SseDeserializer deserializer,
   );
 
@@ -278,9 +245,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LaunchbarItemState sse_decode_launchbar_item_state(
     SseDeserializer deserializer,
   );
-
-  @protected
-  LaunchbarState sse_decode_launchbar_state(SseDeserializer deserializer);
 
   @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
@@ -359,10 +323,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   UserInfo sse_decode_user_info(SseDeserializer deserializer);
 
   @protected
-  BigInt sse_decode_usize(SseDeserializer deserializer);
+  WindowManager sse_decode_window_manager(SseDeserializer deserializer);
 
   @protected
-  WindowManager sse_decode_window_manager(SseDeserializer deserializer);
+  WmState sse_decode_wm_state(SseDeserializer deserializer);
 
   @protected
   WorkspaceItemState sse_decode_workspace_item_state(
@@ -376,31 +340,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  void
-  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    VarError self,
-    SseSerializer serializer,
-  );
-
-  @protected
   void sse_encode_Chrono_Local(DateTime self, SseSerializer serializer);
 
   @protected
   void sse_encode_Map_String_String_None(
     Map<String, String> self,
-    SseSerializer serializer,
-  );
-
-  @protected
-  void
-  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    VarError self,
-    SseSerializer serializer,
-  );
-
-  @protected
-  void sse_encode_StreamSink_launchbar_state_Sse(
-    RustStreamSink<LaunchbarState> self,
     SseSerializer serializer,
   );
 
@@ -419,6 +363,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_StreamSink_notification_data_Sse(
     RustStreamSink<NotificationData> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_wm_state_Sse(
+    RustStreamSink<WmState> self,
     SseSerializer serializer,
   );
 
@@ -464,12 +414,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_launchbar_item_state(
     LaunchbarItemState self,
-    SseSerializer serializer,
-  );
-
-  @protected
-  void sse_encode_launchbar_state(
-    LaunchbarState self,
     SseSerializer serializer,
   );
 
@@ -564,10 +508,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_user_info(UserInfo self, SseSerializer serializer);
 
   @protected
-  void sse_encode_usize(BigInt self, SseSerializer serializer);
+  void sse_encode_window_manager(WindowManager self, SseSerializer serializer);
 
   @protected
-  void sse_encode_window_manager(WindowManager self, SseSerializer serializer);
+  void sse_encode_wm_state(WmState self, SseSerializer serializer);
 
   @protected
   void sse_encode_workspace_item_state(
@@ -589,46 +533,4 @@ class RustLibWire implements BaseWire {
   /// Holds the symbol lookup function.
   final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
   _lookup;
-
-  void
-  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-      ptr,
-    );
-  }
-
-  late final ffi.Pointer<
-    ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void> p1)>
-  >
-  _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarErrorPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-        'frbgen_kitshell_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError',
-      );
-  late final void Function(ffi.Pointer<ffi.Void> p1)
-  _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarErrorPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError(
-      ptr,
-    );
-  }
-
-  late final ffi.Pointer<
-    ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void> p1)>
-  >
-  _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarErrorPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-        'frbgen_kitshell_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError',
-      );
-  late final void Function(ffi.Pointer<ffi.Void> p1)
-  _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarError =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVarErrorPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 }
