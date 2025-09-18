@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
@@ -42,21 +43,48 @@ class PopupContent extends StatelessWidget {
       bloc: get<ScreenManagerBloc>(),
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-        return AnimatedAlign(
-              duration: Durations.medium4,
-              curve: Curves.easeOutQuart,
-              alignment: switch (state.position) {
-                WidgetPosition.left => Alignment.bottomLeft,
-                WidgetPosition.center => Alignment.bottomCenter,
-                WidgetPosition.right => Alignment.bottomRight,
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8),
+        return Padding(
+              padding: const EdgeInsets.all(8),
+              child: AnimatedAlign(
+                duration: Durations.long1,
+                curve: Curves.easeOutQuint,
+                alignment: switch (state.position) {
+                  WidgetPosition.left => Alignment.bottomLeft,
+                  WidgetPosition.center => Alignment.bottomCenter,
+                  WidgetPosition.right => Alignment.bottomRight,
+                },
                 child: Material(
                   color: Colors.transparent,
-                  child: AnimatedSwitcher(
-                    duration: Durations.long1,
-                    child: state.popupShown.widget,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainer.withValues(
+                        alpha: popupBgOpacity,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: context.colorScheme.outlineVariant,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.colorScheme.shadow.withValues(
+                            alpha: 0.6,
+                          ),
+                          blurRadius: 8,
+                          blurStyle: BlurStyle.outer,
+                        ),
+                      ],
+                    ),
+                    child: AnimatedSize(
+                      duration: Durations.long1,
+                      curve: Curves.easeOutQuint,
+                      alignment: Alignment.bottomCenter,
+                      child: AnimatedSwitcher(
+                        duration: Durations.medium1,
+                        switchInCurve: Curves.easeInSine,
+                        switchOutCurve: Curves.easeOutSine,
+                        child: state.popupShown.widget,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -70,9 +98,7 @@ class PopupContent extends StatelessWidget {
               duration: popupOpenCloseDuration,
               curve: Easing.standard,
             )
-            .fade(
-              begin: 0,
-              end: 1,
+            .fadeIn(
               duration: popupOpenCloseDuration,
             );
       },

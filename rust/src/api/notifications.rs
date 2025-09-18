@@ -36,11 +36,11 @@ pub struct NotificationService {
 
 #[interface(
     name = "org.freedesktop.Notifications",
-    // proxy(
-    //     gen_blocking = false,
-    //     default_path = "/org/freedesktop/Notifications",
-    //     default_service = "org.freedesktop.Notifications"
-    // )
+    proxy(
+        gen_blocking = false,
+        default_path = "/org/freedesktop/Notifications",
+        default_service = "org.freedesktop.Notifications"
+    )
 )]
 impl NotificationService {
     /// Handle the Notify method call

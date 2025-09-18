@@ -23,9 +23,9 @@ class PanelManagerBloc extends Bloc<PanelManagerEvent, PanelManagerState> {
   ) async {
     emit(
       const PanelManagerStateLoaded(
-        componentsLeft: [ClockComponent()],
+        componentsLeft: [ClockComponent(), StatusbarComponent()],
         componentsCenter: [LaunchBar()],
-        componentsRight: [StatusbarComponent()],
+        componentsRight: [],
       ),
     );
   }

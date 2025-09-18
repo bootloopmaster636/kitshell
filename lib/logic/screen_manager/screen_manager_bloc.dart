@@ -32,7 +32,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     final displayInfo = displays.last;
     await layerShellManager.initialize(
       displayInfo.widthPx,
-      panelDefaultHeightPx,
+      panelDefaultHeightPx + 16,
     );
 
     // Set panel anchor to bottom
@@ -48,7 +48,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     await layerShellManager.setLayer(ShellLayer.layerTop);
 
     // Set exclusive mode to only bottom panel
-    await layerShellManager.setExclusiveZone(panelDefaultHeightPx);
+    await layerShellManager.setExclusiveZone(panelDefaultHeightPx + 8);
 
     // Set where shell appear. Shell will appear on primary monitor
     await layerShellManager.setMonitor(
@@ -117,7 +117,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     await layerShellManager.setLayer(ShellLayer.layerTop);
     await layerShellManager.initialize(
       displayInfo.widthPx,
-      panelDefaultHeightPx,
+      panelDefaultHeightPx + 16,
     );
   }
 }
