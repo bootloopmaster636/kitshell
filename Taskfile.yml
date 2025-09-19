@@ -1,0 +1,10 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  codegen:
+    cmds:
+      - fvm dart run build_runner build
+      - fvm dart run slang build
+      - flutter_rust_bridge_codegen generate
