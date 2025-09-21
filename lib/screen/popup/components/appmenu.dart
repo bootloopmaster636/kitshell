@@ -12,7 +12,6 @@ import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
 import 'package:kitshell/etc/component/custom_contextmenu.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
-import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/i18n/strings.g.dart';
@@ -31,19 +30,13 @@ class AppmenuPopup extends HookWidget {
       return () {};
     }, []);
 
-    return Container(
+    return const SizedBox(
       height: 580,
       width: 540,
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainer.withValues(
-          alpha: popupBgOpacity,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.colorScheme.outlineVariant),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: AppsList(),
       ),
-      clipBehavior: Clip.antiAlias,
-      padding: const EdgeInsets.all(16),
-      child: const AppsList(),
     );
   }
 }

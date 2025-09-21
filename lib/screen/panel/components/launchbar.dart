@@ -34,10 +34,10 @@ class LaunchBar extends HookWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        const AppmenuButton(),
-        Gaps.sm.gap,
-        const LaunchBarPinnedAppsList(),
+      spacing: Gaps.xs.value,
+      children: const [
+        AppmenuButton(),
+        LaunchBarPinnedAppsList(),
       ],
     );
   }
@@ -129,23 +129,22 @@ class LaunchbarItemComp extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isHovered = useState(false);
     final isOpened = useMemoized(() => data.windowInfo != null, [
       data.windowInfo,
     ]);
     final isFocused = useMemoized(() => data.windowInfo?.isFocused ?? false, [
       data.windowInfo,
     ]);
-    final showTitle = useMemoized(() => false);
+    final showTitle = useMemoized(() => isFocused, [
+      isFocused,
+    ]); // In the future, this will be configurable
 
     return AnimatedSize(
-      duration: Durations.medium1,
-      curve: Easing.standard,
+      duration: Durations.long2,
+      curve: Curves.easeOutBack,
       child: CustomInkwell(
         width: showTitle ? 160 : panelDefaultHeightPx.toDouble(),
         height: panelDefaultHeightPx.toDouble(),
-        onPointerEnter: (_) => isHovered.value = true,
-        onPointerExit: (_) => isHovered.value = false,
         onTap: () {
           if (data.windowInfo != null) {
             get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
@@ -153,7 +152,9 @@ class LaunchbarItemComp extends HookWidget {
         },
         decoration: BoxDecoration(
           color: isOpened
-              ? context.colorScheme.surfaceContainerLow
+              ? context.colorScheme.surface.withValues(
+                  alpha: 0.8,
+                )
               : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
           border: isOpened
@@ -167,7 +168,7 @@ class LaunchbarItemComp extends HookWidget {
           children: [
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: Gaps.sm.value,
@@ -192,7 +193,7 @@ class LaunchbarItemComp extends HookWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: AnimatedContainer(
-                  duration: Durations.medium1,
+                  duration: Durations.medium2,
                   curve: Easing.standard,
                   width: isFocused ? 32 : 8,
                   height: 4,

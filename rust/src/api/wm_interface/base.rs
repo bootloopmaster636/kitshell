@@ -34,7 +34,7 @@ pub struct WmState {
 }
 
 pub trait WmInterface {
-    async fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error>;
+    fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error>;
 
     fn focus_window(window_id: u64) -> Result<(), Error>;
 

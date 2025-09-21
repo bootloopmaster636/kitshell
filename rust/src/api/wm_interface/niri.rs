@@ -16,9 +16,9 @@ impl Niri {
 }
 
 impl WmInterface for Niri {
-    async fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error> {
+    fn watch_launchbar_events(sink: StreamSink<WmState>) -> Result<(), Error> {
         let mut socket = Niri::get_socket()?;
-        let reply = socket.send(Request::EventStream)?;
+        let _ = socket.send(Request::EventStream)?;
 
         let mut next = socket.read_events();
         let mut state = WmState {
@@ -30,7 +30,6 @@ impl WmInterface for Niri {
             // Update state
             match next() {
                 Ok(Event::WorkspacesChanged { workspaces }) => {
-                    println!("API | Niri: Workspaces Changed");
                     let mut workspaces_new: Vec<WorkspaceItemState> = Vec::new();
                     workspaces.iter().for_each(|e| {
                         workspaces_new.push(WorkspaceItemState {
@@ -42,7 +41,6 @@ impl WmInterface for Niri {
                     state.workspaces = workspaces_new;
                 }
                 Ok(Event::WindowsChanged { windows }) => {
-                    println!("API | Niri: Windows Changed");
                     let mut windows_new: Vec<LaunchbarItemState> = Vec::new();
                     windows.iter().for_each(|e| {
                         windows_new.push(LaunchbarItemState {
@@ -57,7 +55,6 @@ impl WmInterface for Niri {
                     state.launchbar = windows_new;
                 }
                 Ok(Event::WindowOpenedOrChanged { window }) => {
-                    println!("API | Niri: Window opened or changed");
                     let mut launchbar_items = state.launchbar.clone();
                     let window_exists = launchbar_items.iter().any(|e| e.window_id == window.id);
                     let result: Vec<LaunchbarItemState>;
@@ -94,95 +91,63 @@ impl WmInterface for Niri {
 
                     state.launchbar = result;
                 }
-                Ok(Event::WindowFocusChanged { id }) => {
-                    println!("API | Niri: Window focus changed");
-                    match id {
-                        Some(val) => {
-                            let launchbar_items = state.launchbar.clone();
-                            let new_list: Vec<LaunchbarItemState> = launchbar_items
-                                .iter()
-                                .map(|e| -> LaunchbarItemState {
-                                    if e.window_id == val {
-                                        return LaunchbarItemState {
-                                            window_id: e.window_id,
-                                            window_title: e.window_title.clone(),
-                                            app_id: e.app_id.clone(),
-                                            workspace_id: e.workspace_id,
-                                            process_id: e.process_id,
-                                            is_focused: true,
-                                        };
-                                    } else {
-                                        return LaunchbarItemState {
-                                            window_id: e.window_id,
-                                            window_title: e.window_title.clone(),
-                                            app_id: e.app_id.clone(),
-                                            workspace_id: e.workspace_id,
-                                            process_id: e.process_id,
-                                            is_focused: false,
-                                        };
-                                    }
-                                })
-                                .collect();
-                            state.launchbar = new_list;
-                        }
-                        None => {
-                            let launchbar_items = state.launchbar.clone();
-                            let new_list: Vec<LaunchbarItemState> = launchbar_items
-                                .iter()
-                                .map(|e| -> LaunchbarItemState {
-                                    return LaunchbarItemState {
-                                        window_id: e.window_id,
-                                        window_title: e.window_title.clone(),
-                                        app_id: e.app_id.clone(),
-                                        workspace_id: e.workspace_id,
-                                        process_id: e.process_id,
-                                        is_focused: false,
-                                    };
-                                })
-                                .collect();
-                            state.launchbar = new_list;
-                        }
+                Ok(Event::WindowFocusChanged { id }) => match id {
+                    Some(val) => {
+                        let launchbar_items = state.launchbar.clone();
+                        let new_list: Vec<LaunchbarItemState> = launchbar_items
+                            .iter()
+                            .map(|e| -> LaunchbarItemState {
+                                if e.window_id == val {
+                                    let mut item = e.clone();
+                                    item.is_focused = true;
+                                    return item;
+                                } else {
+                                    let mut item = e.clone();
+                                    item.is_focused = false;
+                                    return item;
+                                }
+                            })
+                            .collect();
+                        state.launchbar = new_list;
                     }
-                }
+                    None => {
+                        let launchbar_items = state.launchbar.clone();
+                        let new_list: Vec<LaunchbarItemState> = launchbar_items
+                            .iter()
+                            .map(|e| -> LaunchbarItemState {
+                                let mut item = e.clone();
+                                item.is_focused = false;
+                                return item;
+                            })
+                            .collect();
+                        state.launchbar = new_list;
+                    }
+                },
                 Ok(Event::WorkspaceActiveWindowChanged {
-                    workspace_id,
+                    workspace_id: _,
                     active_window_id,
-                }) => {
-                    println!("API | Niri: Workspace active window changed");
-                    match active_window_id {
-                        Some(val) => {
-                            let launchbar_items = state.launchbar.clone();
-                            let new_list: Vec<LaunchbarItemState> = launchbar_items
-                                .iter()
-                                .map(|e| -> LaunchbarItemState {
-                                    if e.window_id == val {
-                                        return LaunchbarItemState {
-                                            window_id: e.window_id,
-                                            window_title: e.window_title.clone(),
-                                            app_id: e.app_id.clone(),
-                                            workspace_id: e.workspace_id,
-                                            process_id: e.process_id,
-                                            is_focused: true,
-                                        };
-                                    } else {
-                                        return LaunchbarItemState {
-                                            window_id: e.window_id,
-                                            window_title: e.window_title.clone(),
-                                            app_id: e.app_id.clone(),
-                                            workspace_id: e.workspace_id,
-                                            process_id: e.process_id,
-                                            is_focused: false,
-                                        };
-                                    }
-                                })
-                                .collect();
-                            state.launchbar = new_list;
-                        }
-                        None => {}
+                }) => match active_window_id {
+                    Some(val) => {
+                        let launchbar_items = state.launchbar.clone();
+                        let new_list: Vec<LaunchbarItemState> = launchbar_items
+                            .iter()
+                            .map(|e| -> LaunchbarItemState {
+                                if e.window_id == val {
+                                    let mut item = e.clone();
+                                    item.is_focused = true;
+                                    return item;
+                                } else {
+                                    let mut item = e.clone();
+                                    item.is_focused = false;
+                                    return item;
+                                }
+                            })
+                            .collect();
+                        state.launchbar = new_list;
                     }
-                }
+                    None => {}
+                },
                 Ok(Event::WindowClosed { id }) => {
-                    println!("API | Niri: Window closed");
                     let mut result = state.launchbar.clone();
 
                     let index = result.iter().position(|item| item.window_id == id);
@@ -192,8 +157,27 @@ impl WmInterface for Niri {
 
                     state.launchbar = result;
                 }
+                Ok(Event::WorkspaceActivated { id, focused }) => {
+                    let workspaces = state.workspaces.clone();
+                    let result: Vec<WorkspaceItemState>;
+
+                    result = workspaces
+                        .iter()
+                        .map(|e| {
+                            if e.id == id {
+                                let mut item = e.clone();
+                                item.is_focused = focused;
+                                return item;
+                            } else {
+                                return e.to_owned();
+                            }
+                        })
+                        .collect();
+
+                    state.workspaces = result;
+                }
                 Ok(other_event) => {
-                    println!("API | Niri: got event {:?}", other_event);
+                    println!("API | Niri: got unmapped event {:?}", other_event);
                 }
                 Err(e) => {
                     println!("API | Niri: got error {}", e.to_string());

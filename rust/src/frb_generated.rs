@@ -463,7 +463,7 @@ fn wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
     rust_vec_len_: i32,
     data_len_: i32,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "niri_watch_launchbar_events",
             port: Some(port_),
@@ -484,15 +484,13 @@ fn wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
                 flutter_rust_bridge::for_generated::SseCodec,
             >>::sse_decode(&mut deserializer);
             deserializer.end();
-            move |context| async move {
+            move |context| {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
-                    (move || async move {
+                    (move || {
                         let output_ok =
-                            crate::api::wm_interface::niri::Niri::watch_launchbar_events(api_sink)
-                                .await?;
+                            crate::api::wm_interface::niri::Niri::watch_launchbar_events(api_sink)?;
                         Ok(output_ok)
-                    })()
-                    .await,
+                    })(),
                 )
             }
         },

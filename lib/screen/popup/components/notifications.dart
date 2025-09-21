@@ -10,7 +10,6 @@ import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
-import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/etc/utitity/hooks/periodic_hooks.dart';
@@ -25,17 +24,9 @@ class NotificationsPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 340,
       height: 560,
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainer.withValues(
-          alpha: popupBgOpacity,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.colorScheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -260,6 +251,7 @@ class NotificationContent extends HookWidget {
 
 class NotificationTile extends HookWidget {
   const NotificationTile({required this.data, required this.index, super.key});
+
   final NotificationData data;
   final int index;
 
