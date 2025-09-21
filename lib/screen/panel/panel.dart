@@ -92,26 +92,28 @@ class SectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: panelDefaultHeightPx.toDouble(),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface.withValues(alpha: 0.76),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: context.colorScheme.shadow.withValues(alpha: 0.5),
-            blurRadius: 4,
-            blurStyle: BlurStyle.outer,
-          ),
-          BoxShadow(
-            color: context.colorScheme.primaryContainer.withValues(alpha: 0.5),
-            blurStyle: BlurStyle.solid,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: InheritedAlignment(
-        position: position,
+    return InheritedAlignment(
+      position: position,
+      child: Container(
+        height: panelDefaultHeightPx.toDouble(),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface.withValues(alpha: 0.76),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: context.colorScheme.shadow.withValues(alpha: 0.5),
+              blurRadius: 4,
+              blurStyle: BlurStyle.outer,
+            ),
+            BoxShadow(
+              color: context.colorScheme.primaryContainer.withValues(
+                alpha: 0.5,
+              ),
+              blurStyle: BlurStyle.solid,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Row(
           mainAxisAlignment: switch (position) {
             WidgetPosition.left => MainAxisAlignment.start,

@@ -6,7 +6,7 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`
 
 /// Get current WM used
 Future<WindowManager> detectCurrentWm() =>
@@ -23,11 +23,23 @@ class LaunchbarItemState {
     this.workspaceId,
     this.processId,
   });
+
+  /// WIndow ID provided by compositor
   final BigInt windowId;
+
+  /// Optional window title
   final String? windowTitle;
+
+  /// App ID (taken from dekstop entry name without ".desktop")
   final String? appId;
+
+  /// Workspace ID this window belongs to
   final BigInt? workspaceId;
+
+  /// Process ID (PID)
   final int? processId;
+
+  /// Whether this window is currently focused
   final bool isFocused;
 
   @override
@@ -62,8 +74,12 @@ class WmState {
     required this.launchbar,
     required this.workspaces,
   });
+
+  /// Launchbar items containing running apps
   final List<LaunchbarItemState> launchbar;
-  final List<WorkspaceItemState> workspaces;
+
+  /// Workspaces data
+  final List<WorkspaceState> workspaces;
 
   @override
   int get hashCode => launchbar.hashCode ^ workspaces.hashCode;
@@ -80,15 +96,34 @@ class WmState {
 class WorkspaceItemState {
   const WorkspaceItemState({
     required this.id,
+    required this.idx,
     required this.isFocused,
+    required this.isActive,
     this.name,
   });
+
+  /// ID of the workspace, should be stable when moving between outputs
   final BigInt id;
+
+  /// Index of the workspace inside this output
+  final int idx;
+
+  /// Optional name of workspace
   final String? name;
+
+  /// Whether this workspace is currently focused
   final bool isFocused;
 
+  /// Whether this workspace is active/showing on the output
+  final bool isActive;
+
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ isFocused.hashCode;
+  int get hashCode =>
+      id.hashCode ^
+      idx.hashCode ^
+      name.hashCode ^
+      isFocused.hashCode ^
+      isActive.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -96,6 +131,32 @@ class WorkspaceItemState {
       other is WorkspaceItemState &&
           runtimeType == other.runtimeType &&
           id == other.id &&
+          idx == other.idx &&
           name == other.name &&
-          isFocused == other.isFocused;
+          isFocused == other.isFocused &&
+          isActive == other.isActive;
+}
+
+class WorkspaceState {
+  const WorkspaceState({
+    required this.items,
+    this.output,
+  });
+
+  /// Workspaces in this output
+  final List<WorkspaceItemState> items;
+
+  /// Output (monitor name)
+  final String? output;
+
+  @override
+  int get hashCode => items.hashCode ^ output.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WorkspaceState &&
+          runtimeType == other.runtimeType &&
+          items == other.items &&
+          output == other.output;
 }

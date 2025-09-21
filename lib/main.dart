@@ -62,7 +62,7 @@ Future<void> initDb() async {
 
 // TODO(bootloopmaster636): Add dynamic theme support
 ThemeData lightTheme = ThemeData(
-  colorSchemeSeed: Colors.lightBlue,
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
   brightness: Brightness.light,
   fontFamily: GoogleFonts.nunitoSans().fontFamily,
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
@@ -74,7 +74,9 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
-  colorSchemeSeed: Colors.lightBlue,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.blue,
+  ),
   brightness: Brightness.dark,
   fontFamily: GoogleFonts.nunitoSans().fontFamily,
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),

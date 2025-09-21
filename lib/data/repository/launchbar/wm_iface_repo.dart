@@ -16,7 +16,7 @@ class WmIfaceRepo {
 
   /// Get window manager state by stream
   Stream<WmState> get windowManagerStateStream {
-    return _controller.stream;
+    return _controller.stream.asBroadcastStream();
   }
 
   /// Get current window manager state (non reactive)
