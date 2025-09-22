@@ -125,6 +125,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<WorkspaceItemState> dco_decode_list_workspace_item_state(dynamic raw);
 
   @protected
+  List<WorkspaceState> dco_decode_list_workspace_state(dynamic raw);
+
+  @protected
   Niri dco_decode_niri(dynamic raw);
 
   @protected
@@ -171,6 +174,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   WorkspaceItemState dco_decode_workspace_item_state(dynamic raw);
+
+  @protected
+  WorkspaceState dco_decode_workspace_state(dynamic raw);
 
   @protected
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
@@ -282,6 +288,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  List<WorkspaceState> sse_decode_list_workspace_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Niri sse_decode_niri(SseDeserializer deserializer);
 
   @protected
@@ -332,6 +343,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   WorkspaceItemState sse_decode_workspace_item_state(
     SseDeserializer deserializer,
   );
+
+  @protected
+  WorkspaceState sse_decode_workspace_state(SseDeserializer deserializer);
 
   @protected
   void sse_encode_AnyhowException(
@@ -463,6 +477,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_workspace_state(
+    List<WorkspaceState> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_niri(Niri self, SseSerializer serializer);
 
   @protected
@@ -516,6 +536,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_workspace_item_state(
     WorkspaceItemState self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_workspace_state(
+    WorkspaceState self,
     SseSerializer serializer,
   );
 }

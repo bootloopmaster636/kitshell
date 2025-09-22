@@ -968,6 +968,18 @@ impl SseDecode for Vec<crate::api::wm_interface::base::WorkspaceItemState> {
     }
 }
 
+impl SseDecode for Vec<crate::api::wm_interface::base::WorkspaceState> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::wm_interface::base::WorkspaceState>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1121,7 +1133,7 @@ impl SseDecode for crate::api::wm_interface::base::WmState {
         let mut var_launchbar =
             <Vec<crate::api::wm_interface::base::LaunchbarItemState>>::sse_decode(deserializer);
         let mut var_workspaces =
-            <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_decode(deserializer);
+            <Vec<crate::api::wm_interface::base::WorkspaceState>>::sse_decode(deserializer);
         return crate::api::wm_interface::base::WmState {
             launchbar: var_launchbar,
             workspaces: var_workspaces,
@@ -1133,12 +1145,31 @@ impl SseDecode for crate::api::wm_interface::base::WorkspaceItemState {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_id = <u64>::sse_decode(deserializer);
+        let mut var_idx = <u8>::sse_decode(deserializer);
         let mut var_name = <Option<String>>::sse_decode(deserializer);
         let mut var_isFocused = <bool>::sse_decode(deserializer);
+        let mut var_isActive = <bool>::sse_decode(deserializer);
         return crate::api::wm_interface::base::WorkspaceItemState {
             id: var_id,
+            idx: var_idx,
             name: var_name,
             is_focused: var_isFocused,
+            is_active: var_isActive,
+        };
+    }
+}
+
+impl SseDecode for crate::api::wm_interface::base::WorkspaceState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_items =
+            <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_decode(deserializer);
+        let mut var_output = <Option<String>>::sse_decode(deserializer);
+        let mut var_hasWorkspaceFocused = <bool>::sse_decode(deserializer);
+        return crate::api::wm_interface::base::WorkspaceState {
+            items: var_items,
+            output: var_output,
+            has_workspace_focused: var_hasWorkspaceFocused,
         };
     }
 }
@@ -1521,8 +1552,10 @@ impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::Workspace
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.id.into_into_dart().into_dart(),
+            self.idx.into_into_dart().into_dart(),
             self.name.into_into_dart().into_dart(),
             self.is_focused.into_into_dart().into_dart(),
+            self.is_active.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1535,6 +1568,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::Workspace
     for crate::api::wm_interface::base::WorkspaceItemState
 {
     fn into_into_dart(self) -> crate::api::wm_interface::base::WorkspaceItemState {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::WorkspaceState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.items.into_into_dart().into_dart(),
+            self.output.into_into_dart().into_dart(),
+            self.has_workspace_focused.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::wm_interface::base::WorkspaceState
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::WorkspaceState>
+    for crate::api::wm_interface::base::WorkspaceState
+{
+    fn into_into_dart(self) -> crate::api::wm_interface::base::WorkspaceState {
         self
     }
 }
@@ -1814,6 +1869,16 @@ impl SseEncode for Vec<crate::api::wm_interface::base::WorkspaceItemState> {
     }
 }
 
+impl SseEncode for Vec<crate::api::wm_interface::base::WorkspaceState> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::wm_interface::base::WorkspaceState>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
@@ -1948,7 +2013,7 @@ impl SseEncode for crate::api::wm_interface::base::WmState {
             self.launchbar,
             serializer,
         );
-        <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_encode(
+        <Vec<crate::api::wm_interface::base::WorkspaceState>>::sse_encode(
             self.workspaces,
             serializer,
         );
@@ -1959,8 +2024,21 @@ impl SseEncode for crate::api::wm_interface::base::WorkspaceItemState {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.id, serializer);
+        <u8>::sse_encode(self.idx, serializer);
         <Option<String>>::sse_encode(self.name, serializer);
         <bool>::sse_encode(self.is_focused, serializer);
+        <bool>::sse_encode(self.is_active, serializer);
+    }
+}
+
+impl SseEncode for crate::api::wm_interface::base::WorkspaceState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_encode(
+            self.items, serializer,
+        );
+        <Option<String>>::sse_encode(self.output, serializer);
+        <bool>::sse_encode(self.has_workspace_focused, serializer);
     }
 }
 

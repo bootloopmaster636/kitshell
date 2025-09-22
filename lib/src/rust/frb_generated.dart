@@ -891,6 +891,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<WorkspaceState> dco_decode_list_workspace_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_workspace_state).toList();
+  }
+
+  @protected
   Niri dco_decode_niri(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1013,7 +1019,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return WmState(
       launchbar: dco_decode_list_launchbar_item_state(arr[0]),
-      workspaces: dco_decode_list_workspace_item_state(arr[1]),
+      workspaces: dco_decode_list_workspace_state(arr[1]),
     );
   }
 
@@ -1021,12 +1027,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   WorkspaceItemState dco_decode_workspace_item_state(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return WorkspaceItemState(
       id: dco_decode_u_64(arr[0]),
-      name: dco_decode_opt_String(arr[1]),
-      isFocused: dco_decode_bool(arr[2]),
+      idx: dco_decode_u_8(arr[1]),
+      name: dco_decode_opt_String(arr[2]),
+      isFocused: dco_decode_bool(arr[3]),
+      isActive: dco_decode_bool(arr[4]),
+    );
+  }
+
+  @protected
+  WorkspaceState dco_decode_workspace_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WorkspaceState(
+      items: dco_decode_list_workspace_item_state(arr[0]),
+      output: dco_decode_opt_String(arr[1]),
+      hasWorkspaceFocused: dco_decode_bool(arr[2]),
     );
   }
 
@@ -1343,6 +1364,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<WorkspaceState> sse_decode_list_workspace_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <WorkspaceState>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_workspace_state(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Niri sse_decode_niri(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return const Niri();
@@ -1482,7 +1517,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   WmState sse_decode_wm_state(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_launchbar = sse_decode_list_launchbar_item_state(deserializer);
-    final var_workspaces = sse_decode_list_workspace_item_state(deserializer);
+    final var_workspaces = sse_decode_list_workspace_state(deserializer);
     return WmState(launchbar: var_launchbar, workspaces: var_workspaces);
   }
 
@@ -1492,12 +1527,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_id = sse_decode_u_64(deserializer);
+    final var_idx = sse_decode_u_8(deserializer);
     final var_name = sse_decode_opt_String(deserializer);
     final var_isFocused = sse_decode_bool(deserializer);
+    final var_isActive = sse_decode_bool(deserializer);
     return WorkspaceItemState(
       id: var_id,
+      idx: var_idx,
       name: var_name,
       isFocused: var_isFocused,
+      isActive: var_isActive,
+    );
+  }
+
+  @protected
+  WorkspaceState sse_decode_workspace_state(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_items = sse_decode_list_workspace_item_state(deserializer);
+    final var_output = sse_decode_opt_String(deserializer);
+    final var_hasWorkspaceFocused = sse_decode_bool(deserializer);
+    return WorkspaceState(
+      items: var_items,
+      output: var_output,
+      hasWorkspaceFocused: var_hasWorkspaceFocused,
     );
   }
 
@@ -1812,6 +1864,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_workspace_state(
+    List<WorkspaceState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_workspace_state(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_niri(Niri self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
   }
@@ -1931,7 +1995,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_wm_state(WmState self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_launchbar_item_state(self.launchbar, serializer);
-    sse_encode_list_workspace_item_state(self.workspaces, serializer);
+    sse_encode_list_workspace_state(self.workspaces, serializer);
   }
 
   @protected
@@ -1941,7 +2005,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self.id, serializer);
+    sse_encode_u_8(self.idx, serializer);
     sse_encode_opt_String(self.name, serializer);
     sse_encode_bool(self.isFocused, serializer);
+    sse_encode_bool(self.isActive, serializer);
+  }
+
+  @protected
+  void sse_encode_workspace_state(
+    WorkspaceState self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_workspace_item_state(self.items, serializer);
+    sse_encode_opt_String(self.output, serializer);
+    sse_encode_bool(self.hasWorkspaceFocused, serializer);
   }
 }

@@ -16,6 +16,7 @@ import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart';
 import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
+import 'package:kitshell/screen/panel/components/launchbar/workspace_indicator.dart';
 import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/screen/popup/components/appmenu.dart';
 
@@ -35,9 +36,11 @@ class LaunchBar extends HookWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: Gaps.xs.value,
-      children: const [
-        AppmenuButton(),
-        LaunchBarPinnedAppsList(),
+      children: [
+        const WorkspaceIndicator(),
+        Gaps.xs.gap,
+        const AppmenuButton(),
+        const LaunchBarPinnedAppsList(),
       ],
     );
   }
@@ -91,6 +94,7 @@ class LaunchBarPinnedAppsList extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               buildDefaultDragHandles: false,
               shrinkWrap: true,
+              clipBehavior: Clip.none,
               children: [
                 for (int idx = 0; idx < state.items.length; idx++)
                   Padding(
@@ -141,7 +145,7 @@ class LaunchbarItemComp extends HookWidget {
 
     return AnimatedSize(
       duration: Durations.long2,
-      curve: Curves.easeOutBack,
+      curve: Curves.easeOutQuint,
       child: CustomInkwell(
         width: showTitle ? 160 : panelDefaultHeightPx.toDouble(),
         height: panelDefaultHeightPx.toDouble(),
@@ -162,7 +166,17 @@ class LaunchbarItemComp extends HookWidget {
                   color: context.colorScheme.outlineVariant,
                 )
               : null,
+          boxShadow: [
+            if (isOpened)
+              BoxShadow(
+                color: context.colorScheme.shadow.withValues(alpha: 0.2),
+                blurRadius: 2,
+                offset: const Offset(0, 2),
+                blurStyle: BlurStyle.outer,
+              ),
+          ],
         ),
+        clipBehavior: Clip.none,
         padding: EdgeInsets.zero,
         child: Stack(
           children: [

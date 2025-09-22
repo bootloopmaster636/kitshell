@@ -17,57 +17,60 @@ class MainPanel extends StatelessWidget {
       builder: (context, state) {
         if (state is! PanelManagerStateLoaded) return const SizedBox();
 
-        return Padding(
-          padding: const EdgeInsets.all(8),
-          child: Stack(
-            children: [
-              // Left section
-              Align(
-                alignment: Alignment.centerLeft,
-                child:
-                    SectionRow(
-                      position: WidgetPosition.left,
-                      components: state.componentsLeft,
-                    ).animate().slideX(
-                      begin: -1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
+        return Material(
+          color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Stack(
+              children: [
+                // Left section
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.left,
+                        components: state.componentsLeft,
+                      ).animate().slideX(
+                        begin: -1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
 
-              // Mid section
-              Align(
-                child:
-                    SectionRow(
-                      position: WidgetPosition.center,
-                      components: state.componentsCenter,
-                    ).animate().slideY(
-                      begin: 1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
+                // Mid section
+                Align(
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.center,
+                        components: state.componentsCenter,
+                      ).animate().slideY(
+                        begin: 1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
 
-              // Right section
-              Align(
-                alignment: Alignment.centerRight,
-                child:
-                    SectionRow(
-                      position: WidgetPosition.right,
-                      components: state.componentsRight,
-                    ).animate().slideX(
-                      begin: 1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
-            ],
+                // Right section
+                Align(
+                  alignment: Alignment.centerRight,
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.right,
+                        components: state.componentsRight,
+                      ).animate().slideX(
+                        begin: 1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -92,26 +95,28 @@ class SectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: panelDefaultHeightPx.toDouble(),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface.withValues(alpha: 0.76),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: context.colorScheme.shadow.withValues(alpha: 0.5),
-            blurRadius: 4,
-            blurStyle: BlurStyle.outer,
-          ),
-          BoxShadow(
-            color: context.colorScheme.primaryContainer.withValues(alpha: 0.5),
-            blurStyle: BlurStyle.solid,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: InheritedAlignment(
-        position: position,
+    return InheritedAlignment(
+      position: position,
+      child: Container(
+        height: panelDefaultHeightPx.toDouble(),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface.withValues(alpha: 0.76),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: context.colorScheme.shadow.withValues(alpha: 0.5),
+              blurRadius: 4,
+              blurStyle: BlurStyle.outer,
+            ),
+            BoxShadow(
+              color: context.colorScheme.primaryContainer.withValues(
+                alpha: 0.5,
+              ),
+              blurStyle: BlurStyle.solid,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Row(
           mainAxisAlignment: switch (position) {
             WidgetPosition.left => MainAxisAlignment.start,

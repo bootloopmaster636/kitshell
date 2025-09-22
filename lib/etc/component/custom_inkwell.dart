@@ -19,6 +19,7 @@ class CustomInkwell extends StatelessWidget {
     this.height,
     this.width,
     this.hoverColor,
+    this.clipBehavior = Clip.hardEdge,
     super.key,
   });
 
@@ -36,18 +37,20 @@ class CustomInkwell extends StatelessWidget {
   final double? height;
   final double? width;
   final Color? hoverColor;
+  final Clip clipBehavior;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: decoration?.borderRadius ?? BorderRadius.zero,
-      clipBehavior: Clip.hardEdge,
-      child: Material(
-        color: Colors.transparent,
-        child: Ink(
-          width: width,
-          height: height,
-          decoration: decoration,
+      clipBehavior: clipBehavior,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: decoration,
+        child: Material(
+          color: Colors.transparent,
+          clipBehavior: clipBehavior,
           child: MouseRegion(
             onEnter: onPointerEnter?.call,
             onExit: onPointerExit?.call,

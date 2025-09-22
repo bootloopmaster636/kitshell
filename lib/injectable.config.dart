@@ -26,6 +26,8 @@ import 'package:kitshell/logic/panel_components/clock_and_notif/notifications/no
     as _i723;
 import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart'
     as _i487;
+import 'package:kitshell/logic/panel_components/launchbar/workspaces_bloc.dart'
+    as _i451;
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart'
     as _i917;
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart'
@@ -55,6 +57,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
     gh.singleton<_i637.AppListRepo>(
       () => _i637.AppListRepo(appMetadataRepo: gh<_i52.AppMetadataRepo>()),
+    );
+    gh.singleton<_i451.WorkspacesBloc>(
+      () => _i451.WorkspacesBloc(wmIfaceRepo: gh<_i980.WmIfaceRepo>()),
     );
     gh.singleton<_i81.AppmenuBloc>(
       () => _i81.AppmenuBloc(

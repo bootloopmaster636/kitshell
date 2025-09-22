@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/screen/panel/components/clock.dart';
-import 'package:kitshell/screen/panel/components/launchbar.dart';
+import 'package:kitshell/screen/panel/components/launchbar/launchbar.dart';
 import 'package:kitshell/screen/panel/components/statusbar.dart';
 
 part 'panel_manager_bloc.freezed.dart';

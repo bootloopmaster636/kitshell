@@ -10,7 +10,7 @@ import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 @singleton
 class WmIfaceRepo {
   /// {@macro WmIfaceRepo}
-  WmIfaceRepo() : _controller = StreamController<WmState>();
+  WmIfaceRepo() : _controller = StreamController<WmState>.broadcast();
   final StreamController<WmState> _controller;
   late StreamSubscription<WmState> _stateStream;
 
