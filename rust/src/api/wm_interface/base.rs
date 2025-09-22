@@ -56,13 +56,16 @@ pub struct WorkspaceState {
 
     /// Output (monitor name)
     pub output: Option<String>,
+
+    /// Whether this output have workspace focused
+    pub has_workspace_focused: bool,
 }
 
 #[derive(Clone)]
 pub struct WmState {
     /// Launchbar items containing running apps
     pub launchbar: Vec<LaunchbarItemState>,
-    
+
     /// Workspaces data
     pub workspaces: Vec<WorkspaceState>,
 }

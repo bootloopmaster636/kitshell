@@ -140,6 +140,7 @@ class WorkspaceItemState {
 class WorkspaceState {
   const WorkspaceState({
     required this.items,
+    required this.hasWorkspaceFocused,
     this.output,
   });
 
@@ -149,8 +150,12 @@ class WorkspaceState {
   /// Output (monitor name)
   final String? output;
 
+  /// Whether this output have workspace focused
+  final bool hasWorkspaceFocused;
+
   @override
-  int get hashCode => items.hashCode ^ output.hashCode;
+  int get hashCode =>
+      items.hashCode ^ output.hashCode ^ hasWorkspaceFocused.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -158,5 +163,6 @@ class WorkspaceState {
       other is WorkspaceState &&
           runtimeType == other.runtimeType &&
           items == other.items &&
-          output == other.output;
+          output == other.output &&
+          hasWorkspaceFocused == other.hasWorkspaceFocused;
 }

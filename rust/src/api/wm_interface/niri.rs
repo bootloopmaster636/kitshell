@@ -92,6 +92,7 @@ impl WmInterface for Niri {
                             is_active: workspace_data.is_active,
                         }],
                         output: workspace_data.output.clone(),
+                        has_workspace_focused: workspace_data.is_focused,
                     }),
                 }
             });
@@ -235,13 +236,14 @@ impl WmInterface for Niri {
             // This means that each output can only have one active
 
             let mut workspaces = state.workspaces.clone();
-            let result: Vec<WorkspaceState>;
 
             // We iterate through all workspaces in all outputs
             for output_idx in 0..workspaces.len() {
                 // below is used to make other workspace in this output inactive
                 let output_does_contain_id =
                     workspaces[output_idx].items.iter().any(|e| e.id == id);
+
+                let mut output_has_focused_workspace = false;
 
                 for workspace_idx in 0..workspaces[output_idx].items.len() {
                     let mut item = workspaces[output_idx].items[workspace_idx].clone();
@@ -251,11 +253,17 @@ impl WmInterface for Niri {
                     }
                     item.is_focused = item.id == id && focused;
 
+                    if item.is_focused {
+                        output_has_focused_workspace = true;
+                    }
+
                     workspaces[output_idx].items[workspace_idx] = item;
                 }
+
+                workspaces[output_idx].has_workspace_focused = output_has_focused_workspace;
             }
 
-            state.workspaces = result;
+            state.workspaces = workspaces;
         }
     }
 

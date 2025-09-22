@@ -53,7 +53,7 @@ below:
 
 This panel is built using [Flutter](https://flutter.dev/) (for UI/common business logic)
 and [Rust](https://www.rust-lang.org/) (for interfacing with the system). Development is done
-using [RustRover](https://www.jetbrains.com/rust/), use of other IDE is allowed.
+using VSCode, use of other IDE is allowed.
 
 ### Prerequisites
 
@@ -82,9 +82,8 @@ follow Discord rules.
 
 ## ⏩️ Roadmap to stable
 
-- [ ] Workspace indicator and launchbar improvement
-- [ ] More settings in quick settings
 - [ ] Media player and visualization
+- [ ] More settings in quick settings
 - [ ] Settings for personalization and theming
 - [ ] Polishing bugs
 - [ ] Code documentation and testing

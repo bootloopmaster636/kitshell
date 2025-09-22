@@ -1165,9 +1165,11 @@ impl SseDecode for crate::api::wm_interface::base::WorkspaceState {
         let mut var_items =
             <Vec<crate::api::wm_interface::base::WorkspaceItemState>>::sse_decode(deserializer);
         let mut var_output = <Option<String>>::sse_decode(deserializer);
+        let mut var_hasWorkspaceFocused = <bool>::sse_decode(deserializer);
         return crate::api::wm_interface::base::WorkspaceState {
             items: var_items,
             output: var_output,
+            has_workspace_focused: var_hasWorkspaceFocused,
         };
     }
 }
@@ -1575,6 +1577,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::base::Workspace
         [
             self.items.into_into_dart().into_dart(),
             self.output.into_into_dart().into_dart(),
+            self.has_workspace_focused.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2035,6 +2038,7 @@ impl SseEncode for crate::api::wm_interface::base::WorkspaceState {
             self.items, serializer,
         );
         <Option<String>>::sse_encode(self.output, serializer);
+        <bool>::sse_encode(self.has_workspace_focused, serializer);
     }
 }
 

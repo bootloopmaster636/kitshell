@@ -10,13 +10,13 @@ import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 @singleton
 class WmIfaceRepo {
   /// {@macro WmIfaceRepo}
-  WmIfaceRepo() : _controller = StreamController<WmState>();
+  WmIfaceRepo() : _controller = StreamController<WmState>.broadcast();
   final StreamController<WmState> _controller;
   late StreamSubscription<WmState> _stateStream;
 
   /// Get window manager state by stream
   Stream<WmState> get windowManagerStateStream {
-    return _controller.stream.asBroadcastStream();
+    return _controller.stream;
   }
 
   /// Get current window manager state (non reactive)

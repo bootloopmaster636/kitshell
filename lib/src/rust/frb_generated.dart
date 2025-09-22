@@ -1042,11 +1042,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   WorkspaceState dco_decode_workspace_state(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return WorkspaceState(
       items: dco_decode_list_workspace_item_state(arr[0]),
       output: dco_decode_opt_String(arr[1]),
+      hasWorkspaceFocused: dco_decode_bool(arr[2]),
     );
   }
 
@@ -1544,7 +1545,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_items = sse_decode_list_workspace_item_state(deserializer);
     final var_output = sse_decode_opt_String(deserializer);
-    return WorkspaceState(items: var_items, output: var_output);
+    final var_hasWorkspaceFocused = sse_decode_bool(deserializer);
+    return WorkspaceState(
+      items: var_items,
+      output: var_output,
+      hasWorkspaceFocused: var_hasWorkspaceFocused,
+    );
   }
 
   @protected
@@ -2013,5 +2019,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_workspace_item_state(self.items, serializer);
     sse_encode_opt_String(self.output, serializer);
+    sse_encode_bool(self.hasWorkspaceFocused, serializer);
   }
 }

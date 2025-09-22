@@ -17,57 +17,60 @@ class MainPanel extends StatelessWidget {
       builder: (context, state) {
         if (state is! PanelManagerStateLoaded) return const SizedBox();
 
-        return Padding(
-          padding: const EdgeInsets.all(8),
-          child: Stack(
-            children: [
-              // Left section
-              Align(
-                alignment: Alignment.centerLeft,
-                child:
-                    SectionRow(
-                      position: WidgetPosition.left,
-                      components: state.componentsLeft,
-                    ).animate().slideX(
-                      begin: -1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
+        return Material(
+          color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Stack(
+              children: [
+                // Left section
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.left,
+                        components: state.componentsLeft,
+                      ).animate().slideX(
+                        begin: -1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
 
-              // Mid section
-              Align(
-                child:
-                    SectionRow(
-                      position: WidgetPosition.center,
-                      components: state.componentsCenter,
-                    ).animate().slideY(
-                      begin: 1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
+                // Mid section
+                Align(
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.center,
+                        components: state.componentsCenter,
+                      ).animate().slideY(
+                        begin: 1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
 
-              // Right section
-              Align(
-                alignment: Alignment.centerRight,
-                child:
-                    SectionRow(
-                      position: WidgetPosition.right,
-                      components: state.componentsRight,
-                    ).animate().slideX(
-                      begin: 1,
-                      end: 0,
-                      delay: Durations.long3,
-                      duration: Durations.long4,
-                      curve: Easing.emphasizedDecelerate,
-                    ),
-              ),
-            ],
+                // Right section
+                Align(
+                  alignment: Alignment.centerRight,
+                  child:
+                      SectionRow(
+                        position: WidgetPosition.right,
+                        components: state.componentsRight,
+                      ).animate().slideX(
+                        begin: 1,
+                        end: 0,
+                        delay: Durations.long3,
+                        duration: Durations.long4,
+                        curve: Easing.emphasizedDecelerate,
+                      ),
+                ),
+              ],
+            ),
           ),
         );
       },
