@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart';
 import 'package:kitshell/src/rust/api/wm_interface/base.dart';
 
@@ -7,6 +8,7 @@ part 'workspaces_bloc.freezed.dart';
 part 'workspaces_event.dart';
 part 'workspaces_state.dart';
 
+@singleton
 class WorkspacesBloc extends Bloc<WorkspacesEvent, WorkspacesState> {
   WorkspacesBloc({required WmIfaceRepo wmIfaceRepo})
     : _wmIfaceRepo = wmIfaceRepo,
