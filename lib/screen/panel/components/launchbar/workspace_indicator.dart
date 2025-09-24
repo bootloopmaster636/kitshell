@@ -49,23 +49,28 @@ class WorkspaceDataProvider extends HookWidget {
       );
     }, [data]);
 
-    return Row(
-      spacing: Gaps.xs.value,
-      children: [
-        SizedBox(
-          width: 12,
-          child: OutputIndicator(
-            workspaceData: data,
-            currentOutputIdx: focusedOutputIdx,
-          ),
-        ),
-        Expanded(
-          child: WorkspacesItemIndicator(
-            workspaceItemsData: data[focusedOutputIdx].items,
-          ),
-        ),
-      ],
-    );
+    return focusedOutputIdx != -1
+        ? Row(
+            spacing: Gaps.xs.value,
+            children: [
+              SizedBox(
+                width: 12,
+                child: OutputIndicator(
+                  workspaceData: data,
+                  currentOutputIdx: focusedOutputIdx,
+                ),
+              ),
+              Expanded(
+                child: WorkspacesItemIndicator(
+                  workspaceItemsData: data[focusedOutputIdx].items,
+                ),
+              ),
+            ],
+          )
+        : const SizedBox.square(
+            dimension: 8,
+            child: LinearProgressIndicator(),
+          );
   }
 }
 

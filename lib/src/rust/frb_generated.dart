@@ -134,7 +134,7 @@ abstract class RustLibApi extends BaseApi {
 
   Stream<List<BatteryInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
 
-  Stream<TrackProgress> crateApiMprisWatchMediaPlayerEvents();
+  Stream<TrackProgress?> crateApiMprisWatchMediaPlayerEvents();
 
   Stream<NotificationData> crateApiNotificationsWatchNotificationBus();
 }
@@ -618,14 +618,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Stream<TrackProgress> crateApiMprisWatchMediaPlayerEvents() {
-    final sink = RustStreamSink<TrackProgress>();
+  Stream<TrackProgress?> crateApiMprisWatchMediaPlayerEvents() {
+    final sink = RustStreamSink<TrackProgress?>();
     unawaited(
       handler.executeNormal(
         NormalTask(
           callFfi: (port_) {
             final serializer = SseSerializer(generalizedFrbRustBinding);
-            sse_encode_StreamSink_track_progress_Sse(sink, serializer);
+            sse_encode_StreamSink_opt_box_autoadd_track_progress_Sse(
+              sink,
+              serializer,
+            );
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
@@ -739,9 +742,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<TrackProgress> dco_decode_StreamSink_track_progress_Sse(
-    dynamic raw,
-  ) {
+  RustStreamSink<TrackProgress?>
+  dco_decode_StreamSink_opt_box_autoadd_track_progress_Sse(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
   }
@@ -838,6 +840,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int dco_decode_box_autoadd_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
+  }
+
+  @protected
+  TrackProgress dco_decode_box_autoadd_track_progress(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_track_progress(raw);
   }
 
   @protected
@@ -1012,6 +1020,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int? dco_decode_opt_box_autoadd_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_i_32(raw);
+  }
+
+  @protected
+  TrackProgress? dco_decode_opt_box_autoadd_track_progress(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_track_progress(raw);
   }
 
   @protected
@@ -1238,7 +1252,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<TrackProgress> sse_decode_StreamSink_track_progress_Sse(
+  RustStreamSink<TrackProgress?>
+  sse_decode_StreamSink_opt_box_autoadd_track_progress_Sse(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1344,6 +1359,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int sse_decode_box_autoadd_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return sse_decode_i_32(deserializer);
+  }
+
+  @protected
+  TrackProgress sse_decode_box_autoadd_track_progress(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return sse_decode_track_progress(deserializer);
   }
 
   @protected
@@ -1614,6 +1637,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return sse_decode_box_autoadd_i_32(deserializer);
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  TrackProgress? sse_decode_opt_box_autoadd_track_progress(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return sse_decode_box_autoadd_track_progress(deserializer);
     } else {
       return null;
     }
@@ -1896,15 +1932,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_StreamSink_track_progress_Sse(
-    RustStreamSink<TrackProgress> self,
+  void sse_encode_StreamSink_opt_box_autoadd_track_progress_Sse(
+    RustStreamSink<TrackProgress?> self,
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(
       self.setupAndSerialize(
         codec: SseCodec(
-          decodeSuccessData: sse_decode_track_progress,
+          decodeSuccessData: sse_decode_opt_box_autoadd_track_progress,
           decodeErrorData: sse_decode_AnyhowException,
         ),
       ),
@@ -1997,6 +2033,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_track_progress(
+    TrackProgress self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_track_progress(self, serializer);
   }
 
   @protected
@@ -2231,6 +2276,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_i_32(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_track_progress(
+    TrackProgress? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_track_progress(self, serializer);
     }
   }
 

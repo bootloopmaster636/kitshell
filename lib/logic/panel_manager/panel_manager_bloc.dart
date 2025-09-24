@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/screen/panel/components/clock.dart';
 import 'package:kitshell/screen/panel/components/launchbar/launchbar.dart';
+import 'package:kitshell/screen/panel/components/mpris.dart';
 import 'package:kitshell/screen/panel/components/statusbar.dart';
 
 part 'panel_manager_bloc.freezed.dart';
@@ -24,8 +25,8 @@ class PanelManagerBloc extends Bloc<PanelManagerEvent, PanelManagerState> {
     emit(
       const PanelManagerStateLoaded(
         componentsLeft: [ClockComponent(), StatusbarComponent()],
-        componentsCenter: [LaunchBar()],
-        componentsRight: [],
+        componentsCenter: [Launchbar()],
+        componentsRight: [MprisComponent()],
       ),
     );
   }

@@ -1,5 +1,5 @@
 use anyhow::{bail, Error};
-use chrono::Duration;
+use chrono::{Duration, TimeDelta};
 use mpris::{LoopStatus, PlaybackStatus, Player, PlayerFinder, ProgressTick};
 use std::ops::Deref;
 use std::thread::sleep;
@@ -11,6 +11,7 @@ use crate::frb_generated::StreamSink;
 ///
 /// Visit [mpris crate docs](https://docs.rs/mpris/2.0.1/mpris/struct.Metadata.html) for more information
 /// and description regarding fields in this struct
+#[derive(Clone)]
 pub struct TrackMetadata {
     pub title: Option<String>,
     pub artists: Option<Vec<String>>,
@@ -23,6 +24,7 @@ pub struct TrackMetadata {
 ///
 /// Visit [mpris crate docs](https://docs.rs/mpris/2.0.1/mpris/struct.Progress.html) for more information
 /// and description regarding fields in this struct
+#[derive(Clone)]
 pub struct TrackProgress {
     pub metadata: TrackMetadata,
     pub playback_status: PlaybackStatus,
@@ -48,7 +50,10 @@ pub struct PlayerInfo {
     pub can_stop: bool,
 }
 
-pub async fn watch_media_player_events(sink: StreamSink<TrackProgress>) -> Result<(), Error> {
+pub async fn watch_media_player_events(
+    sink: StreamSink<Option<TrackProgress>>,
+) -> Result<(), Error> {
+    println!("API | MPRIS: Watching media player events");
     let player = PlayerFinder::new();
     let player_finder = match player {
         Ok(player) => player,
@@ -62,18 +67,16 @@ pub async fn watch_media_player_events(sink: StreamSink<TrackProgress>) -> Resul
             Ok(player) => player,
             Err(_) => {
                 // No player found, we repeat this until we get an active player
+                let _ = sink.add(None);
                 sleep(StdDuration::from_secs(3));
                 continue;
             }
         };
+        println!("API | MPRIS: Found active player");
 
-        let mut player_info = match get_player_info(&active_player) {
-            Ok(val) => val,
-            Err(e) => bail!(e),
-        };
-
-        let mut progress_tracker = active_player.track_progress(200).unwrap();
+        let mut progress_tracker = active_player.track_progress(500).unwrap();
         let mut progress_state: Option<TrackProgress> = None;
+        let mut progress_age: TimeDelta = TimeDelta::zero();
 
         loop {
             let ProgressTick {
@@ -95,7 +98,10 @@ pub async fn watch_media_player_events(sink: StreamSink<TrackProgress>) -> Resul
             // * Playback status changed
             // * Metadata changed for the track
             // * Volume was decreased
-            if progress_changed || progress_state.is_none() {
+            if progress_changed
+                || progress_state.is_none()
+                || progress_age.num_milliseconds() > 2000
+            {
                 let metadata = progress.metadata();
                 let metadata_struct = TrackMetadata {
                     title: match metadata.title() {
@@ -140,16 +146,17 @@ pub async fn watch_media_player_events(sink: StreamSink<TrackProgress>) -> Resul
                 result.position = match progress.position() {
                     val => Duration::from_std(val).unwrap(),
                 };
+
                 progress_state = Some(result);
             }
-        }
 
-        // Emit new state
-        match progress_state {
-            Some(val) => {
-                let _ = sink.add(val);
+            // Emit new state
+            match &progress_state {
+                Some(val) => {
+                    let _ = sink.add(Some(val.clone()));
+                }
+                None => {}
             }
-            None => {}
         }
     }
 }
@@ -159,31 +166,45 @@ fn get_player_info(player: &Player) -> Result<PlayerInfo, Error> {
         friendly_name: String::from(player.identity()),
         desktop_entry: match player.get_desktop_entry() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | desktopEntry: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_be_controlled: match player.can_control() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canControl: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_go_prev: match player.can_go_previous() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canPrev: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_go_next: match player.can_go_next() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canNext: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_play: match player.can_play() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canPlay: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_pause: match player.can_pause() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canPause: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
         can_stop: match player.can_stop() {
             Ok(val) => val,
-            Err(_) => bail!("API | MPRIS: Cannot get player info (DBus problem)"),
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canStop: Cannot get player info (DBus problem): {:?}", e
+            ),
         },
     })
 }

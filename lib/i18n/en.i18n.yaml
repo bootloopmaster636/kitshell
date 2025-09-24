@@ -24,6 +24,8 @@ appMenu:
     resetRank: Reset ranking
     add: Add to launchbar
     remove: Remove from launchbar
+mpris:
+  noPlaying: No music is playing
 quickSettings:
   brightness:
     title: Brightness

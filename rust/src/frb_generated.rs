@@ -599,7 +599,7 @@ fn wire__crate__api__mpris__watch_media_player_events_impl(
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_sink = <StreamSink<
-                crate::api::mpris::TrackProgress,
+                Option<crate::api::mpris::TrackProgress>,
                 flutter_rust_bridge::for_generated::SseCodec,
             >>::sse_decode(&mut deserializer);
             deserializer.end();
@@ -738,7 +738,10 @@ impl SseDecode
 }
 
 impl SseDecode
-    for StreamSink<crate::api::mpris::TrackProgress, flutter_rust_bridge::for_generated::SseCodec>
+    for StreamSink<
+        Option<crate::api::mpris::TrackProgress>,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1124,6 +1127,17 @@ impl SseDecode for Option<i32> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<i32>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::mpris::TrackProgress> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::mpris::TrackProgress>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1952,7 +1966,10 @@ impl SseEncode
 }
 
 impl SseEncode
-    for StreamSink<crate::api::mpris::TrackProgress, flutter_rust_bridge::for_generated::SseCodec>
+    for StreamSink<
+        Option<crate::api::mpris::TrackProgress>,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2262,6 +2279,16 @@ impl SseEncode for Option<i32> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <i32>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::mpris::TrackProgress> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::mpris::TrackProgress>::sse_encode(value, serializer);
         }
     }
 }

@@ -55,9 +55,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  RustStreamSink<TrackProgress> dco_decode_StreamSink_track_progress_Sse(
-    dynamic raw,
-  );
+  RustStreamSink<TrackProgress?>
+  dco_decode_StreamSink_opt_box_autoadd_track_progress_Sse(dynamic raw);
 
   @protected
   RustStreamSink<WmState> dco_decode_StreamSink_wm_state_Sse(dynamic raw);
@@ -91,6 +90,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int dco_decode_box_autoadd_i_32(dynamic raw);
+
+  @protected
+  TrackProgress dco_decode_box_autoadd_track_progress(dynamic raw);
 
   @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
@@ -160,6 +162,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int? dco_decode_opt_box_autoadd_i_32(dynamic raw);
+
+  @protected
+  TrackProgress? dco_decode_opt_box_autoadd_track_progress(dynamic raw);
 
   @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
@@ -241,7 +246,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  RustStreamSink<TrackProgress> sse_decode_StreamSink_track_progress_Sse(
+  RustStreamSink<TrackProgress?>
+  sse_decode_StreamSink_opt_box_autoadd_track_progress_Sse(
     SseDeserializer deserializer,
   );
 
@@ -276,6 +282,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int sse_decode_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
+  TrackProgress sse_decode_box_autoadd_track_progress(
+    SseDeserializer deserializer,
+  );
 
   @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
@@ -359,6 +370,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int? sse_decode_opt_box_autoadd_i_32(SseDeserializer deserializer);
+
+  @protected
+  TrackProgress? sse_decode_opt_box_autoadd_track_progress(
+    SseDeserializer deserializer,
+  );
 
   @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
@@ -452,8 +468,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  void sse_encode_StreamSink_track_progress_Sse(
-    RustStreamSink<TrackProgress> self,
+  void sse_encode_StreamSink_opt_box_autoadd_track_progress_Sse(
+    RustStreamSink<TrackProgress?> self,
     SseSerializer serializer,
   );
 
@@ -492,6 +508,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_track_progress(
+    TrackProgress self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
@@ -591,6 +613,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_i_32(int? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_track_progress(
+    TrackProgress? self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);

@@ -21,7 +21,11 @@ class MprisBloc extends Bloc<MprisEvent, MprisState> {
     return emit.onEach(
       watchMediaPlayerEvents(),
       onData: (data) {
-        emit(MprisStateLoaded(data));
+        if (data != null) {
+          emit(MprisStatePlaying(data));
+        } else {
+          emit(const MprisStateNotPlaying());
+        }
       },
       onError: (e, s) {
         logger.e(e);

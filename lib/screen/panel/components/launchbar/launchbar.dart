@@ -42,7 +42,7 @@ class Launchbar extends HookWidget {
           height: 24,
           child: VerticalDivider(
             color: context.colorScheme.outlineVariant,
-            width: 2,
+            width: 4,
             radius: BorderRadius.circular(8),
           ),
         ),
