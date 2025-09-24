@@ -8,3 +8,8 @@ tasks:
       - fvm dart run build_runner build
       - fvm dart run slang build
       - flutter_rust_bridge_codegen generate
+  codegenWatch:
+    cmds:
+      - flutter_rust_bridge_codegen generate --watch &
+      - fvm dart run build_runner watch &
+      - fvm dart run slang watch &
