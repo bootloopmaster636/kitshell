@@ -19,6 +19,7 @@ import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
+import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 /// Main entrypoint of the Rust API
 class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
@@ -133,7 +134,7 @@ abstract class RustLibApi extends BaseApi {
 
   Stream<List<BatteryInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
 
-  Stream<TrackMetadata> crateApiMprisWatchMediaPlayerEvents();
+  Stream<TrackProgress> crateApiMprisWatchMediaPlayerEvents();
 
   Stream<NotificationData> crateApiNotificationsWatchNotificationBus();
 }
@@ -617,14 +618,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Stream<TrackMetadata> crateApiMprisWatchMediaPlayerEvents() {
-    final sink = RustStreamSink<TrackMetadata>();
+  Stream<TrackProgress> crateApiMprisWatchMediaPlayerEvents() {
+    final sink = RustStreamSink<TrackProgress>();
     unawaited(
       handler.executeNormal(
         NormalTask(
           callFfi: (port_) {
             final serializer = SseSerializer(generalizedFrbRustBinding);
-            sse_encode_StreamSink_track_metadata_Sse(sink, serializer);
+            sse_encode_StreamSink_track_progress_Sse(sink, serializer);
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
@@ -634,7 +635,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           },
           codec: SseCodec(
             decodeSuccessData: sse_decode_unit,
-            decodeErrorData: null,
+            decodeErrorData: sse_decode_AnyhowException,
           ),
           constMeta: kCrateApiMprisWatchMediaPlayerEventsConstMeta,
           argValues: [sink],
@@ -738,7 +739,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<TrackMetadata> dco_decode_StreamSink_track_metadata_Sse(
+  RustStreamSink<TrackProgress> dco_decode_StreamSink_track_progress_Sse(
     dynamic raw,
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -955,6 +956,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LoopStatus dco_decode_loop_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return LoopStatus.values[raw as int];
+  }
+
+  @protected
   Niri dco_decode_niri(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1020,6 +1027,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlaybackStatus dco_decode_playback_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PlaybackStatus.values[raw as int];
+  }
+
+  @protected
+  PlayerInfo dco_decode_player_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    return PlayerInfo(
+      friendlyName: dco_decode_String(arr[0]),
+      desktopEntry: dco_decode_opt_String(arr[1]),
+      canBeControlled: dco_decode_bool(arr[2]),
+      canGoPrev: dco_decode_bool(arr[3]),
+      canGoNext: dco_decode_bool(arr[4]),
+      canPlay: dco_decode_bool(arr[5]),
+      canPause: dco_decode_bool(arr[6]),
+      canStop: dco_decode_bool(arr[7]),
+    );
+  }
+
+  @protected
   (String, String) dco_decode_record_string_string(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1036,15 +1067,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TrackMetadata dco_decode_track_metadata(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return TrackMetadata(
       title: dco_decode_opt_String(arr[0]),
       artists: dco_decode_opt_list_String(arr[1]),
       album: dco_decode_opt_String(arr[2]),
       artUrl: dco_decode_opt_String(arr[3]),
       trackId: dco_decode_opt_String(arr[4]),
-      length: dco_decode_opt_box_autoadd_Chrono_Duration(arr[5]),
+    );
+  }
+
+  @protected
+  TrackProgress dco_decode_track_progress(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return TrackProgress(
+      metadata: dco_decode_track_metadata(arr[0]),
+      playbackStatus: dco_decode_playback_status(arr[1]),
+      shuffleEnabled: dco_decode_bool(arr[2]),
+      loopStatus: dco_decode_loop_status(arr[3]),
+      length: dco_decode_opt_box_autoadd_Chrono_Duration(arr[4]),
+      position: dco_decode_Chrono_Duration(arr[5]),
+      player: dco_decode_player_info(arr[6]),
     );
   }
 
@@ -1191,7 +1238,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustStreamSink<TrackMetadata> sse_decode_StreamSink_track_metadata_Sse(
+  RustStreamSink<TrackProgress> sse_decode_StreamSink_track_progress_Sse(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1487,6 +1534,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  LoopStatus sse_decode_loop_status(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_i_32(deserializer);
+    return LoopStatus.values[inner];
+  }
+
+  @protected
   Niri sse_decode_niri(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return const Niri();
@@ -1588,6 +1642,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlaybackStatus sse_decode_playback_status(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_i_32(deserializer);
+    return PlaybackStatus.values[inner];
+  }
+
+  @protected
+  PlayerInfo sse_decode_player_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_friendlyName = sse_decode_String(deserializer);
+    final var_desktopEntry = sse_decode_opt_String(deserializer);
+    final var_canBeControlled = sse_decode_bool(deserializer);
+    final var_canGoPrev = sse_decode_bool(deserializer);
+    final var_canGoNext = sse_decode_bool(deserializer);
+    final var_canPlay = sse_decode_bool(deserializer);
+    final var_canPause = sse_decode_bool(deserializer);
+    final var_canStop = sse_decode_bool(deserializer);
+    return PlayerInfo(
+      friendlyName: var_friendlyName,
+      desktopEntry: var_desktopEntry,
+      canBeControlled: var_canBeControlled,
+      canGoPrev: var_canGoPrev,
+      canGoNext: var_canGoNext,
+      canPlay: var_canPlay,
+      canPause: var_canPause,
+      canStop: var_canStop,
+    );
+  }
+
+  @protected
   (String, String) sse_decode_record_string_string(
     SseDeserializer deserializer,
   ) {
@@ -1605,14 +1689,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_album = sse_decode_opt_String(deserializer);
     final var_artUrl = sse_decode_opt_String(deserializer);
     final var_trackId = sse_decode_opt_String(deserializer);
-    final var_length = sse_decode_opt_box_autoadd_Chrono_Duration(deserializer);
     return TrackMetadata(
       title: var_title,
       artists: var_artists,
       album: var_album,
       artUrl: var_artUrl,
       trackId: var_trackId,
+    );
+  }
+
+  @protected
+  TrackProgress sse_decode_track_progress(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_metadata = sse_decode_track_metadata(deserializer);
+    final var_playbackStatus = sse_decode_playback_status(deserializer);
+    final var_shuffleEnabled = sse_decode_bool(deserializer);
+    final var_loopStatus = sse_decode_loop_status(deserializer);
+    final var_length = sse_decode_opt_box_autoadd_Chrono_Duration(deserializer);
+    final var_position = sse_decode_Chrono_Duration(deserializer);
+    final var_player = sse_decode_player_info(deserializer);
+    return TrackProgress(
+      metadata: var_metadata,
+      playbackStatus: var_playbackStatus,
+      shuffleEnabled: var_shuffleEnabled,
+      loopStatus: var_loopStatus,
       length: var_length,
+      position: var_position,
+      player: var_player,
     );
   }
 
@@ -1793,15 +1896,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_StreamSink_track_metadata_Sse(
-    RustStreamSink<TrackMetadata> self,
+  void sse_encode_StreamSink_track_progress_Sse(
+    RustStreamSink<TrackProgress> self,
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(
       self.setupAndSerialize(
         codec: SseCodec(
-          decodeSuccessData: sse_decode_track_metadata,
+          decodeSuccessData: sse_decode_track_progress,
           decodeErrorData: sse_decode_AnyhowException,
         ),
       ),
@@ -2060,6 +2163,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_loop_status(LoopStatus self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
   void sse_encode_niri(Niri self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
   }
@@ -2149,6 +2258,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_playback_status(
+    PlaybackStatus self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_player_info(PlayerInfo self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.friendlyName, serializer);
+    sse_encode_opt_String(self.desktopEntry, serializer);
+    sse_encode_bool(self.canBeControlled, serializer);
+    sse_encode_bool(self.canGoPrev, serializer);
+    sse_encode_bool(self.canGoNext, serializer);
+    sse_encode_bool(self.canPlay, serializer);
+    sse_encode_bool(self.canPause, serializer);
+    sse_encode_bool(self.canStop, serializer);
+  }
+
+  @protected
   void sse_encode_record_string_string(
     (String, String) self,
     SseSerializer serializer,
@@ -2166,7 +2297,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.album, serializer);
     sse_encode_opt_String(self.artUrl, serializer);
     sse_encode_opt_String(self.trackId, serializer);
+  }
+
+  @protected
+  void sse_encode_track_progress(TrackProgress self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_track_metadata(self.metadata, serializer);
+    sse_encode_playback_status(self.playbackStatus, serializer);
+    sse_encode_bool(self.shuffleEnabled, serializer);
+    sse_encode_loop_status(self.loopStatus, serializer);
     sse_encode_opt_box_autoadd_Chrono_Duration(self.length, serializer);
+    sse_encode_Chrono_Duration(self.position, serializer);
+    sse_encode_player_info(self.player, serializer);
   }
 
   @protected

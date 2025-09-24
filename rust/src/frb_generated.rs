@@ -599,16 +599,15 @@ fn wire__crate__api__mpris__watch_media_player_events_impl(
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_sink = <StreamSink<
-                crate::api::mpris::TrackMetadata,
+                crate::api::mpris::TrackProgress,
                 flutter_rust_bridge::for_generated::SseCodec,
             >>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
-                transform_result_sse::<_, ()>(
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || async move {
-                        let output_ok = Result::<_, ()>::Ok({
-                            crate::api::mpris::watch_media_player_events(api_sink).await;
-                        })?;
+                        let output_ok =
+                            crate::api::mpris::watch_media_player_events(api_sink).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -739,7 +738,7 @@ impl SseDecode
 }
 
 impl SseDecode
-    for StreamSink<crate::api::mpris::TrackMetadata, flutter_rust_bridge::for_generated::SseCodec>
+    for StreamSink<crate::api::mpris::TrackProgress, flutter_rust_bridge::for_generated::SseCodec>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1039,6 +1038,19 @@ impl SseDecode for Vec<crate::api::wm_interface::base::WorkspaceState> {
     }
 }
 
+impl SseDecode for mpris::LoopStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => mpris::LoopStatus::None,
+            1 => mpris::LoopStatus::Track,
+            2 => mpris::LoopStatus::Playlist,
+            _ => unreachable!("Invalid variant for LoopStatus: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1140,6 +1152,43 @@ impl SseDecode for Option<Vec<String>> {
     }
 }
 
+impl SseDecode for mpris::PlaybackStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => mpris::PlaybackStatus::Playing,
+            1 => mpris::PlaybackStatus::Paused,
+            2 => mpris::PlaybackStatus::Stopped,
+            _ => unreachable!("Invalid variant for PlaybackStatus: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::mpris::PlayerInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_friendlyName = <String>::sse_decode(deserializer);
+        let mut var_desktopEntry = <Option<String>>::sse_decode(deserializer);
+        let mut var_canBeControlled = <bool>::sse_decode(deserializer);
+        let mut var_canGoPrev = <bool>::sse_decode(deserializer);
+        let mut var_canGoNext = <bool>::sse_decode(deserializer);
+        let mut var_canPlay = <bool>::sse_decode(deserializer);
+        let mut var_canPause = <bool>::sse_decode(deserializer);
+        let mut var_canStop = <bool>::sse_decode(deserializer);
+        return crate::api::mpris::PlayerInfo {
+            friendly_name: var_friendlyName,
+            desktop_entry: var_desktopEntry,
+            can_be_controlled: var_canBeControlled,
+            can_go_prev: var_canGoPrev,
+            can_go_next: var_canGoNext,
+            can_play: var_canPlay,
+            can_pause: var_canPause,
+            can_stop: var_canStop,
+        };
+    }
+}
+
 impl SseDecode for (String, String) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1157,14 +1206,34 @@ impl SseDecode for crate::api::mpris::TrackMetadata {
         let mut var_album = <Option<String>>::sse_decode(deserializer);
         let mut var_artUrl = <Option<String>>::sse_decode(deserializer);
         let mut var_trackId = <Option<String>>::sse_decode(deserializer);
-        let mut var_length = <Option<chrono::Duration>>::sse_decode(deserializer);
         return crate::api::mpris::TrackMetadata {
             title: var_title,
             artists: var_artists,
             album: var_album,
             art_url: var_artUrl,
             track_id: var_trackId,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mpris::TrackProgress {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_metadata = <crate::api::mpris::TrackMetadata>::sse_decode(deserializer);
+        let mut var_playbackStatus = <mpris::PlaybackStatus>::sse_decode(deserializer);
+        let mut var_shuffleEnabled = <bool>::sse_decode(deserializer);
+        let mut var_loopStatus = <mpris::LoopStatus>::sse_decode(deserializer);
+        let mut var_length = <Option<chrono::Duration>>::sse_decode(deserializer);
+        let mut var_position = <chrono::Duration>::sse_decode(deserializer);
+        let mut var_player = <crate::api::mpris::PlayerInfo>::sse_decode(deserializer);
+        return crate::api::mpris::TrackProgress {
+            metadata: var_metadata,
+            playback_status: var_playbackStatus,
+            shuffle_enabled: var_shuffleEnabled,
+            loop_status: var_loopStatus,
             length: var_length,
+            position: var_position,
+            player: var_player,
         };
     }
 }
@@ -1545,6 +1614,23 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::Launchbar
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<mpris::LoopStatus> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            mpris::LoopStatus::None => 0.into_dart(),
+            mpris::LoopStatus::Track => 1.into_dart(),
+            mpris::LoopStatus::Playlist => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<mpris::LoopStatus> {}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<mpris::LoopStatus>> for mpris::LoopStatus {
+    fn into_into_dart(self) -> FrbWrapper<mpris::LoopStatus> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::wm_interface::niri::Niri {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         Vec::<u8>::new().into_dart()
@@ -1591,6 +1677,52 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::notifications::NotificationDa
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<mpris::PlaybackStatus> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            mpris::PlaybackStatus::Playing => 0.into_dart(),
+            mpris::PlaybackStatus::Paused => 1.into_dart(),
+            mpris::PlaybackStatus::Stopped => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<mpris::PlaybackStatus>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<mpris::PlaybackStatus>>
+    for mpris::PlaybackStatus
+{
+    fn into_into_dart(self) -> FrbWrapper<mpris::PlaybackStatus> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::PlayerInfo {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.friendly_name.into_into_dart().into_dart(),
+            self.desktop_entry.into_into_dart().into_dart(),
+            self.can_be_controlled.into_into_dart().into_dart(),
+            self.can_go_prev.into_into_dart().into_dart(),
+            self.can_go_next.into_into_dart().into_dart(),
+            self.can_play.into_into_dart().into_dart(),
+            self.can_pause.into_into_dart().into_dart(),
+            self.can_stop.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::mpris::PlayerInfo {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::PlayerInfo>
+    for crate::api::mpris::PlayerInfo
+{
+    fn into_into_dart(self) -> crate::api::mpris::PlayerInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::mpris::TrackMetadata {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -1599,7 +1731,6 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::TrackMetadata {
             self.album.into_into_dart().into_dart(),
             self.art_url.into_into_dart().into_dart(),
             self.track_id.into_into_dart().into_dart(),
-            self.length.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1612,6 +1743,32 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::TrackMetadata>
     for crate::api::mpris::TrackMetadata
 {
     fn into_into_dart(self) -> crate::api::mpris::TrackMetadata {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::TrackProgress {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.metadata.into_into_dart().into_dart(),
+            self.playback_status.into_into_dart().into_dart(),
+            self.shuffle_enabled.into_into_dart().into_dart(),
+            self.loop_status.into_into_dart().into_dart(),
+            self.length.into_into_dart().into_dart(),
+            self.position.into_into_dart().into_dart(),
+            self.player.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::TrackProgress
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::TrackProgress>
+    for crate::api::mpris::TrackProgress
+{
+    fn into_into_dart(self) -> crate::api::mpris::TrackProgress {
         self
     }
 }
@@ -1795,7 +1952,7 @@ impl SseEncode
 }
 
 impl SseEncode
-    for StreamSink<crate::api::mpris::TrackMetadata, flutter_rust_bridge::for_generated::SseCodec>
+    for StreamSink<crate::api::mpris::TrackProgress, flutter_rust_bridge::for_generated::SseCodec>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2031,6 +2188,23 @@ impl SseEncode for Vec<crate::api::wm_interface::base::WorkspaceState> {
     }
 }
 
+impl SseEncode for mpris::LoopStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                mpris::LoopStatus::None => 0,
+                mpris::LoopStatus::Track => 1,
+                mpris::LoopStatus::Playlist => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
@@ -2112,6 +2286,37 @@ impl SseEncode for Option<Vec<String>> {
     }
 }
 
+impl SseEncode for mpris::PlaybackStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                mpris::PlaybackStatus::Playing => 0,
+                mpris::PlaybackStatus::Paused => 1,
+                mpris::PlaybackStatus::Stopped => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::mpris::PlayerInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.friendly_name, serializer);
+        <Option<String>>::sse_encode(self.desktop_entry, serializer);
+        <bool>::sse_encode(self.can_be_controlled, serializer);
+        <bool>::sse_encode(self.can_go_prev, serializer);
+        <bool>::sse_encode(self.can_go_next, serializer);
+        <bool>::sse_encode(self.can_play, serializer);
+        <bool>::sse_encode(self.can_pause, serializer);
+        <bool>::sse_encode(self.can_stop, serializer);
+    }
+}
+
 impl SseEncode for (String, String) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2128,7 +2333,19 @@ impl SseEncode for crate::api::mpris::TrackMetadata {
         <Option<String>>::sse_encode(self.album, serializer);
         <Option<String>>::sse_encode(self.art_url, serializer);
         <Option<String>>::sse_encode(self.track_id, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mpris::TrackProgress {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::mpris::TrackMetadata>::sse_encode(self.metadata, serializer);
+        <mpris::PlaybackStatus>::sse_encode(self.playback_status, serializer);
+        <bool>::sse_encode(self.shuffle_enabled, serializer);
+        <mpris::LoopStatus>::sse_encode(self.loop_status, serializer);
         <Option<chrono::Duration>>::sse_encode(self.length, serializer);
+        <chrono::Duration>::sse_encode(self.position, serializer);
+        <crate::api::mpris::PlayerInfo>::sse_encode(self.player, serializer);
     }
 }
 

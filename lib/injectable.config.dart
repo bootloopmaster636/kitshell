@@ -28,6 +28,8 @@ import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart'
     as _i487;
 import 'package:kitshell/logic/panel_components/launchbar/workspaces_bloc.dart'
     as _i451;
+import 'package:kitshell/logic/panel_components/mpris/bloc/mpris_bloc.dart'
+    as _i368;
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart'
     as _i917;
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart'
@@ -55,6 +57,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
     gh.singleton<_i52.AppMetadataRepo>(() => _i52.AppMetadataRepo());
     gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
+    gh.singleton<_i368.MprisBloc>(() => _i368.MprisBloc());
     gh.singleton<_i637.AppListRepo>(
       () => _i637.AppListRepo(appMetadataRepo: gh<_i52.AppMetadataRepo>()),
     );

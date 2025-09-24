@@ -18,6 +18,7 @@ import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
 import 'package:kitshell/src/rust/api/wm_interface/base.dart';
 import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
+import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustLibApiImplPlatform({
@@ -54,7 +55,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  RustStreamSink<TrackMetadata> dco_decode_StreamSink_track_metadata_Sse(
+  RustStreamSink<TrackProgress> dco_decode_StreamSink_track_progress_Sse(
     dynamic raw,
   );
 
@@ -140,6 +141,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<WorkspaceState> dco_decode_list_workspace_state(dynamic raw);
 
   @protected
+  LoopStatus dco_decode_loop_status(dynamic raw);
+
+  @protected
   Niri dco_decode_niri(dynamic raw);
 
   @protected
@@ -164,10 +168,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<String>? dco_decode_opt_list_String(dynamic raw);
 
   @protected
+  PlaybackStatus dco_decode_playback_status(dynamic raw);
+
+  @protected
+  PlayerInfo dco_decode_player_info(dynamic raw);
+
+  @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
 
   @protected
   TrackMetadata dco_decode_track_metadata(dynamic raw);
+
+  @protected
+  TrackProgress dco_decode_track_progress(dynamic raw);
 
   @protected
   int dco_decode_u_16(dynamic raw);
@@ -228,7 +241,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  RustStreamSink<TrackMetadata> sse_decode_StreamSink_track_metadata_Sse(
+  RustStreamSink<TrackProgress> sse_decode_StreamSink_track_progress_Sse(
     SseDeserializer deserializer,
   );
 
@@ -325,6 +338,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  LoopStatus sse_decode_loop_status(SseDeserializer deserializer);
+
+  @protected
   Niri sse_decode_niri(SseDeserializer deserializer);
 
   @protected
@@ -351,12 +367,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<String>? sse_decode_opt_list_String(SseDeserializer deserializer);
 
   @protected
+  PlaybackStatus sse_decode_playback_status(SseDeserializer deserializer);
+
+  @protected
+  PlayerInfo sse_decode_player_info(SseDeserializer deserializer);
+
+  @protected
   (String, String) sse_decode_record_string_string(
     SseDeserializer deserializer,
   );
 
   @protected
   TrackMetadata sse_decode_track_metadata(SseDeserializer deserializer);
+
+  @protected
+  TrackProgress sse_decode_track_progress(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_16(SseDeserializer deserializer);
@@ -427,8 +452,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  void sse_encode_StreamSink_track_metadata_Sse(
-    RustStreamSink<TrackMetadata> self,
+  void sse_encode_StreamSink_track_progress_Sse(
+    RustStreamSink<TrackProgress> self,
     SseSerializer serializer,
   );
 
@@ -541,6 +566,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_loop_status(LoopStatus self, SseSerializer serializer);
+
+  @protected
   void sse_encode_niri(Niri self, SseSerializer serializer);
 
   @protected
@@ -571,6 +599,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_list_String(List<String>? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_playback_status(
+    PlaybackStatus self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_player_info(PlayerInfo self, SseSerializer serializer);
+
+  @protected
   void sse_encode_record_string_string(
     (String, String) self,
     SseSerializer serializer,
@@ -578,6 +615,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_track_metadata(TrackMetadata self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_track_progress(TrackProgress self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_16(int self, SseSerializer serializer);
