@@ -20,8 +20,8 @@ import 'package:kitshell/screen/panel/components/launchbar/workspace_indicator.d
 import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/screen/popup/components/appmenu.dart';
 
-class LaunchBar extends HookWidget {
-  const LaunchBar({Key? key}) : super(key: key);
+class Launchbar extends HookWidget {
+  const Launchbar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +38,16 @@ class LaunchBar extends HookWidget {
       spacing: Gaps.xs.value,
       children: [
         const WorkspaceIndicator(),
-        Gaps.xs.gap,
+        SizedBox(
+          height: 24,
+          child: VerticalDivider(
+            color: context.colorScheme.outlineVariant,
+            width: 2,
+            radius: BorderRadius.circular(8),
+          ),
+        ),
         const AppmenuButton(),
-        const LaunchBarPinnedAppsList(),
+        const LaunchbarAppList(),
       ],
     );
   }
@@ -74,8 +81,8 @@ class AppmenuButton extends HookWidget {
   }
 }
 
-class LaunchBarPinnedAppsList extends StatelessWidget {
-  const LaunchBarPinnedAppsList({super.key});
+class LaunchbarAppList extends StatelessWidget {
+  const LaunchbarAppList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +156,11 @@ class LaunchbarItemComp extends HookWidget {
       child: CustomInkwell(
         width: showTitle ? 160 : panelDefaultHeightPx.toDouble(),
         height: panelDefaultHeightPx.toDouble(),
-        onTap: () {
+        onTap: () async {
           if (data.windowInfo != null) {
-            get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
+            await get<WmIfaceRepo>().wmFocusWindow(
+              data.windowInfo!.windowId.toInt(),
+            );
           }
         },
         decoration: BoxDecoration(
@@ -212,7 +221,9 @@ class LaunchbarItemComp extends HookWidget {
                   width: isFocused ? 32 : 8,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: context.colorScheme.primary,
+                    color: data.isPinned
+                        ? context.colorScheme.primary
+                        : context.colorScheme.secondary,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
