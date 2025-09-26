@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
-import 'package:kitshell/src/rust/api/mpris.dart';
+import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 
 part 'mpris_event.dart';
 part 'mpris_state.dart';

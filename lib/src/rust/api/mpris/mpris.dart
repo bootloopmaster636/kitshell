@@ -11,7 +11,7 @@ import 'package:kitshell/src/rust/third_party/mpris.dart';
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`
 
 Stream<TrackProgress?> watchMediaPlayerEvents() =>
-    RustLib.instance.api.crateApiMprisWatchMediaPlayerEvents();
+    RustLib.instance.api.crateApiMprisMprisWatchMediaPlayerEvents();
 
 /// Struct that contains info regarding Player application
 class PlayerInfo {

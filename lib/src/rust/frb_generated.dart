@@ -9,7 +9,8 @@ import 'dart:convert';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
-import 'package:kitshell/src/rust/api/mpris.dart';
+import 'package:kitshell/src/rust/api/mpris/cava.dart';
+import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
@@ -19,6 +20,7 @@ import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
+import 'package:kitshell/src/rust/lib.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 /// Main entrypoint of the Rust API
@@ -77,7 +79,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1813920308;
+  int get rustContentHash => 1386584536;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -115,6 +117,8 @@ abstract class RustLibApi extends BaseApi {
     required bool useTerminal,
   });
 
+  Stream<CavaState> crateApiMprisCavaListenToCava();
+
   Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
     required BigInt windowId,
   });
@@ -134,7 +138,7 @@ abstract class RustLibApi extends BaseApi {
 
   Stream<List<BatteryInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
 
-  Stream<TrackProgress?> crateApiMprisWatchMediaPlayerEvents();
+  Stream<TrackProgress?> crateApiMprisMprisWatchMediaPlayerEvents();
 
   Stream<NotificationData> crateApiNotificationsWatchNotificationBus();
 }
@@ -411,6 +415,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Stream<CavaState> crateApiMprisCavaListenToCava() {
+    final sink = RustStreamSink<CavaState>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_StreamSink_cava_state_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 13,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta: kCrateApiMprisCavaListenToCavaConstMeta,
+          argValues: [sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiMprisCavaListenToCavaConstMeta =>
+      const TaskConstMeta(
+        debugName: 'listen_to_cava',
+        argNames: ['sink'],
+      );
+
+  @override
   Future<void> crateApiWmInterfaceNiriNiriCloseWindow({
     required BigInt windowId,
   }) {
@@ -422,7 +461,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 14,
             port: port_,
           );
         },
@@ -455,7 +494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 14,
+            funcId: 15,
             port: port_,
           );
         },
@@ -488,7 +527,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 15,
+            funcId: 16,
             port: port_,
           );
         },
@@ -521,7 +560,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 16,
+              funcId: 17,
               port: port_,
             );
           },
@@ -557,7 +596,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 17,
+              funcId: 18,
               port: port_,
             );
           },
@@ -594,7 +633,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 18,
+              funcId: 19,
               port: port_,
             );
           },
@@ -618,7 +657,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Stream<TrackProgress?> crateApiMprisWatchMediaPlayerEvents() {
+  Stream<TrackProgress?> crateApiMprisMprisWatchMediaPlayerEvents() {
     final sink = RustStreamSink<TrackProgress?>();
     unawaited(
       handler.executeNormal(
@@ -632,7 +671,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 19,
+              funcId: 20,
               port: port_,
             );
           },
@@ -640,7 +679,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             decodeSuccessData: sse_decode_unit,
             decodeErrorData: sse_decode_AnyhowException,
           ),
-          constMeta: kCrateApiMprisWatchMediaPlayerEventsConstMeta,
+          constMeta: kCrateApiMprisMprisWatchMediaPlayerEventsConstMeta,
           argValues: [sink],
           apiImpl: this,
         ),
@@ -649,7 +688,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return sink.stream;
   }
 
-  TaskConstMeta get kCrateApiMprisWatchMediaPlayerEventsConstMeta =>
+  TaskConstMeta get kCrateApiMprisMprisWatchMediaPlayerEventsConstMeta =>
       const TaskConstMeta(
         debugName: 'watch_media_player_events',
         argNames: ['sink'],
@@ -667,7 +706,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 20,
+              funcId: 21,
               port: port_,
             );
           },
@@ -710,6 +749,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         raw,
       ).map((e) => MapEntry(e.$1, e.$2)),
     );
+  }
+
+  @protected
+  RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
   }
 
   @protected
@@ -846,6 +891,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BigInt dco_decode_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_u_64(raw);
+  }
+
+  @protected
+  CavaState dco_decode_cava_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return CavaState(
+      data: dco_decode_u_8_array_32(arr[0]),
+      barCount: dco_decode_u_16(arr[1]),
+      cavaPid: dco_decode_u_32(arr[2]),
+    );
   }
 
   @protected
@@ -1133,6 +1191,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  U8Array32 dco_decode_u_8_array_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return U8Array32(dco_decode_list_prim_u_8_strict(raw));
+  }
+
+  @protected
   void dco_decode_unit(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return;
@@ -1218,6 +1282,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_list_record_string_string(deserializer);
     return Map.fromEntries(inner.map((e) => MapEntry(e.$1, e.$2)));
+  }
+
+  @protected
+  RustStreamSink<CavaState> sse_decode_StreamSink_cava_state_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
   }
 
   @protected
@@ -1363,6 +1435,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return sse_decode_u_64(deserializer);
+  }
+
+  @protected
+  CavaState sse_decode_cava_state(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_data = sse_decode_u_8_array_32(deserializer);
+    final var_barCount = sse_decode_u_16(deserializer);
+    final var_cavaPid = sse_decode_u_32(deserializer);
+    return CavaState(
+      data: var_data,
+      barCount: var_barCount,
+      cavaPid: var_cavaPid,
+    );
   }
 
   @protected
@@ -1772,6 +1857,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  U8Array32 sse_decode_u_8_array_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_list_prim_u_8_strict(deserializer);
+    return U8Array32(inner);
+  }
+
+  @protected
   void sse_decode_unit(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
   }
@@ -1862,6 +1954,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_record_string_string(
       self.entries.map((e) => (e.key, e.value)).toList(),
+      serializer,
+    );
+  }
+
+  @protected
+  void sse_encode_StreamSink_cava_state_Sse(
+    RustStreamSink<CavaState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_cava_state,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
       serializer,
     );
   }
@@ -2031,6 +2140,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self, serializer);
+  }
+
+  @protected
+  void sse_encode_cava_state(CavaState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_8_array_32(self.data, serializer);
+    sse_encode_u_16(self.barCount, serializer);
+    sse_encode_u_32(self.cavaPid, serializer);
   }
 
   @protected
@@ -2376,6 +2493,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_u_8(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self);
+  }
+
+  @protected
+  void sse_encode_u_8_array_32(U8Array32 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_prim_u_8_strict(self.inner, serializer);
   }
 
   @protected

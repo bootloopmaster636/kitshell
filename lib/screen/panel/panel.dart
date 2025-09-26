@@ -24,50 +24,56 @@ class MainPanel extends StatelessWidget {
             child: Stack(
               children: [
                 // Left section
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child:
-                      SectionRow(
-                        position: WidgetPosition.left,
-                        components: state.componentsLeft,
-                      ).animate().slideX(
-                        begin: -1,
-                        end: 0,
-                        delay: Durations.long3,
-                        duration: Durations.long4,
-                        curve: Easing.emphasizedDecelerate,
-                      ),
+                RepaintBoundary(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:
+                        SectionRow(
+                          position: WidgetPosition.left,
+                          components: state.componentsLeft,
+                        ).animate().slideX(
+                          begin: -1,
+                          end: 0,
+                          delay: Durations.long3,
+                          duration: Durations.long4,
+                          curve: Easing.emphasizedDecelerate,
+                        ),
+                  ),
                 ),
 
                 // Mid section
-                Align(
-                  child:
-                      SectionRow(
-                        position: WidgetPosition.center,
-                        components: state.componentsCenter,
-                      ).animate().slideY(
-                        begin: 1,
-                        end: 0,
-                        delay: Durations.long3,
-                        duration: Durations.long4,
-                        curve: Easing.emphasizedDecelerate,
-                      ),
+                RepaintBoundary(
+                  child: Align(
+                    child:
+                        SectionRow(
+                          position: WidgetPosition.center,
+                          components: state.componentsCenter,
+                        ).animate().slideY(
+                          begin: 1,
+                          end: 0,
+                          delay: Durations.long3,
+                          duration: Durations.long4,
+                          curve: Easing.emphasizedDecelerate,
+                        ),
+                  ),
                 ),
 
                 // Right section
-                Align(
-                  alignment: Alignment.centerRight,
-                  child:
-                      SectionRow(
-                        position: WidgetPosition.right,
-                        components: state.componentsRight,
-                      ).animate().slideX(
-                        begin: 1,
-                        end: 0,
-                        delay: Durations.long3,
-                        duration: Durations.long4,
-                        curve: Easing.emphasizedDecelerate,
-                      ),
+                RepaintBoundary(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child:
+                        SectionRow(
+                          position: WidgetPosition.right,
+                          components: state.componentsRight,
+                        ).animate().slideX(
+                          begin: 1,
+                          end: 0,
+                          delay: Durations.long3,
+                          duration: Durations.long4,
+                          curve: Easing.emphasizedDecelerate,
+                        ),
+                  ),
                 ),
               ],
             ),

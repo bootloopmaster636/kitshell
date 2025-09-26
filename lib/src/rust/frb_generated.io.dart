@@ -10,7 +10,8 @@ import 'dart:ffi' as ffi;
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
-import 'package:kitshell/src/rust/api/mpris.dart';
+import 'package:kitshell/src/rust/api/mpris/cava.dart';
+import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
@@ -18,6 +19,7 @@ import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
 import 'package:kitshell/src/rust/api/wm_interface/base.dart';
 import 'package:kitshell/src/rust/api/wm_interface/niri.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
+import 'package:kitshell/src/rust/lib.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -36,6 +38,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
+
+  @protected
+  RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw);
 
   @protected
   RustStreamSink<List<BacklightInfo>>
@@ -93,6 +98,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
+
+  @protected
+  CavaState dco_decode_cava_state(dynamic raw);
 
   @protected
   DispInfo dco_decode_disp_info(dynamic raw);
@@ -200,6 +208,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_u_8(dynamic raw);
 
   @protected
+  U8Array32 dco_decode_u_8_array_32(dynamic raw);
+
+  @protected
   void dco_decode_unit(dynamic raw);
 
   @protected
@@ -225,6 +236,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Map<String, String> sse_decode_Map_String_String_None(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  RustStreamSink<CavaState> sse_decode_StreamSink_cava_state_Sse(
     SseDeserializer deserializer,
   );
 
@@ -287,6 +303,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
+
+  @protected
+  CavaState sse_decode_cava_state(SseDeserializer deserializer);
 
   @protected
   DispInfo sse_decode_disp_info(SseDeserializer deserializer);
@@ -410,6 +429,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_u_8(SseDeserializer deserializer);
 
   @protected
+  U8Array32 sse_decode_u_8_array_32(SseDeserializer deserializer);
+
+  @protected
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
@@ -441,6 +463,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_Map_String_String_None(
     Map<String, String> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_cava_state_Sse(
+    RustStreamSink<CavaState> self,
     SseSerializer serializer,
   );
 
@@ -509,6 +537,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_cava_state(CavaState self, SseSerializer serializer);
 
   @protected
   void sse_encode_disp_info(DispInfo self, SseSerializer serializer);
@@ -650,6 +681,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_u_8_array_32(U8Array32 self, SseSerializer serializer);
 
   @protected
   void sse_encode_unit(void self, SseSerializer serializer);

@@ -13,9 +13,11 @@ import 'package:kitshell/etc/component/text_icon.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
+import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
-import 'package:kitshell/logic/panel_components/mpris/bloc/mpris_bloc.dart';
+import 'package:kitshell/logic/panel_components/mpris/cava_bloc.dart';
+import 'package:kitshell/logic/panel_components/mpris/mpris_bloc.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 class MprisComponent extends HookWidget {
@@ -186,6 +188,7 @@ class NowPlaying extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         const BlurredBackground(),
+        const Visualizer(),
         const TrackProgressbar(),
         ColoredBox(
           color: context.colorScheme.surface.withValues(alpha: 0.5),
@@ -412,6 +415,38 @@ class BlurredBackground extends StatelessWidget {
               },
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class Visualizer extends HookWidget {
+  const Visualizer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    useEffect(() {
+      get<CavaBloc>().add(const CavaEventStarted());
+      return () {};
+    });
+
+    return BlocBuilder<CavaBloc, CavaState>(
+      bloc: get<CavaBloc>(),
+      builder: (context, state) {
+        if (state is! CavaStateLoaded) return const SizedBox.shrink();
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: state.data
+              .map(
+                (e) => Container(
+                  width: 4,
+                  height: 48 * (e / 255),
+                  color: Colors.white,
+                ),
+              )
+              .toList(),
         );
       },
     );

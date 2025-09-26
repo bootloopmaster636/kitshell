@@ -42,6 +42,7 @@ dependencies:
   flutter_svg: ^2.2.1
   flutter_context_menu: ^0.3.0
   rapidfuzz: ^0.1.1
+  collection: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
