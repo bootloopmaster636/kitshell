@@ -298,6 +298,12 @@ class DatePart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DatetimeCubit, DatetimeState>(
       bloc: get<DatetimeCubit>(),
+      buildWhen: (previous, current) {
+        if (previous is! DatetimeLoaded) return true;
+        if (current is! DatetimeLoaded) return true;
+
+        return previous.now.minute != current.now.minute;
+      },
       builder: (context, state) {
         if (state is! DatetimeLoaded) return const SizedBox();
 
