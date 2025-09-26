@@ -1,5 +1,4 @@
 use anyhow::{bail, Error};
-use chrono::{Duration, TimeDelta};
 use mpris::{LoopStatus, PlaybackStatus, Player, PlayerFinder, ProgressTick};
 use std::ops::Deref;
 use std::thread::sleep;
@@ -30,8 +29,10 @@ pub struct TrackProgress {
     pub playback_status: PlaybackStatus,
     pub shuffle_enabled: bool,
     pub loop_status: LoopStatus,
-    pub length: Option<Duration>,
-    pub position: Duration,
+
+    /// This is calculated progress from difference between [`mpris::Progress::position`]
+    /// and [`mpris::Progress::length`]
+    pub progress: Option<f64>,
 
     /// Info about player, inserted here just for easier access
     pub player: PlayerInfo,
@@ -76,13 +77,13 @@ pub async fn watch_media_player_events(
 
         let mut progress_tracker = active_player.track_progress(500).unwrap();
         let mut progress_state: Option<TrackProgress> = None;
-        let mut progress_age: TimeDelta = TimeDelta::zero();
 
         loop {
             let ProgressTick {
                 progress,
                 progress_changed,
                 player_quit,
+                track_list_changed,
                 ..
             } = progress_tracker.tick();
 
@@ -98,10 +99,7 @@ pub async fn watch_media_player_events(
             // * Playback status changed
             // * Metadata changed for the track
             // * Volume was decreased
-            if progress_changed
-                || progress_state.is_none()
-                || progress_age.num_milliseconds() > 2000
-            {
+            if progress_changed || track_list_changed || progress_state.is_none() {
                 let metadata = progress.metadata();
                 let metadata_struct = TrackMetadata {
                     title: match metadata.title() {
@@ -130,23 +128,14 @@ pub async fn watch_media_player_events(
                     playback_status: progress.playback_status(),
                     shuffle_enabled: progress.shuffle(),
                     loop_status: progress.loop_status(),
-                    length: match progress.length() {
-                        Some(val) => Some(Duration::from_std(val).unwrap()),
-                        None => None,
-                    },
-                    position: match progress.position() {
-                        val => Duration::from_std(val).unwrap(),
-                    },
                     player: get_player_info(&active_player).unwrap(),
+                    progress: get_calculated_progress(&progress.position(), &progress.length()),
                 };
 
                 progress_state = Some(result);
             } else {
                 let mut result = progress_state.unwrap();
-                result.position = match progress.position() {
-                    val => Duration::from_std(val).unwrap(),
-                };
-
+                result.progress = get_calculated_progress(&progress.position(), &progress.length());
                 progress_state = Some(result);
             }
 
@@ -158,6 +147,13 @@ pub async fn watch_media_player_events(
                 None => {}
             }
         }
+    }
+}
+
+fn get_calculated_progress(position: &StdDuration, length: &Option<StdDuration>) -> Option<f64> {
+    match length {
+        Some(length) => Some(position.as_secs_f64() / length.as_secs_f64()),
+        None => None,
     }
 }
 

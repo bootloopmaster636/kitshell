@@ -667,14 +667,6 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
-impl SseDecode for chrono::Duration {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <i64>::sse_decode(deserializer);
-        return chrono::Duration::microseconds(inner);
-    }
-}
-
 impl SseDecode for chrono::DateTime<chrono::Local> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -872,6 +864,13 @@ impl SseDecode for f32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_f32::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_f64::<NativeEndian>().unwrap()
     }
 }
 
@@ -1100,22 +1099,22 @@ impl SseDecode for Option<String> {
     }
 }
 
-impl SseDecode for Option<chrono::Duration> {
+impl SseDecode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<chrono::Duration>::sse_decode(deserializer));
+            return Some(<f32>::sse_decode(deserializer));
         } else {
             return None;
         }
     }
 }
 
-impl SseDecode for Option<f32> {
+impl SseDecode for Option<f64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<f32>::sse_decode(deserializer));
+            return Some(<f64>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1237,16 +1236,14 @@ impl SseDecode for crate::api::mpris::TrackProgress {
         let mut var_playbackStatus = <mpris::PlaybackStatus>::sse_decode(deserializer);
         let mut var_shuffleEnabled = <bool>::sse_decode(deserializer);
         let mut var_loopStatus = <mpris::LoopStatus>::sse_decode(deserializer);
-        let mut var_length = <Option<chrono::Duration>>::sse_decode(deserializer);
-        let mut var_position = <chrono::Duration>::sse_decode(deserializer);
+        let mut var_progress = <Option<f64>>::sse_decode(deserializer);
         let mut var_player = <crate::api::mpris::PlayerInfo>::sse_decode(deserializer);
         return crate::api::mpris::TrackProgress {
             metadata: var_metadata,
             playback_status: var_playbackStatus,
             shuffle_enabled: var_shuffleEnabled,
             loop_status: var_loopStatus,
-            length: var_length,
-            position: var_position,
+            progress: var_progress,
             player: var_player,
         };
     }
@@ -1768,8 +1765,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::TrackProgress {
             self.playback_status.into_into_dart().into_dart(),
             self.shuffle_enabled.into_into_dart().into_dart(),
             self.loop_status.into_into_dart().into_dart(),
-            self.length.into_into_dart().into_dart(),
-            self.position.into_into_dart().into_dart(),
+            self.progress.into_into_dart().into_dart(),
             self.player.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -1901,17 +1897,6 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(format!("{:?}", self), serializer);
-    }
-}
-
-impl SseEncode for chrono::Duration {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <i64>::sse_encode(
-            self.num_microseconds()
-                .expect("cannot get microseconds from time"),
-            serializer,
-        );
     }
 }
 
@@ -2074,6 +2059,13 @@ impl SseEncode for f32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_f32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_f64::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -2253,22 +2245,22 @@ impl SseEncode for Option<String> {
     }
 }
 
-impl SseEncode for Option<chrono::Duration> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <chrono::Duration>::sse_encode(value, serializer);
-        }
-    }
-}
-
 impl SseEncode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <f32>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<f64> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <f64>::sse_encode(value, serializer);
         }
     }
 }
@@ -2370,8 +2362,7 @@ impl SseEncode for crate::api::mpris::TrackProgress {
         <mpris::PlaybackStatus>::sse_encode(self.playback_status, serializer);
         <bool>::sse_encode(self.shuffle_enabled, serializer);
         <mpris::LoopStatus>::sse_encode(self.loop_status, serializer);
-        <Option<chrono::Duration>>::sse_encode(self.length, serializer);
-        <chrono::Duration>::sse_encode(self.position, serializer);
+        <Option<f64>>::sse_encode(self.progress, serializer);
         <crate::api::mpris::PlayerInfo>::sse_encode(self.player, serializer);
     }
 }

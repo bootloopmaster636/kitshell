@@ -7,8 +7,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_player_info`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`
+// These functions are ignored because they are not marked as `pub`: `get_calculated_progress`, `get_player_info`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`
 
 Stream<TrackProgress?> watchMediaPlayerEvents() =>
     RustLib.instance.api.crateApiMprisWatchMediaPlayerEvents();
@@ -108,16 +108,17 @@ class TrackProgress {
     required this.playbackStatus,
     required this.shuffleEnabled,
     required this.loopStatus,
-    required this.position,
     required this.player,
-    this.length,
+    this.progress,
   });
   final TrackMetadata metadata;
   final PlaybackStatus playbackStatus;
   final bool shuffleEnabled;
   final LoopStatus loopStatus;
-  final Duration? length;
-  final Duration position;
+
+  /// This is calculated progress from difference between [`mpris::Progress::position`]
+  /// and [`mpris::Progress::length`]
+  final double? progress;
 
   /// Info about player, inserted here just for easier access
   final PlayerInfo player;
@@ -128,8 +129,7 @@ class TrackProgress {
       playbackStatus.hashCode ^
       shuffleEnabled.hashCode ^
       loopStatus.hashCode ^
-      length.hashCode ^
-      position.hashCode ^
+      progress.hashCode ^
       player.hashCode;
 
   @override
@@ -141,7 +141,6 @@ class TrackProgress {
           playbackStatus == other.playbackStatus &&
           shuffleEnabled == other.shuffleEnabled &&
           loopStatus == other.loopStatus &&
-          length == other.length &&
-          position == other.position &&
+          progress == other.progress &&
           player == other.player;
 }
