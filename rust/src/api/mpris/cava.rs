@@ -2,6 +2,7 @@ use crate::frb_generated::StreamSink;
 use crate::utils::misc::is_program_in_path;
 use anyhow::bail;
 use anyhow::Error;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
@@ -9,6 +10,7 @@ use std::process::Command;
 use std::thread::sleep;
 use std::time::Duration;
 use std::{fs::OpenOptions, io::Write, path::PathBuf};
+use sysinfo::System;
 
 #[derive(Clone)]
 pub struct CavaState {
@@ -18,6 +20,8 @@ pub struct CavaState {
 }
 
 pub fn listen_to_cava(sink: StreamSink<CavaState>) -> Result<(), Error> {
+    let _ = kill_other_cava_instance();
+
     // Check whether we have Cava on the system
     match is_program_in_path("cava") {
         true => {}
@@ -34,7 +38,7 @@ pub fn listen_to_cava(sink: StreamSink<CavaState>) -> Result<(), Error> {
     );
 
     // Spawn CAVA
-    let handle = match Command::new("cava")
+    let mut handle = match Command::new("cava")
         .arg("-p")
         .arg(config_file_path.as_os_str())
         .spawn()
@@ -43,7 +47,7 @@ pub fn listen_to_cava(sink: StreamSink<CavaState>) -> Result<(), Error> {
         Err(_) => bail!("API | Cava: Failed to spawn Cava"),
     };
     sleep(Duration::from_millis(1000));
-    let pid = handle.id();
+    let pid = &handle.id();
 
     let mut out_path = PathBuf::new();
     out_path.push(get_temp_dir());
@@ -53,8 +57,9 @@ pub fn listen_to_cava(sink: StreamSink<CavaState>) -> Result<(), Error> {
         Ok(val) => val,
         Err(_) => bail!("API |Cava: Cava out file not found!"),
     };
+    file.lock()?;
 
-    let reader = BufReader::new(file);
+    let reader = BufReader::new(&file);
     let mut buffer: [u8; 32] = [0; 32]; // Because cava is set up to 32 bars, we use u8*32 bytes buffer
 
     for line in reader.lines() {
@@ -75,11 +80,37 @@ pub fn listen_to_cava(sink: StreamSink<CavaState>) -> Result<(), Error> {
             }
             Err(_) => bail!("API | Cava: failed to read lines"),
         }
+
         let _ = sink.add(CavaState {
             data: buffer,
             bar_count: 32,
-            cava_pid: pid,
+            cava_pid: pid.clone(),
         });
+    }
+
+    file.unlock()?;
+    handle.kill()?;
+
+    Ok(())
+}
+
+fn kill_other_cava_instance() -> Result<(), Error> {
+    let sys = System::new_all();
+    let mut tmp_path = PathBuf::new();
+    tmp_path.push(get_temp_dir());
+    tmp_path.push("kitshell-cava-config");
+
+    let mut comparator = String::from("cava -p ");
+    comparator.push_str(tmp_path.to_str().unwrap());
+
+    for (_, process) in sys.processes() {
+        let cmdline = process.cmd().join(OsStr::new(" "));
+        let cmdline_str = cmdline.to_str().unwrap();
+
+        if comparator == cmdline_str {
+            println!("API | Cava: Same instace killed");
+            process.kill();
+        }
     }
 
     Ok(())
@@ -94,7 +125,7 @@ fn generate_config_file() -> Result<PathBuf, Error> {
 ## This config does not touch your original CAVA config.
 
 [general]
-framerate = 24
+framerate = 30
 autosens = 1
 sensitivity = 80
 bars = 32
@@ -123,7 +154,7 @@ waveform = 0
 [smoothing]
 monstercat = 0
 waves = 0
-noise_reduction = 40
+noise_reduction = 20
     ";
 
     // Get temporary path

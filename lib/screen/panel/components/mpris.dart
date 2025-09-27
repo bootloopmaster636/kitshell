@@ -429,7 +429,7 @@ class Visualizer extends HookWidget {
     useEffect(() {
       get<CavaBloc>().add(const CavaEventStarted());
       return () {};
-    });
+    }, []);
 
     return BlocBuilder<CavaBloc, CavaState>(
       bloc: get<CavaBloc>(),
@@ -443,7 +443,7 @@ class Visualizer extends HookWidget {
                 (e) => Container(
                   width: 4,
                   height: 48 * (e / 255),
-                  color: Colors.white,
+                  color: context.colorScheme.secondary,
                 ),
               )
               .toList(),

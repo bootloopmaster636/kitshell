@@ -7,7 +7,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 import 'package:kitshell/src/rust/lib.dart';
 
-// These functions are ignored because they are not marked as `pub`: `generate_config_file`, `get_temp_dir`
+// These functions are ignored because they are not marked as `pub`: `generate_config_file`, `get_temp_dir`, `kill_other_cava_instance`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`
 
 Stream<CavaState> listenToCava() =>

@@ -28,6 +28,7 @@ libc = "0.2.175"
 niri-ipc = "25.8.0"
 linux-ipc = "0.2.1"
 mpris = { git = "https://github.com/Mange/mpris-rs", rev = "9f55730b9dff3a3a62ad98531ed7098e146fc03e" }
+sysinfo = "0.37.1"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

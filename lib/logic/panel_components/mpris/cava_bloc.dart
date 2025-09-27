@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -12,7 +13,7 @@ part 'cava_bloc.freezed.dart';
 @singleton
 class CavaBloc extends Bloc<CavaEvent, CavaState> {
   CavaBloc() : super(CavaStateInitial()) {
-    on<CavaEventStarted>(_onStarted);
+    on<CavaEventStarted>(_onStarted, transformer: droppable());
   }
 
   Future<void> _onStarted(
