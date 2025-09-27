@@ -10,6 +10,7 @@ import 'package:iconify_flutter_plus/icons/carbon.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
+import 'package:kitshell/etc/component/visualizer.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
@@ -188,11 +189,11 @@ class NowPlaying extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         const BlurredBackground(),
-        const Visualizer(),
-        const TrackProgressbar(),
         ColoredBox(
           color: context.colorScheme.surface.withValues(alpha: 0.5),
         ),
+        const SongVisualizer(),
+        const TrackProgressbar(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
@@ -229,12 +230,11 @@ class TrackProgressbar extends StatelessWidget {
 
         if (progress != null) {
           return FractionallySizedBox(
+            heightFactor: 0.06,
             widthFactor: progress.clamp(0, 1),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.bottomLeft,
             child: ColoredBox(
-              color: context.colorScheme.onSurfaceVariant.withValues(
-                alpha: 0.3,
-              ),
+              color: context.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           );
         } else {
@@ -421,8 +421,8 @@ class BlurredBackground extends StatelessWidget {
   }
 }
 
-class Visualizer extends HookWidget {
-  const Visualizer({super.key});
+class SongVisualizer extends HookWidget {
+  const SongVisualizer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -436,17 +436,9 @@ class Visualizer extends HookWidget {
       builder: (context, state) {
         if (state is! CavaStateLoaded) return const SizedBox.shrink();
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: state.data
-              .map(
-                (e) => Container(
-                  width: 4,
-                  height: 48 * (e / 255),
-                  color: context.colorScheme.secondary,
-                ),
-              )
-              .toList(),
+        return Visualizer(
+          data: state.data,
+          color: context.colorScheme.secondary.withValues(alpha: 0.3),
         );
       },
     );
