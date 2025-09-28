@@ -337,14 +337,14 @@ class AlbumArt extends StatelessWidget {
                       color: context.colorScheme.onSecondary,
                     ),
                   );
-                } else if (uri!.startsWith('http')) {
+                } else if (uri.startsWith('http')) {
                   return Image.network(
-                    uri!,
+                    uri,
                     fit: BoxFit.cover,
                   );
-                } else if (uri!.startsWith('file')) {
+                } else if (uri.startsWith('file') || uri.startsWith('/')) {
                   return Image.file(
-                    File(uri!.replaceFirst('file://', '')),
+                    File(Uri.decodeFull(uri).replaceFirst('file://', '')),
                     fit: BoxFit.cover,
                   );
                 } else {
@@ -397,14 +397,14 @@ class BlurredBackground extends StatelessWidget {
                   return ColoredBox(
                     color: context.colorScheme.secondary,
                   );
-                } else if (uri!.startsWith('http')) {
+                } else if (uri.startsWith('http')) {
                   return Image.network(
-                    uri!,
+                    uri,
                     fit: BoxFit.cover,
                   );
-                } else if (uri!.startsWith('file')) {
+                } else if (uri.startsWith('file') || uri.startsWith('/')) {
                   return Image.file(
-                    File(uri!.replaceFirst('file://', '')),
+                    File(Uri.decodeFull(uri).replaceFirst('file://', '')),
                     fit: BoxFit.cover,
                   );
                 } else {
