@@ -18,6 +18,7 @@ import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/mpris/cava_bloc.dart';
 import 'package:kitshell/logic/panel_components/mpris/mpris_bloc.dart';
+import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
 class MprisComponent extends HookWidget {
@@ -59,6 +60,7 @@ class MprisComponent extends HookWidget {
 
           final colorScheme = await ColorScheme.fromImageProvider(
             provider: provider,
+            brightness: Theme.of(context).brightness,
           );
 
           if (!context.mounted) return;
@@ -94,9 +96,9 @@ class NowPlayingContainer extends HookWidget {
     final isHovered = useState(false);
 
     return CustomInkwell(
-      onHover: (_) => isHovered.value = !isHovered.value,
       onPointerEnter: (_) => isHovered.value = true,
       onPointerExit: (_) => isHovered.value = false,
+      onTap: () {},
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: AnimatedContainer(
@@ -176,7 +178,13 @@ class NowPlayingControls extends StatelessWidget {
                     Gaps.lg.gap,
                     if (playerInfo.canGoPrev)
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          get<MprisBloc>().add(
+                            const MprisEventDispatch(
+                              PlayerOperations.prevTrack,
+                            ),
+                          );
+                        },
                         icon: Iconify(
                           Carbon.chevron_left,
                           color: context.colorScheme.onSecondaryContainer,
@@ -185,7 +193,13 @@ class NowPlayingControls extends StatelessWidget {
                       ),
                     if (playerInfo.canPause && playerInfo.canPlay)
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          get<MprisBloc>().add(
+                            const MprisEventDispatch(
+                              PlayerOperations.togglePlayPause,
+                            ),
+                          );
+                        },
                         icon: Iconify(
                           switch (state.trackProgress.playbackStatus) {
                             PlaybackStatus.playing => Carbon.pause,
@@ -197,7 +211,13 @@ class NowPlayingControls extends StatelessWidget {
                       ),
                     if (playerInfo.canGoNext)
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          get<MprisBloc>().add(
+                            const MprisEventDispatch(
+                              PlayerOperations.nextTrack,
+                            ),
+                          );
+                        },
                         icon: Iconify(
                           Carbon.chevron_right,
                           color: context.colorScheme.onSecondaryContainer,
@@ -225,7 +245,7 @@ class NowPlaying extends StatelessWidget {
       children: [
         const BlurredBackground(),
         ColoredBox(
-          color: context.colorScheme.primaryContainer.withValues(alpha: 0.5),
+          color: context.colorScheme.surfaceContainer.withValues(alpha: 0.6),
         ),
         const SongVisualizer(),
         const TrackProgressbar(),
@@ -309,7 +329,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.title ?? '',
                   style: context.textTheme.labelMedium?.copyWith(
-                    color: context.colorScheme.onPrimaryContainer,
+                    color: context.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -317,7 +337,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.artists?.join(', ') ?? '',
                   style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onPrimaryContainer,
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -392,15 +412,11 @@ class AlbumArt extends StatelessWidget {
                     return Image.network(
                       uri,
                       fit: BoxFit.cover,
-                      cacheHeight: 64,
-                      cacheWidth: 64,
                     );
                   } else if (uri.startsWith('file') || uri.startsWith('/')) {
                     return Image.file(
                       File(Uri.decodeFull(uri).replaceFirst('file://', '')),
                       fit: BoxFit.cover,
-                      cacheHeight: 64,
-                      cacheWidth: 64,
                     );
                   } else {
                     return ColoredBox(
@@ -501,7 +517,7 @@ class SongVisualizer extends HookWidget {
 
         return Visualizer(
           data: state.data,
-          color: context.colorScheme.secondary.withValues(alpha: 0.25),
+          color: context.colorScheme.secondary.withValues(alpha: 0.3),
         );
       },
     );

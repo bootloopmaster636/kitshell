@@ -6,6 +6,16 @@ use std::time::Duration as StdDuration;
 
 use crate::frb_generated::StreamSink;
 
+pub enum PlayerOperations {
+    TogglePlayPause,
+    NextTrack,
+    PrevTrack,
+    ToggleShuffle,
+
+    /// Set loop status with status once, playlist, disable, then back to once
+    SetLoop,
+}
+
 /// Struct copying the content of [`mpris::Metadata`]
 ///
 /// Visit [mpris crate docs](https://docs.rs/mpris/2.0.1/mpris/struct.Metadata.html) for more information
@@ -75,7 +85,7 @@ pub async fn watch_media_player_events(
         };
         println!("API | MPRIS: Found active player");
 
-        let mut progress_tracker = active_player.track_progress(500).unwrap();
+        let mut progress_tracker = active_player.track_progress(200).unwrap();
         let mut progress_state: Option<TrackProgress> = None;
 
         loop {
@@ -148,6 +158,68 @@ pub async fn watch_media_player_events(
             }
         }
     }
+}
+
+pub async fn dispatch_player_action(action: PlayerOperations) -> Result<(), Error> {
+    let player = PlayerFinder::new();
+    let player_finder = match player {
+        Ok(player) => player,
+        Err(_) => {
+            bail!("API | MPRIS: Cannot connect to DBus!");
+        }
+    };
+
+    let active_player = match player_finder.find_active() {
+        Ok(player) => player,
+        Err(_) => bail!("API | MPRIS: No active player detected"),
+    };
+
+    match action {
+        PlayerOperations::TogglePlayPause => match active_player.play_pause() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot play/pause track (dbus error?)"),
+        },
+        PlayerOperations::NextTrack => match active_player.next() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot go to next track (dbus error?)"),
+        },
+        PlayerOperations::PrevTrack => match active_player.previous() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot go to previous track (dbus error?)"),
+        },
+        PlayerOperations::ToggleShuffle => {
+            let shuffle_state = active_player.get_shuffle().ok();
+
+            if shuffle_state.is_none() {
+                ()
+            }
+
+            match active_player.set_shuffle(!shuffle_state.unwrap()) {
+                Ok(_) => (),
+                Err(_) => bail!("API | MPRIS: Cannot set track shuffle (dbus error?)"),
+            }
+        }
+        PlayerOperations::SetLoop => {
+            let loop_state = active_player.get_loop_status().ok();
+
+            if loop_state.is_none() {
+                ()
+            }
+
+            let operation = match loop_state.unwrap() {
+                LoopStatus::None => LoopStatus::Track,
+                LoopStatus::Track => LoopStatus::Playlist,
+                LoopStatus::Playlist => LoopStatus::None,
+            };
+
+            match active_player.set_loop_status(operation) {
+                Ok(_) => (),
+                Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn get_calculated_progress(position: &StdDuration, length: &Option<StdDuration>) -> Option<f64> {

@@ -13,6 +13,9 @@ import 'package:kitshell/src/rust/third_party/mpris.dart';
 Stream<TrackProgress?> watchMediaPlayerEvents() =>
     RustLib.instance.api.crateApiMprisMprisWatchMediaPlayerEvents();
 
+Future<void> dispatchPlayerAction({required PlayerOperations action}) =>
+    RustLib.instance.api.crateApiMprisMprisDispatchPlayerAction(action: action);
+
 /// Struct that contains info regarding Player application
 class PlayerInfo {
   const PlayerInfo({
@@ -58,6 +61,16 @@ class PlayerInfo {
           canPlay == other.canPlay &&
           canPause == other.canPause &&
           canStop == other.canStop;
+}
+
+enum PlayerOperations {
+  togglePlayPause,
+  nextTrack,
+  prevTrack,
+  toggleShuffle,
+
+  /// Set loop status with status once, playlist, disable, then back to once
+  setLoop,
 }
 
 /// Struct copying the content of [`mpris::Metadata`]

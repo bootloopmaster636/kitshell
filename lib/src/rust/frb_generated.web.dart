@@ -188,6 +188,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlayerInfo dco_decode_player_info(dynamic raw);
 
   @protected
+  PlayerOperations dco_decode_player_operations(dynamic raw);
+
+  @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
 
   @protected
@@ -405,6 +408,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PlayerInfo sse_decode_player_info(SseDeserializer deserializer);
+
+  @protected
+  PlayerOperations sse_decode_player_operations(SseDeserializer deserializer);
 
   @protected
   (String, String) sse_decode_record_string_string(
@@ -658,6 +664,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_player_info(PlayerInfo self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_player_operations(
+    PlayerOperations self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_record_string_string(

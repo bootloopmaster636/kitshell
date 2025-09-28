@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1386584536;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -793992137;
 
 // Section: executor
 
@@ -117,6 +117,44 @@ fn wire__crate__api__wm_interface__base__detect_current_wm_impl(
                         let output_ok = crate::api::wm_interface::base::detect_current_wm()?;
                         Ok(output_ok)
                     })(),
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__mpris__mpris__dispatch_player_action_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dispatch_player_action",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_action =
+                <crate::api::mpris::mpris::PlayerOperations>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::mpris::mpris::dispatch_player_action(api_action).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
                 )
             }
         },
@@ -1266,6 +1304,21 @@ impl SseDecode for crate::api::mpris::mpris::PlayerInfo {
     }
 }
 
+impl SseDecode for crate::api::mpris::mpris::PlayerOperations {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::mpris::mpris::PlayerOperations::TogglePlayPause,
+            1 => crate::api::mpris::mpris::PlayerOperations::NextTrack,
+            2 => crate::api::mpris::mpris::PlayerOperations::PrevTrack,
+            3 => crate::api::mpris::mpris::PlayerOperations::ToggleShuffle,
+            4 => crate::api::mpris::mpris::PlayerOperations::SetLoop,
+            _ => unreachable!("Invalid variant for PlayerOperations: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for (String, String) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1448,83 +1501,89 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+        7 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => {
+        8 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => {
             wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len)
         }
-        9 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
+        10 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
+        11 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__notifications__invoke_notif_action_impl(
+        12 => wire__crate__api__notifications__invoke_notif_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
+        13 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
+        14 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        15 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
+        16 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        16 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
+        17 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        17 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
+        18 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        18 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        19 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        19 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        20 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        20 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+        21 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        21 => wire__crate__api__notifications__watch_notification_bus_impl(
+        22 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -1828,6 +1887,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::PlayerInfo>
     for crate::api::mpris::mpris::PlayerInfo
 {
     fn into_into_dart(self) -> crate::api::mpris::mpris::PlayerInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerOperations {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::TogglePlayPause => 0.into_dart(),
+            Self::NextTrack => 1.into_dart(),
+            Self::PrevTrack => 2.into_dart(),
+            Self::ToggleShuffle => 3.into_dart(),
+            Self::SetLoop => 4.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::mpris::PlayerOperations
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::PlayerOperations>
+    for crate::api::mpris::mpris::PlayerOperations
+{
+    fn into_into_dart(self) -> crate::api::mpris::mpris::PlayerOperations {
         self
     }
 }
@@ -2449,6 +2532,25 @@ impl SseEncode for crate::api::mpris::mpris::PlayerInfo {
         <bool>::sse_encode(self.can_play, serializer);
         <bool>::sse_encode(self.can_pause, serializer);
         <bool>::sse_encode(self.can_stop, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mpris::mpris::PlayerOperations {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => 0,
+                crate::api::mpris::mpris::PlayerOperations::NextTrack => 1,
+                crate::api::mpris::mpris::PlayerOperations::PrevTrack => 2,
+                crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => 3,
+                crate::api::mpris::mpris::PlayerOperations::SetLoop => 4,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 

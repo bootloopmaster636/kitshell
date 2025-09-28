@@ -12,6 +12,7 @@ part 'mpris_bloc.freezed.dart';
 class MprisBloc extends Bloc<MprisEvent, MprisState> {
   MprisBloc() : super(MprisStateInitial()) {
     on<MprisEventStarted>(_onStarted);
+    on<MprisEventDispatch>(_onDispatch);
   }
 
   Future<void> _onStarted(
@@ -31,5 +32,12 @@ class MprisBloc extends Bloc<MprisEvent, MprisState> {
         logger.e(e);
       },
     );
+  }
+
+  Future<void> _onDispatch(
+    MprisEventDispatch event,
+    Emitter<MprisState> emit,
+  ) async {
+    await dispatchPlayerAction(action: event.operation);
   }
 }
