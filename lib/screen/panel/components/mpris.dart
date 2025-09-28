@@ -392,11 +392,15 @@ class AlbumArt extends StatelessWidget {
                     return Image.network(
                       uri,
                       fit: BoxFit.cover,
+                      cacheHeight: 64,
+                      cacheWidth: 64,
                     );
                   } else if (uri.startsWith('file') || uri.startsWith('/')) {
                     return Image.file(
                       File(Uri.decodeFull(uri).replaceFirst('file://', '')),
                       fit: BoxFit.cover,
+                      cacheHeight: 64,
+                      cacheWidth: 64,
                     );
                   } else {
                     return ColoredBox(
@@ -456,11 +460,15 @@ class BlurredBackground extends StatelessWidget {
                   return Image.network(
                     uri,
                     fit: BoxFit.cover,
+                    cacheHeight: 48,
+                    cacheWidth: 48,
                   );
                 } else if (uri.startsWith('file') || uri.startsWith('/')) {
                   return Image.file(
                     File(Uri.decodeFull(uri).replaceFirst('file://', '')),
                     fit: BoxFit.cover,
+                    cacheHeight: 48,
+                    cacheWidth: 48,
                   );
                 } else {
                   return ColoredBox(

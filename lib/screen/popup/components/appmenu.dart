@@ -223,6 +223,8 @@ class AppIcon extends StatelessWidget {
           height: iconSize,
           width: iconSize,
           fit: BoxFit.contain,
+          cacheHeight: 96,
+          cacheWidth: 96,
         ),
         'svg' => SvgPicture.file(
           File(icon ?? ''),
