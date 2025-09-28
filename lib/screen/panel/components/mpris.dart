@@ -382,6 +382,7 @@ class AlbumArt extends StatelessWidget {
           child: AnimatedSwitcher(
             duration: Durations.medium1,
             child: DecoratedBox(
+              key: ValueKey(uri),
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -395,7 +396,6 @@ class AlbumArt extends StatelessWidget {
                 ],
               ),
               child: Builder(
-                key: ValueKey(uri),
                 builder: (context) {
                   if (uri == null) {
                     return ColoredBox(
