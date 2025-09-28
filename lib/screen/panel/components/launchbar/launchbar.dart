@@ -161,6 +161,10 @@ class LaunchbarItemComp extends HookWidget {
             await get<WmIfaceRepo>().wmFocusWindow(
               data.windowInfo!.windowId.toInt(),
             );
+          } else {
+            if (data.appInfo != null) {
+              get<AppmenuBloc>().add(AppmenuAppExecuted(data.appInfo!));
+            }
           }
         },
         decoration: BoxDecoration(
