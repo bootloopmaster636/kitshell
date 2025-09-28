@@ -290,6 +290,10 @@ class TrackProgressbar extends StatelessWidget {
           return LinearProgressIndicator(
             value: progress,
             minHeight: 3,
+            color: context.colorScheme.secondary.withValues(alpha: 0.8),
+            backgroundColor: context.colorScheme.secondaryContainer.withValues(
+              alpha: 0.8,
+            ),
           );
           // return FractionallySizedBox(
           //   heightFactor: 0.06,
