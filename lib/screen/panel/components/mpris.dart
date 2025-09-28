@@ -248,7 +248,10 @@ class NowPlaying extends StatelessWidget {
           color: context.colorScheme.surfaceContainer.withValues(alpha: 0.6),
         ),
         const SongVisualizer(),
-        const TrackProgressbar(),
+        const Align(
+          alignment: Alignment.bottomCenter,
+          child: TrackProgressbar(),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
@@ -284,14 +287,18 @@ class TrackProgressbar extends StatelessWidget {
         final progress = state.trackProgress.progress;
 
         if (progress != null) {
-          return FractionallySizedBox(
-            heightFactor: 0.06,
-            widthFactor: progress.clamp(0, 1),
-            alignment: Alignment.bottomLeft,
-            child: ColoredBox(
-              color: context.colorScheme.primary.withValues(alpha: 0.8),
-            ),
+          return LinearProgressIndicator(
+            value: progress,
+            minHeight: 3,
           );
+          // return FractionallySizedBox(
+          //   heightFactor: 0.06,
+          //   widthFactor: progress.clamp(0, 1),
+          //   alignment: Alignment.bottomLeft,
+          //   child: ColoredBox(
+          //     color: context.colorScheme.primary.withValues(alpha: 0.8),
+          //   ),
+          // );
         } else {
           return const SizedBox.shrink();
         }
