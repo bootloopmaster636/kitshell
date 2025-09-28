@@ -129,8 +129,8 @@ framerate = 30
 autosens = 1
 sensitivity = 80
 bars = 32
-lower_cutoff_freq = 50
-higher_cutoff_freq = 10000
+lower_cutoff_freq = 60
+higher_cutoff_freq = 8000
 sleep_timer = 5
 
 [input]
@@ -152,7 +152,7 @@ frame_delimiter = 10
 waveform = 0
 
 [smoothing]
-monstercat = 0
+monstercat = 1
 waves = 0
 noise_reduction = 20
     ";

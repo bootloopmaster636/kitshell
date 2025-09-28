@@ -7,14 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/carbon.dart';
-import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
 import 'package:kitshell/etc/component/visualizer.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
-import 'package:kitshell/etc/utitity/logger.dart';
+import 'package:kitshell/etc/utitity/image_provider.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/mpris/cava_bloc.dart';
@@ -30,10 +29,43 @@ class MprisComponent extends HookWidget {
       get<MprisBloc>().add(const MprisEventStarted());
       return () {};
     }, []);
+    final themeAlbumArt = useState(Theme.of(context));
 
     return RepaintBoundary(
-      child: BlocBuilder<MprisBloc, MprisState>(
+      child: BlocConsumer<MprisBloc, MprisState>(
         bloc: get<MprisBloc>(),
+        listenWhen: (prev, current) {
+          if (prev is! MprisStatePlaying || current is! MprisStatePlaying) {
+            return true;
+          }
+
+          return prev.trackProgress.metadata.artUrl !=
+              current.trackProgress.metadata.artUrl;
+        },
+        listener: (context, state) async {
+          if (state is! MprisStatePlaying) return;
+
+          final uri = state.trackProgress.metadata.artUrl;
+          if (uri == null) {
+            themeAlbumArt.value = Theme.of(context);
+            return;
+          }
+
+          final provider = getImageProviderFromUri(uri);
+          if (provider == null) {
+            themeAlbumArt.value = Theme.of(context);
+            return;
+          }
+
+          final colorScheme = await ColorScheme.fromImageProvider(
+            provider: provider,
+          );
+
+          if (!context.mounted) return;
+          themeAlbumArt.value = Theme.of(
+            context,
+          ).copyWith(colorScheme: colorScheme);
+        },
         buildWhen: (prev, current) {
           return prev.runtimeType != current.runtimeType;
         },
@@ -43,7 +75,10 @@ class MprisComponent extends HookWidget {
             case MprisStateNotPlaying():
               return const NoMusicPlaying();
             case MprisStatePlaying():
-              return const NowPlayingContainer();
+              return Theme(
+                data: themeAlbumArt.value,
+                child: const NowPlayingContainer(),
+              );
           }
         },
       ),
@@ -127,8 +162,8 @@ class NowPlayingControls extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                context.colorScheme.surfaceBright.withValues(alpha: 0),
-                context.colorScheme.surfaceBright.withValues(alpha: 0.8),
+                context.colorScheme.secondaryContainer.withValues(alpha: 0),
+                context.colorScheme.secondaryContainer.withValues(alpha: 0.8),
               ],
               stops: const [0, 0.6],
             ),
@@ -144,7 +179,7 @@ class NowPlayingControls extends StatelessWidget {
                         onPressed: () {},
                         icon: Iconify(
                           Carbon.chevron_left,
-                          color: context.colorScheme.onSurfaceVariant,
+                          color: context.colorScheme.onSecondaryContainer,
                           size: 20,
                         ),
                       ),
@@ -157,7 +192,7 @@ class NowPlayingControls extends StatelessWidget {
                             PlaybackStatus.paused ||
                             PlaybackStatus.stopped => Carbon.play,
                           },
-                          color: context.colorScheme.onSurfaceVariant,
+                          color: context.colorScheme.onSecondaryContainer,
                         ),
                       ),
                     if (playerInfo.canGoNext)
@@ -165,7 +200,7 @@ class NowPlayingControls extends StatelessWidget {
                         onPressed: () {},
                         icon: Iconify(
                           Carbon.chevron_right,
-                          color: context.colorScheme.onSurfaceVariant,
+                          color: context.colorScheme.onSecondaryContainer,
                           size: 20,
                         ),
                       ),
@@ -190,7 +225,7 @@ class NowPlaying extends StatelessWidget {
       children: [
         const BlurredBackground(),
         ColoredBox(
-          color: context.colorScheme.surface.withValues(alpha: 0.5),
+          color: context.colorScheme.primaryContainer.withValues(alpha: 0.5),
         ),
         const SongVisualizer(),
         const TrackProgressbar(),
@@ -234,7 +269,7 @@ class TrackProgressbar extends StatelessWidget {
             widthFactor: progress.clamp(0, 1),
             alignment: Alignment.bottomLeft,
             child: ColoredBox(
-              color: context.colorScheme.onSurface.withValues(alpha: 0.5),
+              color: context.colorScheme.primary.withValues(alpha: 0.8),
             ),
           );
         } else {
@@ -274,7 +309,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.title ?? '',
                   style: context.textTheme.labelMedium?.copyWith(
-                    color: context.colorScheme.onSurface,
+                    color: context.colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -282,7 +317,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.artists?.join(', ') ?? '',
                   style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onSurface,
+                    color: context.colorScheme.onPrimaryContainer,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -297,7 +332,7 @@ class TrackInfo extends StatelessWidget {
               curve: Easing.emphasizedDecelerate,
             )
             .fadeIn(
-              duration: Durations.medium2,
+              duration: Durations.medium3,
             );
       },
     );
@@ -326,37 +361,57 @@ class AlbumArt extends StatelessWidget {
           dimension: 32,
           child: AnimatedSwitcher(
             duration: Durations.medium1,
-            child: Builder(
-              key: ValueKey(uri),
-              builder: (context) {
-                if (uri == null) {
-                  return ColoredBox(
-                    color: context.colorScheme.secondary,
-                    child: Iconify(
-                      Carbon.music,
-                      color: context.colorScheme.onSecondary,
-                    ),
-                  );
-                } else if (uri.startsWith('http')) {
-                  return Image.network(
-                    uri,
-                    fit: BoxFit.cover,
-                  );
-                } else if (uri.startsWith('file') || uri.startsWith('/')) {
-                  return Image.file(
-                    File(Uri.decodeFull(uri).replaceFirst('file://', '')),
-                    fit: BoxFit.cover,
-                  );
-                } else {
-                  return ColoredBox(
-                    color: context.colorScheme.secondary,
-                    child: Iconify(
-                      Ic.question_answer,
-                      color: context.colorScheme.onSecondary,
-                    ),
-                  );
-                }
-              },
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: context.colorScheme.shadow.withValues(alpha: 0.4),
+                    blurRadius: 2,
+                  ),
+                  BoxShadow(
+                    color: context.colorScheme.primaryFixedDim,
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              child: Builder(
+                key: ValueKey(uri),
+                builder: (context) {
+                  if (uri == null) {
+                    return ColoredBox(
+                      color: context.colorScheme.secondary,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Iconify(
+                          Carbon.music,
+                          color: context.colorScheme.onSecondary,
+                        ),
+                      ),
+                    );
+                  } else if (uri.startsWith('http')) {
+                    return Image.network(
+                      uri,
+                      fit: BoxFit.cover,
+                    );
+                  } else if (uri.startsWith('file') || uri.startsWith('/')) {
+                    return Image.file(
+                      File(Uri.decodeFull(uri).replaceFirst('file://', '')),
+                      fit: BoxFit.cover,
+                    );
+                  } else {
+                    return ColoredBox(
+                      color: context.colorScheme.secondary,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Iconify(
+                          Carbon.music,
+                          color: context.colorScheme.onSecondary,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
           ),
         );
@@ -438,7 +493,7 @@ class SongVisualizer extends HookWidget {
 
         return Visualizer(
           data: state.data,
-          color: context.colorScheme.secondary.withValues(alpha: 0.3),
+          color: context.colorScheme.secondary.withValues(alpha: 0.25),
         );
       },
     );
