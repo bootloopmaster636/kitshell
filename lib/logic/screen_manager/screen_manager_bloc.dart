@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
 import 'package:wayland_layer_shell/types.dart';
 import 'package:wayland_layer_shell/wayland_layer_shell.dart';
@@ -110,7 +110,9 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     final displayInfo = loadedState.displays.last;
 
     // Do closing animation and etc
-    emit(loadedState.copyWith(isPopupShown: false));
+    emit(
+      loadedState.copyWith(isPopupShown: false, popupShown: PopupWidget.none),
+    );
     await Future<void>.delayed(popupOpenCloseDuration);
 
     // Reset layer state
