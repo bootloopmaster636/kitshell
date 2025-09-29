@@ -18,7 +18,7 @@ enum PopupWidget {
   mpris(MprisPopup()),
 
   /// No PopupWidget
-  none(SizedBox.shrink());
+  none(SizedBox());
 
   const PopupWidget(this.widget);
   final Widget widget;

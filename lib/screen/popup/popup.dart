@@ -26,7 +26,10 @@ class PopupContainer extends StatelessWidget {
                 );
               },
             ),
-            const PopupContent(),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: PopupContent(),
+            ),
           ],
         );
       },
@@ -43,47 +46,43 @@ class PopupContent extends StatelessWidget {
       bloc: get<ScreenManagerBloc>(),
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-        return Padding(
-              padding: const EdgeInsets.all(8),
-              child: AnimatedAlign(
-                duration: Durations.long1,
-                curve: Curves.easeOutQuint,
-                alignment: switch (state.position) {
-                  WidgetPosition.left => Alignment.bottomLeft,
-                  WidgetPosition.center => Alignment.bottomCenter,
-                  WidgetPosition.right => Alignment.bottomRight,
-                },
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.surfaceContainer.withValues(
-                        alpha: popupBgOpacity,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: context.colorScheme.outlineVariant,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.colorScheme.shadow.withValues(
-                            alpha: 0.6,
-                          ),
-                          blurRadius: 8,
-                          blurStyle: BlurStyle.outer,
-                        ),
-                      ],
+        return AnimatedAlign(
+              duration: Durations.long1,
+              curve: Curves.easeOutQuint,
+              alignment: switch (state.position) {
+                WidgetPosition.left => Alignment.bottomLeft,
+                WidgetPosition.center => Alignment.bottomCenter,
+                WidgetPosition.right => Alignment.bottomRight,
+              },
+              child: Material(
+                type: MaterialType.transparency,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.surfaceContainer.withValues(
+                      alpha: popupBgOpacity,
                     ),
-                    child: AnimatedSize(
-                      duration: Durations.long1,
-                      curve: Curves.easeOutQuint,
-                      alignment: Alignment.bottomCenter,
-                      child: AnimatedSwitcher(
-                        duration: Durations.medium1,
-                        switchInCurve: Curves.easeInSine,
-                        switchOutCurve: Curves.easeOutSine,
-                        child: state.popupShown.widget,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: context.colorScheme.outlineVariant,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: context.colorScheme.shadow.withValues(
+                          alpha: 0.6,
+                        ),
+                        blurRadius: 8,
+                        blurStyle: BlurStyle.outer,
                       ),
+                    ],
+                  ),
+                  child: AnimatedSize(
+                    duration: Durations.long1,
+                    curve: Curves.easeOutQuint,
+                    child: AnimatedSwitcher(
+                      duration: Durations.medium1,
+                      switchInCurve: Curves.easeInSine,
+                      switchOutCurve: Curves.easeOutSine,
+                      child: state.popupShown.widget,
                     ),
                   ),
                 ),
@@ -92,14 +91,8 @@ class PopupContent extends StatelessWidget {
             .animate(
               target: state.isPopupShown ? 1 : 0,
             )
-            .slideY(
-              begin: 0.2,
-              end: 0,
-              duration: popupOpenCloseDuration,
-              curve: Easing.standard,
-            )
             .fadeIn(
-              duration: popupOpenCloseDuration,
+              duration: Durations.short4,
             );
       },
     );
