@@ -6,6 +6,7 @@ import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
+import 'package:motor/motor.dart';
 
 class PopupContainer extends StatelessWidget {
   const PopupContainer({super.key});
@@ -54,34 +55,37 @@ class PopupContent extends StatelessWidget {
                 WidgetPosition.center => Alignment.bottomCenter,
                 WidgetPosition.right => Alignment.bottomRight,
               },
-              child: Material(
-                type: MaterialType.transparency,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.surfaceContainer.withValues(
-                      alpha: popupBgOpacity,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: context.colorScheme.outlineVariant,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: context.colorScheme.shadow.withValues(
-                          alpha: 0.6,
-                        ),
-                        blurRadius: 8,
-                        blurStyle: BlurStyle.outer,
+              child: MotionDraggable(
+                motion: const Motion.snappySpring(),
+                onlyReturnWhenCanceled: true,
+                data: 'popup',
+                maxSimultaneousDrags: 1,
+                affinity: Axis.vertical,
+                axis: Axis.vertical,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainer.withValues(
+                        alpha: popupBgOpacity,
                       ),
-                    ],
-                  ),
-                  child: AnimatedSize(
-                    duration: Durations.long1,
-                    curve: Curves.easeOutQuint,
-                    child: AnimatedSwitcher(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: context.colorScheme.outlineVariant,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.colorScheme.shadow.withValues(
+                            alpha: 0.6,
+                          ),
+                          blurRadius: 8,
+                          blurStyle: BlurStyle.outer,
+                        ),
+                      ],
+                    ),
+                    child: AnimatedSize(
                       duration: Durations.medium1,
-                      switchInCurve: Curves.easeInSine,
-                      switchOutCurve: Curves.easeOutSine,
+                      curve: Easing.standard,
                       child: state.popupShown.widget,
                     ),
                   ),
@@ -90,6 +94,17 @@ class PopupContent extends StatelessWidget {
             )
             .animate(
               target: state.isPopupShown ? 1 : 0,
+            )
+            .scaleXY(
+              begin: 0.8,
+              end: 1,
+              duration: Durations.short4,
+              curve: Easing.standard,
+              alignment: switch (state.position) {
+                WidgetPosition.left => Alignment.bottomLeft,
+                WidgetPosition.center => Alignment.bottomCenter,
+                WidgetPosition.right => Alignment.bottomRight,
+              },
             )
             .fadeIn(
               duration: Durations.short4,

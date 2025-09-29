@@ -43,6 +43,7 @@ dependencies:
   flutter_context_menu: ^0.3.0
   rapidfuzz: ^0.1.1
   collection: any
+  motor: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
