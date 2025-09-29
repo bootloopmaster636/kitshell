@@ -84,8 +84,9 @@ class PopupContent extends StatelessWidget {
                       ],
                     ),
                     child: AnimatedSize(
-                      duration: Durations.medium1,
+                      duration: Durations.medium3,
                       curve: Easing.standard,
+                      alignment: Alignment.bottomCenter,
                       child: state.popupShown.widget,
                     ),
                   ),
@@ -95,19 +96,14 @@ class PopupContent extends StatelessWidget {
             .animate(
               target: state.isPopupShown ? 1 : 0,
             )
-            .scaleXY(
-              begin: 0.8,
-              end: 1,
-              duration: Durations.short4,
+            .slideY(
+              begin: 0.2,
+              end: 0,
+              duration: popupOpenCloseDuration,
               curve: Easing.standard,
-              alignment: switch (state.position) {
-                WidgetPosition.left => Alignment.bottomLeft,
-                WidgetPosition.center => Alignment.bottomCenter,
-                WidgetPosition.right => Alignment.bottomRight,
-              },
             )
             .fadeIn(
-              duration: Durations.short4,
+              duration: popupOpenCloseDuration,
             );
       },
     );
