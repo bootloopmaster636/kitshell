@@ -295,14 +295,6 @@ class TrackProgressbar extends StatelessWidget {
               alpha: 0.8,
             ),
           );
-          // return FractionallySizedBox(
-          //   heightFactor: 0.06,
-          //   widthFactor: progress.clamp(0, 1),
-          //   alignment: Alignment.bottomLeft,
-          //   child: ColoredBox(
-          //     color: context.colorScheme.primary.withValues(alpha: 0.8),
-          //   ),
-          // );
         } else {
           return const SizedBox.shrink();
         }
