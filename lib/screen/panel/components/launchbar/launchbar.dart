@@ -7,7 +7,6 @@ import 'package:iconify_flutter_plus/icons/bi.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
 import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
-import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
@@ -15,6 +14,7 @@ import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart';
 import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 import 'package:kitshell/screen/panel/components/launchbar/workspace_indicator.dart';
 import 'package:kitshell/screen/panel/panel.dart';
@@ -26,8 +26,7 @@ class Launchbar extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      get<AppmenuBloc>().add(const AppmenuSubscribed());
-      get<AppmenuBloc>().add(AppmenuLoad(locale: t.locale));
+      get<AppmenuBloc>().add(AppmenuSubscribed(locale: t.locale));
       get<LaunchbarBloc>().add(const LaunchbarEventApplistWatched());
       get<LaunchbarBloc>().add(const LaunchbarEventWmEventsWatched());
       return () {};

@@ -7,6 +7,7 @@ class AppmenuState with _$AppmenuState {
   const factory AppmenuState.loaded({
     required List<AppInfoModel> entries,
     required List<AppInfoModel> pinnedEntries,
+    required DateTime lastRefresh,
     String? searchQuery,
     List<AppInfoModel>? searchResult,
   }) = AppmenuLoaded;

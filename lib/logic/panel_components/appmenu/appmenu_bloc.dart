@@ -41,6 +41,9 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
     AppmenuSubscribed event,
     Emitter<AppmenuState> emit,
   ) async {
+    _appListRepo.locale = event.locale ?? 'en_US';
+    await _appListRepo.load();
+
     return emit.forEach(
       _appListRepo.appsList,
       onData: (apps) {
@@ -64,15 +67,21 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
         return AppmenuLoaded(
           entries: regularEntry,
           pinnedEntries: pinnedEntry,
+          lastRefresh: DateTime.now(),
         );
       },
     );
   }
 
   Future<void> _load(AppmenuLoad event, Emitter<AppmenuState> emit) async {
-    // TODO(bootloopmaster636): Use dynamic locale from front end
-    _appListRepo.locale = event.locale ?? 'en_US';
-    await _appListRepo.load();
+    if (state is! AppmenuLoaded) return;
+    final loadedState = state as AppmenuLoaded;
+
+    if (loadedState.lastRefresh.add(const Duration(minutes: 30)).second >
+        DateTime.now().second) {
+      _appListRepo.locale = event.locale ?? 'en_US';
+      await _appListRepo.load();
+    }
   }
 
   Future<void> _open(

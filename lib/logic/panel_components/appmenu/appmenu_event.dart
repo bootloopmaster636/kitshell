@@ -2,7 +2,7 @@ part of 'appmenu_bloc.dart';
 
 @freezed
 class AppmenuEvent with _$AppmenuEvent {
-  const factory AppmenuEvent.subscribe() = AppmenuSubscribed;
+  const factory AppmenuEvent.subscribe({String? locale}) = AppmenuSubscribed;
 
   const factory AppmenuEvent.load({String? locale}) = AppmenuLoad;
 
