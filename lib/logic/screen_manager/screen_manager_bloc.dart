@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';

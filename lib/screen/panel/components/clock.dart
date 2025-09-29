@@ -7,7 +7,7 @@ import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:intl/intl.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';

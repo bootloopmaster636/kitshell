@@ -7,7 +7,7 @@ import 'package:iconify_flutter_plus/icons/bi.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
 import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
