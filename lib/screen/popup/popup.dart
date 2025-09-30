@@ -8,7 +8,6 @@ import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
-import 'package:motor/motor.dart';
 
 class PopupContainer extends StatelessWidget {
   const PopupContainer({super.key});
