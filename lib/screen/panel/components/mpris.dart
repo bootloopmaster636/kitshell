@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -110,9 +109,8 @@ class NowPlayingContainer extends HookWidget {
         );
       },
       padding: EdgeInsets.zero,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: AnimatedContainer(
-        width: isHovered.value ? 240 : 180,
+        width: isHovered.value ? 260 : 180,
         duration: Durations.medium2,
         curve: Easing.standard,
         alignment: Alignment.centerLeft,
@@ -191,7 +189,7 @@ class NowPlayingControls extends StatelessWidget {
                         onPressed: () {
                           get<MprisBloc>().add(
                             const MprisEventDispatch(
-                              PlayerOperations.prevTrack,
+                              PlayerOperations.prevTrack(),
                             ),
                           );
                         },
@@ -206,7 +204,7 @@ class NowPlayingControls extends StatelessWidget {
                         onPressed: () {
                           get<MprisBloc>().add(
                             const MprisEventDispatch(
-                              PlayerOperations.togglePlayPause,
+                              PlayerOperations.togglePlayPause(),
                             ),
                           );
                         },
@@ -224,7 +222,7 @@ class NowPlayingControls extends StatelessWidget {
                         onPressed: () {
                           get<MprisBloc>().add(
                             const MprisEventDispatch(
-                              PlayerOperations.nextTrack,
+                              PlayerOperations.nextTrack(),
                             ),
                           );
                         },
@@ -250,12 +248,10 @@ class NowPlaying extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.centerLeft,
       fit: StackFit.expand,
       children: [
-        const BlurredBackground(),
         ColoredBox(
-          color: context.colorScheme.surfaceContainer.withValues(alpha: 0.6),
+          color: context.colorScheme.primaryContainer.withValues(alpha: 0.6),
         ),
         const SongVisualizer(),
         const Align(
@@ -290,11 +286,12 @@ class TrackProgressbar extends StatelessWidget {
         if (prev is! MprisStatePlaying || current is! MprisStatePlaying) {
           return true;
         }
-        return prev.trackProgress.progress != current.trackProgress.progress;
+        return prev.trackProgress.progressNormalized !=
+            current.trackProgress.progressNormalized;
       },
       builder: (context, state) {
         if (state is! MprisStatePlaying) return const SizedBox.shrink();
-        final progress = state.trackProgress.progress;
+        final progress = state.trackProgress.progressNormalized;
 
         if (progress != null) {
           return LinearProgressIndicator(
@@ -373,7 +370,8 @@ class TrackInfo extends StatelessWidget {
 }
 
 class AlbumArt extends StatelessWidget {
-  const AlbumArt({super.key});
+  const AlbumArt({this.dimension = 32, super.key});
+  final double dimension;
 
   @override
   Widget build(BuildContext context) {
@@ -391,121 +389,17 @@ class AlbumArt extends StatelessWidget {
         final uri = state.trackProgress.metadata.artUrl;
 
         return SizedBox.square(
-          dimension: 32,
-          child: AnimatedSwitcher(
-            duration: Durations.medium1,
-            child: DecoratedBox(
-              key: ValueKey(uri),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: context.colorScheme.shadow.withValues(alpha: 0.4),
-                    blurRadius: 2,
-                  ),
-                  BoxShadow(
-                    color: context.colorScheme.primaryFixedDim,
-                    blurRadius: 8,
-                  ),
-                ],
-              ),
-              child: Builder(
-                builder: (context) {
-                  if (uri == null) {
-                    return ColoredBox(
-                      color: context.colorScheme.secondary,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Iconify(
-                          Carbon.music,
-                          color: context.colorScheme.onSecondary,
-                        ),
-                      ),
-                    );
-                  } else if (uri.startsWith('http')) {
-                    return Image.network(
-                      uri,
-                      fit: BoxFit.cover,
-                    );
-                  } else if (uri.startsWith('file') || uri.startsWith('/')) {
-                    return Image.file(
-                      File(Uri.decodeFull(uri).replaceFirst('file://', '')),
-                      fit: BoxFit.cover,
-                    );
-                  } else {
-                    return ColoredBox(
-                      color: context.colorScheme.secondary,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Iconify(
-                          Carbon.music,
-                          color: context.colorScheme.onSecondary,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
+          dimension: dimension,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: context.colorScheme.shadow.withValues(alpha: 0.4),
+                  blurRadius: 4,
+                ),
+              ],
             ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class BlurredBackground extends StatelessWidget {
-  const BlurredBackground({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<MprisBloc, MprisState>(
-      bloc: get<MprisBloc>(),
-      buildWhen: (prev, current) {
-        if (prev is! MprisStatePlaying || current is! MprisStatePlaying) {
-          return true;
-        }
-        return prev.trackProgress.metadata.artUrl !=
-            current.trackProgress.metadata.artUrl;
-      },
-      builder: (context, state) {
-        if (state is! MprisStatePlaying) return const SizedBox.shrink();
-        final uri = state.trackProgress.metadata.artUrl;
-
-        return ImageFiltered(
-          imageFilter: ImageFilter.blur(
-            sigmaX: 4,
-            sigmaY: 4,
-          ),
-          child: AnimatedSwitcher(
-            duration: Durations.medium1,
-            child: Builder(
-              key: ValueKey(uri),
-              builder: (context) {
-                if (uri == null) {
-                  return ColoredBox(
-                    color: context.colorScheme.secondary,
-                  );
-                } else if (uri.startsWith('http')) {
-                  return Image.network(
-                    uri,
-                    fit: BoxFit.cover,
-                    cacheHeight: 48,
-                    cacheWidth: 48,
-                  );
-                } else if (uri.startsWith('file') || uri.startsWith('/')) {
-                  return Image.file(
-                    File(Uri.decodeFull(uri).replaceFirst('file://', '')),
-                    fit: BoxFit.cover,
-                    cacheHeight: 48,
-                    cacheWidth: 48,
-                  );
-                } else {
-                  return ColoredBox(
-                    color: context.colorScheme.secondary,
-                  );
-                }
-              },
-            ),
+            child: AlbumArtBuilder(uri: uri),
           ),
         );
       },
@@ -564,6 +458,72 @@ class NoMusicPlaying extends HookWidget {
                 )
               : const SizedBox.shrink(),
         ),
+      ),
+    );
+  }
+}
+
+class AlbumArtBuilder extends StatelessWidget {
+  const AlbumArtBuilder({
+    this.uri,
+    this.cacheDimension,
+    this.blurPx,
+    super.key,
+  });
+  final String? uri;
+  final int? cacheDimension;
+  final double? blurPx;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Durations.medium1,
+      layoutBuilder: (currentChild, previousChildren) => Stack(
+        fit: StackFit.passthrough,
+        alignment: Alignment.center,
+        children: [...previousChildren, ?currentChild],
+      ),
+      child: Builder(
+        key: ValueKey(uri),
+        builder: (context) {
+          if (uri == null) {
+            return ColoredBox(
+              color: context.colorScheme.secondary,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Iconify(
+                  Carbon.music,
+                  color: context.colorScheme.onSecondary,
+                ),
+              ),
+            );
+          } else if (uri!.startsWith('http')) {
+            return Image.network(
+              uri!,
+              fit: BoxFit.cover,
+              cacheHeight: cacheDimension,
+              cacheWidth: cacheDimension,
+            );
+          } else if (uri!.startsWith('file') || uri!.startsWith('/')) {
+            return Image.file(
+              File(Uri.decodeFull(uri!).replaceFirst('file://', '')),
+              fit: BoxFit.cover,
+              cacheHeight: cacheDimension,
+              cacheWidth: cacheDimension,
+            );
+          } else {
+            return ColoredBox(
+              color: context.colorScheme.secondary,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Iconify(
+                  Carbon.music,
+                  color: context.colorScheme.onSecondary,
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }

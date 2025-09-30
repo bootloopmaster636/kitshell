@@ -162,7 +162,7 @@ class AppEntryTilePinned extends StatelessWidget {
           child: Column(
             spacing: Gaps.sm.value,
             children: [
-              AppIcon(icon: appInfo.metadata.iconPath),
+              AppIconBuilder(icon: appInfo.metadata.iconPath),
               Text(
                 appInfo.entry.name,
                 maxLines: 2,
@@ -197,7 +197,7 @@ class AppEntryTile extends StatelessWidget {
         child: Row(
           spacing: Gaps.sm.value,
           children: [
-            AppIcon(icon: appInfo.metadata.iconPath),
+            AppIconBuilder(icon: appInfo.metadata.iconPath),
             Text(appInfo.entry.name),
           ],
         ),
@@ -206,8 +206,8 @@ class AppEntryTile extends StatelessWidget {
   }
 }
 
-class AppIcon extends StatelessWidget {
-  const AppIcon({this.icon, this.iconSize = 32, super.key});
+class AppIconBuilder extends StatelessWidget {
+  const AppIconBuilder({this.icon, this.iconSize = 32, super.key});
 
   final String? icon;
   final double iconSize;
@@ -265,7 +265,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
         child: Row(
           spacing: Gaps.sm.value,
           children: [
-            AppIcon(
+            AppIconBuilder(
               icon: appInfo.metadata.iconPath,
             ),
             Expanded(

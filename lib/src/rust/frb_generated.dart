@@ -230,7 +230,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_player_operations(action, serializer);
+          sse_encode_box_autoadd_player_operations(action, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -773,6 +773,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Duration dco_decode_Chrono_Duration(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeDuration(dco_decode_i_64(raw));
+  }
+
+  @protected
   DateTime dco_decode_Chrono_Local(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dcoDecodeTimestamp(ts: dco_decode_i_64(raw), isUtc: false);
@@ -901,6 +907,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Duration dco_decode_box_autoadd_Chrono_Duration(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Chrono_Duration(raw);
+  }
+
+  @protected
   double dco_decode_box_autoadd_f_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as double;
@@ -916,6 +928,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int dco_decode_box_autoadd_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
+  }
+
+  @protected
+  PlayerOperations dco_decode_box_autoadd_player_operations(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_player_operations(raw);
   }
 
   @protected
@@ -1100,6 +1118,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Duration? dco_decode_opt_box_autoadd_Chrono_Duration(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_Chrono_Duration(raw);
+  }
+
+  @protected
   double? dco_decode_opt_box_autoadd_f_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_f_32(raw);
@@ -1162,7 +1186,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   PlayerOperations dco_decode_player_operations(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return PlayerOperations.values[raw as int];
+    switch (raw[0]) {
+      case 0:
+        return const PlayerOperations_Play();
+      case 1:
+        return const PlayerOperations_Pause();
+      case 2:
+        return const PlayerOperations_TogglePlayPause();
+      case 3:
+        return const PlayerOperations_NextTrack();
+      case 4:
+        return const PlayerOperations_PrevTrack();
+      case 5:
+        return const PlayerOperations_ToggleShuffle();
+      case 6:
+        return const PlayerOperations_SetLoop();
+      case 7:
+        return PlayerOperations_Seek(
+          offsetUs: dco_decode_i_64(raw[1]),
+        );
+      case 8:
+        return const PlayerOperations_Open();
+      default:
+        throw Exception('unreachable');
+    }
   }
 
   @protected
@@ -1182,14 +1229,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TrackMetadata dco_decode_track_metadata(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return TrackMetadata(
       title: dco_decode_opt_String(arr[0]),
       artists: dco_decode_opt_list_String(arr[1]),
       album: dco_decode_opt_String(arr[2]),
       artUrl: dco_decode_opt_String(arr[3]),
       trackId: dco_decode_opt_String(arr[4]),
+      trackLength: dco_decode_opt_box_autoadd_Chrono_Duration(arr[5]),
     );
   }
 
@@ -1197,15 +1245,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TrackProgress dco_decode_track_progress(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
     return TrackProgress(
       metadata: dco_decode_track_metadata(arr[0]),
       playbackStatus: dco_decode_playback_status(arr[1]),
       shuffleEnabled: dco_decode_bool(arr[2]),
       loopStatus: dco_decode_loop_status(arr[3]),
-      progress: dco_decode_opt_box_autoadd_f_64(arr[4]),
-      player: dco_decode_player_info(arr[5]),
+      progressNormalized: dco_decode_opt_box_autoadd_f_64(arr[4]),
+      progressDuration: dco_decode_Chrono_Duration(arr[5]),
+      player: dco_decode_player_info(arr[6]),
     );
   }
 
@@ -1309,6 +1358,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_String(deserializer);
     return AnyhowException(inner);
+  }
+
+  @protected
+  Duration sse_decode_Chrono_Duration(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_i_64(deserializer);
+    return Duration(microseconds: inner);
   }
 
   @protected
@@ -1449,6 +1505,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Duration sse_decode_box_autoadd_Chrono_Duration(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return sse_decode_Chrono_Duration(deserializer);
+  }
+
+  @protected
   double sse_decode_box_autoadd_f_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return sse_decode_f_32(deserializer);
@@ -1464,6 +1528,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int sse_decode_box_autoadd_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return sse_decode_i_32(deserializer);
+  }
+
+  @protected
+  PlayerOperations sse_decode_box_autoadd_player_operations(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return sse_decode_player_operations(deserializer);
   }
 
   @protected
@@ -1732,6 +1804,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Duration? sse_decode_opt_box_autoadd_Chrono_Duration(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return sse_decode_box_autoadd_Chrono_Duration(deserializer);
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -1832,8 +1917,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   PlayerOperations sse_decode_player_operations(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    final inner = sse_decode_i_32(deserializer);
-    return PlayerOperations.values[inner];
+
+    final tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return const PlayerOperations_Play();
+      case 1:
+        return const PlayerOperations_Pause();
+      case 2:
+        return const PlayerOperations_TogglePlayPause();
+      case 3:
+        return const PlayerOperations_NextTrack();
+      case 4:
+        return const PlayerOperations_PrevTrack();
+      case 5:
+        return const PlayerOperations_ToggleShuffle();
+      case 6:
+        return const PlayerOperations_SetLoop();
+      case 7:
+        final var_offsetUs = sse_decode_i_64(deserializer);
+        return PlayerOperations_Seek(offsetUs: var_offsetUs);
+      case 8:
+        return const PlayerOperations_Open();
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected
@@ -1854,12 +1962,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_album = sse_decode_opt_String(deserializer);
     final var_artUrl = sse_decode_opt_String(deserializer);
     final var_trackId = sse_decode_opt_String(deserializer);
+    final var_trackLength = sse_decode_opt_box_autoadd_Chrono_Duration(
+      deserializer,
+    );
     return TrackMetadata(
       title: var_title,
       artists: var_artists,
       album: var_album,
       artUrl: var_artUrl,
       trackId: var_trackId,
+      trackLength: var_trackLength,
     );
   }
 
@@ -1870,14 +1982,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_playbackStatus = sse_decode_playback_status(deserializer);
     final var_shuffleEnabled = sse_decode_bool(deserializer);
     final var_loopStatus = sse_decode_loop_status(deserializer);
-    final var_progress = sse_decode_opt_box_autoadd_f_64(deserializer);
+    final var_progressNormalized = sse_decode_opt_box_autoadd_f_64(
+      deserializer,
+    );
+    final var_progressDuration = sse_decode_Chrono_Duration(deserializer);
     final var_player = sse_decode_player_info(deserializer);
     return TrackProgress(
       metadata: var_metadata,
       playbackStatus: var_playbackStatus,
       shuffleEnabled: var_shuffleEnabled,
       loopStatus: var_loopStatus,
-      progress: var_progress,
+      progressNormalized: var_progressNormalized,
+      progressDuration: var_progressDuration,
       player: var_player,
     );
   }
@@ -1985,6 +2101,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.message, serializer);
+  }
+
+  @protected
+  void sse_encode_Chrono_Duration(Duration self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_64(PlatformInt64Util.from(self.inMicroseconds), serializer);
   }
 
   @protected
@@ -2160,6 +2282,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_Chrono_Duration(
+    Duration self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Chrono_Duration(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_f_32(double self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_f_32(self, serializer);
@@ -2175,6 +2306,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_box_autoadd_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_player_operations(
+    PlayerOperations self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_player_operations(self, serializer);
   }
 
   @protected
@@ -2403,6 +2543,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_Chrono_Duration(
+    Duration? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Chrono_Duration(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_f_32(double? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -2496,7 +2649,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseSerializer serializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
+    switch (self) {
+      case PlayerOperations_Play():
+        sse_encode_i_32(0, serializer);
+      case PlayerOperations_Pause():
+        sse_encode_i_32(1, serializer);
+      case PlayerOperations_TogglePlayPause():
+        sse_encode_i_32(2, serializer);
+      case PlayerOperations_NextTrack():
+        sse_encode_i_32(3, serializer);
+      case PlayerOperations_PrevTrack():
+        sse_encode_i_32(4, serializer);
+      case PlayerOperations_ToggleShuffle():
+        sse_encode_i_32(5, serializer);
+      case PlayerOperations_SetLoop():
+        sse_encode_i_32(6, serializer);
+      case PlayerOperations_Seek(offsetUs: final offsetUs):
+        sse_encode_i_32(7, serializer);
+        sse_encode_i_64(offsetUs, serializer);
+      case PlayerOperations_Open():
+        sse_encode_i_32(8, serializer);
+    }
   }
 
   @protected
@@ -2517,6 +2690,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.album, serializer);
     sse_encode_opt_String(self.artUrl, serializer);
     sse_encode_opt_String(self.trackId, serializer);
+    sse_encode_opt_box_autoadd_Chrono_Duration(self.trackLength, serializer);
   }
 
   @protected
@@ -2526,7 +2700,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_playback_status(self.playbackStatus, serializer);
     sse_encode_bool(self.shuffleEnabled, serializer);
     sse_encode_loop_status(self.loopStatus, serializer);
-    sse_encode_opt_box_autoadd_f_64(self.progress, serializer);
+    sse_encode_opt_box_autoadd_f_64(self.progressNormalized, serializer);
+    sse_encode_Chrono_Duration(self.progressDuration, serializer);
     sse_encode_player_info(self.player, serializer);
   }
 

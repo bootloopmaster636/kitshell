@@ -35,6 +35,8 @@ class AppListRepo {
 
   final AppMetadataRepo _appMetadataRepo;
 
+  /// Load app data by fetching list of app available on the system
+  /// and append it with additional metadata (icons, freq. opened, etc).
   Future<void> load() async {
     await _appMetadataRepo.initDb();
 
@@ -63,5 +65,14 @@ class AppListRepo {
 
     _controller.add(completeApps);
     _setCurrentPrivate(completeApps);
+  }
+
+  /// Get app info from desktop entry string
+  AppInfoModel? getAppInfoFromDesktopEntry(String desktopEntry) {
+    final index = _currentPrivate.indexWhere(
+      (e) => e.entry.appId == desktopEntry,
+    );
+
+    return index != -1 ? _currentPrivate[index] : null;
   }
 }

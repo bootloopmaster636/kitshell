@@ -51,6 +51,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i1073.PanelManagerBloc>(() => _i1073.PanelManagerBloc());
     gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
+    gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
     gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
     gh.singleton<_i723.NotificationBloc>(() => _i723.NotificationBloc());
     gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
@@ -61,7 +62,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
     gh.singleton<_i52.AppMetadataRepo>(() => _i52.AppMetadataRepo());
     gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
-    gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
     gh.singleton<_i637.AppListRepo>(
       () => _i637.AppListRepo(appMetadataRepo: gh<_i52.AppMetadataRepo>()),
     );

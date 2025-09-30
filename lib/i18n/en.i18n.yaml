@@ -27,6 +27,10 @@ appMenu:
     remove: Remove from launchbar
 mpris:
   noPlaying: No music is playing
+  unknown:
+    title: Unknown title
+    artist: Unknown artist(s)
+    album: Unknown album
 quickSettings:
   brightness:
     title: Brightness

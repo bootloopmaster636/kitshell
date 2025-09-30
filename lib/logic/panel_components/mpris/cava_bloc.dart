@@ -12,7 +12,7 @@ part 'cava_bloc.freezed.dart';
 
 @singleton
 class CavaBloc extends Bloc<CavaEvent, CavaState> {
-  CavaBloc() : super(CavaStateInitial()) {
+  CavaBloc() : super(const CavaStateInitial()) {
     on<CavaEventStarted>(_onStarted, transformer: droppable());
   }
 

@@ -743,6 +743,14 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
+impl SseDecode for chrono::Duration {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i64>::sse_decode(deserializer);
+        return chrono::Duration::microseconds(inner);
+    }
+}
+
 impl SseDecode for chrono::DateTime<chrono::Local> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1199,6 +1207,17 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<chrono::Duration> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<chrono::Duration>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1307,15 +1326,42 @@ impl SseDecode for crate::api::mpris::mpris::PlayerInfo {
 impl SseDecode for crate::api::mpris::mpris::PlayerOperations {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <i32>::sse_decode(deserializer);
-        return match inner {
-            0 => crate::api::mpris::mpris::PlayerOperations::TogglePlayPause,
-            1 => crate::api::mpris::mpris::PlayerOperations::NextTrack,
-            2 => crate::api::mpris::mpris::PlayerOperations::PrevTrack,
-            3 => crate::api::mpris::mpris::PlayerOperations::ToggleShuffle,
-            4 => crate::api::mpris::mpris::PlayerOperations::SetLoop,
-            _ => unreachable!("Invalid variant for PlayerOperations: {}", inner),
-        };
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                return crate::api::mpris::mpris::PlayerOperations::Play;
+            }
+            1 => {
+                return crate::api::mpris::mpris::PlayerOperations::Pause;
+            }
+            2 => {
+                return crate::api::mpris::mpris::PlayerOperations::TogglePlayPause;
+            }
+            3 => {
+                return crate::api::mpris::mpris::PlayerOperations::NextTrack;
+            }
+            4 => {
+                return crate::api::mpris::mpris::PlayerOperations::PrevTrack;
+            }
+            5 => {
+                return crate::api::mpris::mpris::PlayerOperations::ToggleShuffle;
+            }
+            6 => {
+                return crate::api::mpris::mpris::PlayerOperations::SetLoop;
+            }
+            7 => {
+                let mut var_offsetUs = <i64>::sse_decode(deserializer);
+                return crate::api::mpris::mpris::PlayerOperations::Seek {
+                    offset_us: var_offsetUs,
+                };
+            }
+            8 => {
+                return crate::api::mpris::mpris::PlayerOperations::Open;
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
     }
 }
 
@@ -1336,12 +1382,14 @@ impl SseDecode for crate::api::mpris::mpris::TrackMetadata {
         let mut var_album = <Option<String>>::sse_decode(deserializer);
         let mut var_artUrl = <Option<String>>::sse_decode(deserializer);
         let mut var_trackId = <Option<String>>::sse_decode(deserializer);
+        let mut var_trackLength = <Option<chrono::Duration>>::sse_decode(deserializer);
         return crate::api::mpris::mpris::TrackMetadata {
             title: var_title,
             artists: var_artists,
             album: var_album,
             art_url: var_artUrl,
             track_id: var_trackId,
+            track_length: var_trackLength,
         };
     }
 }
@@ -1353,14 +1401,16 @@ impl SseDecode for crate::api::mpris::mpris::TrackProgress {
         let mut var_playbackStatus = <mpris::PlaybackStatus>::sse_decode(deserializer);
         let mut var_shuffleEnabled = <bool>::sse_decode(deserializer);
         let mut var_loopStatus = <mpris::LoopStatus>::sse_decode(deserializer);
-        let mut var_progress = <Option<f64>>::sse_decode(deserializer);
+        let mut var_progressNormalized = <Option<f64>>::sse_decode(deserializer);
+        let mut var_progressDuration = <chrono::Duration>::sse_decode(deserializer);
         let mut var_player = <crate::api::mpris::mpris::PlayerInfo>::sse_decode(deserializer);
         return crate::api::mpris::mpris::TrackProgress {
             metadata: var_metadata,
             playback_status: var_playbackStatus,
             shuffle_enabled: var_shuffleEnabled,
             loop_status: var_loopStatus,
-            progress: var_progress,
+            progress_normalized: var_progressNormalized,
+            progress_duration: var_progressDuration,
             player: var_player,
         };
     }
@@ -1894,12 +1944,24 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::PlayerInfo>
 impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerOperations {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            Self::TogglePlayPause => 0.into_dart(),
-            Self::NextTrack => 1.into_dart(),
-            Self::PrevTrack => 2.into_dart(),
-            Self::ToggleShuffle => 3.into_dart(),
-            Self::SetLoop => 4.into_dart(),
-            _ => unreachable!(),
+            crate::api::mpris::mpris::PlayerOperations::Play => [0.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Pause => [1.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => {
+                [2.into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::NextTrack => [3.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::PrevTrack => [4.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => {
+                [5.into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetLoop => [6.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Seek { offset_us } => {
+                [7.into_dart(), offset_us.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::Open => [8.into_dart()].into_dart(),
+            _ => {
+                unimplemented!("");
+            }
         }
     }
 }
@@ -1923,6 +1985,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::TrackMetadata {
             self.album.into_into_dart().into_dart(),
             self.art_url.into_into_dart().into_dart(),
             self.track_id.into_into_dart().into_dart(),
+            self.track_length.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1946,7 +2009,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::TrackProgress {
             self.playback_status.into_into_dart().into_dart(),
             self.shuffle_enabled.into_into_dart().into_dart(),
             self.loop_status.into_into_dart().into_dart(),
-            self.progress.into_into_dart().into_dart(),
+            self.progress_normalized.into_into_dart().into_dart(),
+            self.progress_duration.into_into_dart().into_dart(),
             self.player.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -2078,6 +2142,17 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(format!("{:?}", self), serializer);
+    }
+}
+
+impl SseEncode for chrono::Duration {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i64>::sse_encode(
+            self.num_microseconds()
+                .expect("cannot get microseconds from time"),
+            serializer,
+        );
     }
 }
 
@@ -2444,6 +2519,16 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<chrono::Duration> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <chrono::Duration>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2538,19 +2623,39 @@ impl SseEncode for crate::api::mpris::mpris::PlayerInfo {
 impl SseEncode for crate::api::mpris::mpris::PlayerOperations {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <i32>::sse_encode(
-            match self {
-                crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => 0,
-                crate::api::mpris::mpris::PlayerOperations::NextTrack => 1,
-                crate::api::mpris::mpris::PlayerOperations::PrevTrack => 2,
-                crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => 3,
-                crate::api::mpris::mpris::PlayerOperations::SetLoop => 4,
-                _ => {
-                    unimplemented!("");
-                }
-            },
-            serializer,
-        );
+        match self {
+            crate::api::mpris::mpris::PlayerOperations::Play => {
+                <i32>::sse_encode(0, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Pause => {
+                <i32>::sse_encode(1, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => {
+                <i32>::sse_encode(2, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::NextTrack => {
+                <i32>::sse_encode(3, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::PrevTrack => {
+                <i32>::sse_encode(4, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => {
+                <i32>::sse_encode(5, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetLoop => {
+                <i32>::sse_encode(6, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Seek { offset_us } => {
+                <i32>::sse_encode(7, serializer);
+                <i64>::sse_encode(offset_us, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Open => {
+                <i32>::sse_encode(8, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
     }
 }
 
@@ -2570,6 +2675,7 @@ impl SseEncode for crate::api::mpris::mpris::TrackMetadata {
         <Option<String>>::sse_encode(self.album, serializer);
         <Option<String>>::sse_encode(self.art_url, serializer);
         <Option<String>>::sse_encode(self.track_id, serializer);
+        <Option<chrono::Duration>>::sse_encode(self.track_length, serializer);
     }
 }
 
@@ -2580,7 +2686,8 @@ impl SseEncode for crate::api::mpris::mpris::TrackProgress {
         <mpris::PlaybackStatus>::sse_encode(self.playback_status, serializer);
         <bool>::sse_encode(self.shuffle_enabled, serializer);
         <mpris::LoopStatus>::sse_encode(self.loop_status, serializer);
-        <Option<f64>>::sse_encode(self.progress, serializer);
+        <Option<f64>>::sse_encode(self.progress_normalized, serializer);
+        <chrono::Duration>::sse_encode(self.progress_duration, serializer);
         <crate::api::mpris::mpris::PlayerInfo>::sse_encode(self.player, serializer);
     }
 }

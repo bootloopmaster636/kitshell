@@ -10,7 +10,7 @@ part 'mpris_bloc.freezed.dart';
 
 @singleton
 class MprisBloc extends Bloc<MprisEvent, MprisState> {
-  MprisBloc() : super(MprisStateInitial()) {
+  MprisBloc() : super(const MprisStateInitial()) {
     on<MprisEventStarted>(_onStarted);
     on<MprisEventDispatch>(_onDispatch);
   }

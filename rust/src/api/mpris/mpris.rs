@@ -1,4 +1,5 @@
 use anyhow::{bail, Error};
+use chrono::Duration;
 use mpris::{LoopStatus, PlaybackStatus, Player, PlayerFinder, ProgressTick};
 use std::ops::Deref;
 use std::thread::sleep;
@@ -7,6 +8,8 @@ use std::time::Duration as StdDuration;
 use crate::frb_generated::StreamSink;
 
 pub enum PlayerOperations {
+    Play,
+    Pause,
     TogglePlayPause,
     NextTrack,
     PrevTrack,
@@ -14,6 +17,14 @@ pub enum PlayerOperations {
 
     /// Set loop status with status once, playlist, disable, then back to once
     SetLoop,
+
+    /// Seek song (with offset in MICROseconds)
+    Seek {
+        offset_us: i64,
+    },
+
+    /// Open player
+    Open,
 }
 
 /// Struct copying the content of [`mpris::Metadata`]
@@ -27,6 +38,7 @@ pub struct TrackMetadata {
     pub album: Option<String>,
     pub art_url: Option<String>,
     pub track_id: Option<String>,
+    pub track_length: Option<Duration>,
 }
 
 /// Struct copying the content of [`mpris::Progress`]
@@ -42,7 +54,8 @@ pub struct TrackProgress {
 
     /// This is calculated progress from difference between [`mpris::Progress::position`]
     /// and [`mpris::Progress::length`]
-    pub progress: Option<f64>,
+    pub progress_normalized: Option<f64>,
+    pub progress_duration: Duration,
 
     /// Info about player, inserted here just for easier access
     pub player: PlayerInfo,
@@ -132,6 +145,10 @@ pub async fn watch_media_player_events(
                         Some(val) => Some(String::from(val)),
                         None => None,
                     },
+                    track_length: match metadata.length() {
+                        Some(val) => Some(Duration::from_std(val)?),
+                        None => None,
+                    },
                 };
                 let result = TrackProgress {
                     metadata: metadata_struct,
@@ -139,13 +156,20 @@ pub async fn watch_media_player_events(
                     shuffle_enabled: progress.shuffle(),
                     loop_status: progress.loop_status(),
                     player: get_player_info(&active_player).unwrap(),
-                    progress: get_calculated_progress(&progress.position(), &progress.length()),
+                    progress_normalized: get_normalized_progress(
+                        &progress.position(),
+                        &progress.length(),
+                    ),
+                    progress_duration: Duration::from_std(progress.position())?,
                 };
 
                 progress_state = Some(result);
             } else {
                 let mut result = progress_state.unwrap();
-                result.progress = get_calculated_progress(&progress.position(), &progress.length());
+                result.progress_normalized =
+                    get_normalized_progress(&progress.position(), &progress.length());
+                result.progress_duration = Duration::from_std(progress.position())?;
+
                 progress_state = Some(result);
             }
 
@@ -175,6 +199,14 @@ pub async fn dispatch_player_action(action: PlayerOperations) -> Result<(), Erro
     };
 
     match action {
+        PlayerOperations::Play => match active_player.play() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot play/pause track (dbus error?)"),
+        },
+        PlayerOperations::Pause => match active_player.pause() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot play/pause track (dbus error?)"),
+        },
         PlayerOperations::TogglePlayPause => match active_player.play_pause() {
             Ok(_) => (),
             Err(_) => bail!("API | MPRIS: Cannot play/pause track (dbus error?)"),
@@ -217,12 +249,20 @@ pub async fn dispatch_player_action(action: PlayerOperations) -> Result<(), Erro
                 Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
             }
         }
+        PlayerOperations::Seek { offset_us } => match active_player.seek(offset_us) {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
+        },
+        PlayerOperations::Open => match active_player.raise() {
+            Ok(_) => (),
+            Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
+        },
     }
 
     Ok(())
 }
 
-fn get_calculated_progress(position: &StdDuration, length: &Option<StdDuration>) -> Option<f64> {
+fn get_normalized_progress(position: &StdDuration, length: &Option<StdDuration>) -> Option<f64> {
     match length {
         Some(length) => Some(position.as_secs_f64() / length.as_secs_f64()),
         None => None,

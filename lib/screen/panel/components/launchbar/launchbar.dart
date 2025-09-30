@@ -21,7 +21,7 @@ import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/screen/popup/components/appmenu.dart';
 
 class Launchbar extends HookWidget {
-  const Launchbar({Key? key}) : super(key: key);
+  const Launchbar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +199,7 @@ class LaunchbarItemComp extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: Gaps.sm.value,
                   children: [
-                    AppIcon(
+                    AppIconBuilder(
                       icon: data.appInfo?.metadata.iconPath,
                       iconSize: 24,
                     ),
