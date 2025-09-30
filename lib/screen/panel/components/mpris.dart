@@ -18,6 +18,9 @@ import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/mpris/cava_bloc.dart';
 import 'package:kitshell/logic/panel_components/mpris/mpris_bloc.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
+import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
+import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/third_party/mpris.dart';
 
@@ -98,7 +101,14 @@ class NowPlayingContainer extends HookWidget {
     return CustomInkwell(
       onPointerEnter: (_) => isHovered.value = true,
       onPointerExit: (_) => isHovered.value = false,
-      onTap: () {},
+      onTap: () {
+        get<ScreenManagerBloc>().add(
+          ScreenManagerEventOpenPopup(
+            popupToShow: PopupWidget.mpris,
+            position: InheritedAlignment.of(context).position,
+          ),
+        );
+      },
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: AnimatedContainer(

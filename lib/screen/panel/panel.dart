@@ -7,6 +7,7 @@ import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart';
+import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
 class MainPanel extends StatelessWidget {
@@ -94,9 +95,14 @@ class PanelPopupDragTarget extends StatelessWidget {
     return DragTarget(
       onAcceptWithDetails: (_) {
         get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+        get<PanelGestureCubit>().setPanelGestureState(readyToClose: false);
       },
       onWillAcceptWithDetails: (details) {
+        get<PanelGestureCubit>().setPanelGestureState(readyToClose: true);
         return details.data == 'popup';
+      },
+      onLeave: (_) {
+        get<PanelGestureCubit>().setPanelGestureState(readyToClose: false);
       },
       builder: (context, candidateData, rejectedData) {
         return Stack(
@@ -104,12 +110,12 @@ class PanelPopupDragTarget extends StatelessWidget {
             child
                 .animate(target: candidateData.isNotEmpty ? 1 : 0)
                 .slideY(
-                  end: 0.2,
+                  end: 0.1,
                   duration: Durations.medium1,
-                  curve: Curves.easeInOutSine,
+                  curve: Curves.easeInOutCubic,
                 )
                 .fade(
-                  end: 0.4,
+                  end: 0.6,
                   begin: 1,
                   duration: Durations.medium1,
                 ),
@@ -142,7 +148,10 @@ class PanelPopupDragTarget extends StatelessWidget {
                       ),
                     ),
                   )
-                  .animate(target: candidateData.isNotEmpty ? 1 : 0)
+                  .animate(
+                    target: candidateData.isNotEmpty ? 1 : 0,
+                    delay: 1.seconds,
+                  )
                   .slideY(
                     begin: 1,
                     duration: Durations.medium1,
