@@ -1,7 +1,6 @@
 use anyhow::{bail, Error};
 use chrono::Duration;
-use mpris::{LoopStatus, PlaybackStatus, Player, PlayerFinder, ProgressTick};
-use std::ops::Deref;
+use mpris::{LoopStatus, PlaybackStatus, Player, PlayerFinder, ProgressTick, TrackID};
 use std::thread::sleep;
 use std::time::Duration as StdDuration;
 
@@ -21,6 +20,12 @@ pub enum PlayerOperations {
     /// Seek song (with offset in MICROseconds)
     Seek {
         offset_us: i64,
+    },
+
+    /// Set position of player
+    SetPosition {
+        track_id: String,
+        position_us: u64,
     },
 
     /// Open player
@@ -66,12 +71,15 @@ pub struct TrackProgress {
 pub struct PlayerInfo {
     pub friendly_name: String,
     pub desktop_entry: Option<String>,
+    pub can_be_raised: bool,
     pub can_be_controlled: bool,
     pub can_go_prev: bool,
     pub can_go_next: bool,
     pub can_play: bool,
     pub can_pause: bool,
     pub can_stop: bool,
+    pub can_shuffle: bool,
+    pub can_loop: bool,
 }
 
 pub async fn watch_media_player_events(
@@ -98,7 +106,7 @@ pub async fn watch_media_player_events(
         };
         println!("API | MPRIS: Found active player");
 
-        let mut progress_tracker = active_player.track_progress(200).unwrap();
+        let mut progress_tracker = active_player.track_progress(250).unwrap();
         let mut progress_state: Option<TrackProgress> = None;
 
         loop {
@@ -130,7 +138,7 @@ pub async fn watch_media_player_events(
                         None => None,
                     },
                     artists: match metadata.artists() {
-                        Some(val) => Some(val.iter().map(|e| String::from(e.deref())).collect()),
+                        Some(val) => Some(val.iter().map(|e| String::from(*e)).collect()),
                         None => None,
                     },
                     album: match metadata.album_name() {
@@ -251,11 +259,25 @@ pub async fn dispatch_player_action(action: PlayerOperations) -> Result<(), Erro
         }
         PlayerOperations::Seek { offset_us } => match active_player.seek(offset_us) {
             Ok(_) => (),
-            Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
+            Err(_) => bail!("API | MPRIS: Cannot seek track (dbus error?)"),
         },
+        PlayerOperations::SetPosition {
+            track_id,
+            position_us,
+        } => {
+            let track = match TrackID::new(track_id) {
+                Ok(val) => val,
+                Err(_) => bail!("API | MPRIS: Cannot set track position (cannot find TrackID)"),
+            };
+
+            match active_player.set_position_in_microseconds(track, position_us) {
+                Ok(_) => (),
+                Err(_) => bail!("API | MPRIS: Cannot set track position (dbus error?)"),
+            }
+        }
         PlayerOperations::Open => match active_player.raise() {
             Ok(_) => (),
-            Err(_) => bail!("API | MPRIS: Cannot set track loop status (dbus error?)"),
+            Err(_) => bail!("API | MPRIS: Cannot open player (dbus error?)"),
         },
     }
 
@@ -314,5 +336,23 @@ fn get_player_info(player: &Player) -> Result<PlayerInfo, Error> {
                 "API | MPRIS | getPlayerInfo | canStop: Cannot get player info (DBus problem): {:?}", e
             ),
         },
+        can_be_raised: match player.can_raise() {
+            Ok(val) => val,
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canControl: Cannot get player info (DBus problem): {:?}", e
+            ),
+        },
+        can_loop: match player.can_loop() {
+            Ok(val) => val,
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canControl: Cannot get player info (DBus problem): {:?}", e
+            ),
+        },
+        can_shuffle: match player.can_shuffle() {
+            Ok(val) => val,
+            Err(e) => bail!(
+                "API | MPRIS | getPlayerInfo | canControl: Cannot get player info (DBus problem): {:?}", e
+            ),
+        }
     })
 }

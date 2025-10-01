@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kitshell/etc/utitity/logger.dart';
@@ -12,7 +15,7 @@ part 'mpris_bloc.freezed.dart';
 class MprisBloc extends Bloc<MprisEvent, MprisState> {
   MprisBloc() : super(const MprisStateInitial()) {
     on<MprisEventStarted>(_onStarted);
-    on<MprisEventDispatch>(_onDispatch);
+    on<MprisEventDispatch>(_onDispatch, transformer: sequential());
   }
 
   Future<void> _onStarted(
@@ -34,10 +37,10 @@ class MprisBloc extends Bloc<MprisEvent, MprisState> {
     );
   }
 
-  Future<void> _onDispatch(
+  void _onDispatch(
     MprisEventDispatch event,
     Emitter<MprisState> emit,
-  ) async {
-    await dispatchPlayerAction(action: event.operation);
+  ) {
+    unawaited(dispatchPlayerAction(action: event.operation));
   }
 }

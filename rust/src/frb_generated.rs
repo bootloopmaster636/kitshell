@@ -1304,21 +1304,27 @@ impl SseDecode for crate::api::mpris::mpris::PlayerInfo {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_friendlyName = <String>::sse_decode(deserializer);
         let mut var_desktopEntry = <Option<String>>::sse_decode(deserializer);
+        let mut var_canBeRaised = <bool>::sse_decode(deserializer);
         let mut var_canBeControlled = <bool>::sse_decode(deserializer);
         let mut var_canGoPrev = <bool>::sse_decode(deserializer);
         let mut var_canGoNext = <bool>::sse_decode(deserializer);
         let mut var_canPlay = <bool>::sse_decode(deserializer);
         let mut var_canPause = <bool>::sse_decode(deserializer);
         let mut var_canStop = <bool>::sse_decode(deserializer);
+        let mut var_canShuffle = <bool>::sse_decode(deserializer);
+        let mut var_canLoop = <bool>::sse_decode(deserializer);
         return crate::api::mpris::mpris::PlayerInfo {
             friendly_name: var_friendlyName,
             desktop_entry: var_desktopEntry,
+            can_be_raised: var_canBeRaised,
             can_be_controlled: var_canBeControlled,
             can_go_prev: var_canGoPrev,
             can_go_next: var_canGoNext,
             can_play: var_canPlay,
             can_pause: var_canPause,
             can_stop: var_canStop,
+            can_shuffle: var_canShuffle,
+            can_loop: var_canLoop,
         };
     }
 }
@@ -1356,6 +1362,14 @@ impl SseDecode for crate::api::mpris::mpris::PlayerOperations {
                 };
             }
             8 => {
+                let mut var_trackId = <String>::sse_decode(deserializer);
+                let mut var_positionUs = <u64>::sse_decode(deserializer);
+                return crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                    track_id: var_trackId,
+                    position_us: var_positionUs,
+                };
+            }
+            9 => {
                 return crate::api::mpris::mpris::PlayerOperations::Open;
             }
             _ => {
@@ -1919,12 +1933,15 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerInfo {
         [
             self.friendly_name.into_into_dart().into_dart(),
             self.desktop_entry.into_into_dart().into_dart(),
+            self.can_be_raised.into_into_dart().into_dart(),
             self.can_be_controlled.into_into_dart().into_dart(),
             self.can_go_prev.into_into_dart().into_dart(),
             self.can_go_next.into_into_dart().into_dart(),
             self.can_play.into_into_dart().into_dart(),
             self.can_pause.into_into_dart().into_dart(),
             self.can_stop.into_into_dart().into_dart(),
+            self.can_shuffle.into_into_dart().into_dart(),
+            self.can_loop.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1958,7 +1975,16 @@ impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerOperation
             crate::api::mpris::mpris::PlayerOperations::Seek { offset_us } => {
                 [7.into_dart(), offset_us.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::mpris::mpris::PlayerOperations::Open => [8.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                track_id,
+                position_us,
+            } => [
+                8.into_dart(),
+                track_id.into_into_dart().into_dart(),
+                position_us.into_into_dart().into_dart(),
+            ]
+            .into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Open => [9.into_dart()].into_dart(),
             _ => {
                 unimplemented!("");
             }
@@ -2611,12 +2637,15 @@ impl SseEncode for crate::api::mpris::mpris::PlayerInfo {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.friendly_name, serializer);
         <Option<String>>::sse_encode(self.desktop_entry, serializer);
+        <bool>::sse_encode(self.can_be_raised, serializer);
         <bool>::sse_encode(self.can_be_controlled, serializer);
         <bool>::sse_encode(self.can_go_prev, serializer);
         <bool>::sse_encode(self.can_go_next, serializer);
         <bool>::sse_encode(self.can_play, serializer);
         <bool>::sse_encode(self.can_pause, serializer);
         <bool>::sse_encode(self.can_stop, serializer);
+        <bool>::sse_encode(self.can_shuffle, serializer);
+        <bool>::sse_encode(self.can_loop, serializer);
     }
 }
 
@@ -2649,8 +2678,16 @@ impl SseEncode for crate::api::mpris::mpris::PlayerOperations {
                 <i32>::sse_encode(7, serializer);
                 <i64>::sse_encode(offset_us, serializer);
             }
-            crate::api::mpris::mpris::PlayerOperations::Open => {
+            crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                track_id,
+                position_us,
+            } => {
                 <i32>::sse_encode(8, serializer);
+                <String>::sse_encode(track_id, serializer);
+                <u64>::sse_encode(position_us, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Open => {
+                <i32>::sse_encode(9, serializer);
             }
             _ => {
                 unimplemented!("");

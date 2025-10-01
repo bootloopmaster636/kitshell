@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/carbon.dart';
+import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/data/repository/appmenu/app_list_repo.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
 import 'package:kitshell/etc/component/text_icon.dart';
@@ -23,8 +24,8 @@ class MprisPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
-      width: 380,
+      height: 220,
+      width: 400,
       child: BlocBuilder<MprisBloc, MprisState>(
         bloc: get<MprisBloc>(),
         builder: (context, state) {
@@ -103,7 +104,8 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.title ?? t.mpris.unknown.title,
                       style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.onSurface,
+                        color: context.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -112,7 +114,7 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.artists?.join(', ') ?? t.mpris.unknown.artist,
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorScheme.onSurface,
+                        color: context.colorScheme.onSurfaceVariant,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -121,7 +123,7 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.album ?? t.mpris.unknown.album,
                       style: context.textTheme.bodySmall?.copyWith(
-                        color: context.colorScheme.onSurface,
+                        color: context.colorScheme.onSurfaceVariant,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -170,15 +172,107 @@ class InformationProgressAndControl extends StatelessWidget {
       builder: (context, state) {
         if (state is! MprisStatePlaying) return const SizedBox.shrink();
 
-        return Row(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: Gaps.sm.value,
           children: [
-            Expanded(
-              child: TrackSeekbar(
-                progress: state.trackProgress.progressNormalized,
-                length: state.trackProgress.metadata.trackLength,
-                progressDuration: state.trackProgress.progressDuration,
-              ),
+            TrackSeekbar(
+              trackId: state.trackProgress.metadata.trackId,
+              progress: state.trackProgress.progressNormalized,
+              length: state.trackProgress.metadata.trackLength,
+              progressDuration: state.trackProgress.progressDuration,
             ),
+
+            if (state.trackProgress.player.canBeControlled)
+              const SizedBox(height: 36, child: TrackControls()),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class TrackControls extends StatelessWidget {
+  const TrackControls({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MprisBloc, MprisState>(
+      bloc: get<MprisBloc>(),
+      builder: (context, state) {
+        if (state is! MprisStatePlaying) return const SizedBox.shrink();
+        final trackInfo = state.trackProgress;
+        final playerInfo = state.trackProgress.player;
+
+        return Row(
+          spacing: Gaps.sm.value,
+          children: [
+            if (playerInfo.canGoPrev)
+              FilledButton.tonal(
+                onPressed: () {
+                  get<MprisBloc>().add(
+                    const MprisEventDispatch(
+                      PlayerOperations.prevTrack(),
+                    ),
+                  );
+                },
+                child: Iconify(
+                  Ic.outline_skip_previous,
+                  color: context.colorScheme.onPrimaryContainer,
+                ),
+              ),
+            if (playerInfo.canGoNext)
+              FilledButton.tonal(
+                onPressed: () {
+                  get<MprisBloc>().add(
+                    const MprisEventDispatch(
+                      PlayerOperations.nextTrack(),
+                    ),
+                  );
+                },
+                child: Iconify(
+                  Ic.outline_skip_next,
+                  color: context.colorScheme.onPrimaryContainer,
+                ),
+              ),
+
+            const Spacer(),
+
+            if (playerInfo.canLoop)
+              IconButton(
+                onPressed: () {
+                  get<MprisBloc>().add(
+                    const MprisEventDispatch(
+                      PlayerOperations.setLoop(),
+                    ),
+                  );
+                },
+                icon: Iconify(
+                  switch (state.trackProgress.loopStatus) {
+                    LoopStatus.none || LoopStatus.track => Carbon.repeat,
+                    LoopStatus.playlist => Carbon.repeat_one,
+                  },
+                  color: trackInfo.loopStatus != LoopStatus.none
+                      ? context.colorScheme.primary
+                      : context.colorScheme.error,
+                ),
+              ),
+            if (playerInfo.canShuffle)
+              IconButton(
+                onPressed: () {
+                  get<MprisBloc>().add(
+                    const MprisEventDispatch(
+                      PlayerOperations.toggleShuffle(),
+                    ),
+                  );
+                },
+                icon: Iconify(
+                  Carbon.shuffle,
+                  color: trackInfo.shuffleEnabled
+                      ? context.colorScheme.primary
+                      : context.colorScheme.error,
+                ),
+              ),
           ],
         );
       },
@@ -188,11 +282,13 @@ class InformationProgressAndControl extends StatelessWidget {
 
 class TrackSeekbar extends HookWidget {
   const TrackSeekbar({
+    required this.trackId,
     required this.progress,
     this.progressDuration,
     this.length,
     super.key,
   });
+  final String? trackId;
   final double? progress;
   final Duration? progressDuration;
   final Duration? length;
@@ -211,8 +307,6 @@ class TrackSeekbar extends HookWidget {
       }
     }, [progress, interactiveValue.value]);
 
-    final startedSeekAt = useState<Duration>(Duration.zero);
-
     return SliderTheme(
       data:
           SliderTheme.of(
@@ -229,57 +323,71 @@ class TrackSeekbar extends HookWidget {
             }),
           ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        spacing: Gaps.sm.value,
         children: [
-          Slider(
-            value: progressEffective?.clamp(0, 1) ?? 1,
-            onChanged: (val) {
-              interactiveValue.value = val;
-            },
-            onChangeStart: (val) {
-              currentlySeeking.value = true;
-              startedSeekAt.value = progressDuration ?? Duration.zero;
-
-              get<MprisBloc>().add(
-                const MprisEventDispatch(
-                  PlayerOperations.pause(),
-                ),
-              );
-            },
-            onChangeEnd: (val) {
-              final finalSeekAtUs =
-                  (length?.inMicroseconds ?? 1) * interactiveValue.value;
-              final seekDelta =
-                  finalSeekAtUs - startedSeekAt.value.inMicroseconds;
-
-              get<MprisBloc>().add(
-                MprisEventDispatch(
-                  PlayerOperations.seek(offsetUs: seekDelta.toInt()),
-                ),
-              );
-
-              currentlySeeking.value = false;
-              get<MprisBloc>().add(
-                const MprisEventDispatch(
-                  PlayerOperations.play(),
-                ),
-              );
-            },
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (progressDuration != null)
                 Text(
                   progressDuration!.toHoursMinutesSeconds(),
-                  style: context.textTheme.labelSmall,
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               if (length != null)
                 Text(
                   length!.toHoursMinutesSeconds(),
-                  style: context.textTheme.labelSmall,
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                 ),
             ],
+          ),
+          SizedBox(
+            height: 18,
+            child: Slider(
+              value: progressEffective?.clamp(0, 1) ?? 1,
+              allowedInteraction: SliderInteraction.slideOnly,
+              onChangeStart: (val) {
+                currentlySeeking.value = true;
+
+                get<MprisBloc>().add(
+                  const MprisEventDispatch(
+                    PlayerOperations.pause(),
+                  ),
+                );
+
+                interactiveValue.value = val;
+              },
+              onChanged: (val) {
+                interactiveValue.value = val;
+              },
+              onChangeEnd: (val) async {
+                final positionUs =
+                    (length?.inMicroseconds ?? 1) * (progressEffective ?? 1);
+
+                get<MprisBloc>().add(
+                  MprisEventDispatch(
+                    PlayerOperations.setPosition(
+                      trackId: trackId ?? '',
+                      positionUs: BigInt.from(positionUs),
+                    ),
+                  ),
+                );
+
+                await Future<void>.delayed(const Duration(milliseconds: 300));
+
+                get<MprisBloc>().add(
+                  const MprisEventDispatch(
+                    PlayerOperations.play(),
+                  ),
+                );
+
+                currentlySeeking.value = false;
+              },
+            ),
           ),
         ],
       ),
@@ -294,6 +402,7 @@ class PlayerIcon extends HookWidget {
   Widget build(BuildContext context) {
     final appName = useState<String?>(null);
     final iconPath = useState<String?>(null);
+    final canRaise = useState(false);
 
     return BlocListener<MprisBloc, MprisState>(
       bloc: get<MprisBloc>(),
@@ -309,29 +418,53 @@ class PlayerIcon extends HookWidget {
 
         appName.value = appInfo?.entry.name;
         iconPath.value = appInfo?.metadata.iconPath;
+        canRaise.value = state.trackProgress.player.canBeRaised;
       },
-      child: TextIcon(
-        icon: iconPath.value != null
-            ? ClipRRect(
-                borderRadius: BorderRadiusGeometry.circular(8),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.onPrimaryContainer,
-                    BlendMode.color,
-                  ),
-                  child: AppIconBuilder(
-                    icon: iconPath.value,
-                    iconSize: 20,
-                  ),
-                ),
-              )
-            : const SizedBox.shrink(),
-        text: Text(
-          appName.value ?? '',
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.onPrimaryContainer,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextIcon(
+            icon: iconPath.value != null
+                ? ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(8),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        context.colorScheme.primaryContainer,
+                        BlendMode.color,
+                      ),
+                      child: AppIconBuilder(
+                        icon: iconPath.value,
+                        iconSize: 20,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            text: Text(
+              appName.value ?? '',
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+              ),
+            ),
           ),
-        ),
+
+          // if (canRaise.value)
+          //   SizedBox.square(
+          //     dimension: 28,
+          //     child: IconButton(
+          //       onPressed: () {
+          //         get<MprisBloc>().add(
+          //           const MprisEventDispatch(
+          //             PlayerOperations.open(),
+          //           ),
+          //         );
+          //       },
+          //       icon: Iconify(
+          //         Ic.outline_open_in_new,
+          //         color: context.colorScheme.onSecondaryContainer,
+          //       ),
+          //     ),
+          //   ),
+        ],
       ),
     );
   }
@@ -354,7 +487,7 @@ class AlbumArtBg extends StatelessWidget {
               uri: state.trackProgress.metadata.artUrl,
             ),
             ColoredBox(
-              color: context.colorScheme.scrim.withValues(
+              color: context.colorScheme.surfaceContainerLowest.withValues(
                 alpha: 0.75,
               ),
             ),

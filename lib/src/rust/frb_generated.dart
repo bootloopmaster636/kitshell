@@ -1169,17 +1169,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   PlayerInfo dco_decode_player_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 8)
-      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    if (arr.length != 11)
+      throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
     return PlayerInfo(
       friendlyName: dco_decode_String(arr[0]),
       desktopEntry: dco_decode_opt_String(arr[1]),
-      canBeControlled: dco_decode_bool(arr[2]),
-      canGoPrev: dco_decode_bool(arr[3]),
-      canGoNext: dco_decode_bool(arr[4]),
-      canPlay: dco_decode_bool(arr[5]),
-      canPause: dco_decode_bool(arr[6]),
-      canStop: dco_decode_bool(arr[7]),
+      canBeRaised: dco_decode_bool(arr[2]),
+      canBeControlled: dco_decode_bool(arr[3]),
+      canGoPrev: dco_decode_bool(arr[4]),
+      canGoNext: dco_decode_bool(arr[5]),
+      canPlay: dco_decode_bool(arr[6]),
+      canPause: dco_decode_bool(arr[7]),
+      canStop: dco_decode_bool(arr[8]),
+      canShuffle: dco_decode_bool(arr[9]),
+      canLoop: dco_decode_bool(arr[10]),
     );
   }
 
@@ -1206,6 +1209,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           offsetUs: dco_decode_i_64(raw[1]),
         );
       case 8:
+        return PlayerOperations_SetPosition(
+          trackId: dco_decode_String(raw[1]),
+          positionUs: dco_decode_u_64(raw[2]),
+        );
+      case 9:
         return const PlayerOperations_Open();
       default:
         throw Exception('unreachable');
@@ -1896,21 +1904,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_friendlyName = sse_decode_String(deserializer);
     final var_desktopEntry = sse_decode_opt_String(deserializer);
+    final var_canBeRaised = sse_decode_bool(deserializer);
     final var_canBeControlled = sse_decode_bool(deserializer);
     final var_canGoPrev = sse_decode_bool(deserializer);
     final var_canGoNext = sse_decode_bool(deserializer);
     final var_canPlay = sse_decode_bool(deserializer);
     final var_canPause = sse_decode_bool(deserializer);
     final var_canStop = sse_decode_bool(deserializer);
+    final var_canShuffle = sse_decode_bool(deserializer);
+    final var_canLoop = sse_decode_bool(deserializer);
     return PlayerInfo(
       friendlyName: var_friendlyName,
       desktopEntry: var_desktopEntry,
+      canBeRaised: var_canBeRaised,
       canBeControlled: var_canBeControlled,
       canGoPrev: var_canGoPrev,
       canGoNext: var_canGoNext,
       canPlay: var_canPlay,
       canPause: var_canPause,
       canStop: var_canStop,
+      canShuffle: var_canShuffle,
+      canLoop: var_canLoop,
     );
   }
 
@@ -1938,6 +1952,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final var_offsetUs = sse_decode_i_64(deserializer);
         return PlayerOperations_Seek(offsetUs: var_offsetUs);
       case 8:
+        final var_trackId = sse_decode_String(deserializer);
+        final var_positionUs = sse_decode_u_64(deserializer);
+        return PlayerOperations_SetPosition(
+          trackId: var_trackId,
+          positionUs: var_positionUs,
+        );
+      case 9:
         return const PlayerOperations_Open();
       default:
         throw UnimplementedError('');
@@ -2635,12 +2656,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.friendlyName, serializer);
     sse_encode_opt_String(self.desktopEntry, serializer);
+    sse_encode_bool(self.canBeRaised, serializer);
     sse_encode_bool(self.canBeControlled, serializer);
     sse_encode_bool(self.canGoPrev, serializer);
     sse_encode_bool(self.canGoNext, serializer);
     sse_encode_bool(self.canPlay, serializer);
     sse_encode_bool(self.canPause, serializer);
     sse_encode_bool(self.canStop, serializer);
+    sse_encode_bool(self.canShuffle, serializer);
+    sse_encode_bool(self.canLoop, serializer);
   }
 
   @protected
@@ -2667,8 +2691,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case PlayerOperations_Seek(offsetUs: final offsetUs):
         sse_encode_i_32(7, serializer);
         sse_encode_i_64(offsetUs, serializer);
-      case PlayerOperations_Open():
+      case PlayerOperations_SetPosition(
+        trackId: final trackId,
+        positionUs: final positionUs,
+      ):
         sse_encode_i_32(8, serializer);
+        sse_encode_String(trackId, serializer);
+        sse_encode_u_64(positionUs, serializer);
+      case PlayerOperations_Open():
+        sse_encode_i_32(9, serializer);
     }
   }
 

@@ -23,33 +23,42 @@ Future<void> dispatchPlayerAction({required PlayerOperations action}) =>
 class PlayerInfo {
   const PlayerInfo({
     required this.friendlyName,
+    required this.canBeRaised,
     required this.canBeControlled,
     required this.canGoPrev,
     required this.canGoNext,
     required this.canPlay,
     required this.canPause,
     required this.canStop,
+    required this.canShuffle,
+    required this.canLoop,
     this.desktopEntry,
   });
   final String friendlyName;
   final String? desktopEntry;
+  final bool canBeRaised;
   final bool canBeControlled;
   final bool canGoPrev;
   final bool canGoNext;
   final bool canPlay;
   final bool canPause;
   final bool canStop;
+  final bool canShuffle;
+  final bool canLoop;
 
   @override
   int get hashCode =>
       friendlyName.hashCode ^
       desktopEntry.hashCode ^
+      canBeRaised.hashCode ^
       canBeControlled.hashCode ^
       canGoPrev.hashCode ^
       canGoNext.hashCode ^
       canPlay.hashCode ^
       canPause.hashCode ^
-      canStop.hashCode;
+      canStop.hashCode ^
+      canShuffle.hashCode ^
+      canLoop.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -58,12 +67,15 @@ class PlayerInfo {
           runtimeType == other.runtimeType &&
           friendlyName == other.friendlyName &&
           desktopEntry == other.desktopEntry &&
+          canBeRaised == other.canBeRaised &&
           canBeControlled == other.canBeControlled &&
           canGoPrev == other.canGoPrev &&
           canGoNext == other.canGoNext &&
           canPlay == other.canPlay &&
           canPause == other.canPause &&
-          canStop == other.canStop;
+          canStop == other.canStop &&
+          canShuffle == other.canShuffle &&
+          canLoop == other.canLoop;
 }
 
 @freezed
@@ -86,6 +98,12 @@ sealed class PlayerOperations with _$PlayerOperations {
   const factory PlayerOperations.seek({
     required PlatformInt64 offsetUs,
   }) = PlayerOperations_Seek;
+
+  /// Set position of player
+  const factory PlayerOperations.setPosition({
+    required String trackId,
+    required BigInt positionUs,
+  }) = PlayerOperations_SetPosition;
 
   /// Open player
   const factory PlayerOperations.open() = PlayerOperations_Open;
