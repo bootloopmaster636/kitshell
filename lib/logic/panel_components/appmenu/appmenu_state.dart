@@ -8,7 +8,7 @@ class AppmenuState with _$AppmenuState {
     required List<AppInfoModel> entries,
     required List<AppInfoModel> pinnedEntries,
     required DateTime lastRefresh,
-    String? searchQuery,
-    List<AppInfoModel>? searchResult,
+    required String searchQuery,
+    required List<AppInfoModel> searchResult,
   }) = AppmenuLoaded;
 }

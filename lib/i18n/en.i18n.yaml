@@ -19,6 +19,7 @@ dateTimeNotif:
 appMenu:
   apps: Apps
   searchApps: Search your apps
+  noAppFound: No app(s) found, try other search term.
   contextMenu:
     pin: Pin to favorites
     unpin: Unpin from favorites

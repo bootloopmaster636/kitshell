@@ -68,6 +68,8 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
           entries: regularEntry,
           pinnedEntries: pinnedEntry,
           lastRefresh: DateTime.now(),
+          searchQuery: '',
+          searchResult: [],
         );
       },
     );
@@ -126,7 +128,7 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
       emit(
         loadedState.copyWith(
           searchQuery: '',
-          searchResult: null,
+          searchResult: [],
         ),
       );
       return;

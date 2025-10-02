@@ -63,7 +63,7 @@ class AppsList extends StatelessWidget {
             Gaps.md.sliverGap,
 
             // Regular state
-            if (state.pinnedEntries.isNotEmpty && state.searchResult == null)
+            if (state.pinnedEntries.isNotEmpty && state.searchResult.isEmpty)
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 96,
@@ -80,8 +80,8 @@ class AppsList extends StatelessWidget {
                 ),
               ),
 
-            if (state.searchResult == null) Gaps.sm.sliverGap,
-            if (state.searchResult == null)
+            if (state.searchResult.isEmpty) Gaps.sm.sliverGap,
+            if (state.searchResult.isEmpty && state.searchQuery.isEmpty)
               SliverList.builder(
                 itemCount: state.entries.length,
                 itemBuilder: (context, index) {
@@ -93,15 +93,25 @@ class AppsList extends StatelessWidget {
               ),
 
             // Searching state
-            if (state.searchResult != null)
+            if (state.searchResult.isNotEmpty)
               SliverList.builder(
-                itemCount: state.searchResult?.length,
+                itemCount: state.searchResult.length,
                 itemBuilder: (context, index) {
                   return AppEntryTile(
                     key: ValueKey(state.searchResult?[index].hashCode),
                     appInfo: state.searchResult![index],
                   );
                 },
+              ),
+
+            if (state.searchQuery.isNotEmpty && state.searchResult.isEmpty)
+              SliverToBoxAdapter(
+                child: Center(
+                  child: Text(
+                    t.appMenu.noAppFound,
+                    style: context.textTheme.bodyLarge,
+                  ),
+                ),
               ),
           ],
         );
@@ -120,6 +130,18 @@ class SearchBarComponent extends HookWidget {
       onChanged: (val) {
         get<AppmenuBloc>().add(AppmenuSearched(val));
       },
+      onSubmitted: (_) {
+        final appmenuBloc = get<AppmenuBloc>();
+        if (appmenuBloc.state is! AppmenuLoaded) return;
+        final loadedState = appmenuBloc.state as AppmenuLoaded;
+
+        final firstApp = loadedState.searchResult?.firstOrNull;
+
+        if (firstApp == null) return;
+        appmenuBloc.add(AppmenuAppExecuted(firstApp));
+
+        get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+      },
       leading: Padding(
         padding: const EdgeInsets.only(left: 8),
         child: Iconify(
@@ -129,15 +151,6 @@ class SearchBarComponent extends HookWidget {
       ),
       hintText: t.appMenu.searchApps,
     );
-  }
-}
-
-class SearchResultBuilder extends StatelessWidget {
-  const SearchResultBuilder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
 
