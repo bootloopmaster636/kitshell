@@ -26,6 +26,7 @@ class AppmenuPopup extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
+      get<AppmenuBloc>().add(const AppmenuSearched(''));
       get<AppmenuBloc>().add(AppmenuLoad(locale: t.locale));
       return () {};
     }, []);

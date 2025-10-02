@@ -30,7 +30,7 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
     on<AppmenuAppExecuted>(_open, transformer: droppable());
     on<AppmenuSearched>(
       _search,
-      transformer: debounced(const Duration(milliseconds: 250)),
+      transformer: debounced(const Duration(milliseconds: 150)),
     );
   }
 
@@ -77,7 +77,7 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
     if (state is! AppmenuLoaded) return;
     final loadedState = state as AppmenuLoaded;
 
-    if (loadedState.lastRefresh.add(const Duration(minutes: 30)).second >
+    if (loadedState.lastRefresh.add(const Duration(seconds: 30)).second >
         DateTime.now().second) {
       _appListRepo.locale = event.locale ?? 'en_US';
       await _appListRepo.load();
