@@ -17,8 +17,8 @@ part 'screen_manager_state.dart';
 class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
   ScreenManagerBloc() : super(const ScreenManagerStateInitial()) {
     on<ScreenManagerEventStarted>(_onStarted);
-    on<ScreenManagerEventOpenPopup>(_onOpenPopup, transformer: restartable());
-    on<ScreenManagerEventClosePopup>(_onClosePopup, transformer: restartable());
+    on<ScreenManagerEventOpenPopup>(_onOpenPopup, transformer: droppable());
+    on<ScreenManagerEventClosePopup>(_onClosePopup, transformer: droppable());
   }
 
   final layerShellManager = WaylandLayerShell();

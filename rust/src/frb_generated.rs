@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -793992137;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1271633284;
 
 // Section: executor
 
@@ -652,6 +652,44 @@ fn wire__crate__api__quick_settings__battery__watch_battery_event_impl(
         },
     )
 }
+fn wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "watch_kitshell_socket",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                crate::api::ipc::types::IpcContent,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::ipc::ipc::watch_kitshell_socket(api_sink)?;
+                        Ok(output_ok)
+                    })(),
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__mpris__mpris__watch_media_player_events_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -776,6 +814,16 @@ impl SseDecode for std::collections::HashMap<String, String> {
 
 impl SseDecode
     for StreamSink<crate::api::mpris::cava::CavaState, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
+    }
+}
+
+impl SseDecode
+    for StreamSink<crate::api::ipc::types::IpcContent, flutter_rust_bridge::for_generated::SseCodec>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -993,6 +1041,24 @@ impl SseDecode for i64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_i64::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::ipc::types::IpcContent {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_opt1 = <String>::sse_decode(deserializer);
+        let mut var_opt2 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt3 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt4 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt5 = <Option<String>>::sse_decode(deserializer);
+        return crate::api::ipc::types::IpcContent {
+            opt1: var_opt1,
+            opt2: var_opt2,
+            opt3: var_opt3,
+            opt4: var_opt4,
+            opt5: var_opt5,
+        };
     }
 }
 
@@ -1641,13 +1707,19 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        21 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+        21 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        22 => wire__crate__api__notifications__watch_notification_bus_impl(
+        22 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        23 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -1814,6 +1886,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::display_info::DispInfo>
     for crate::api::display_info::DispInfo
 {
     fn into_into_dart(self) -> crate::api::display_info::DispInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::ipc::types::IpcContent {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.opt1.into_into_dart().into_dart(),
+            self.opt2.into_into_dart().into_dart(),
+            self.opt3.into_into_dart().into_dart(),
+            self.opt4.into_into_dart().into_dart(),
+            self.opt5.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::ipc::types::IpcContent
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::ipc::types::IpcContent>
+    for crate::api::ipc::types::IpcContent
+{
+    fn into_into_dart(self) -> crate::api::ipc::types::IpcContent {
         self
     }
 }
@@ -2206,6 +2302,15 @@ impl SseEncode
 }
 
 impl SseEncode
+    for StreamSink<crate::api::ipc::types::IpcContent, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
+    }
+}
+
+impl SseEncode
     for StreamSink<
         Vec<crate::api::quick_settings::display_brightness::BacklightInfo>,
         flutter_rust_bridge::for_generated::SseCodec,
@@ -2380,6 +2485,17 @@ impl SseEncode for i64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::ipc::types::IpcContent {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.opt1, serializer);
+        <Option<String>>::sse_encode(self.opt2, serializer);
+        <Option<String>>::sse_encode(self.opt3, serializer);
+        <Option<String>>::sse_encode(self.opt4, serializer);
+        <Option<String>>::sse_encode(self.opt5, serializer);
     }
 }
 

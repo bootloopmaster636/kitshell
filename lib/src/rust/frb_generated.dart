@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
+import 'package:kitshell/src/rust/api/ipc/ipc.dart';
+import 'package:kitshell/src/rust/api/ipc/types.dart';
 import 'package:kitshell/src/rust/api/mpris/cava.dart';
 import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
@@ -79,7 +81,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -793992137;
+  int get rustContentHash => 1271633284;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -141,6 +143,8 @@ abstract class RustLibApi extends BaseApi {
   crateApiQuickSettingsDisplayBrightnessWatchBacklightEvent();
 
   Stream<List<BatteryInfo>> crateApiQuickSettingsBatteryWatchBatteryEvent();
+
+  Stream<IpcContent> crateApiIpcIpcWatchKitshellSocket();
 
   Stream<TrackProgress?> crateApiMprisMprisWatchMediaPlayerEvents();
 
@@ -694,6 +698,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Stream<IpcContent> crateApiIpcIpcWatchKitshellSocket() {
+    final sink = RustStreamSink<IpcContent>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_StreamSink_ipc_content_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 21,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta: kCrateApiIpcIpcWatchKitshellSocketConstMeta,
+          argValues: [sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiIpcIpcWatchKitshellSocketConstMeta =>
+      const TaskConstMeta(
+        debugName: 'watch_kitshell_socket',
+        argNames: ['sink'],
+      );
+
+  @override
   Stream<TrackProgress?> crateApiMprisMprisWatchMediaPlayerEvents() {
     final sink = RustStreamSink<TrackProgress?>();
     unawaited(
@@ -708,7 +747,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 21,
+              funcId: 22,
               port: port_,
             );
           },
@@ -743,7 +782,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 22,
+              funcId: 23,
               port: port_,
             );
           },
@@ -796,6 +835,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  RustStreamSink<IpcContent> dco_decode_StreamSink_ipc_content_Sse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
   }
@@ -998,6 +1045,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   PlatformInt64 dco_decode_i_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dcoDecodeI64(raw);
+  }
+
+  @protected
+  IpcContent dco_decode_ipc_content(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return IpcContent(
+      opt1: dco_decode_String(arr[0]),
+      opt2: dco_decode_opt_String(arr[1]),
+      opt3: dco_decode_opt_String(arr[2]),
+      opt4: dco_decode_opt_String(arr[3]),
+      opt5: dco_decode_opt_String(arr[4]),
+    );
   }
 
   @protected
@@ -1400,6 +1462,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<IpcContent> sse_decode_StreamSink_ipc_content_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
   RustStreamSink<List<BacklightInfo>>
   sse_decode_StreamSink_list_backlight_info_Sse(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1612,6 +1682,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getPlatformInt64();
+  }
+
+  @protected
+  IpcContent sse_decode_ipc_content(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_opt1 = sse_decode_String(deserializer);
+    final var_opt2 = sse_decode_opt_String(deserializer);
+    final var_opt3 = sse_decode_opt_String(deserializer);
+    final var_opt4 = sse_decode_opt_String(deserializer);
+    final var_opt5 = sse_decode_opt_String(deserializer);
+    return IpcContent(
+      opt1: var_opt1,
+      opt2: var_opt2,
+      opt3: var_opt3,
+      opt4: var_opt4,
+      opt5: var_opt5,
+    );
   }
 
   @protected
@@ -2169,6 +2256,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_StreamSink_ipc_content_Sse(
+    RustStreamSink<IpcContent> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_ipc_content,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
+      serializer,
+    );
+  }
+
+  @protected
   void sse_encode_StreamSink_list_backlight_info_Sse(
     RustStreamSink<List<BacklightInfo>> self,
     SseSerializer serializer,
@@ -2393,6 +2497,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putPlatformInt64(self);
+  }
+
+  @protected
+  void sse_encode_ipc_content(IpcContent self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.opt1, serializer);
+    sse_encode_opt_String(self.opt2, serializer);
+    sse_encode_opt_String(self.opt3, serializer);
+    sse_encode_opt_String(self.opt4, serializer);
+    sse_encode_opt_String(self.opt5, serializer);
   }
 
   @protected

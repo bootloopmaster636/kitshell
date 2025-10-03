@@ -11,6 +11,8 @@ import 'dart:convert';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
 import 'package:kitshell/src/rust/api/appmenu/appmenu_items.dart';
 import 'package:kitshell/src/rust/api/display_info.dart';
+import 'package:kitshell/src/rust/api/ipc/ipc.dart';
+import 'package:kitshell/src/rust/api/ipc/types.dart';
 import 'package:kitshell/src/rust/api/mpris/cava.dart';
 import 'package:kitshell/src/rust/api/mpris/mpris.dart';
 import 'package:kitshell/src/rust/api/notifications.dart';
@@ -45,6 +47,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw);
+
+  @protected
+  RustStreamSink<IpcContent> dco_decode_StreamSink_ipc_content_Sse(dynamic raw);
 
   @protected
   RustStreamSink<List<BacklightInfo>>
@@ -126,6 +131,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PlatformInt64 dco_decode_i_64(dynamic raw);
+
+  @protected
+  IpcContent dco_decode_ipc_content(dynamic raw);
 
   @protected
   LaunchbarItemState dco_decode_launchbar_item_state(dynamic raw);
@@ -264,6 +272,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  RustStreamSink<IpcContent> sse_decode_StreamSink_ipc_content_Sse(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   RustStreamSink<List<BacklightInfo>>
   sse_decode_StreamSink_list_backlight_info_Sse(SseDeserializer deserializer);
 
@@ -348,6 +361,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
+
+  @protected
+  IpcContent sse_decode_ipc_content(SseDeserializer deserializer);
 
   @protected
   LaunchbarItemState sse_decode_launchbar_item_state(
@@ -511,6 +527,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_StreamSink_ipc_content_Sse(
+    RustStreamSink<IpcContent> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_StreamSink_list_backlight_info_Sse(
     RustStreamSink<List<BacklightInfo>> self,
     SseSerializer serializer,
@@ -605,6 +627,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_ipc_content(IpcContent self, SseSerializer serializer);
 
   @protected
   void sse_encode_launchbar_item_state(
