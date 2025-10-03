@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: animated_switcher_plus
-      sha256: "5e1e5a189d131a62b99c3e96dc8d8747bca5dd3b1350cd6d30ed8797ea0cc862"
+      sha256: f085d64100ac9d0178a4de6bf8a6c46d2767ef8d7f9b279fc54a280afdfe3896
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.4.0"
   args:
     dependency: transitive
     description:
@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: bloc
-      sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
+      sha256: e18b8e7825e9921d67a6d256dba0b6015ece8a577eb0a411845c46a352994d78
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.0.1"
   bloc_concurrency:
     dependency: "direct main"
     description:
@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: build
-      sha256: "6439a9c71a4e6eca8d9490c1b380a25b02675aa688137dfbe66d2062884a23ac"
+      sha256: ce76b1d48875e3233fde17717c23d1f60a91cc631597e49a400c89b475395b1d
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.0"
   build_cli_annotations:
     dependency: transitive
     description:
@@ -109,26 +109,26 @@ packages:
     dependency: transitive
     description:
       name: build_resolvers
-      sha256: "2b21a125d66a86b9511cc3fb6c668c42e9a1185083922bf60e46d483a81a9712"
+      sha256: d1d57f7807debd7349b4726a19fd32ec8bc177c71ad0febf91a20f84cd2d4b46
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.3"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: fd3c09f4bbff7fa6e8d8ef688a0b2e8a6384e6483a25af0dac75fef362bcfe6f
+      sha256: b24597fceb695969d47025c958f3837f9f0122e237c6a22cb082a5ac66c3ca30
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.0"
+    version: "2.7.1"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
-      sha256: ab27e46c8aa233e610cf6084ee6d8a22c6f873a0a9929241d8855b7a72978ae7
+      sha256: "066dda7f73d8eb48ba630a55acb50c4a84a2e6b453b1cb4567f581729e794f7b"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.0"
+    version: "9.3.1"
   built_collection:
     dependency: transitive
     description:
@@ -178,7 +178,7 @@ packages:
     source: hosted
     version: "4.10.1"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: "2f5709ae4d3d59dd8f7cd309b4e023046b57d8a6c82130785d2b0e5868084e76"
@@ -348,10 +348,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
+      sha256: b9c2ad5872518a27507ab432d1fb97e8813b05f0fc693f9d40fad06d073e0678
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -361,10 +361,10 @@ packages:
     dependency: "direct dev"
     description:
       name: freezed
-      sha256: da32f8ba8cfcd4ec71d9decc8cbf28bd2c31b5283d9887eb51eb4a0659d8110c
+      sha256: "13065f10e135263a4f5a4391b79a8efc5fb8106f8dd555a9e49b750b45393d77"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.3"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -414,10 +414,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: df9763500dadba0155373e9cb44e202ce21bd9ed5de6bdbd05c5854e86839cb8
+      sha256: ebc94ed30fd13cefd397cb1658b593f21571f014b7d1197eeb41fb95f05d899a
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.3.1"
   graphs:
     dependency: transitive
     description:
@@ -430,18 +430,18 @@ packages:
     dependency: "direct main"
     description:
       name: hive_ce
-      sha256: "708bb39050998707c5d422752159f91944d3c81ab42d80e1bd0ee37d8e130658"
+      sha256: "89746b555109029a30780e0a601978460b8065643592667f6e43a238faccb8a4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.3"
+    version: "2.13.2"
   hive_ce_flutter:
     dependency: "direct main"
     description:
       name: hive_ce_flutter
-      sha256: a0989670652eab097b47544f1e5a4456e861b1b01b050098ea0b80a5fabe9909
+      sha256: f5bd57fda84402bca7557fedb8c629c96c8ea10fab4a542968d7b60864ca02cc
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   hive_ce_generator:
     dependency: "direct dev"
     description:
@@ -547,10 +547,10 @@ packages:
     dependency: "direct dev"
     description:
       name: json_serializable
-      sha256: ce2cf974ccdee13be2a510832d7fba0b94b364e0b0395dee42abaa51b855be27
+      sha256: "33a040668b31b320aafa4822b7b1e177e163fc3c1e835c6750319d4ab23aa6fe"
       url: "https://pub.dev"
     source: hosted
-    version: "6.10.0"
+    version: "6.11.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -983,10 +983,10 @@ packages:
     dependency: "direct dev"
     description:
       name: very_good_analysis
-      sha256: e479fbc0941009262343db308133e121bf8660c2c81d48dd8e952df7b7e1e382
+      sha256: "96245839dbcc45dfab1af5fa551603b5c7a282028a64746c19c547d21a7f1e3a"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "10.0.0"
   vm_service:
     dependency: transitive
     description:

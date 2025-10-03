@@ -27,8 +27,8 @@ class CustomInkwell extends StatelessWidget {
   final VoidCallback? onLongPress;
   final void Function(TapUpDetails)? onTapUp;
   final void Function(TapDownDetails)? onTapDown;
-  final void Function(bool)? onHover;
   final VoidCallback? onTapCancel;
+  final void Function(PointerHoverEvent)? onHover;
   final void Function(PointerEnterEvent)? onPointerEnter;
   final void Function(PointerExitEvent)? onPointerExit;
   final BoxDecoration? decoration;
@@ -54,13 +54,13 @@ class CustomInkwell extends StatelessWidget {
           child: MouseRegion(
             onEnter: onPointerEnter?.call,
             onExit: onPointerExit?.call,
+            onHover: onHover?.call,
             child: InkWell(
               onTap: onTap?.call,
               onLongPress: onLongPress?.call,
               onTapUp: onTapUp?.call,
               onTapDown: onTapDown?.call,
               onTapCancel: onTapCancel?.call,
-              onHover: onHover?.call,
               hoverColor: hoverColor,
               child: Padding(
                 padding: padding ?? const EdgeInsets.all(8),

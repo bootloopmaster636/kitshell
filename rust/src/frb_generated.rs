@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1302838839;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1271633284;
 
 // Section: executor
 
@@ -117,6 +117,44 @@ fn wire__crate__api__wm_interface__base__detect_current_wm_impl(
                         let output_ok = crate::api::wm_interface::base::detect_current_wm()?;
                         Ok(output_ok)
                     })(),
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__mpris__mpris__dispatch_player_action_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dispatch_player_action",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_action =
+                <crate::api::mpris::mpris::PlayerOperations>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::mpris::mpris::dispatch_player_action(api_action).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
                 )
             }
         },
@@ -343,6 +381,44 @@ fn wire__crate__api__appmenu__appmenu_items__launch_app_impl(
                         Ok(output_ok)
                     })()
                     .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__mpris__cava__listen_to_cava_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "listen_to_cava",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                crate::api::mpris::cava::CavaState,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::mpris::cava::listen_to_cava(api_sink)?;
+                        Ok(output_ok)
+                    })(),
                 )
             }
         },
@@ -576,6 +652,84 @@ fn wire__crate__api__quick_settings__battery__watch_battery_event_impl(
         },
     )
 }
+fn wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "watch_kitshell_socket",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                crate::api::ipc::types::IpcContent,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || {
+                        let output_ok = crate::api::ipc::ipc::watch_kitshell_socket(api_sink)?;
+                        Ok(output_ok)
+                    })(),
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "watch_media_player_events",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                Option<crate::api::mpris::mpris::TrackProgress>,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::mpris::mpris::watch_media_player_events(api_sink).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__notifications__watch_notification_bus_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -627,6 +781,14 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
+impl SseDecode for chrono::Duration {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i64>::sse_decode(deserializer);
+        return chrono::Duration::microseconds(inner);
+    }
+}
+
 impl SseDecode for chrono::DateTime<chrono::Local> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -647,6 +809,26 @@ impl SseDecode for std::collections::HashMap<String, String> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<(String, String)>>::sse_decode(deserializer);
         return inner.into_iter().collect();
+    }
+}
+
+impl SseDecode
+    for StreamSink<crate::api::mpris::cava::CavaState, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
+    }
+}
+
+impl SseDecode
+    for StreamSink<crate::api::ipc::types::IpcContent, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
     }
 }
 
@@ -679,6 +861,19 @@ impl SseDecode
 impl SseDecode
     for StreamSink<
         crate::api::notifications::NotificationData,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
+    }
+}
+
+impl SseDecode
+    for StreamSink<
+        Option<crate::api::mpris::mpris::TrackProgress>,
         flutter_rust_bridge::for_generated::SseCodec,
     >
 {
@@ -789,6 +984,20 @@ impl SseDecode for bool {
     }
 }
 
+impl SseDecode for crate::api::mpris::cava::CavaState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_data = <[u8; 32]>::sse_decode(deserializer);
+        let mut var_barCount = <u16>::sse_decode(deserializer);
+        let mut var_cavaPid = <u32>::sse_decode(deserializer);
+        return crate::api::mpris::cava::CavaState {
+            data: var_data,
+            bar_count: var_barCount,
+            cava_pid: var_cavaPid,
+        };
+    }
+}
+
 impl SseDecode for crate::api::display_info::DispInfo {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -814,6 +1023,13 @@ impl SseDecode for f32 {
     }
 }
 
+impl SseDecode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_f64::<NativeEndian>().unwrap()
+    }
+}
+
 impl SseDecode for i32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -825,6 +1041,24 @@ impl SseDecode for i64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_i64::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::ipc::types::IpcContent {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_opt1 = <String>::sse_decode(deserializer);
+        let mut var_opt2 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt3 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt4 = <Option<String>>::sse_decode(deserializer);
+        let mut var_opt5 = <Option<String>>::sse_decode(deserializer);
+        return crate::api::ipc::types::IpcContent {
+            opt1: var_opt1,
+            opt2: var_opt2,
+            opt3: var_opt3,
+            opt4: var_opt4,
+            opt5: var_opt5,
+        };
     }
 }
 
@@ -980,6 +1214,19 @@ impl SseDecode for Vec<crate::api::wm_interface::base::WorkspaceState> {
     }
 }
 
+impl SseDecode for mpris::LoopStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => mpris::LoopStatus::None,
+            1 => mpris::LoopStatus::Track,
+            2 => mpris::LoopStatus::Playlist,
+            _ => unreachable!("Invalid variant for LoopStatus: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1026,11 +1273,33 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<chrono::Duration> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<chrono::Duration>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<f32>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<f64> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<f64>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1048,6 +1317,19 @@ impl SseDecode for Option<i32> {
     }
 }
 
+impl SseDecode for Option<crate::api::mpris::mpris::TrackProgress> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::mpris::mpris::TrackProgress>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1059,12 +1341,158 @@ impl SseDecode for Option<u64> {
     }
 }
 
+impl SseDecode for Option<Vec<String>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<String>>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for mpris::PlaybackStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => mpris::PlaybackStatus::Playing,
+            1 => mpris::PlaybackStatus::Paused,
+            2 => mpris::PlaybackStatus::Stopped,
+            _ => unreachable!("Invalid variant for PlaybackStatus: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::mpris::mpris::PlayerInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_friendlyName = <String>::sse_decode(deserializer);
+        let mut var_desktopEntry = <Option<String>>::sse_decode(deserializer);
+        let mut var_canBeRaised = <bool>::sse_decode(deserializer);
+        let mut var_canBeControlled = <bool>::sse_decode(deserializer);
+        let mut var_canGoPrev = <bool>::sse_decode(deserializer);
+        let mut var_canGoNext = <bool>::sse_decode(deserializer);
+        let mut var_canPlay = <bool>::sse_decode(deserializer);
+        let mut var_canPause = <bool>::sse_decode(deserializer);
+        let mut var_canStop = <bool>::sse_decode(deserializer);
+        let mut var_canShuffle = <bool>::sse_decode(deserializer);
+        let mut var_canLoop = <bool>::sse_decode(deserializer);
+        return crate::api::mpris::mpris::PlayerInfo {
+            friendly_name: var_friendlyName,
+            desktop_entry: var_desktopEntry,
+            can_be_raised: var_canBeRaised,
+            can_be_controlled: var_canBeControlled,
+            can_go_prev: var_canGoPrev,
+            can_go_next: var_canGoNext,
+            can_play: var_canPlay,
+            can_pause: var_canPause,
+            can_stop: var_canStop,
+            can_shuffle: var_canShuffle,
+            can_loop: var_canLoop,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mpris::mpris::PlayerOperations {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                return crate::api::mpris::mpris::PlayerOperations::Play;
+            }
+            1 => {
+                return crate::api::mpris::mpris::PlayerOperations::Pause;
+            }
+            2 => {
+                return crate::api::mpris::mpris::PlayerOperations::TogglePlayPause;
+            }
+            3 => {
+                return crate::api::mpris::mpris::PlayerOperations::NextTrack;
+            }
+            4 => {
+                return crate::api::mpris::mpris::PlayerOperations::PrevTrack;
+            }
+            5 => {
+                return crate::api::mpris::mpris::PlayerOperations::ToggleShuffle;
+            }
+            6 => {
+                return crate::api::mpris::mpris::PlayerOperations::SetLoop;
+            }
+            7 => {
+                let mut var_offsetUs = <i64>::sse_decode(deserializer);
+                return crate::api::mpris::mpris::PlayerOperations::Seek {
+                    offset_us: var_offsetUs,
+                };
+            }
+            8 => {
+                let mut var_trackId = <String>::sse_decode(deserializer);
+                let mut var_positionUs = <u64>::sse_decode(deserializer);
+                return crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                    track_id: var_trackId,
+                    position_us: var_positionUs,
+                };
+            }
+            9 => {
+                return crate::api::mpris::mpris::PlayerOperations::Open;
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for (String, String) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_field0 = <String>::sse_decode(deserializer);
         let mut var_field1 = <String>::sse_decode(deserializer);
         return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for crate::api::mpris::mpris::TrackMetadata {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_title = <Option<String>>::sse_decode(deserializer);
+        let mut var_artists = <Option<Vec<String>>>::sse_decode(deserializer);
+        let mut var_album = <Option<String>>::sse_decode(deserializer);
+        let mut var_artUrl = <Option<String>>::sse_decode(deserializer);
+        let mut var_trackId = <Option<String>>::sse_decode(deserializer);
+        let mut var_trackLength = <Option<chrono::Duration>>::sse_decode(deserializer);
+        return crate::api::mpris::mpris::TrackMetadata {
+            title: var_title,
+            artists: var_artists,
+            album: var_album,
+            art_url: var_artUrl,
+            track_id: var_trackId,
+            track_length: var_trackLength,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mpris::mpris::TrackProgress {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_metadata = <crate::api::mpris::mpris::TrackMetadata>::sse_decode(deserializer);
+        let mut var_playbackStatus = <mpris::PlaybackStatus>::sse_decode(deserializer);
+        let mut var_shuffleEnabled = <bool>::sse_decode(deserializer);
+        let mut var_loopStatus = <mpris::LoopStatus>::sse_decode(deserializer);
+        let mut var_progressNormalized = <Option<f64>>::sse_decode(deserializer);
+        let mut var_progressDuration = <chrono::Duration>::sse_decode(deserializer);
+        let mut var_player = <crate::api::mpris::mpris::PlayerInfo>::sse_decode(deserializer);
+        return crate::api::mpris::mpris::TrackProgress {
+            metadata: var_metadata,
+            playback_status: var_playbackStatus,
+            shuffle_enabled: var_shuffleEnabled,
+            loop_status: var_loopStatus,
+            progress_normalized: var_progressNormalized,
+            progress_duration: var_progressDuration,
+            player: var_player,
+        };
     }
 }
 
@@ -1093,6 +1521,14 @@ impl SseDecode for u8 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u8().unwrap()
+    }
+}
+
+impl SseDecode for [u8; 32] {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <Vec<u8>>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::from_vec_to_array(inner);
     }
 }
 
@@ -1195,76 +1631,95 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+        7 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => {
+        8 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        9 => {
             wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len)
         }
-        9 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
+        10 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
+        11 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__notifications__invoke_notif_action_impl(
+        12 => wire__crate__api__notifications__invoke_notif_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
+        13 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
+        14 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        14 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
+        16 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        15 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
+        17 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        16 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
+        18 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        17 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        19 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        18 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        20 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        19 => wire__crate__api__notifications__watch_notification_bus_impl(
+        21 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        22 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        23 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -1389,6 +1844,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::quick_settings::battery::Batt
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::cava::CavaState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.data.into_into_dart().into_dart(),
+            self.bar_count.into_into_dart().into_dart(),
+            self.cava_pid.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::cava::CavaState
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::cava::CavaState>
+    for crate::api::mpris::cava::CavaState
+{
+    fn into_into_dart(self) -> crate::api::mpris::cava::CavaState {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::display_info::DispInfo {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -1409,6 +1886,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::display_info::DispInfo>
     for crate::api::display_info::DispInfo
 {
     fn into_into_dart(self) -> crate::api::display_info::DispInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::ipc::types::IpcContent {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.opt1.into_into_dart().into_dart(),
+            self.opt2.into_into_dart().into_dart(),
+            self.opt3.into_into_dart().into_dart(),
+            self.opt4.into_into_dart().into_dart(),
+            self.opt5.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::ipc::types::IpcContent
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::ipc::types::IpcContent>
+    for crate::api::ipc::types::IpcContent
+{
+    fn into_into_dart(self) -> crate::api::ipc::types::IpcContent {
         self
     }
 }
@@ -1435,6 +1936,23 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::wm_interface::base::Launchbar
 {
     fn into_into_dart(self) -> crate::api::wm_interface::base::LaunchbarItemState {
         self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<mpris::LoopStatus> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            mpris::LoopStatus::None => 0.into_dart(),
+            mpris::LoopStatus::Track => 1.into_dart(),
+            mpris::LoopStatus::Playlist => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<mpris::LoopStatus> {}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<mpris::LoopStatus>> for mpris::LoopStatus {
+    fn into_into_dart(self) -> FrbWrapper<mpris::LoopStatus> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1480,6 +1998,154 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::notifications::NotificationDa
     for crate::api::notifications::NotificationData
 {
     fn into_into_dart(self) -> crate::api::notifications::NotificationData {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<mpris::PlaybackStatus> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            mpris::PlaybackStatus::Playing => 0.into_dart(),
+            mpris::PlaybackStatus::Paused => 1.into_dart(),
+            mpris::PlaybackStatus::Stopped => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<mpris::PlaybackStatus>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<mpris::PlaybackStatus>>
+    for mpris::PlaybackStatus
+{
+    fn into_into_dart(self) -> FrbWrapper<mpris::PlaybackStatus> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerInfo {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.friendly_name.into_into_dart().into_dart(),
+            self.desktop_entry.into_into_dart().into_dart(),
+            self.can_be_raised.into_into_dart().into_dart(),
+            self.can_be_controlled.into_into_dart().into_dart(),
+            self.can_go_prev.into_into_dart().into_dart(),
+            self.can_go_next.into_into_dart().into_dart(),
+            self.can_play.into_into_dart().into_dart(),
+            self.can_pause.into_into_dart().into_dart(),
+            self.can_stop.into_into_dart().into_dart(),
+            self.can_shuffle.into_into_dart().into_dart(),
+            self.can_loop.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::mpris::PlayerInfo
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::PlayerInfo>
+    for crate::api::mpris::mpris::PlayerInfo
+{
+    fn into_into_dart(self) -> crate::api::mpris::mpris::PlayerInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::PlayerOperations {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::mpris::mpris::PlayerOperations::Play => [0.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Pause => [1.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => {
+                [2.into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::NextTrack => [3.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::PrevTrack => [4.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => {
+                [5.into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetLoop => [6.into_dart()].into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Seek { offset_us } => {
+                [7.into_dart(), offset_us.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                track_id,
+                position_us,
+            } => [
+                8.into_dart(),
+                track_id.into_into_dart().into_dart(),
+                position_us.into_into_dart().into_dart(),
+            ]
+            .into_dart(),
+            crate::api::mpris::mpris::PlayerOperations::Open => [9.into_dart()].into_dart(),
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::mpris::PlayerOperations
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::PlayerOperations>
+    for crate::api::mpris::mpris::PlayerOperations
+{
+    fn into_into_dart(self) -> crate::api::mpris::mpris::PlayerOperations {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::TrackMetadata {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.title.into_into_dart().into_dart(),
+            self.artists.into_into_dart().into_dart(),
+            self.album.into_into_dart().into_dart(),
+            self.art_url.into_into_dart().into_dart(),
+            self.track_id.into_into_dart().into_dart(),
+            self.track_length.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::mpris::TrackMetadata
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::TrackMetadata>
+    for crate::api::mpris::mpris::TrackMetadata
+{
+    fn into_into_dart(self) -> crate::api::mpris::mpris::TrackMetadata {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::mpris::mpris::TrackProgress {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.metadata.into_into_dart().into_dart(),
+            self.playback_status.into_into_dart().into_dart(),
+            self.shuffle_enabled.into_into_dart().into_dart(),
+            self.loop_status.into_into_dart().into_dart(),
+            self.progress_normalized.into_into_dart().into_dart(),
+            self.progress_duration.into_into_dart().into_dart(),
+            self.player.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::mpris::mpris::TrackProgress
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::mpris::mpris::TrackProgress>
+    for crate::api::mpris::mpris::TrackProgress
+{
+    fn into_into_dart(self) -> crate::api::mpris::mpris::TrackProgress {
         self
     }
 }
@@ -1601,6 +2267,17 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     }
 }
 
+impl SseEncode for chrono::Duration {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i64>::sse_encode(
+            self.num_microseconds()
+                .expect("cannot get microseconds from time"),
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for chrono::DateTime<chrono::Local> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1612,6 +2289,24 @@ impl SseEncode for std::collections::HashMap<String, String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<(String, String)>>::sse_encode(self.into_iter().collect(), serializer);
+    }
+}
+
+impl SseEncode
+    for StreamSink<crate::api::mpris::cava::CavaState, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
+    }
+}
+
+impl SseEncode
+    for StreamSink<crate::api::ipc::types::IpcContent, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
     }
 }
 
@@ -1642,6 +2337,18 @@ impl SseEncode
 impl SseEncode
     for StreamSink<
         crate::api::notifications::NotificationData,
+        flutter_rust_bridge::for_generated::SseCodec,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
+    }
+}
+
+impl SseEncode
+    for StreamSink<
+        Option<crate::api::mpris::mpris::TrackProgress>,
         flutter_rust_bridge::for_generated::SseCodec,
     >
 {
@@ -1733,6 +2440,15 @@ impl SseEncode for bool {
     }
 }
 
+impl SseEncode for crate::api::mpris::cava::CavaState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <[u8; 32]>::sse_encode(self.data, serializer);
+        <u16>::sse_encode(self.bar_count, serializer);
+        <u32>::sse_encode(self.cava_pid, serializer);
+    }
+}
+
 impl SseEncode for crate::api::display_info::DispInfo {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1751,6 +2467,13 @@ impl SseEncode for f32 {
     }
 }
 
+impl SseEncode for f64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_f64::<NativeEndian>(self).unwrap();
+    }
+}
+
 impl SseEncode for i32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1762,6 +2485,17 @@ impl SseEncode for i64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::ipc::types::IpcContent {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.opt1, serializer);
+        <Option<String>>::sse_encode(self.opt2, serializer);
+        <Option<String>>::sse_encode(self.opt3, serializer);
+        <Option<String>>::sse_encode(self.opt4, serializer);
+        <Option<String>>::sse_encode(self.opt5, serializer);
     }
 }
 
@@ -1879,6 +2613,23 @@ impl SseEncode for Vec<crate::api::wm_interface::base::WorkspaceState> {
     }
 }
 
+impl SseEncode for mpris::LoopStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                mpris::LoopStatus::None => 0,
+                mpris::LoopStatus::Track => 1,
+                mpris::LoopStatus::Playlist => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for crate::api::wm_interface::niri::Niri {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
@@ -1910,12 +2661,32 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<chrono::Duration> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <chrono::Duration>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<f32> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <f32>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<f64> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <f64>::sse_encode(value, serializer);
         }
     }
 }
@@ -1930,6 +2701,16 @@ impl SseEncode for Option<i32> {
     }
 }
 
+impl SseEncode for Option<crate::api::mpris::mpris::TrackProgress> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::mpris::mpris::TrackProgress>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1940,11 +2721,127 @@ impl SseEncode for Option<u64> {
     }
 }
 
+impl SseEncode for Option<Vec<String>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<String>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for mpris::PlaybackStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                mpris::PlaybackStatus::Playing => 0,
+                mpris::PlaybackStatus::Paused => 1,
+                mpris::PlaybackStatus::Stopped => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::mpris::mpris::PlayerInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.friendly_name, serializer);
+        <Option<String>>::sse_encode(self.desktop_entry, serializer);
+        <bool>::sse_encode(self.can_be_raised, serializer);
+        <bool>::sse_encode(self.can_be_controlled, serializer);
+        <bool>::sse_encode(self.can_go_prev, serializer);
+        <bool>::sse_encode(self.can_go_next, serializer);
+        <bool>::sse_encode(self.can_play, serializer);
+        <bool>::sse_encode(self.can_pause, serializer);
+        <bool>::sse_encode(self.can_stop, serializer);
+        <bool>::sse_encode(self.can_shuffle, serializer);
+        <bool>::sse_encode(self.can_loop, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mpris::mpris::PlayerOperations {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::mpris::mpris::PlayerOperations::Play => {
+                <i32>::sse_encode(0, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Pause => {
+                <i32>::sse_encode(1, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::TogglePlayPause => {
+                <i32>::sse_encode(2, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::NextTrack => {
+                <i32>::sse_encode(3, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::PrevTrack => {
+                <i32>::sse_encode(4, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::ToggleShuffle => {
+                <i32>::sse_encode(5, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetLoop => {
+                <i32>::sse_encode(6, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Seek { offset_us } => {
+                <i32>::sse_encode(7, serializer);
+                <i64>::sse_encode(offset_us, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::SetPosition {
+                track_id,
+                position_us,
+            } => {
+                <i32>::sse_encode(8, serializer);
+                <String>::sse_encode(track_id, serializer);
+                <u64>::sse_encode(position_us, serializer);
+            }
+            crate::api::mpris::mpris::PlayerOperations::Open => {
+                <i32>::sse_encode(9, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseEncode for (String, String) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.0, serializer);
         <String>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mpris::mpris::TrackMetadata {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<String>>::sse_encode(self.title, serializer);
+        <Option<Vec<String>>>::sse_encode(self.artists, serializer);
+        <Option<String>>::sse_encode(self.album, serializer);
+        <Option<String>>::sse_encode(self.art_url, serializer);
+        <Option<String>>::sse_encode(self.track_id, serializer);
+        <Option<chrono::Duration>>::sse_encode(self.track_length, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mpris::mpris::TrackProgress {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::mpris::mpris::TrackMetadata>::sse_encode(self.metadata, serializer);
+        <mpris::PlaybackStatus>::sse_encode(self.playback_status, serializer);
+        <bool>::sse_encode(self.shuffle_enabled, serializer);
+        <mpris::LoopStatus>::sse_encode(self.loop_status, serializer);
+        <Option<f64>>::sse_encode(self.progress_normalized, serializer);
+        <chrono::Duration>::sse_encode(self.progress_duration, serializer);
+        <crate::api::mpris::mpris::PlayerInfo>::sse_encode(self.player, serializer);
     }
 }
 
@@ -1973,6 +2870,19 @@ impl SseEncode for u8 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_u8(self).unwrap();
+    }
+}
+
+impl SseEncode for [u8; 32] {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<u8>>::sse_encode(
+            {
+                let boxed: Box<[_]> = Box::new(self);
+                boxed.into_vec()
+            },
+            serializer,
+        );
     }
 }
 

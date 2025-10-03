@@ -10,6 +10,7 @@ general:
       xMins: ${min}m
       xHours: ${hour}h
       xDays: ${day}d
+  closePopup: Release to close popup
 dateTimeNotif:
   notification:
     noNotification: No notifications
@@ -18,12 +19,19 @@ dateTimeNotif:
 appMenu:
   apps: Apps
   searchApps: Search your apps
+  noAppFound: No app(s) found, try other search term.
   contextMenu:
     pin: Pin to favorites
     unpin: Unpin from favorites
     resetRank: Reset ranking
     add: Add to launchbar
     remove: Remove from launchbar
+mpris:
+  noPlaying: No music is playing
+  unknown:
+    title: Unknown title
+    artist: Unknown artist(s)
+    album: Unknown album
 quickSettings:
   brightness:
     title: Brightness

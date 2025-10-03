@@ -1,6 +1,6 @@
 # Kitshell [ALPHA]
 
-### *A modern looking, Material-ish panel/bar built with ease of use in mind.*
+### _A modern looking, Material-ish panel/bar built with ease of use in mind._
 
 ## 👋 Introduction
 
@@ -37,7 +37,7 @@ to make WM setup ready for daily use, like
 
 **So, all of these benefits, but what does it cost?**  
 To be easier to use, means that this program does not have many customizations. Customization is
-done through panel UI, *not* through configuration text/dotfiles. You can't also make components
+done through panel UI, _not_ through configuration text/dotfiles. You can't also make components
 yourself (not at this moment). So this program is not for you who want to fully customize the
 content of the bar.
 
@@ -87,6 +87,7 @@ follow Discord rules.
 - [ ] Settings for personalization and theming
 - [ ] Polishing bugs
 - [ ] Code documentation and testing
+- [ ] Requested features: Clipboard managers
 - [ ] Multi monitor support (when Flutter multi window officially released I suppose)
 
 ## ❤️ Acknowledgements

@@ -132,8 +132,8 @@ class LaunchbarBloc extends Bloc<LaunchbarEvent, LaunchbarState> {
     // List of apps thats available, for lookup reason only
     required List<AppInfoModel> appList,
   }) {
-    List<LaunchbarItemState> mutRunningApps = [...runningApps];
-    List<LaunchbarItem> result = [];
+    final mutRunningApps = <LaunchbarItemState>[...runningApps];
+    final result = <LaunchbarItem>[];
 
     // First, we process pinned apps first
     for (final pinnedApp in pinnedApps) {

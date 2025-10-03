@@ -6,13 +6,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/etc/component/clickable_panel_component.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/hooks/callback_debounce_hook.dart';
 import 'package:kitshell/etc/utitity/math.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 

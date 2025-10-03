@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/injectable.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
+import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
 class PopupContainer extends StatelessWidget {
@@ -17,7 +18,6 @@ class PopupContainer extends StatelessWidget {
       builder: (BuildContext context, ScreenManagerState state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
         return Stack(
-          fit: StackFit.expand,
           children: [
             GestureDetector(
               onTap: () {
@@ -26,7 +26,10 @@ class PopupContainer extends StatelessWidget {
                 );
               },
             ),
-            const PopupContent(),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: PopupContent(),
+            ),
           ],
         );
       },
@@ -43,65 +46,93 @@ class PopupContent extends StatelessWidget {
       bloc: get<ScreenManagerBloc>(),
       builder: (context, state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-        return Padding(
-              padding: const EdgeInsets.all(8),
-              child: AnimatedAlign(
-                duration: Durations.long1,
-                curve: Curves.easeOutQuint,
-                alignment: switch (state.position) {
-                  WidgetPosition.left => Alignment.bottomLeft,
-                  WidgetPosition.center => Alignment.bottomCenter,
-                  WidgetPosition.right => Alignment.bottomRight,
-                },
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.surfaceContainer.withValues(
-                        alpha: popupBgOpacity,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: context.colorScheme.outlineVariant,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.colorScheme.shadow.withValues(
-                            alpha: 0.6,
-                          ),
-                          blurRadius: 8,
-                          blurStyle: BlurStyle.outer,
-                        ),
-                      ],
-                    ),
-                    child: AnimatedSize(
-                      duration: Durations.long1,
-                      curve: Curves.easeOutQuint,
-                      alignment: Alignment.bottomCenter,
-                      child: AnimatedSwitcher(
-                        duration: Durations.medium1,
-                        switchInCurve: Curves.easeInSine,
-                        switchOutCurve: Curves.easeOutSine,
-                        child: state.popupShown.widget,
-                      ),
-                    ),
+
+        return AnimatedAlign(
+              duration: Durations.long1,
+              curve: Curves.easeOutQuint,
+              alignment: switch (state.position) {
+                WidgetPosition.left => Alignment.bottomLeft,
+                WidgetPosition.center => Alignment.bottomCenter,
+                WidgetPosition.right => Alignment.bottomRight,
+              },
+              child: AnimatedSize(
+                duration: Durations.medium1,
+                curve: Easing.standard,
+                clipBehavior: Clip.none,
+                child: AnimatedSwitcher(
+                  duration: Durations.medium1,
+                  child: PopupChild(
+                    key: ValueKey(state.popupShown),
+                    popup: state.popupShown,
                   ),
                 ),
               ),
             )
             .animate(
-              target: state.isPopupShown ? 1 : 0,
+              target: state.popupShown != PopupWidget.none ? 1 : 0,
             )
             .slideY(
               begin: 0.2,
               end: 0,
               duration: popupOpenCloseDuration,
               curve: Easing.standard,
-            )
-            .fadeIn(
-              duration: popupOpenCloseDuration,
             );
       },
+    );
+  }
+}
+
+class PopupChild extends StatelessWidget {
+  const PopupChild({required this.popup, super.key});
+  final PopupWidget popup;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: BlocBuilder<PanelGestureCubit, PanelGestureState>(
+        bloc: get<PanelGestureCubit>(),
+        builder: (context, state) {
+          return Container(
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainer.withValues(
+                    alpha: popupBgOpacity,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: context.colorScheme.outlineVariant,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.colorScheme.shadow.withValues(
+                        alpha: 0.6,
+                      ),
+                      blurRadius: 8,
+                      blurStyle: BlurStyle.outer,
+                    ),
+                  ],
+                ),
+                child: Draggable(
+                  data: 'popup',
+                  maxSimultaneousDrags: 1,
+                  axis: Axis.vertical,
+                  feedback: const SizedBox.shrink(),
+                  child: popup.widget,
+                ),
+              )
+              .animate(target: state.readyToClose ? 1 : 0)
+              .slideY(
+                end: 0.1,
+                duration: Durations.medium1,
+                curve: Curves.easeInOutCubic,
+              )
+              .fade(
+                begin: 1,
+                end: 0.8,
+                duration: Durations.medium1,
+              );
+        },
+      ),
     );
   }
 }

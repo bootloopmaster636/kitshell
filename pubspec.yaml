@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  bloc: ^9.0.0
+  bloc: ^9.0.1
   flutter_bloc: ^9.1.1
   freezed_annotation: ^3.1.0
   slang: ^4.8.1
@@ -30,29 +30,30 @@ dependencies:
   gap: ^3.0.1
   intl: ^0.20.2
   logger: ^2.6.1
-  animated_switcher_plus: ^1.2.0
-  google_fonts: ^6.3.0
+  animated_switcher_plus: ^1.4.0
+  google_fonts: ^6.3.1
   flutter_html: ^3.0.0
   diffutil_dart: ^4.0.1
   rxdart: ^0.28.0
-  hive_ce: ^2.11.3
-  hive_ce_flutter: ^2.3.1
+  hive_ce: ^2.13.2
+  hive_ce_flutter: ^2.3.2
   path_provider: ^2.1.5
   crypto: ^3.0.6
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.1
   flutter_context_menu: ^0.3.0
   rapidfuzz: ^0.1.1
+  collection: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.7.0
-  freezed: ^3.2.0
-  very_good_analysis: ^9.0.0
+  build_runner: ^2.7.1
+  freezed: ^3.2.3
+  very_good_analysis: ^10.0.0
   integration_test:
     sdk: flutter
   injectable_generator: ^2.8.1
-  json_serializable: ^6.10.0
+  json_serializable: ^6.11.0
   json_annotation: ^4.9.0
   hive_ce_generator: ^1.9.3
 

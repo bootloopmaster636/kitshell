@@ -6,5 +6,11 @@ tasks:
   codegen:
     cmds:
       - fvm dart run build_runner build
-      - fvm dart run slang build
       - flutter_rust_bridge_codegen generate
+
+  build:
+    cmds:
+      - fvm dart run slang build
+      - fvm dart run build_runner build
+      - flutter_rust_bridge_codegen generate
+      - fvm flutter build linux --verbose

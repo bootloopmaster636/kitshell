@@ -2,7 +2,6 @@ use freedesktop_desktop_entry::{default_paths, Iter};
 use freedesktop_icons::lookup;
 use nix::sys::wait::waitpid;
 use nix::unistd::{fork, ForkResult};
-use sha2::{Digest, Sha256};
 use std::os::unix::process::CommandExt;
 use std::process::Command;
 
@@ -36,8 +35,8 @@ pub async fn get_appmenu_items(locale: &str) -> Vec<AppEntry> {
 
         // Calculate hash
         let id_unhashed = format!("{}{}", name, exec_joined);
-        let hashed = Sha256::digest(&id_unhashed);
-        let id = base16ct::lower::encode_string(&hashed);
+        let hashed = md5::compute(&id_unhashed);
+        let id = format!("{:x}", hashed);
 
         entries.push(AppEntry {
             id,

@@ -22,7 +22,12 @@ extension DurationExtensions on Duration {
   String toHoursMinutesSeconds() {
     final twoDigitMinutes = _toTwoDigits(inMinutes.remainder(60));
     final twoDigitSeconds = _toTwoDigits(inSeconds.remainder(60));
-    return '${_toTwoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+
+    if (inHours == 0) {
+      return '$twoDigitMinutes:$twoDigitSeconds';
+    } else {
+      return '${_toTwoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+    }
   }
 
   /// Converts duration to dynamic time string

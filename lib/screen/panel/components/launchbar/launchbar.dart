@@ -7,7 +7,6 @@ import 'package:iconify_flutter_plus/icons/bi.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
 import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
-import 'package:kitshell/etc/component/panel_enum.dart';
 import 'package:kitshell/etc/utitity/config.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
@@ -15,19 +14,19 @@ import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart';
 import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart';
+import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 import 'package:kitshell/screen/panel/components/launchbar/workspace_indicator.dart';
 import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/screen/popup/components/appmenu.dart';
 
-class LaunchBar extends HookWidget {
-  const LaunchBar({Key? key}) : super(key: key);
+class Launchbar extends HookWidget {
+  const Launchbar({super.key});
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      get<AppmenuBloc>().add(const AppmenuSubscribed());
-      get<AppmenuBloc>().add(AppmenuLoad(locale: t.locale));
+      get<AppmenuBloc>().add(AppmenuSubscribed(locale: t.locale));
       get<LaunchbarBloc>().add(const LaunchbarEventApplistWatched());
       get<LaunchbarBloc>().add(const LaunchbarEventWmEventsWatched());
       return () {};
@@ -38,9 +37,16 @@ class LaunchBar extends HookWidget {
       spacing: Gaps.xs.value,
       children: [
         const WorkspaceIndicator(),
-        Gaps.xs.gap,
+        SizedBox(
+          height: 24,
+          child: VerticalDivider(
+            color: context.colorScheme.outlineVariant,
+            width: 4,
+            radius: BorderRadius.circular(8),
+          ),
+        ),
         const AppmenuButton(),
-        const LaunchBarPinnedAppsList(),
+        const LaunchbarAppList(),
       ],
     );
   }
@@ -74,8 +80,8 @@ class AppmenuButton extends HookWidget {
   }
 }
 
-class LaunchBarPinnedAppsList extends StatelessWidget {
-  const LaunchBarPinnedAppsList({super.key});
+class LaunchbarAppList extends StatelessWidget {
+  const LaunchbarAppList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +155,15 @@ class LaunchbarItemComp extends HookWidget {
       child: CustomInkwell(
         width: showTitle ? 160 : panelDefaultHeightPx.toDouble(),
         height: panelDefaultHeightPx.toDouble(),
-        onTap: () {
+        onTap: () async {
           if (data.windowInfo != null) {
-            get<WmIfaceRepo>().wmFocusWindow(data.windowInfo!.windowId.toInt());
+            await get<WmIfaceRepo>().wmFocusWindow(
+              data.windowInfo!.windowId.toInt(),
+            );
+          } else {
+            if (data.appInfo != null) {
+              get<AppmenuBloc>().add(AppmenuAppExecuted(data.appInfo!));
+            }
           }
         },
         decoration: BoxDecoration(
@@ -187,7 +199,7 @@ class LaunchbarItemComp extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: Gaps.sm.value,
                   children: [
-                    AppIcon(
+                    AppIconBuilder(
                       icon: data.appInfo?.metadata.iconPath,
                       iconSize: 24,
                     ),
@@ -212,7 +224,9 @@ class LaunchbarItemComp extends HookWidget {
                   width: isFocused ? 32 : 8,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: context.colorScheme.primary,
+                    color: data.isPinned
+                        ? context.colorScheme.primary
+                        : context.colorScheme.secondary,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),

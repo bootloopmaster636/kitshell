@@ -14,7 +14,7 @@ class LaunchbarRepo {
     : _pinnedAppsController = StreamController<List<AppInfoModel>>(),
       _appListRepo = appListRepo;
 
-  late final Box<dynamic> _box;
+  Box<dynamic>? _box;
 
   final AppListRepo _appListRepo;
   final StreamController<List<AppInfoModel>> _pinnedAppsController;
@@ -27,8 +27,10 @@ class LaunchbarRepo {
   }
 
   Future<void> initDb() async {
-    _box = await Hive.openBox('launchbar');
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    if (_box == null) {
+      _box = await Hive.openBox('launchbar');
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
   }
 
   Future<void> startWatchingAppList() async {
@@ -58,16 +60,16 @@ class LaunchbarRepo {
     // Initialize with current app list
     _pinnedAppsController.add(
       fromDbToApplist(
-        _box.values.map((e) => e as LaunchbarItemPersist).toList(),
+        _box!.values.map((e) => e as LaunchbarItemPersist).toList(),
       ),
     );
 
     // Add to stream on subsequent db event
     logger.i('LaunchbarRepo: Listening for changes in app list');
-    _appListStream = _box.watch().listen((_) {
+    _appListStream = _box!.watch().listen((_) {
       _pinnedAppsController.add(
         fromDbToApplist(
-          _box.values.map((e) => e as LaunchbarItemPersist).toList(),
+          _box!.values.map((e) => e as LaunchbarItemPersist).toList(),
         ),
       );
     });
@@ -75,22 +77,25 @@ class LaunchbarRepo {
 
   Future<void> addNew(String appId) async {
     // Always add the new item after the last element in launchbar
-    final length = _box.values.length;
-    await _box.put(appId, LaunchbarItemPersist(appId: appId, idx: length));
+    final length = _box?.values.length;
+    await _box?.put(
+      appId,
+      LaunchbarItemPersist(appId: appId, idx: length ?? 0),
+    );
   }
 
   Future<void> changeIndex({
     required String appHash,
     required int newIdx,
   }) async {
-    final item = _box.get(appHash) as LaunchbarItemPersist?;
+    final item = _box?.get(appHash) as LaunchbarItemPersist?;
     if (item == null) return;
     item.idx = newIdx;
-    await _box.put(appHash, item);
+    await _box?.put(appHash, item);
   }
 
   Future<void> removeItem(String appId) async {
-    await _box.delete(appId);
+    await _box?.delete(appId);
   }
 
   Future<void> dispose() async {

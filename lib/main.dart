@@ -5,6 +5,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:kitshell/data/source/hive/hive_registrar.g.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
+import 'package:kitshell/logic/ipc/ipc_bloc.dart';
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 import 'package:kitshell/screen/screen_manager.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
   // BLoC init
   get<ScreenManagerBloc>().add(const ScreenManagerEventStarted());
   get<PanelManagerBloc>().add(const PanelManagerEventStarted());
+  get<IpcBloc>().add(const IpcEventStarted());
 
   // Run app
   runApp(TranslationProvider(child: const MainApp()));

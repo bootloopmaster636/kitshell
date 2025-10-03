@@ -28,6 +28,8 @@ import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart'
     as _i487;
 import 'package:kitshell/logic/panel_components/launchbar/workspaces_bloc.dart'
     as _i451;
+import 'package:kitshell/logic/panel_components/mpris/cava_bloc.dart' as _i173;
+import 'package:kitshell/logic/panel_components/mpris/mpris_bloc.dart' as _i331;
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart'
     as _i917;
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart'
@@ -35,6 +37,8 @@ import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_bri
 import 'package:kitshell/logic/panel_components/quick_settings/qs_routing/qs_routing_cubit.dart'
     as _i652;
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart' as _i1073;
+import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart'
+    as _i931;
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart'
     as _i491;
 
@@ -47,11 +51,14 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i1073.PanelManagerBloc>(() => _i1073.PanelManagerBloc());
     gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
+    gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
     gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
     gh.singleton<_i723.NotificationBloc>(() => _i723.NotificationBloc());
     gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
     gh.singleton<_i652.QsRoutingCubit>(() => _i652.QsRoutingCubit());
     gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
+    gh.singleton<_i331.MprisBloc>(() => _i331.MprisBloc());
+    gh.singleton<_i173.CavaBloc>(() => _i173.CavaBloc());
     gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
     gh.singleton<_i52.AppMetadataRepo>(() => _i52.AppMetadataRepo());
     gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
