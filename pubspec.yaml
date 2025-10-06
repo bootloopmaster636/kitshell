@@ -1,5 +1,5 @@
 name: kitshell
-description: "A new Flutter project."
+description: "An easy to use panel for Wayland WMs"
 publish_to: "none"
 version: 0.100.0
 
