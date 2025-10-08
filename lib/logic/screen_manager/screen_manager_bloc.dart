@@ -90,6 +90,9 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
       displayInfo.heightPx,
     );
     await layerShellManager.setLayer(ShellLayer.layerOverlay);
+    await layerShellManager.setKeyboardMode(
+      ShellKeyboardMode.keyboardModeExclusive,
+    );
     emit(
       loadedState.copyWith(
         isPopupShown: true,
@@ -117,6 +120,9 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
 
     // Reset layer state
     await layerShellManager.setLayer(ShellLayer.layerTop);
+    await layerShellManager.setKeyboardMode(
+      ShellKeyboardMode.keyboardModeOnDemand,
+    );
     await layerShellManager.initialize(
       displayInfo.widthPx,
       panelDefaultHeightPx + 16,
