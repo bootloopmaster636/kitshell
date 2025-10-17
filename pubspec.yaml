@@ -11,17 +11,17 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  bloc: ^9.0.1
+  bloc: ^9.1.0
   flutter_bloc: ^9.1.1
   freezed_annotation: ^3.1.0
-  slang: ^4.8.1
-  slang_flutter: ^4.8.0
+  slang: ^4.9.1
+  slang_flutter: ^4.9.0
   rust_lib_kitshell:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
   wayland_layer_shell: ^1.0.1
   get_it: ^8.2.0
-  injectable: ^2.5.1
+  injectable: ^2.5.2
   flutter_hooks: ^0.21.3+1
   flutter_animate: ^4.5.2
   bloc_concurrency: ^0.3.0
@@ -29,13 +29,13 @@ dependencies:
   iconify_flutter_plus: ^1.0.4
   gap: ^3.0.1
   intl: ^0.20.2
-  logger: ^2.6.1
+  logger: ^2.6.2
   animated_switcher_plus: ^1.4.0
-  google_fonts: ^6.3.1
+  google_fonts: ^6.3.2
   flutter_html: ^3.0.0
   diffutil_dart: ^4.0.1
   rxdart: ^0.28.0
-  hive_ce: ^2.13.2
+  hive_ce: ^2.15.0
   hive_ce_flutter: ^2.3.2
   path_provider: ^2.1.5
   crypto: ^3.0.6
@@ -47,15 +47,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.7.1
+  build_runner: ^2.9.0
   freezed: ^3.2.3
   very_good_analysis: ^10.0.0
   integration_test:
     sdk: flutter
-  injectable_generator: ^2.8.1
+  injectable_generator: ^2.9.0
   json_serializable: ^6.11.0
   json_annotation: ^4.9.0
-  hive_ce_generator: ^1.9.3
+  hive_ce_generator: ^1.10.0
 
 flutter:
   uses-material-design: true
