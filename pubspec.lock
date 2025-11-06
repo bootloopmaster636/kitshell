@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.4"
-  animated_switcher_plus:
-    dependency: "direct main"
-    description:
-      name: animated_switcher_plus
-      sha256: f085d64100ac9d0178a4de6bf8a6c46d2767ef8d7f9b279fc54a280afdfe3896
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   args:
     dependency: transitive
     description:
@@ -402,6 +394,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  hero_container:
+    dependency: "direct main"
+    description:
+      name: hero_container
+      sha256: "049a8f558e2e37ea8aac70236c1fb775b9d54c787e1c875d24a66cfa5f4755a4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   hive_ce:
     dependency: "direct main"
     description:

@@ -44,6 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Rust target
+target
+
 # Generated dart file
 *.freezed.dart
 *.g.dart

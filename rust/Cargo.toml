@@ -30,6 +30,8 @@ linux-ipc = "0.2.1"
 mpris = { git = "https://github.com/Mange/mpris-rs", rev = "9f55730b9dff3a3a62ad98531ed7098e146fc03e" }
 sysinfo = "0.37.1"
 serde = { version = "1.0.228", features = ["derive"] }
+rusty_network_manager = "0.7.1"
+num_enum = "0.7.4"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
