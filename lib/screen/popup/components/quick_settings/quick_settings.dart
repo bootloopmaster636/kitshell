@@ -110,8 +110,7 @@ class QsContent extends HookWidget {
             children: [
               QsTile(
                 icon: Carbon.wifi,
-                text: 'Wi-Fiaaaaaaaaaaaaaaaaa',
-                subText: 'aaaaaaaaaaaaaaaaaaaaaaaaaa',
+                text: 'Wi-Fi',
                 onAction: () {
                   test.value = !test.value;
                 },
@@ -131,7 +130,7 @@ class QsContent extends HookWidget {
   }
 }
 
-class QsTile extends HookWidget {
+class QsTile extends StatelessWidget {
   const QsTile({
     required this.icon,
     required this.text,
@@ -164,21 +163,8 @@ class QsTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final animationCtl = useAnimationController(duration: Durations.short4);
-    final animation = useAnimation(
-      animationCtl.drive(CurveTween(curve: Curves.easeInOutQuad)),
-    );
-
-    final _ = useMemoized(() async {
-      if (active ?? false) {
-        await animationCtl.forward();
-      } else {
-        await animationCtl.reverse();
-      }
-    }, [active]);
-
     return HeroContainer(
-      transitionDuration: Durations.long2,
+      transitionDuration: Durations.long3,
       transitionCurve: Curves.easeInOutCubicEmphasized,
       closedElevation: 0,
       openedElevation: 0,
@@ -187,106 +173,17 @@ class QsTile extends HookWidget {
       closedColor: Colors.transparent,
       openedColor: Colors.transparent,
       closedFit: BoxFit.contain,
-      openedFit: BoxFit.fill,
-      closedBuilder: (BuildContext context, void Function() openMoreSetting) {
-        return CustomInkwell(
-          onTap: onAction.call,
-          onLongPress: openMoreSetting,
-          decoration: BoxDecoration(
-            color: Color.lerp(
-              context.colorScheme.surfaceContainer,
-              context.colorScheme.primary,
-              animation,
-            ),
-            borderRadius: BorderRadius.lerp(
-              BorderRadius.circular(48),
-              BorderRadius.circular(8),
-              animation,
-            ),
+      openedFit: BoxFit.cover,
+      closedBuilder: (BuildContext context, void Function() openMoreSetting) =>
+          QsTileComponent(
+            icon: icon,
+            onAction: onAction,
+            openMoreSetting: openMoreSetting,
+            text: text,
+            active: active,
+            openedChild: openedChild,
+            subText: subText,
           ),
-          padding: EdgeInsets.zero,
-          child: Row(
-            children: [
-              // Main action button
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding:
-                      EdgeInsets.lerp(
-                        const EdgeInsets.only(left: 16, right: 8),
-                        const EdgeInsets.only(left: 12, right: 8),
-                        animation,
-                      ) ??
-                      EdgeInsets.zero,
-                  child: TextIcon(
-                    icon: Iconify(
-                      icon,
-                      color: Color.lerp(
-                        context.colorScheme.onSurfaceVariant,
-                        context.colorScheme.onPrimary,
-                        animation,
-                      ),
-                    ),
-                    text: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          text,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: Color.lerp(
-                              context.colorScheme.onSurfaceVariant,
-                              context.colorScheme.onPrimary,
-                              animation,
-                            ),
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (subText != null)
-                          Text(
-                            subText!,
-                            style: context.textTheme.bodySmall?.copyWith(
-                              color: Color.lerp(
-                                context.colorScheme.onSurfaceVariant,
-                                context.colorScheme.onPrimary,
-                                animation,
-                              ),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              // More setting button
-              if (openedChild != null)
-                Flexible(
-                  child: CustomInkwell(
-                    width: double.infinity,
-                    height: double.infinity,
-                    onTap: () => openMoreSetting.call(),
-                    decoration: BoxDecoration(
-                      color: active ?? false
-                          ? context.colorScheme.secondaryContainer
-                          : context.colorScheme.surfaceContainerHigh,
-                    ),
-                    child: Iconify(
-                      Ic.chevron_right,
-                      color: active ?? false
-                          ? context.colorScheme.onSecondaryContainer
-                          : context.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-            ],
-          ).animate(),
-        );
-      },
       openedBuilder: (BuildContext context) {
         return Container(
           height: double.infinity,
@@ -325,6 +222,173 @@ class QsTile extends HookWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class QsTileComponent extends HookWidget {
+  const QsTileComponent({
+    required this.icon,
+    required this.text,
+    required this.onAction,
+    required this.openMoreSetting,
+    this.subText,
+    this.openedChild,
+    this.active,
+    super.key,
+  });
+
+  /// Feature icon to be displayed on the left side
+  final String icon;
+
+  /// Feature name
+  final String text;
+
+  /// Feature's additional text
+  final String? subText;
+
+  /// Function to run when clicking on QS tile
+  final VoidCallback onAction;
+
+  /// Widget to open when clicking on 'more button'
+  /// If null, the feature does not support more action
+  final Widget? openedChild;
+
+  /// Whether the feature is active.
+  /// If this is null, the feature does not support switching
+  final bool? active;
+
+  /// Function to trigger more setting
+  final VoidCallback openMoreSetting;
+
+  @override
+  Widget build(BuildContext context) {
+    final animationCtl = useAnimationController(duration: Durations.short4);
+    final animation = useAnimation(
+      animationCtl.drive(CurveTween(curve: Curves.easeInOutQuad)),
+    );
+
+    final _ = useMemoized(() async {
+      if (active ?? false) {
+        await animationCtl.forward();
+      } else {
+        await animationCtl.reverse();
+      }
+    }, [active]);
+
+    return CustomInkwell(
+      onTap: onAction.call,
+      onLongPress: () {
+        if (openedChild == null) return;
+        openMoreSetting.call();
+      },
+      decoration: BoxDecoration(
+        color: Color.lerp(
+          context.colorScheme.surfaceContainer,
+          context.colorScheme.primary,
+          animation,
+        ),
+        borderRadius: BorderRadius.lerp(
+          BorderRadius.circular(48),
+          BorderRadius.circular(8),
+          animation,
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 2,
+            color: context.colorScheme.shadow.withValues(
+              alpha: 0.2,
+            ),
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.none,
+      padding: EdgeInsets.zero,
+      child: Row(
+        children: [
+          // Main action button
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding:
+                  EdgeInsets.lerp(
+                    const EdgeInsets.only(left: 16, right: 8),
+                    const EdgeInsets.only(left: 12, right: 8),
+                    animation,
+                  ) ??
+                  EdgeInsets.zero,
+              child: TextIcon(
+                icon: Iconify(
+                  icon,
+                  color: Color.lerp(
+                    context.colorScheme.onSurfaceVariant,
+                    context.colorScheme.onPrimary,
+                    animation,
+                  ),
+                ),
+                text: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      text,
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: Color.lerp(
+                          context.colorScheme.onSurfaceVariant,
+                          context.colorScheme.onPrimary,
+                          animation,
+                        ),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (subText != null)
+                      Text(
+                        subText!,
+                        style: context.textTheme.bodySmall?.copyWith(
+                          color: Color.lerp(
+                            context.colorScheme.onSurfaceVariant,
+                            context.colorScheme.onPrimary,
+                            animation,
+                          ),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // More setting button
+          if (openedChild != null)
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: CustomInkwell(
+                  width: 32,
+                  height: 40,
+                  onTap: openMoreSetting.call,
+                  decoration: BoxDecoration(
+                    color: active ?? false
+                        ? context.colorScheme.secondaryContainer
+                        : context.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: Iconify(
+                    Ic.chevron_right,
+                    color: active ?? false
+                        ? context.colorScheme.onSecondaryContainer
+                        : context.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ).animate(),
     );
   }
 }
