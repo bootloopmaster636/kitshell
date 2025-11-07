@@ -23,8 +23,12 @@ class MainPanel extends StatelessWidget {
         return Material(
           color: Colors.transparent,
           child: PanelPopupDragTarget(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
+            child: Container(
+              height: panelDefaultHeightPx.toDouble(),
+              decoration: BoxDecoration(
+                color: context.colorScheme.surface.withValues(alpha: 0.76),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Stack(
                 children: [
                   // Left section
@@ -88,6 +92,7 @@ class MainPanel extends StatelessWidget {
 
 class PanelPopupDragTarget extends StatelessWidget {
   const PanelPopupDragTarget({required this.child, super.key});
+
   final Widget child;
 
   @override
@@ -181,35 +186,14 @@ class SectionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InheritedAlignment(
       position: position,
-      child: Container(
-        height: panelDefaultHeightPx.toDouble(),
-        decoration: BoxDecoration(
-          color: context.colorScheme.surface.withValues(alpha: 0.76),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.5),
-              blurRadius: 4,
-              blurStyle: BlurStyle.outer,
-            ),
-            BoxShadow(
-              color: context.colorScheme.primaryContainer.withValues(
-                alpha: 0.5,
-              ),
-              blurStyle: BlurStyle.solid,
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Row(
-          mainAxisAlignment: switch (position) {
-            WidgetPosition.left => MainAxisAlignment.start,
-            WidgetPosition.center => MainAxisAlignment.center,
-            WidgetPosition.right => MainAxisAlignment.end,
-          },
-          mainAxisSize: MainAxisSize.min,
-          children: components,
-        ),
+      child: Row(
+        mainAxisAlignment: switch (position) {
+          WidgetPosition.left => MainAxisAlignment.start,
+          WidgetPosition.center => MainAxisAlignment.center,
+          WidgetPosition.right => MainAxisAlignment.end,
+        },
+        mainAxisSize: MainAxisSize.min,
+        children: components,
       ),
     );
   }
