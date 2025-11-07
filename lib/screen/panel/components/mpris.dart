@@ -81,7 +81,13 @@ class MprisComponent extends HookWidget {
             case MprisStatePlaying():
               return Theme(
                 data: themeAlbumArt.value,
-                child: const NowPlayingContainer(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: const NowPlayingContainer(),
+                  ),
+                ),
               );
           }
         },
@@ -178,6 +184,7 @@ class NowPlayingControls extends StatelessWidget {
               stops: const [0, 0.6],
             ),
           ),
+          padding: const EdgeInsets.all(4),
           child: playerInfo.canBeControlled
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -250,25 +257,18 @@ class NowPlaying extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
+        const AlbumArt(),
         ColoredBox(
-          color: context.colorScheme.primaryContainer.withValues(alpha: 0.6),
+          color: context.colorScheme.primaryContainer.withValues(alpha: 0.8),
         ),
         const SongVisualizer(),
         const Align(
           alignment: Alignment.bottomCenter,
           child: TrackProgressbar(),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            spacing: Gaps.sm.value,
-            children: const [
-              AlbumArt(),
-              Expanded(
-                child: TrackInfo(),
-              ),
-            ],
-          ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: TrackInfo(),
         ),
       ],
     );
@@ -371,6 +371,7 @@ class TrackInfo extends StatelessWidget {
 
 class AlbumArt extends StatelessWidget {
   const AlbumArt({this.dimension = 32, super.key});
+
   final double dimension;
 
   @override
@@ -470,6 +471,7 @@ class AlbumArtBuilder extends StatelessWidget {
     this.blurPx,
     super.key,
   });
+
   final String? uri;
   final int? cacheDimension;
   final double? blurPx;
