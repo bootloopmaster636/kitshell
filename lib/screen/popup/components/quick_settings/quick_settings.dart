@@ -30,22 +30,15 @@ class QuickSettingsPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 380,
-      height: 520,
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainer.withValues(
           alpha: popupBgOpacity,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: context.colorScheme.outlineVariant),
       ),
       clipBehavior: Clip.antiAlias,
-      child: Navigator(
-        onGenerateRoute: (context) {
-          return MaterialPageRoute(
-            builder: (context) => const QuickSettingsMainScreen(),
-          );
-        },
-      ),
+      child: const QuickSettingsMainScreen(),
     );
   }
 }
@@ -56,16 +49,15 @@ class QuickSettingsMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const QsHeader(),
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.all(8).copyWith(top: 0),
           child: Container(
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: context.colorScheme.shadow.withValues(alpha: 0.2),
@@ -74,7 +66,7 @@ class QuickSettingsMainScreen extends StatelessWidget {
               ],
             ),
             clipBehavior: Clip.antiAlias,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             child: const QsContent(),
           ),
         ),
@@ -90,39 +82,48 @@ class QsContent extends HookWidget {
   Widget build(BuildContext context) {
     final test = useState(false);
     return Column(
-      spacing: Gaps.sm.value,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Row(
-          children: [BatteryProgress()],
+        GridView.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: Gaps.sm.value,
+          crossAxisSpacing: Gaps.sm.value,
+          childAspectRatio: 3,
+          shrinkWrap: true,
+          children: [
+            QsTile(
+              icon: Carbon.wifi,
+              text: 'Wi-Fi',
+              onAction: () {
+                test.value = !test.value;
+              },
+              openedChild: const Placeholder(),
+              active: test.value,
+            ),
+            QsTile(
+              icon: Carbon.bluetooth,
+              text: 'Bluetooth',
+              onAction: () {},
+            ),
+          ],
         ),
+        Gaps.md.gap,
         const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             BrightnessSlider(),
           ],
         ),
-        Flexible(
-          child: GridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: Gaps.sm.value,
-            crossAxisSpacing: Gaps.sm.value,
-            childAspectRatio: 3,
-            children: [
-              QsTile(
-                icon: Carbon.wifi,
-                text: 'Wi-Fi',
-                onAction: () {
-                  test.value = !test.value;
-                },
-                openedChild: Placeholder(),
-                active: test.value,
-              ),
-              QsTile(
-                icon: Carbon.bluetooth,
-                text: 'Bluetooth',
-                onAction: () {},
-              ),
-            ],
+        Gaps.sm.gap,
+        Container(
+          height: 32,
+          decoration: BoxDecoration(
+            color: context.colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: const Row(
+            children: [BatteryProgress()],
           ),
         ),
       ],

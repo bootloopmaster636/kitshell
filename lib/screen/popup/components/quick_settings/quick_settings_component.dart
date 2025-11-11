@@ -42,7 +42,7 @@ class BatteryProgress extends StatelessWidget {
       builder: (context, state) {
         if (state is! QsBatteryStateLoaded) return const SizedBox();
 
-        return Column(
+        return Row(
           children: state.batteryInfos.map((info) {
             // Count duration from seconds
             final timeToFull = info.timeToFullSecs != null
@@ -56,7 +56,7 @@ class BatteryProgress extends StatelessWidget {
                   )
                 : null;
 
-            return QsMiniProgressComponent(
+            return QsMiniStatusComponent(
               tooltipText: switch (info.battState) {
                 BatteryState.unknown => '',
                 BatteryState.charging =>
@@ -137,35 +137,49 @@ class QsSliderComponent extends HookWidget {
     this.subtitle,
     super.key,
   });
+
   final IconData icon;
   final String title;
   final String? subtitle;
   final int maxVal;
   final int value;
-  final void Function(double)? onValueChanged;
+  final void Function(double) onValueChanged;
 
   @override
   Widget build(BuildContext context) {
     final isHovered = useState(false);
-    return LargeSlider(
-      insetIcon: icon,
-      label: title,
-      onChanged: onValueChanged ?? (val) {},
-      value: value.toDouble(),
-      maxValue: maxVal.toDouble(),
-      textStyle: context.textTheme.bodySmall,
+    return MouseRegion(
+      onEnter: (_) => isHovered.value = true,
+      onExit: (_) => isHovered.value = false,
+      child:
+          LargeSlider(
+                insetIcon: icon,
+                label: title,
+                onChanged: onValueChanged,
+                value: value.toDouble(),
+                maxValue: maxVal.toDouble(),
+                textStyle: context.textTheme.bodySmall,
+              )
+              .animate(target: isHovered.value ? 1 : 0)
+              .scaleXY(
+                duration: Durations.short3,
+                begin: 1,
+                end: 1.02,
+                curve: Curves.easeInOutQuad,
+              ),
     );
   }
 }
 
-class QsMiniProgressComponent extends HookWidget {
-  const QsMiniProgressComponent({
+class QsMiniStatusComponent extends HookWidget {
+  const QsMiniStatusComponent({
     required this.icon,
     required this.value,
     required this.maxVal,
     this.tooltipText,
     super.key,
   });
+
   final String icon;
   final int value;
   final int maxVal;
@@ -174,49 +188,25 @@ class QsMiniProgressComponent extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final normalizedValue = useMemoized(
-      () => getNormalized(value ?? 0, maxVal ?? 0),
+      () => getNormalized(value, maxVal),
       [
         value,
         maxVal,
       ],
     );
 
-    return CustomInkwell(
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: context.colorScheme.shadow.withValues(alpha: 0.1),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    return Tooltip(
+      message: tooltipText,
       child: TextIcon(
+        spacing: Gaps.xxs.value,
         icon: Iconify(
           icon,
           size: 20,
           color: context.colorScheme.primary,
         ),
-        spacing: Gaps.xs.value,
-        text: Tooltip(
-          message: tooltipText,
-          child: Column(
-            spacing: Gaps.xs.value,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${(normalizedValue * 100).toStringAsFixed(0)}%',
-                style: context.textTheme.bodySmall,
-              ),
-              SizedBox(
-                width: 36,
-                child: LinearProgressIndicator(value: normalizedValue),
-              ),
-            ],
-          ),
+        text: Text(
+          '${(normalizedValue * 100).toStringAsFixed(0)}%',
+          style: context.textTheme.bodySmall,
         ),
       ),
     );
