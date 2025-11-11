@@ -48,24 +48,15 @@ class PopupContent extends StatelessWidget {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
 
         return AnimatedAlign(
-              duration: Durations.long1,
+              duration: Durations.medium4,
               curve: Curves.easeOutQuint,
               alignment: switch (state.position) {
                 WidgetPosition.left => Alignment.bottomLeft,
                 WidgetPosition.center => Alignment.bottomCenter,
                 WidgetPosition.right => Alignment.bottomRight,
               },
-              child: AnimatedSize(
-                duration: Durations.medium1,
-                curve: Easing.standard,
-                clipBehavior: Clip.none,
-                child: AnimatedSwitcher(
-                  duration: Durations.medium1,
-                  child: PopupChild(
-                    key: ValueKey(state.popupShown),
-                    popup: state.popupShown,
-                  ),
-                ),
+              child: PopupChild(
+                popup: state.popupShown,
               ),
             )
             .animate(
@@ -84,6 +75,7 @@ class PopupContent extends StatelessWidget {
 
 class PopupChild extends StatelessWidget {
   const PopupChild({required this.popup, super.key});
+
   final PopupWidget popup;
 
   @override
@@ -98,7 +90,7 @@ class PopupChild extends StatelessWidget {
                   color: context.colorScheme.surfaceContainer.withValues(
                     alpha: popupBgOpacity,
                   ),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: context.colorScheme.outlineVariant,
                   ),
@@ -112,12 +104,20 @@ class PopupChild extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Draggable(
-                  data: 'popup',
-                  maxSimultaneousDrags: 1,
-                  axis: Axis.vertical,
-                  feedback: const SizedBox.shrink(),
-                  child: popup.widget,
+                clipBehavior: Clip.antiAlias,
+                child: AnimatedSize(
+                  duration: Durations.medium4,
+                  curve: Curves.easeInOutCubicEmphasized,
+                  alignment: Alignment.bottomCenter,
+                  clipBehavior: Clip.none,
+                  child: Draggable(
+                    key: ValueKey(popup.hashCode),
+                    data: 'popup',
+                    maxSimultaneousDrags: 1,
+                    axis: Axis.vertical,
+                    feedback: const SizedBox.shrink(),
+                    child: popup.widget,
+                  ),
                 ),
               )
               .animate(target: state.readyToClose ? 1 : 0)
