@@ -83,16 +83,16 @@ pub enum DeviceState {
 #[repr(u32)]
 pub enum DeviceType {
     /// Network using Ethernet cable
-    ETH = 1,
+    Eth = 1,
 
-    /// Network using Wireless LAN/WiFi
-    WIFI = 2,
+    /// Network using Wireless LAN/Wi-Fi
+    Wifi = 2,
 
     /// Network using modem (e.g. LTE)
-    MODEM = 8,
+    Modem = 8,
 
     /// Unknown network type
-    UNKNOWN = 0,
+    Unknown = 0,
 }
 
 pub async fn get_network_devices() -> Result<Vec<NetworkDevice>, Error> {

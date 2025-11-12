@@ -51,8 +51,8 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.factory<_i593.WlanRepo>(() => _i593.WlanRepo());
     gh.singleton<_i1073.PanelManagerBloc>(() => _i1073.PanelManagerBloc());
-    gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
     gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
+    gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
     gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
     gh.singleton<_i723.NotificationBloc>(() => _i723.NotificationBloc());
     gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());

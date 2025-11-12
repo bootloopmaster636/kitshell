@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use anyhow::{bail, Error};
 use flutter_rust_bridge::frb;
+use num_enum::TryFromPrimitive;
 use rusty_network_manager::{AccessPointProxy, NetworkManagerProxy, WirelessProxy};
 use zbus::{zvariant::OwnedObjectPath, Connection};
 
@@ -41,7 +42,7 @@ pub struct WlanDevice {
     device_path: Option<OwnedObjectPath>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Eq, Ord, PartialOrd, PartialEq)]
 #[frb(non_opaque)]
 pub struct AccessPoint {
     /// This access point name/SSID
@@ -57,12 +58,53 @@ pub struct AccessPoint {
     pub is_active: bool,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Ord, Eq, PartialOrd, PartialEq)]
 pub enum WifiFreq {
     Freq2_4ghz,
     Freq5ghz,
     Freq6ghz,
     FreqUnknown,
+}
+
+/// Enum containing AP security flags
+///
+/// Copied from
+/// [NetworkManager docs](https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html#NM80211ApSecurityFlags)
+#[derive(Eq, PartialEq, TryFromPrimitive)]
+#[repr(u32)]
+pub enum ApSecurityFlag {
+    /// the access point has no special security requirements
+    None = 0x00000000,
+
+    /// 40/64-bit WEP is supported for pairwise/unicast encryption
+    PairWep40 = 0x00000001,
+
+    /// 104/128-bit WEP is supported for pairwise/unicast encryption
+    PairWep104 = 0x00000002,
+
+    /// TKIP is supported for pairwise/unicast encryption
+    PairTkip = 0x00000004,
+
+    /// AES/CCMP is supported for pairwise/unicast encryption
+    PairCcmp = 0x00000008,
+
+    /// 40/64-bit WEP is supported for group/broadcast encryption
+    GroupWep40 = 0x00000010,
+
+    /// 104/128-bit WEP is supported for group/broadcast encryption
+    GroupWep104 = 0x00000020,
+
+    /// TKIP is supported for group/broadcast encryption
+    GroupTkip = 0x00000040,
+
+    /// AES/CCMP is supported for group/broadcast encryption
+    GroupCcmp = 0x00000080,
+
+    /// WPA/RSN Pre-Shared Key encryption is supported
+    KeyMgmtPsk = 0x00000100,
+
+    /// 802.1x authentication and key management is supported
+    KeyMgmt802_1x = 0x00000200,
 }
 
 impl WlanDevice {
@@ -116,7 +158,7 @@ impl WlanDevice {
     }
 
     pub async fn get_access_points(&self) -> Result<Vec<AccessPoint>, Error> {
-        let access_points = Vec::new();
+        let mut access_points = Vec::new();
         let wireless_proxy = match self.get_wireless_proxy().await {
             Ok(val) => val,
             Err(_) => {
@@ -124,13 +166,16 @@ impl WlanDevice {
             }
         };
 
+        // Get currently active AP
+        let active_ap = wireless_proxy.active_access_point().await?;
+
         let ap_path_list = match wireless_proxy.get_access_points().await {
             Ok(val) => val,
             Err(_) => bail!("API | Network | Wireless: Failed to get AP list"),
         };
         for ap_path in ap_path_list {
             let ap_proxy = match AccessPointProxy::new_from_path(
-                ap_path,
+                ap_path.clone(),
                 self.dbus_connection.as_ref().unwrap(),
             )
             .await
@@ -140,19 +185,40 @@ impl WlanDevice {
             };
 
             let ssid = match ap_proxy.ssid().await {
-                Ok(val) => String::from_utf8(val).unwrap(),
+                Ok(val) => String::from_utf8(val)?,
                 Err(_) => bail!("API | Network | Wireless: Cannot get AP SSID"),
             };
 
-            // access_points.push(AccessPoint {
-            //     ssid: ssid,
-            //     strength: (),
-            //     frequency: (),
-            //     is_active: (),
-            // });
+            let strength = match ap_proxy.strength().await {
+                Ok(val) => val,
+                Err(_) => bail!("API | Network | Wireless: Cannot get AP strength"),
+            };
+
+            let frequency = match ap_proxy.frequency().await {
+                Ok(val) if val >= 2400 && val <= 2500 => WifiFreq::Freq2_4ghz,
+                Ok(val) if val >= 5100 && val < 5925 => WifiFreq::Freq5ghz,
+                Ok(val) if val >= 5925 && val >= 7215 => WifiFreq::Freq6ghz,
+                _ => WifiFreq::FreqUnknown,
+            };
+
+            let is_active = ap_path == active_ap;
+
+            access_points.push(AccessPoint {
+                ssid,
+                strength,
+                frequency,
+                is_active,
+            });
         }
 
+        // Sort by strength
+        access_points.sort_by_key(|e| e.strength);
+
         Ok(access_points)
+    }
+
+    pub async fn connect_to_ap(&self, ssid: String, password: Option<String>) -> Result<(), Error> {
+        Ok(())
     }
 
     /// Get a wireless proxy for this device

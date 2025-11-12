@@ -17,20 +17,24 @@ class PopupContainer extends StatelessWidget {
       bloc: get<ScreenManagerBloc>(),
       builder: (BuildContext context, ScreenManagerState state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-        return Stack(
-          children: [
-            GestureDetector(
-              onTap: () {
-                get<ScreenManagerBloc>().add(
-                  const ScreenManagerEventClosePopup(),
-                );
-              },
+        return Navigator(
+          onGenerateRoute: (_) => MaterialPageRoute(
+            builder: (context) => Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    get<ScreenManagerBloc>().add(
+                      const ScreenManagerEventClosePopup(),
+                    );
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: PopupContent(),
+                ),
+              ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: PopupContent(),
-            ),
-          ],
+          ),
         );
       },
     );

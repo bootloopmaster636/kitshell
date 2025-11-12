@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1682377807;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 113931906;
 
 // Section: executor
 
@@ -141,6 +141,69 @@ fn wire__crate__api__quick_settings__network__wlan__WlanDevice_auto_accessor_set
                 })?;
                 Ok(output_ok)
             })())
+        },
+    )
+}
+fn wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "WlanDevice_connect_to_ap",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<WlanDevice>,
+            >>::sse_decode(&mut deserializer);
+            let api_ssid = <String>::sse_decode(&mut deserializer);
+            let api_password = <Option<String>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_that_guard = api_that_guard.unwrap();
+                        let output_ok =
+                            crate::api::quick_settings::network::wlan::WlanDevice::connect_to_ap(
+                                &*api_that_guard,
+                                api_ssid,
+                                api_password,
+                            )
+                            .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
         },
     )
 }
@@ -1361,10 +1424,10 @@ impl SseDecode for crate::api::quick_settings::network::network_devices::DeviceT
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <i32>::sse_decode(deserializer);
         return match inner {
-            0 => crate::api::quick_settings::network::network_devices::DeviceType::ETH,
-            1 => crate::api::quick_settings::network::network_devices::DeviceType::WIFI,
-            2 => crate::api::quick_settings::network::network_devices::DeviceType::MODEM,
-            3 => crate::api::quick_settings::network::network_devices::DeviceType::UNKNOWN,
+            0 => crate::api::quick_settings::network::network_devices::DeviceType::Eth,
+            1 => crate::api::quick_settings::network::network_devices::DeviceType::Wifi,
+            2 => crate::api::quick_settings::network::network_devices::DeviceType::Modem,
+            3 => crate::api::quick_settings::network::network_devices::DeviceType::Unknown,
             _ => unreachable!("Invalid variant for DeviceType: {}", inner),
         };
     }
@@ -2062,137 +2125,143 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        7 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(
+        7 => wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(
+        8 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(
+        9 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
+        10 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(
+        11 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__wm_interface__base__detect_current_wm_impl(
+        12 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
+        13 => wire__crate__api__wm_interface__base__detect_current_wm_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        14 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+        14 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        15 => {
+        15 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        16 => {
             wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len)
         }
-        16 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
+        17 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        17 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(
+        18 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        18 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
+        19 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        19 => wire__crate__api__notifications__invoke_notif_action_impl(
+        20 => wire__crate__api__notifications__invoke_notif_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        20 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
+        21 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        21 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
+        22 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
+        23 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        23 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
+        24 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        24 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
+        25 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        25 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
+        26 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        26 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        27 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        27 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        28 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        28 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
+        29 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        29 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+        30 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        30 => wire__crate__api__notifications__watch_notification_bus_impl(
+        31 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -2420,10 +2489,10 @@ impl flutter_rust_bridge::IntoDart
 {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            Self::ETH => 0.into_dart(),
-            Self::WIFI => 1.into_dart(),
-            Self::MODEM => 2.into_dart(),
-            Self::UNKNOWN => 3.into_dart(),
+            Self::Eth => 0.into_dart(),
+            Self::Wifi => 1.into_dart(),
+            Self::Modem => 2.into_dart(),
+            Self::Unknown => 3.into_dart(),
             _ => unreachable!(),
         }
     }
@@ -3141,10 +3210,10 @@ impl SseEncode for crate::api::quick_settings::network::network_devices::DeviceT
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(
             match self {
-                crate::api::quick_settings::network::network_devices::DeviceType::ETH => 0,
-                crate::api::quick_settings::network::network_devices::DeviceType::WIFI => 1,
-                crate::api::quick_settings::network::network_devices::DeviceType::MODEM => 2,
-                crate::api::quick_settings::network::network_devices::DeviceType::UNKNOWN => 3,
+                crate::api::quick_settings::network::network_devices::DeviceType::Eth => 0,
+                crate::api::quick_settings::network::network_devices::DeviceType::Wifi => 1,
+                crate::api::quick_settings::network::network_devices::DeviceType::Modem => 2,
+                crate::api::quick_settings::network::network_devices::DeviceType::Unknown => 3,
                 _ => {
                     unimplemented!("");
                 }

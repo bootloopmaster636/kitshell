@@ -50,6 +50,7 @@ class QuickSettingsMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const QsHeader(),
         Padding(
@@ -82,7 +83,6 @@ class QsContent extends HookWidget {
   Widget build(BuildContext context) {
     final test = useState(false);
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         GridView.count(
           crossAxisCount: 2,
@@ -185,44 +185,10 @@ class QsTile extends StatelessWidget {
             openedChild: openedChild,
             subText: subText,
           ),
-      openedBuilder: (BuildContext context) {
-        return Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: context.colorScheme.surfaceContainer,
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            spacing: Gaps.sm.value,
-            children: [
-              // Header
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Iconify(
-                      Ic.arrow_back,
-                      color: context.colorScheme.onSurfaceVariant,
-                      size: 20,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: context.textTheme.titleLarge,
-                    ),
-                  ),
-                ],
-              ),
-
-              // Content
-              if (openedChild != null)
-                Expanded(child: openedChild ?? const SizedBox()),
-            ],
-          ),
-        );
-      },
+      openedBuilder: (BuildContext context) => QsMoreSettings(
+        moreSettingPage: openedChild ?? const Placeholder(),
+        title: text,
+      ),
     );
   }
 }
@@ -368,7 +334,7 @@ class QsTileComponent extends HookWidget {
           if (openedChild != null)
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 child: CustomInkwell(
                   width: 32,
                   height: 40,
@@ -388,8 +354,61 @@ class QsTileComponent extends HookWidget {
                 ),
               ),
             ),
+          Gaps.sm.gap,
         ],
       ).animate(),
+    );
+  }
+}
+
+class QsMoreSettings extends StatelessWidget {
+  const QsMoreSettings({
+    required this.moreSettingPage,
+    required this.title,
+    super.key,
+  });
+
+  final String title;
+  final Widget moreSettingPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      child: Container(
+        height: 500,
+        width: 400,
+        decoration: BoxDecoration(
+          color: context.colorScheme.surfaceContainer,
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          spacing: Gaps.sm.value,
+          children: [
+            // Header
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Iconify(
+                    Ic.arrow_back,
+                    color: context.colorScheme.onSurfaceVariant,
+                    size: 20,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: context.textTheme.titleLarge,
+                  ),
+                ),
+              ],
+            ),
+
+            // Content
+            Expanded(child: moreSettingPage),
+          ],
+        ),
+      ),
     );
   }
 }
