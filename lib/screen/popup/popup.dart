@@ -7,6 +7,7 @@ import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
+import 'package:kitshell/screen/panel/panel.dart';
 
 class PopupContainer extends StatelessWidget {
   const PopupContainer({super.key});
@@ -59,8 +60,11 @@ class PopupContent extends StatelessWidget {
                 WidgetPosition.center => Alignment.bottomCenter,
                 WidgetPosition.right => Alignment.bottomRight,
               },
-              child: PopupChild(
-                popup: state.popupShown,
+              child: InheritedAlignment(
+                position: state.position,
+                child: PopupChild(
+                  popup: state.popupShown,
+                ),
               ),
             )
             .animate(

@@ -104,6 +104,11 @@ ThemeData lightTheme = ThemeData(
     padding: EdgeInsets.zero,
   ),
   splashFactory: InkSparkle.splashFactory,
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: {
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+    },
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -119,4 +124,11 @@ ThemeData darkTheme = ThemeData(
     padding: EdgeInsets.zero,
   ),
   splashFactory: InkSparkle.splashFactory,
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: {
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(
+        backgroundColor: Colors.transparent,
+      ),
+    },
+  ),
 );
