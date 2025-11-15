@@ -259,7 +259,7 @@ class NowPlaying extends StatelessWidget {
       children: [
         const AlbumArt(),
         ColoredBox(
-          color: context.colorScheme.primaryContainer.withValues(alpha: 0.8),
+          color: context.colorScheme.scrim.withValues(alpha: 0.75),
         ),
         const SongVisualizer(),
         const Align(

@@ -487,7 +487,7 @@ class AlbumArtBg extends StatelessWidget {
               uri: state.trackProgress.metadata.artUrl,
             ),
             ColoredBox(
-              color: context.colorScheme.surfaceContainerLowest.withValues(
+              color: context.colorScheme.scrim.withValues(
                 alpha: 0.75,
               ),
             ),
