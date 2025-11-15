@@ -128,7 +128,7 @@ class VisualizerRenderObject extends RenderBox {
       final x2 = offset.dx + _barSpacing * (i + 1);
       final y2 = offset.dy + (size.height * _getHeightMultiplier(data[i + 1]));
 
-      path.conicTo(x1, y1, x2, y2, 0.2);
+      path.conicTo(x1, y1, x2, y2, 1);
     }
 
     // Draw the last data
