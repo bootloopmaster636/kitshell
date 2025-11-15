@@ -124,7 +124,12 @@ class PopupChild extends StatelessWidget {
                     maxSimultaneousDrags: 1,
                     axis: Axis.vertical,
                     feedback: const SizedBox.shrink(),
-                    child: popup.widget,
+                    child: popup.widget
+                        .animate(key: ValueKey(popup.hashCode))
+                        .fadeIn(
+                          duration: Durations.medium1,
+                          curve: Curves.easeOut,
+                        ),
                   ),
                 ),
               )
