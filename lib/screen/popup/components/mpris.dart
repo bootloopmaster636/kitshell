@@ -104,7 +104,7 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.title ?? t.mpris.unknown.title,
                       style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
+                        color: context.colorScheme.onSecondaryContainer,
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
@@ -114,7 +114,7 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.artists?.join(', ') ?? t.mpris.unknown.artist,
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
+                        color: context.colorScheme.onSecondaryContainer,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -123,7 +123,7 @@ class InformationTitle extends StatelessWidget {
                     Text(
                       metadata.album ?? t.mpris.unknown.album,
                       style: context.textTheme.bodySmall?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
+                        color: context.colorScheme.onSecondaryContainer,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -152,7 +152,7 @@ class InformationTitle extends StatelessWidget {
                   playbackStatus == PlaybackStatus.paused
                       ? Carbon.play
                       : Carbon.pause,
-                  color: context.colorScheme.onPrimary,
+                  color: context.colorScheme.onSecondary,
                 ),
               ),
           ],
@@ -333,14 +333,14 @@ class TrackSeekbar extends HookWidget {
                 Text(
                   progressDuration!.toHoursMinutesSeconds(),
                   style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                    color: context.colorScheme.onSecondaryContainer,
                   ),
                 ),
               if (length != null)
                 Text(
                   length!.toHoursMinutesSeconds(),
                   style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                    color: context.colorScheme.onSecondaryContainer,
                   ),
                 ),
             ],
@@ -442,7 +442,7 @@ class PlayerIcon extends HookWidget {
             text: Text(
               appName.value ?? '',
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
+                color: context.colorScheme.onSecondaryContainer,
               ),
             ),
           ),
@@ -487,7 +487,7 @@ class AlbumArtBg extends StatelessWidget {
               uri: state.trackProgress.metadata.artUrl,
             ),
             ColoredBox(
-              color: context.colorScheme.scrim.withValues(
+              color: context.colorScheme.secondaryContainer.withValues(
                 alpha: 0.75,
               ),
             ),

@@ -259,7 +259,7 @@ class NowPlaying extends StatelessWidget {
       children: [
         const AlbumArt(),
         ColoredBox(
-          color: context.colorScheme.scrim.withValues(alpha: 0.75),
+          color: context.colorScheme.secondaryContainer.withValues(alpha: 0.75),
         ),
         const SongVisualizer(),
         const Align(
@@ -339,7 +339,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.title ?? '',
                   style: context.textTheme.labelMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                    color: context.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -347,7 +347,7 @@ class TrackInfo extends StatelessWidget {
                 Text(
                   metadata.artists?.join(', ') ?? '',
                   style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                    color: context.colorScheme.onSecondaryContainer,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
