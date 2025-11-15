@@ -36,11 +36,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   });
 
   CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_NetworkDevicePtr => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice;
+
+  CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_WlanDevicePtr => wire
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice;
 
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw);
+
+  @protected
+  NetworkDevice
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  );
 
   @protected
   WlanDevice
@@ -49,8 +59,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  NetworkDevice
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  );
+
+  @protected
   WlanDevice
   dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+    dynamic raw,
+  );
+
+  @protected
+  NetworkDevice
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     dynamic raw,
   );
 
@@ -70,6 +92,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
 
   @protected
+  NetworkDevice
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  );
+
+  @protected
   WlanDevice
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     dynamic raw,
@@ -77,6 +105,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw);
+
+  @protected
+  RustStreamSink<InternetDeviceState>
+  dco_decode_StreamSink_internet_device_state_Sse(dynamic raw);
 
   @protected
   RustStreamSink<IpcContent> dco_decode_StreamSink_ipc_content_Sse(dynamic raw);
@@ -151,9 +183,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CavaState dco_decode_cava_state(dynamic raw);
 
   @protected
-  DeviceState dco_decode_device_state(dynamic raw);
-
-  @protected
   DeviceType dco_decode_device_type(dynamic raw);
 
   @protected
@@ -172,10 +201,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 dco_decode_i_64(dynamic raw);
 
   @protected
+  InternetDeviceState dco_decode_internet_device_state(dynamic raw);
+
+  @protected
   IpcContent dco_decode_ipc_content(dynamic raw);
 
   @protected
   LaunchbarItemState dco_decode_launchbar_item_state(dynamic raw);
+
+  @protected
+  List<NetworkDevice>
+  dco_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  );
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
@@ -199,9 +237,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<LaunchbarItemState> dco_decode_list_launchbar_item_state(dynamic raw);
 
   @protected
-  List<NetworkDevice> dco_decode_list_network_device(dynamic raw);
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
@@ -215,9 +250,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LoopStatus dco_decode_loop_status(dynamic raw);
-
-  @protected
-  NetworkDevice dco_decode_network_device(dynamic raw);
 
   @protected
   Niri dco_decode_niri(dynamic raw);
@@ -310,14 +342,32 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
+  NetworkDevice
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   WlanDevice
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     SseDeserializer deserializer,
   );
 
   @protected
+  NetworkDevice
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   WlanDevice
   sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  NetworkDevice
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     SseDeserializer deserializer,
   );
 
@@ -339,6 +389,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  NetworkDevice
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   WlanDevice
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     SseDeserializer deserializer,
@@ -348,6 +404,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustStreamSink<CavaState> sse_decode_StreamSink_cava_state_Sse(
     SseDeserializer deserializer,
   );
+
+  @protected
+  RustStreamSink<InternetDeviceState>
+  sse_decode_StreamSink_internet_device_state_Sse(SseDeserializer deserializer);
 
   @protected
   RustStreamSink<IpcContent> sse_decode_StreamSink_ipc_content_Sse(
@@ -429,9 +489,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CavaState sse_decode_cava_state(SseDeserializer deserializer);
 
   @protected
-  DeviceState sse_decode_device_state(SseDeserializer deserializer);
-
-  @protected
   DeviceType sse_decode_device_type(SseDeserializer deserializer);
 
   @protected
@@ -450,10 +507,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlatformInt64 sse_decode_i_64(SseDeserializer deserializer);
 
   @protected
+  InternetDeviceState sse_decode_internet_device_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   IpcContent sse_decode_ipc_content(SseDeserializer deserializer);
 
   @protected
   LaunchbarItemState sse_decode_launchbar_item_state(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  List<NetworkDevice>
+  sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     SseDeserializer deserializer,
   );
 
@@ -483,11 +551,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  List<NetworkDevice> sse_decode_list_network_device(
-    SseDeserializer deserializer,
-  );
-
-  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
@@ -507,9 +570,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LoopStatus sse_decode_loop_status(SseDeserializer deserializer);
-
-  @protected
-  NetworkDevice sse_decode_network_device(SseDeserializer deserializer);
 
   @protected
   Niri sse_decode_niri(SseDeserializer deserializer);
@@ -614,6 +674,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
     SseSerializer serializer,
@@ -621,8 +688,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
     SseSerializer serializer,
   );
 
@@ -647,6 +728,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
     SseSerializer serializer,
@@ -655,6 +743,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_StreamSink_cava_state_Sse(
     RustStreamSink<CavaState> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_StreamSink_internet_device_state_Sse(
+    RustStreamSink<InternetDeviceState> self,
     SseSerializer serializer,
   );
 
@@ -749,9 +843,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_cava_state(CavaState self, SseSerializer serializer);
 
   @protected
-  void sse_encode_device_state(DeviceState self, SseSerializer serializer);
-
-  @protected
   void sse_encode_device_type(DeviceType self, SseSerializer serializer);
 
   @protected
@@ -770,11 +861,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer);
 
   @protected
+  void sse_encode_internet_device_state(
+    InternetDeviceState self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_ipc_content(IpcContent self, SseSerializer serializer);
 
   @protected
   void sse_encode_launchbar_item_state(
     LaunchbarItemState self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    List<NetworkDevice> self,
     SseSerializer serializer,
   );
 
@@ -812,12 +916,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
-  void sse_encode_list_network_device(
-    List<NetworkDevice> self,
-    SseSerializer serializer,
-  );
-
-  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -843,9 +941,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_loop_status(LoopStatus self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_network_device(NetworkDevice self, SseSerializer serializer);
 
   @protected
   void sse_encode_niri(Niri self, SseSerializer serializer);
@@ -965,6 +1060,22 @@ class RustLibWire implements BaseWire {
   RustLibWire.fromExternalLibrary();
 
   void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+        ptr,
+      );
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+        ptr,
+      );
+
+  void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     int ptr,
   ) => wasmModule
@@ -987,6 +1098,16 @@ external RustLibWasmModule get wasmModule;
 @JS()
 @anonymous
 extension type RustLibWasmModule._(JSObject _) implements JSObject {
+  external void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    int ptr,
+  );
+
+  external void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    int ptr,
+  );
+
   external void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     int ptr,

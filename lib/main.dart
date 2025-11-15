@@ -106,7 +106,9 @@ ThemeData lightTheme = ThemeData(
   splashFactory: InkSparkle.splashFactory,
   pageTransitionsTheme: const PageTransitionsTheme(
     builders: {
-      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(
+        backgroundColor: Colors.transparent,
+      ),
     },
   ),
 );

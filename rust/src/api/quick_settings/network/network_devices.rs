@@ -1,27 +1,32 @@
 use anyhow::Error;
+use flutter_rust_bridge::frb;
 use num_enum::TryFromPrimitive;
 use rusty_network_manager::{DeviceProxy, NetworkManagerProxy};
 use zbus::Connection;
 
+#[frb(opaque)]
 pub struct NetworkDevice {
     /// Interface name of the device (e.g. wlan0, eth0)
     pub iface: String,
 
-    /// This device device type
+    /// Device path
+    pub device_path: String,
+
+    /// This device's device type
     pub dev_type: DeviceType,
 
     /// This device state
-    pub dev_state: DeviceState,
+    pub dev_state: InternetDeviceState,
 }
 
 /// Enum containing Network's device state, can be used to display
-/// connecting status when connecting to wifi
+/// connecting status when connecting to Wi-Fi
 ///
 /// Description is copied from
 /// [NetworkManager docs](https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html#NMDeviceState)
-#[derive(Eq, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
 #[repr(u32)]
-pub enum DeviceState {
+pub enum InternetDeviceState {
     /// the device's state is unknown
     Unknown = 0,
 
@@ -44,12 +49,12 @@ pub enum DeviceState {
     Prepare = 40,
 
     /// the device is connecting to the requested network. This may include
-    /// operations like associating with the WiFi AP, dialing the modem, connecting
+    /// operations like associating with the Wi-Fi AP, dialing the modem, connecting
     /// to the remote Bluetooth device, etc.
     Config = 50,
 
     /// the device requires more information to continue connecting to the requested
-    /// network. This includes secrets like WiFi passphrases, login passwords, PIN
+    /// network. This includes secrets like Wi-Fi passphrases, login passwords, PIN
     /// codes, etc.
     NeedAuth = 60,
 
@@ -79,7 +84,7 @@ pub enum DeviceState {
 /// Enum containing part of device type
 ///
 /// Copied from [NetworkManager docs](https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html#NMDeviceType)
-#[derive(Eq, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Eq, PartialEq, TryFromPrimitive)]
 #[repr(u32)]
 pub enum DeviceType {
     /// Network using Ethernet cable
@@ -107,7 +112,7 @@ pub async fn get_network_devices() -> Result<Vec<NetworkDevice>, Error> {
         .expect("API | Network: Could not get NetworkManager");
 
     for device in nm.get_all_devices().await.expect("Could not find devices") {
-        let device_proxy = DeviceProxy::new_from_path(device, &connection)
+        let device_proxy = DeviceProxy::new_from_path(device.clone(), &connection)
             .await
             .expect("API | Network: Could not retrieve Device Proxy");
 
@@ -115,10 +120,22 @@ pub async fn get_network_devices() -> Result<Vec<NetworkDevice>, Error> {
         let dev_type = device_proxy.device_type().await?;
         let dev_state = device_proxy.state().await?;
 
+        let dev_type_enum = match DeviceType::try_from_primitive(dev_type) {
+            Ok(val) => val,
+            Err(err) => {
+                println!(
+                    "API | Network: Found unknown/incompatible device type: {}",
+                    err.number
+                );
+                DeviceType::Unknown
+            }
+        };
+
         found_devices.push(NetworkDevice {
             iface,
-            dev_type: DeviceType::try_from_primitive(dev_type)?,
-            dev_state: DeviceState::try_from_primitive(dev_state)?,
+            device_path: device.to_string(),
+            dev_type: dev_type_enum,
+            dev_state: InternetDeviceState::try_from_primitive(dev_state)?,
         });
     }
 

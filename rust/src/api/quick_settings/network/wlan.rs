@@ -1,9 +1,12 @@
-use std::collections::HashMap;
-
+use crate::api::quick_settings::network::network_devices::InternetDeviceState;
+use crate::frb_generated::StreamSink;
 use anyhow::{bail, Error};
 use flutter_rust_bridge::frb;
 use num_enum::TryFromPrimitive;
-use rusty_network_manager::{AccessPointProxy, NetworkManagerProxy, WirelessProxy};
+use rusty_network_manager::{AccessPointProxy, DeviceProxy, NetworkManagerProxy, WirelessProxy};
+use smol::Timer;
+use std::collections::HashMap;
+use std::time::Duration;
 use zbus::{zvariant::OwnedObjectPath, Connection};
 
 /// Enum containing connectivity state
@@ -34,6 +37,9 @@ pub enum ConnectivityState {
 pub struct WlanDevice {
     /// Wireless LAN device interface name
     pub interface: String,
+
+    /// Current device state
+    pub device_state: InternetDeviceState,
 
     #[frb(ignore)]
     dbus_connection: Option<Connection>,
@@ -139,6 +145,10 @@ impl WlanDevice {
             }
         };
 
+        // Set device status
+        let device_proxy = self.get_device_proxy().await?;
+        self.device_state = InternetDeviceState::try_from_primitive(device_proxy.state().await?)?;
+
         Ok(())
     }
 
@@ -221,10 +231,35 @@ impl WlanDevice {
         Ok(())
     }
 
+    pub async fn monitor_device_state(
+        &self,
+        sink: StreamSink<InternetDeviceState>,
+    ) -> Result<(), Error> {
+        let device_proxy = self.get_device_proxy().await?;
+
+        loop {
+            let state = device_proxy.state().await?;
+            let _ = sink.add(InternetDeviceState::try_from_primitive(state)?);
+            Timer::after(Duration::from_millis(100)).await;
+        }
+    }
+
     /// Get a wireless proxy for this device
     async fn get_wireless_proxy(&self) -> Result<WirelessProxy<'_>, Error> {
         if let (Some(device_path), Some(connection)) = (&self.device_path, &self.dbus_connection) {
             match WirelessProxy::new_from_path(device_path.clone(), connection).await {
+                Ok(proxy) => Ok(proxy),
+                Err(e) => bail!("Failed to create wireless proxy: {}", e),
+            }
+        } else {
+            bail!("Device not initialized. Call init() first.")
+        }
+    }
+
+    /// Get a device proxy for this
+    async fn get_device_proxy(&self) -> Result<DeviceProxy<'_>, Error> {
+        if let (Some(device_path), Some(connection)) = (&self.device_path, &self.dbus_connection) {
+            match DeviceProxy::new_from_path(device_path.clone(), connection).await {
                 Ok(proxy) => Ok(proxy),
                 Err(e) => bail!("Failed to create wireless proxy: {}", e),
             }
@@ -240,5 +275,6 @@ pub fn create_wlan_device(from_iface: String) -> WlanDevice {
         interface: from_iface,
         dbus_connection: None,
         device_path: None,
+        device_state: InternetDeviceState::Unknown,
     }
 }

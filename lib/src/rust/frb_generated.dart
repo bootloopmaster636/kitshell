@@ -83,7 +83,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 113931906;
+  int get rustContentHash => 1455776400;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -94,8 +94,62 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  InternetDeviceState
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevState({
+    required NetworkDevice that,
+  });
+
+  DeviceType
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevType({
+    required NetworkDevice that,
+  });
+
+  String
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevicePath({
+    required NetworkDevice that,
+  });
+
+  String
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetIface({
+    required NetworkDevice that,
+  });
+
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevState({
+    required NetworkDevice that,
+    required InternetDeviceState devState,
+  });
+
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevType({
+    required NetworkDevice that,
+    required DeviceType devType,
+  });
+
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevicePath({
+    required NetworkDevice that,
+    required String devicePath,
+  });
+
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetIface({
+    required NetworkDevice that,
+    required String iface,
+  });
+
+  InternetDeviceState
+  crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetDeviceState({
+    required WlanDevice that,
+  });
+
   String crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetInterface({
     required WlanDevice that,
+  });
+
+  void crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetDeviceState({
+    required WlanDevice that,
+    required InternetDeviceState deviceState,
   });
 
   void crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetInterface({
@@ -115,6 +169,11 @@ abstract class RustLibApi extends BaseApi {
   });
 
   Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceInit({
+    required WlanDevice that,
+  });
+
+  Stream<InternetDeviceState>
+  crateApiQuickSettingsNetworkWlanWlanDeviceMonitorDeviceState({
     required WlanDevice that,
   });
 
@@ -188,6 +247,15 @@ abstract class RustLibApi extends BaseApi {
   Stream<NotificationData> crateApiNotificationsWatchNotificationBus();
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_NetworkDevice;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_NetworkDevice;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_NetworkDevicePtr;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_WlanDevice;
 
   RustArcDecrementStrongCountFnType
@@ -205,6 +273,320 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  InternetDeviceState
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevState({
+    required NetworkDevice that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_internet_device_state,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevStateConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevStateConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_get_dev_state',
+        argNames: ['that'],
+      );
+
+  @override
+  DeviceType
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevType({
+    required NetworkDevice that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_device_type,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevTypeConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevTypeConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_get_dev_type',
+        argNames: ['that'],
+      );
+
+  @override
+  String
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevicePath({
+    required NetworkDevice that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevicePathConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevicePathConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_get_device_path',
+        argNames: ['that'],
+      );
+
+  @override
+  String
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetIface({
+    required NetworkDevice that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetIfaceConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetIfaceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_get_iface',
+        argNames: ['that'],
+      );
+
+  @override
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevState({
+    required NetworkDevice that,
+    required InternetDeviceState devState,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          sse_encode_internet_device_state(devState, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevStateConstMeta,
+        argValues: [that, devState],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevStateConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_set_dev_state',
+        argNames: ['that', 'devState'],
+      );
+
+  @override
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevType({
+    required NetworkDevice that,
+    required DeviceType devType,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          sse_encode_device_type(devType, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevTypeConstMeta,
+        argValues: [that, devType],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevTypeConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_set_dev_type',
+        argNames: ['that', 'devType'],
+      );
+
+  @override
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevicePath({
+    required NetworkDevice that,
+    required String devicePath,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          sse_encode_String(devicePath, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevicePathConstMeta,
+        argValues: [that, devicePath],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevicePathConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_set_device_path',
+        argNames: ['that', 'devicePath'],
+      );
+
+  @override
+  void
+  crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetIface({
+    required NetworkDevice that,
+    required String iface,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+            that,
+            serializer,
+          );
+          sse_encode_String(iface, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetIfaceConstMeta,
+        argValues: [that, iface],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetIfaceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'NetworkDevice_auto_accessor_set_iface',
+        argNames: ['that', 'iface'],
+      );
+
+  @override
+  InternetDeviceState
+  crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetDeviceState({
+    required WlanDevice that,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+            that,
+            serializer,
+          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_internet_device_state,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetDeviceStateConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetDeviceStateConstMeta =>
+      const TaskConstMeta(
+        debugName: 'WlanDevice_auto_accessor_get_device_state',
+        argNames: ['that'],
+      );
+
+  @override
   String crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetInterface({
     required WlanDevice that,
   }) {
@@ -216,7 +598,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that,
             serializer,
           );
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_String,
@@ -238,6 +620,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  void crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetDeviceState({
+    required WlanDevice that,
+    required InternetDeviceState deviceState,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+            that,
+            serializer,
+          );
+          sse_encode_internet_device_state(deviceState, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetDeviceStateConstMeta,
+        argValues: [that, deviceState],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetDeviceStateConstMeta =>
+      const TaskConstMeta(
+        debugName: 'WlanDevice_auto_accessor_set_device_state',
+        argNames: ['that', 'deviceState'],
+      );
+
+  @override
   void crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetInterface({
     required WlanDevice that,
     required String interface_,
@@ -251,7 +668,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             serializer,
           );
           sse_encode_String(interface_, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_unit,
@@ -291,7 +708,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 7,
+            funcId: 17,
             port: port_,
           );
         },
@@ -330,7 +747,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 8,
+            funcId: 18,
             port: port_,
           );
         },
@@ -368,7 +785,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 9,
+            funcId: 19,
             port: port_,
           );
         },
@@ -390,6 +807,50 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Stream<InternetDeviceState>
+  crateApiQuickSettingsNetworkWlanWlanDeviceMonitorDeviceState({
+    required WlanDevice that,
+  }) {
+    final sink = RustStreamSink<InternetDeviceState>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+              that,
+              serializer,
+            );
+            sse_encode_StreamSink_internet_device_state_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 20,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: sse_decode_AnyhowException,
+          ),
+          constMeta:
+              kCrateApiQuickSettingsNetworkWlanWlanDeviceMonitorDeviceStateConstMeta,
+          argValues: [that, sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkWlanWlanDeviceMonitorDeviceStateConstMeta =>
+      const TaskConstMeta(
+        debugName: 'WlanDevice_monitor_device_state',
+        argNames: ['that', 'sink'],
+      );
+
+  @override
   Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceRequestScan({
     required WlanDevice that,
   }) {
@@ -404,7 +865,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 10,
+            funcId: 21,
             port: port_,
           );
         },
@@ -441,7 +902,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 11,
+            funcId: 22,
             port: port_,
           );
         },
@@ -476,7 +937,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 12,
+            funcId: 23,
             port: port_,
           );
         },
@@ -508,7 +969,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 24,
             port: port_,
           );
         },
@@ -541,7 +1002,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 14,
+            funcId: 25,
             port: port_,
           );
         },
@@ -574,7 +1035,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 15,
+            funcId: 26,
             port: port_,
           );
         },
@@ -604,7 +1065,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 16,
+            funcId: 27,
             port: port_,
           );
         },
@@ -637,7 +1098,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 17,
+            funcId: 28,
             port: port_,
           );
         },
@@ -668,12 +1129,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 18,
+            funcId: 29,
             port: port_,
           );
         },
         codec: SseCodec(
-          decodeSuccessData: sse_decode_list_network_device,
+          decodeSuccessData:
+              sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice,
           decodeErrorData: sse_decode_AnyhowException,
         ),
         constMeta:
@@ -700,7 +1162,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 19,
+            funcId: 30,
             port: port_,
           );
         },
@@ -735,7 +1197,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 20,
+            funcId: 31,
             port: port_,
           );
         },
@@ -770,7 +1232,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 21,
+            funcId: 32,
             port: port_,
           );
         },
@@ -803,7 +1265,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 22,
+              funcId: 33,
               port: port_,
             );
           },
@@ -838,7 +1300,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 23,
+            funcId: 34,
             port: port_,
           );
         },
@@ -871,7 +1333,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 24,
+            funcId: 35,
             port: port_,
           );
         },
@@ -904,7 +1366,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 25,
+            funcId: 36,
             port: port_,
           );
         },
@@ -937,7 +1399,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 26,
+              funcId: 37,
               port: port_,
             );
           },
@@ -973,7 +1435,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 27,
+              funcId: 38,
               port: port_,
             );
           },
@@ -1010,7 +1472,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 28,
+              funcId: 39,
               port: port_,
             );
           },
@@ -1045,7 +1507,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 29,
+              funcId: 40,
               port: port_,
             );
           },
@@ -1083,7 +1545,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 30,
+              funcId: 41,
               port: port_,
             );
           },
@@ -1118,7 +1580,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 31,
+              funcId: 42,
               port: port_,
             );
           },
@@ -1142,6 +1604,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_NetworkDevice => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_NetworkDevice => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_WlanDevice => wire
       .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice;
 
@@ -1156,6 +1626,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   WlanDevice
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     dynamic raw,
@@ -1165,12 +1644,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   WlanDevice
   dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     dynamic raw,
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return WlanDeviceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  NetworkDevice
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1205,6 +1702,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   WlanDevice
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     dynamic raw,
@@ -1215,6 +1721,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<CavaState> dco_decode_StreamSink_cava_state_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  RustStreamSink<InternetDeviceState>
+  dco_decode_StreamSink_internet_device_state_Sse(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError();
   }
@@ -1403,12 +1916,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  DeviceState dco_decode_device_state(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return DeviceState.values[raw as int];
-  }
-
-  @protected
   DeviceType dco_decode_device_type(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return DeviceType.values[raw as int];
@@ -1454,6 +1961,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InternetDeviceState dco_decode_internet_device_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InternetDeviceState.values[raw as int];
+  }
+
+  @protected
   IpcContent dco_decode_ipc_content(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1482,6 +1995,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       processId: dco_decode_opt_box_autoadd_i_32(arr[4]),
       isFocused: dco_decode_bool(arr[5]),
     );
+  }
+
+  @protected
+  List<NetworkDevice>
+  dco_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice,
+        )
+        .toList();
   }
 
   @protected
@@ -1527,12 +2053,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<NetworkDevice> dco_decode_list_network_device(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return (raw as List<dynamic>).map(dco_decode_network_device).toList();
-  }
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
@@ -1560,19 +2080,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   LoopStatus dco_decode_loop_status(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return LoopStatus.values[raw as int];
-  }
-
-  @protected
-  NetworkDevice dco_decode_network_device(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return NetworkDevice(
-      iface: dco_decode_String(arr[0]),
-      devType: dco_decode_device_type(arr[1]),
-      devState: dco_decode_device_state(arr[2]),
-    );
   }
 
   @protected
@@ -1874,6 +2381,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   WlanDevice
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     SseDeserializer deserializer,
@@ -1886,12 +2405,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   WlanDevice
   sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return WlanDeviceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  NetworkDevice
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -1933,6 +2476,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  NetworkDevice
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return NetworkDeviceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   WlanDevice
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     SseDeserializer deserializer,
@@ -1946,6 +2501,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   RustStreamSink<CavaState> sse_decode_StreamSink_cava_state_Sse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
+  RustStreamSink<InternetDeviceState>
+  sse_decode_StreamSink_internet_device_state_Sse(
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2150,13 +2714,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  DeviceState sse_decode_device_state(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    final inner = sse_decode_i_32(deserializer);
-    return DeviceState.values[inner];
-  }
-
-  @protected
   DeviceType sse_decode_device_type(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_i_32(deserializer);
@@ -2205,6 +2762,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InternetDeviceState sse_decode_internet_device_state(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_i_32(deserializer);
+    return InternetDeviceState.values[inner];
+  }
+
+  @protected
   IpcContent sse_decode_ipc_content(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_opt1 = sse_decode_String(deserializer);
@@ -2240,6 +2806,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       processId: var_processId,
       isFocused: var_isFocused,
     );
+  }
+
+  @protected
+  List<NetworkDevice>
+  sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <NetworkDevice>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+          deserializer,
+        ),
+      );
+    }
+    return ans_;
   }
 
   @protected
@@ -2331,20 +2916,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<NetworkDevice> sse_decode_list_network_device(
-    SseDeserializer deserializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    final len_ = sse_decode_i_32(deserializer);
-    final ans_ = <NetworkDevice>[];
-    for (var idx_ = 0; idx_ < len_; ++idx_) {
-      ans_.add(sse_decode_network_device(deserializer));
-    }
-    return ans_;
-  }
-
-  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final len_ = sse_decode_i_32(deserializer);
@@ -2398,19 +2969,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final inner = sse_decode_i_32(deserializer);
     return LoopStatus.values[inner];
-  }
-
-  @protected
-  NetworkDevice sse_decode_network_device(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    final var_iface = sse_decode_String(deserializer);
-    final var_devType = sse_decode_device_type(deserializer);
-    final var_devState = sse_decode_device_state(deserializer);
-    return NetworkDevice(
-      iface: var_iface,
-      devType: var_devType,
-      devState: var_devState,
-    );
   }
 
   @protected
@@ -2785,6 +3343,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as NetworkDeviceImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
     SseSerializer serializer,
@@ -2798,6 +3369,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as NetworkDeviceImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
     SseSerializer serializer,
@@ -2805,6 +3389,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as WlanDeviceImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as NetworkDeviceImpl).frbInternalSseEncode(move: false),
       serializer,
     );
   }
@@ -2851,6 +3448,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    NetworkDevice self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as NetworkDeviceImpl).frbInternalSseEncode(),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
     WlanDevice self,
     SseSerializer serializer,
@@ -2872,6 +3482,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       self.setupAndSerialize(
         codec: SseCodec(
           decodeSuccessData: sse_decode_cava_state,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+      ),
+      serializer,
+    );
+  }
+
+  @protected
+  void sse_encode_StreamSink_internet_device_state_Sse(
+    RustStreamSink<InternetDeviceState> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+      self.setupAndSerialize(
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_internet_device_state,
           decodeErrorData: sse_decode_AnyhowException,
         ),
       ),
@@ -3099,12 +3726,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_device_state(DeviceState self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
   void sse_encode_device_type(DeviceType self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
@@ -3145,6 +3766,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_internet_device_state(
+    InternetDeviceState self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
   void sse_encode_ipc_content(IpcContent self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.opt1, serializer);
@@ -3166,6 +3796,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_box_autoadd_u_64(self.workspaceId, serializer);
     sse_encode_opt_box_autoadd_i_32(self.processId, serializer);
     sse_encode_bool(self.isFocused, serializer);
+  }
+
+  @protected
+  void
+  sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+    List<NetworkDevice> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
+        item,
+        serializer,
+      );
+    }
   }
 
   @protected
@@ -3250,18 +3896,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_list_network_device(
-    List<NetworkDevice> self,
-    SseSerializer serializer,
-  ) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.length, serializer);
-    for (final item in self) {
-      sse_encode_network_device(item, serializer);
-    }
-  }
-
-  @protected
   void sse_encode_list_prim_u_8_strict(
     Uint8List self,
     SseSerializer serializer,
@@ -3311,14 +3945,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_loop_status(LoopStatus self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
-  void sse_encode_network_device(NetworkDevice self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.iface, serializer);
-    sse_encode_device_type(self.devType, serializer);
-    sse_encode_device_state(self.devState, serializer);
   }
 
   @protected
@@ -3621,6 +4247,70 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 }
 
 @sealed
+class NetworkDeviceImpl extends RustOpaque implements NetworkDevice {
+  // Not to be used by end users
+  NetworkDeviceImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  NetworkDeviceImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final RustArcStaticData<dynamic> _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_NetworkDevice,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_NetworkDevice,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_NetworkDevicePtr,
+  );
+
+  InternetDeviceState get devState => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevState(
+        that: this,
+      );
+
+  DeviceType get devType => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevType(
+        that: this,
+      );
+
+  String get devicePath => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetDevicePath(
+        that: this,
+      );
+
+  String get iface => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorGetIface(
+        that: this,
+      );
+
+  set devState(InternetDeviceState devState) => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevState(
+        that: this,
+        devState: devState,
+      );
+
+  set devType(DeviceType devType) => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevType(
+        that: this,
+        devType: devType,
+      );
+
+  set devicePath(String devicePath) => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetDevicePath(
+        that: this,
+        devicePath: devicePath,
+      );
+
+  set iface(String iface) => RustLib.instance.api
+      .crateApiQuickSettingsNetworkNetworkDevicesNetworkDeviceAutoAccessorSetIface(
+        that: this,
+        iface: iface,
+      );
+}
+
+@sealed
 class WlanDeviceImpl extends RustOpaque implements WlanDevice {
   // Not to be used by end users
   WlanDeviceImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -3630,7 +4320,7 @@ class WlanDeviceImpl extends RustOpaque implements WlanDevice {
   WlanDeviceImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
     : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
-  static final RustArcStaticData _kStaticData = RustArcStaticData(
+  static final RustArcStaticData<dynamic> _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
         RustLib.instance.api.rust_arc_increment_strong_count_WlanDevice,
     rustArcDecrementStrongCount:
@@ -3639,9 +4329,20 @@ class WlanDeviceImpl extends RustOpaque implements WlanDevice {
         RustLib.instance.api.rust_arc_decrement_strong_count_WlanDevicePtr,
   );
 
+  InternetDeviceState get deviceState => RustLib.instance.api
+      .crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetDeviceState(
+        that: this,
+      );
+
   String get interface => RustLib.instance.api
       .crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorGetInterface(
         that: this,
+      );
+
+  set deviceState(InternetDeviceState deviceState) => RustLib.instance.api
+      .crateApiQuickSettingsNetworkWlanWlanDeviceAutoAccessorSetDeviceState(
+        that: this,
+        deviceState: deviceState,
       );
 
   set interface(String interface_) => RustLib.instance.api
@@ -3667,6 +4368,11 @@ class WlanDeviceImpl extends RustOpaque implements WlanDevice {
   /// Initializes the WLAN device instance
   Future<void> init() =>
       RustLib.instance.api.crateApiQuickSettingsNetworkWlanWlanDeviceInit(
+        that: this,
+      );
+
+  Stream<InternetDeviceState> monitorDeviceState() => RustLib.instance.api
+      .crateApiQuickSettingsNetworkWlanWlanDeviceMonitorDeviceState(
         that: this,
       );
 

@@ -4,9 +4,10 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:kitshell/src/rust/api/quick_settings/network/network_devices.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_wireless_proxy`
+// These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_wireless_proxy`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ApSecurityFlag`, `ConnectivityState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
 
@@ -18,7 +19,11 @@ Future<WlanDevice> createWlanDevice({required String fromIface}) => RustLib
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<WlanDevice>>
 abstract class WlanDevice implements RustOpaqueInterface {
+  InternetDeviceState get deviceState;
+
   String get interface;
+
+  set deviceState(InternetDeviceState deviceState);
 
   set interface(String interface_);
 
@@ -28,6 +33,8 @@ abstract class WlanDevice implements RustOpaqueInterface {
 
   /// Initializes the WLAN device instance
   Future<void> init();
+
+  Stream<InternetDeviceState> monitorDeviceState();
 
   Future<void> requestScan();
 }
