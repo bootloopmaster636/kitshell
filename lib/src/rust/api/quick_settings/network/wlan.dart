@@ -8,8 +8,8 @@ import 'package:kitshell/src/rust/api/quick_settings/network/network_devices.dar
 import 'package:kitshell/src/rust/frb_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_wireless_proxy`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ApSecurityFlag`, `ConnectivityState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ConnectivityState`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
 
 /// Create new [WlanDevice] instance from specified interface name
 Future<WlanDevice> createWlanDevice({required String fromIface}) => RustLib
@@ -44,6 +44,8 @@ class AccessPoint {
     required this.ssid,
     required this.strength,
     required this.frequency,
+    required this.isSecured,
+    required this.security,
     required this.isActive,
   });
 
@@ -56,6 +58,12 @@ class AccessPoint {
   /// This access point radio frequency
   final WifiFreq frequency;
 
+  /// Whether this AP require password to connect
+  final bool isSecured;
+
+  /// Security flag for this AP
+  final ApSecurityFlag security;
+
   /// Whether this AP is currently active and connected
   final bool isActive;
 
@@ -64,6 +72,8 @@ class AccessPoint {
       ssid.hashCode ^
       strength.hashCode ^
       frequency.hashCode ^
+      isSecured.hashCode ^
+      security.hashCode ^
       isActive.hashCode;
 
   @override
@@ -74,7 +84,51 @@ class AccessPoint {
           ssid == other.ssid &&
           strength == other.strength &&
           frequency == other.frequency &&
+          isSecured == other.isSecured &&
+          security == other.security &&
           isActive == other.isActive;
+}
+
+/// Enum containing AP security flags
+///
+/// Copied from
+/// [NetworkManager docs](https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html#NM80211ApSecurityFlags)
+enum ApSecurityFlag {
+  /// the access point has no special security requirements
+  none,
+
+  /// 40/64-bit WEP is supported for pairwise/unicast encryption
+  pairWep40,
+
+  /// 104/128-bit WEP is supported for pairwise/unicast encryption
+  pairWep104,
+
+  /// TKIP is supported for pairwise/unicast encryption
+  pairTkip,
+
+  /// AES/CCMP is supported for pairwise/unicast encryption
+  pairCcmp,
+
+  /// 40/64-bit WEP is supported for group/broadcast encryption
+  groupWep40,
+
+  /// 104/128-bit WEP is supported for group/broadcast encryption
+  groupWep104,
+
+  /// TKIP is supported for group/broadcast encryption
+  groupTkip,
+
+  /// AES/CCMP is supported for group/broadcast encryption
+  groupCcmp,
+
+  /// WPA/RSN Pre-Shared Key encryption is supported
+  keyMgmtPsk,
+
+  /// 802.1x authentication and key management is supported
+  keyMgmt8021X,
+
+  /// Unknown value (this is custom value for unknown Key Management)
+  unknown,
 }
 
 enum WifiFreq {

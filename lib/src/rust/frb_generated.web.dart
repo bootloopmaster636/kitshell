@@ -144,6 +144,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AccessPoint dco_decode_access_point(dynamic raw);
 
   @protected
+  ApSecurityFlag dco_decode_ap_security_flag(dynamic raw);
+
+  @protected
   AppEntry dco_decode_app_entry(dynamic raw);
 
   @protected
@@ -444,6 +447,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   AccessPoint sse_decode_access_point(SseDeserializer deserializer);
+
+  @protected
+  ApSecurityFlag sse_decode_ap_security_flag(SseDeserializer deserializer);
 
   @protected
   AppEntry sse_decode_app_entry(SseDeserializer deserializer);
@@ -793,6 +799,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_access_point(AccessPoint self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_ap_security_flag(
+    ApSecurityFlag self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_app_entry(AppEntry self, SseSerializer serializer);

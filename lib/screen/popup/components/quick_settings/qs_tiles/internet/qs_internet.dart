@@ -15,7 +15,6 @@ class InternetQsTile extends StatelessWidget {
     return QsTile(
       icon: LucideIcons.globe,
       text: t.quickSettings.internet.title,
-      onAction: () {},
       openedChild: const InternetQsDetails(),
       active: false,
     );

@@ -60,6 +60,12 @@ pub struct AccessPoint {
     /// This access point radio frequency
     pub frequency: WifiFreq,
 
+    /// Whether this AP require password to connect
+    pub is_secured: bool,
+
+    /// Security flag for this AP
+    pub security: ApSecurityFlag,
+
     /// Whether this AP is currently active and connected
     pub is_active: bool,
 }
@@ -76,7 +82,7 @@ pub enum WifiFreq {
 ///
 /// Copied from
 /// [NetworkManager docs](https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html#NM80211ApSecurityFlags)
-#[derive(Eq, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq, TryFromPrimitive)]
 #[repr(u32)]
 pub enum ApSecurityFlag {
     /// the access point has no special security requirements
@@ -111,6 +117,9 @@ pub enum ApSecurityFlag {
 
     /// 802.1x authentication and key management is supported
     KeyMgmt802_1x = 0x00000200,
+
+    /// Unknown value (this is custom value for unknown Key Management)
+    Unknown = 0x11111111,
 }
 
 impl WlanDevice {
@@ -211,12 +220,31 @@ impl WlanDevice {
                 _ => WifiFreq::FreqUnknown,
             };
 
+            let security = match ap_proxy.wpa_flags().await {
+                Ok(val) => ApSecurityFlag::try_from_primitive(val),
+                Err(_) => bail!("API | Network | Wireless: Cannot get AP WPA flag"),
+            };
+            let security_enum = match security {
+                Ok(val) => val,
+                Err(_) => {
+                    println!("API | Network | Wireless: Got unknown AP WPA flag");
+                    ApSecurityFlag::Unknown
+                }
+            };
+
+            let is_secured = match ap_proxy.flags().await {
+                Ok(val) => val == 1,
+                Err(_) => bail!("API | Network | Wireless: Cannot get AP secured flag"),
+            };
+
             let is_active = ap_path == active_ap;
 
             access_points.push(AccessPoint {
                 ssid,
                 strength,
                 frequency,
+                security: security_enum,
+                is_secured,
                 is_active,
             });
         }

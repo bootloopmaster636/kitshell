@@ -1792,14 +1792,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AccessPoint dco_decode_access_point(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return AccessPoint(
       ssid: dco_decode_String(arr[0]),
       strength: dco_decode_u_8(arr[1]),
       frequency: dco_decode_wifi_freq(arr[2]),
-      isActive: dco_decode_bool(arr[3]),
+      isSecured: dco_decode_bool(arr[3]),
+      security: dco_decode_ap_security_flag(arr[4]),
+      isActive: dco_decode_bool(arr[5]),
     );
+  }
+
+  @protected
+  ApSecurityFlag dco_decode_ap_security_flag(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApSecurityFlag.values[raw as int];
   }
 
   @protected
@@ -2577,13 +2585,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_ssid = sse_decode_String(deserializer);
     final var_strength = sse_decode_u_8(deserializer);
     final var_frequency = sse_decode_wifi_freq(deserializer);
+    final var_isSecured = sse_decode_bool(deserializer);
+    final var_security = sse_decode_ap_security_flag(deserializer);
     final var_isActive = sse_decode_bool(deserializer);
     return AccessPoint(
       ssid: var_ssid,
       strength: var_strength,
       frequency: var_frequency,
+      isSecured: var_isSecured,
+      security: var_security,
       isActive: var_isActive,
     );
+  }
+
+  @protected
+  ApSecurityFlag sse_decode_ap_security_flag(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final inner = sse_decode_i_32(deserializer);
+    return ApSecurityFlag.values[inner];
   }
 
   @protected
@@ -3620,7 +3639,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.ssid, serializer);
     sse_encode_u_8(self.strength, serializer);
     sse_encode_wifi_freq(self.frequency, serializer);
+    sse_encode_bool(self.isSecured, serializer);
+    sse_encode_ap_security_flag(self.security, serializer);
     sse_encode_bool(self.isActive, serializer);
+  }
+
+  @protected
+  void sse_encode_ap_security_flag(
+    ApSecurityFlag self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected

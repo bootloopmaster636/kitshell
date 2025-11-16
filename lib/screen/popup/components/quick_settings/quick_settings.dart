@@ -353,6 +353,7 @@ class QsMoreSettings extends StatelessWidget {
               ),
               padding: const .all(8),
               child: Column(
+                spacing: Gaps.xs.value,
                 children: [
                   // Header
                   Row(

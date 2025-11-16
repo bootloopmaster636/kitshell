@@ -62,3 +62,7 @@ quickSettings:
       disconnected: Disconnected
     wifi:
       passwordRequired: A password is required to connect to this Wi-Fi. Please type the password...
+      capabilities:
+        freq5g: 5GHz
+        freq6g: 6GHz
+        open: Open

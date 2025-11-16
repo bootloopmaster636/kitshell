@@ -1787,12 +1787,39 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
         let mut var_strength = <u8>::sse_decode(deserializer);
         let mut var_frequency =
             <crate::api::quick_settings::network::wlan::WifiFreq>::sse_decode(deserializer);
+        let mut var_isSecured = <bool>::sse_decode(deserializer);
+        let mut var_security =
+            <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
         let mut var_isActive = <bool>::sse_decode(deserializer);
         return crate::api::quick_settings::network::wlan::AccessPoint {
             ssid: var_ssid,
             strength: var_strength,
             frequency: var_frequency,
+            is_secured: var_isSecured,
+            security: var_security,
             is_active: var_isActive,
+        };
+    }
+}
+
+impl SseDecode for crate::api::quick_settings::network::wlan::ApSecurityFlag {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::quick_settings::network::wlan::ApSecurityFlag::None,
+            1 => crate::api::quick_settings::network::wlan::ApSecurityFlag::PairWep40,
+            2 => crate::api::quick_settings::network::wlan::ApSecurityFlag::PairWep104,
+            3 => crate::api::quick_settings::network::wlan::ApSecurityFlag::PairTkip,
+            4 => crate::api::quick_settings::network::wlan::ApSecurityFlag::PairCcmp,
+            5 => crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupWep40,
+            6 => crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupWep104,
+            7 => crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupTkip,
+            8 => crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupCcmp,
+            9 => crate::api::quick_settings::network::wlan::ApSecurityFlag::KeyMgmtPsk,
+            10 => crate::api::quick_settings::network::wlan::ApSecurityFlag::KeyMgmt802_1x,
+            11 => crate::api::quick_settings::network::wlan::ApSecurityFlag::Unknown,
+            _ => unreachable!("Invalid variant for ApSecurityFlag: {}", inner),
         };
     }
 }
@@ -2812,6 +2839,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::network::wlan
             self.ssid.into_into_dart().into_dart(),
             self.strength.into_into_dart().into_dart(),
             self.frequency.into_into_dart().into_dart(),
+            self.is_secured.into_into_dart().into_dart(),
+            self.security.into_into_dart().into_dart(),
             self.is_active.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -2825,6 +2854,37 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::quick_settings::network::wlan
     for crate::api::quick_settings::network::wlan::AccessPoint
 {
     fn into_into_dart(self) -> crate::api::quick_settings::network::wlan::AccessPoint {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::network::wlan::ApSecurityFlag {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::None => 0.into_dart(),
+            Self::PairWep40 => 1.into_dart(),
+            Self::PairWep104 => 2.into_dart(),
+            Self::PairTkip => 3.into_dart(),
+            Self::PairCcmp => 4.into_dart(),
+            Self::GroupWep40 => 5.into_dart(),
+            Self::GroupWep104 => 6.into_dart(),
+            Self::GroupTkip => 7.into_dart(),
+            Self::GroupCcmp => 8.into_dart(),
+            Self::KeyMgmtPsk => 9.into_dart(),
+            Self::KeyMgmt802_1x => 10.into_dart(),
+            Self::Unknown => 11.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::quick_settings::network::wlan::ApSecurityFlag
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::quick_settings::network::wlan::ApSecurityFlag>
+    for crate::api::quick_settings::network::wlan::ApSecurityFlag
+{
+    fn into_into_dart(self) -> crate::api::quick_settings::network::wlan::ApSecurityFlag {
         self
     }
 }
@@ -3607,7 +3667,38 @@ impl SseEncode for crate::api::quick_settings::network::wlan::AccessPoint {
             self.frequency,
             serializer,
         );
+        <bool>::sse_encode(self.is_secured, serializer);
+        <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_encode(
+            self.security,
+            serializer,
+        );
         <bool>::sse_encode(self.is_active, serializer);
+    }
+}
+
+impl SseEncode for crate::api::quick_settings::network::wlan::ApSecurityFlag {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::None => 0,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::PairWep40 => 1,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::PairWep104 => 2,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::PairTkip => 3,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::PairCcmp => 4,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupWep40 => 5,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupWep104 => 6,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupTkip => 7,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::GroupCcmp => 8,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::KeyMgmtPsk => 9,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::KeyMgmt802_1x => 10,
+                crate::api::quick_settings::network::wlan::ApSecurityFlag::Unknown => 11,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 
