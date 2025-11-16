@@ -63,7 +63,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
       ScreenManagerStateLoaded(
         isPopupShown: false,
         popupShown: PopupWidget.appMenu,
-        position: WidgetPosition.center,
+        position: .center,
         displays: displays,
       ),
     );

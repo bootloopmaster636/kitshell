@@ -35,7 +35,7 @@ class AppmenuPopup extends HookWidget {
       height: 580,
       width: 540,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: .all(16),
         child: AppsList(),
       ),
     );
@@ -56,7 +56,7 @@ class AppsList extends StatelessWidget {
           slivers: [
             const PinnedHeaderSliver(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: .symmetric(horizontal: 8),
                 child: SearchBarComponent(),
               ),
             ),
@@ -143,7 +143,7 @@ class SearchBarComponent extends HookWidget {
         get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
       },
       leading: Padding(
-        padding: const EdgeInsets.only(left: 8),
+        padding: const .only(left: 8),
         child: Iconify(
           Ic.baseline_search,
           color: context.colorScheme.onSurfaceVariant,
@@ -166,7 +166,7 @@ class AppEntryTilePinned extends StatelessWidget {
       child: ContextMenuRegion(
         contextMenu: makeContextMenu(context, appInfo),
         child: CustomInkwell(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(borderRadius: .circular(8)),
           onTap: () {
             get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
             get<AppmenuBloc>().add(
@@ -180,8 +180,8 @@ class AppEntryTilePinned extends StatelessWidget {
               Text(
                 appInfo.entry.name,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
+                overflow: .ellipsis,
+                textAlign: .center,
               ),
             ],
           ),
@@ -201,7 +201,7 @@ class AppEntryTile extends StatelessWidget {
     return ContextMenuRegion(
       contextMenu: makeContextMenu(context, appInfo),
       child: CustomInkwell(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(borderRadius: .circular(8)),
         onTap: () {
           get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
           get<AppmenuBloc>().add(
@@ -230,7 +230,7 @@ class AppIconBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final fileExtension = icon?.split('.').last;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: .circular(4),
       child: switch (fileExtension) {
         'png' => Image.file(
           File(icon ?? ''),
@@ -253,9 +253,9 @@ class AppIconBuilder extends StatelessWidget {
             border: Border.all(
               color: context.colorScheme.primary.withValues(alpha: 0.4),
             ),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: .circular(8),
           ),
-          padding: const EdgeInsets.all(6),
+          padding: const .all(6),
           child: Iconify(
             Bi.box_seam,
             color: context.colorScheme.onPrimaryContainer,
@@ -273,9 +273,9 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
         width: 300,
         decoration: BoxDecoration(
           color: context.colorScheme.surfaceContainer,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: .circular(8),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const .all(16),
         child: Row(
           spacing: Gaps.sm.value,
           children: [
@@ -284,21 +284,21 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
             ),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Text(
                     appInfo.entry.name,
                     maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                     style: context.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: .bold,
                     ),
                   ),
                   if (appInfo.entry.desc.isNotEmpty)
                     Text(
                       appInfo.entry.desc,
                       maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                       style: context.textTheme.bodySmall,
                     ),
                   Gaps.xs.gap,
@@ -306,7 +306,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
                     Text(
                       appInfo.entry.exec.join(' '),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                       style: context.textTheme.labelSmall,
                     ),
                 ],
@@ -325,7 +325,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
           Navigator.of(context).pop();
         },
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: .centerLeft,
           child: TextIcon(
             text: Text(
               appInfo.metadata.isPinned
@@ -352,7 +352,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
           Navigator.of(context).pop();
         },
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: .centerLeft,
           child: TextIcon(
             text: Text(
               t.appMenu.contextMenu.add,
@@ -375,7 +375,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
           Navigator.of(context).pop();
         },
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: .centerLeft,
           child: TextIcon(
             text: Text(
               t.appMenu.contextMenu.resetRank,
@@ -396,7 +396,7 @@ ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
     entries: menuEntries,
     boxDecoration: BoxDecoration(
       color: context.colorScheme.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: .circular(8),
     ),
     clipBehavior: Clip.antiAlias,
   );

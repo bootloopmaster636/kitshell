@@ -44,9 +44,9 @@ class ClockComponent extends HookWidget {
           // Notif toast
           Align(
             alignment: switch (InheritedAlignment.of(context).position) {
-              WidgetPosition.left => Alignment.centerLeft,
-              WidgetPosition.center => Alignment.center,
-              WidgetPosition.right => Alignment.centerRight,
+              .left => .centerLeft,
+              .center => .center,
+              .right => .centerRight,
             },
             child: const NotificationToast(),
           ),
@@ -70,7 +70,7 @@ class NotificationCount extends StatelessWidget {
         if (state.notifications.isEmpty) return const SizedBox.shrink();
 
         return Padding(
-          padding: EdgeInsets.only(right: Gaps.sm.value),
+          padding: .only(right: Gaps.sm.value),
           child: AnimatedCrossFade(
             duration: Durations.medium1,
             sizeCurve: Easing.standard,
@@ -80,14 +80,14 @@ class NotificationCount extends StatelessWidget {
             firstChild: Container(
               decoration: BoxDecoration(
                 color: context.colorScheme.primary,
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: .circular(999),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              padding: const .symmetric(horizontal: 4, vertical: 2),
               child: Text(
                 state.notifications.length.toString(),
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onPrimary,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: .bold,
                 ),
               ),
             ),
@@ -155,7 +155,7 @@ class NotificationToast extends HookWidget {
                         ),
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const .symmetric(horizontal: 16),
                     child: _notificationContent(context, notifToShow),
                   )
                   .animate(key: ValueKey(notifToShow.hashCode))
@@ -192,21 +192,21 @@ class NotificationToast extends HookWidget {
 
   Widget _notificationContent(BuildContext context, NotificationData data) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children:
           [
                 Text(
                   '${data.summary} | ${data.appName}',
                   style: context.textTheme.labelMedium,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
                 Text(
                   data.body,
                   style: context.textTheme.labelLarge,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ]
               .animate(delay: Durations.short4, interval: 60.ms)
@@ -230,11 +230,11 @@ class DateTimeComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       crossAxisAlignment: switch (InheritedAlignment.of(context).position) {
-        WidgetPosition.left => CrossAxisAlignment.start,
-        WidgetPosition.center => CrossAxisAlignment.center,
-        WidgetPosition.right => CrossAxisAlignment.end,
+        .left => .start,
+        .center => .center,
+        .right => .end,
       },
       children: const [
         ClockPart(),
@@ -266,13 +266,13 @@ class ClockPart extends StatelessWidget {
               curve: Easing.standard,
               wholeDigits: 2,
               textStyle: context.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             Text(
               ':',
               style: context.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             AnimatedFlipCounter(
@@ -281,7 +281,7 @@ class ClockPart extends StatelessWidget {
               curve: Easing.standard,
               wholeDigits: 2,
               textStyle: context.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
           ],

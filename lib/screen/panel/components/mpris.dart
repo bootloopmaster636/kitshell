@@ -82,9 +82,9 @@ class MprisComponent extends HookWidget {
               return Theme(
                 data: themeAlbumArt.value,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const .symmetric(vertical: 4),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: .circular(8),
                     child: const NowPlayingContainer(),
                   ),
                 ),
@@ -114,21 +114,21 @@ class NowPlayingContainer extends HookWidget {
           ),
         );
       },
-      padding: EdgeInsets.zero,
+      padding: .zero,
       child: AnimatedContainer(
         width: isHovered.value ? 260 : 180,
         duration: Durations.medium2,
         curve: Easing.standard,
-        alignment: Alignment.centerLeft,
+        alignment: .centerLeft,
         child: Stack(
           children: [
             const NowPlaying(),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: .centerRight,
               child: AnimatedCrossFade(
                 duration: Durations.medium2,
                 sizeCurve: Easing.standard,
-                alignment: Alignment.centerRight,
+                alignment: .centerRight,
                 crossFadeState: isHovered.value
                     ? CrossFadeState.showFirst
                     : CrossFadeState.showSecond,
@@ -184,11 +184,11 @@ class NowPlayingControls extends StatelessWidget {
               stops: const [0, 0.6],
             ),
           ),
-          padding: const EdgeInsets.all(4),
+          padding: const .all(4),
           child: playerInfo.canBeControlled
               ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: .end,
+                  mainAxisSize: .min,
                   children: [
                     Gaps.lg.gap,
                     if (playerInfo.canGoPrev)
@@ -263,11 +263,11 @@ class NowPlaying extends StatelessWidget {
         ),
         const SongVisualizer(),
         const Align(
-          alignment: Alignment.bottomCenter,
+          alignment: .bottomCenter,
           child: TrackProgressbar(),
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: .symmetric(horizontal: 8),
           child: TrackInfo(),
         ),
       ],
@@ -333,23 +333,23 @@ class TrackInfo extends StatelessWidget {
         final metadata = state.trackProgress.metadata;
 
         return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: .start,
+              mainAxisAlignment: .center,
               children: [
                 Text(
                   metadata.title ?? '',
                   style: context.textTheme.labelMedium?.copyWith(
                     color: context.colorScheme.onSecondaryContainer,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
                 Text(
                   metadata.artists?.join(', ') ?? '',
                   style: context.textTheme.labelSmall?.copyWith(
                     color: context.colorScheme.onSecondaryContainer,
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ],
             )
@@ -357,7 +357,7 @@ class TrackInfo extends StatelessWidget {
             .scaleXY(
               begin: 0.8,
               end: 1,
-              alignment: Alignment.centerLeft,
+              alignment: .centerLeft,
               duration: Durations.medium3,
               curve: Easing.emphasizedDecelerate,
             )
@@ -454,7 +454,7 @@ class NoMusicPlaying extends HookWidget {
           spacing: 0,
           text: isHovered.value
               ? Padding(
-                  padding: EdgeInsets.only(left: Gaps.sm.value),
+                  padding: .only(left: Gaps.sm.value),
                   child: Text(t.mpris.noPlaying),
                 )
               : const SizedBox.shrink(),
@@ -482,7 +482,7 @@ class AlbumArtBuilder extends StatelessWidget {
       duration: Durations.medium1,
       layoutBuilder: (currentChild, previousChildren) => Stack(
         fit: StackFit.passthrough,
-        alignment: Alignment.center,
+        alignment: .center,
         children: [...previousChildren, ?currentChild],
       ),
       child: Builder(
@@ -492,7 +492,7 @@ class AlbumArtBuilder extends StatelessWidget {
             return ColoredBox(
               color: context.colorScheme.secondary,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const .all(8),
                 child: Iconify(
                   Carbon.music,
                   color: context.colorScheme.onSecondary,
@@ -517,7 +517,7 @@ class AlbumArtBuilder extends StatelessWidget {
             return ColoredBox(
               color: context.colorScheme.secondary,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const .all(8),
                 child: Iconify(
                   Carbon.music,
                   color: context.colorScheme.onSecondary,

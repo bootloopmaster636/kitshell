@@ -33,7 +33,7 @@ class Launchbar extends HookWidget {
     }, []);
 
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       spacing: Gaps.xs.value,
       children: [
         const WorkspaceIndicator(),
@@ -42,7 +42,7 @@ class Launchbar extends HookWidget {
           child: VerticalDivider(
             color: context.colorScheme.outlineVariant,
             width: 4,
-            radius: BorderRadius.circular(8),
+            radius: .circular(8),
           ),
         ),
         const AppmenuButton(),
@@ -69,7 +69,7 @@ class AppmenuButton extends HookWidget {
       },
       onPointerEnter: (_) => isHovered.value = true,
       onPointerExit: (_) => isHovered.value = false,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(borderRadius: .circular(8)),
       child: Iconify(
         Bi.box_seam,
         color: isHovered.value
@@ -93,9 +93,9 @@ class LaunchbarAppList extends StatelessWidget {
         return AnimatedSize(
           duration: Durations.medium2,
           curve: Easing.standard,
-          alignment: Alignment.centerLeft,
+          alignment: .centerLeft,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const .symmetric(vertical: 4),
             child: ReorderableListView(
               scrollDirection: Axis.horizontal,
               buildDefaultDragHandles: false,
@@ -104,7 +104,7 @@ class LaunchbarAppList extends StatelessWidget {
               children: [
                 for (int idx = 0; idx < state.items.length; idx++)
                   Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        padding: const .symmetric(horizontal: 2),
                         child: ReorderableDelayedDragStartListener(
                           enabled: state.items[idx].isPinned,
                           index: idx,
@@ -115,7 +115,7 @@ class LaunchbarAppList extends StatelessWidget {
                       .scaleXY(
                         begin: 0,
                         end: 1,
-                        alignment: Alignment.center,
+                        alignment: .center,
                         duration: Durations.medium1,
                         curve: Easing.standard,
                       )
@@ -172,7 +172,7 @@ class LaunchbarItemComp extends HookWidget {
                   alpha: 0.8,
                 )
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: .circular(4),
           border: isOpened
               ? Border.all(
                   color: context.colorScheme.outlineVariant,
@@ -189,14 +189,14 @@ class LaunchbarItemComp extends HookWidget {
           ],
         ),
         clipBehavior: Clip.none,
-        padding: EdgeInsets.zero,
+        padding: .zero,
         child: Stack(
           children: [
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const .all(8),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: .center,
                   spacing: Gaps.sm.value,
                   children: [
                     AppIconBuilder(
@@ -208,7 +208,7 @@ class LaunchbarItemComp extends HookWidget {
                         child: Text(
                           data.windowInfo?.windowTitle ?? '',
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: .ellipsis,
                         ),
                       ),
                   ],
@@ -217,7 +217,7 @@ class LaunchbarItemComp extends HookWidget {
             ),
             if (isOpened)
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: .bottomCenter,
                 child: AnimatedContainer(
                   duration: Durations.medium2,
                   curve: Easing.standard,
@@ -227,7 +227,7 @@ class LaunchbarItemComp extends HookWidget {
                     color: data.isPinned
                         ? context.colorScheme.primary
                         : context.colorScheme.secondary,
-                    borderRadius: const BorderRadius.only(
+                    borderRadius: const .only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
                     ),

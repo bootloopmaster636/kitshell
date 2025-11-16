@@ -36,7 +36,7 @@ class QuickSettingsPopup extends StatelessWidget {
         color: context.colorScheme.surfaceContainer.withValues(
           alpha: popupBgOpacity,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: .circular(16),
         border: Border.all(color: context.colorScheme.outlineVariant),
       ),
       clipBehavior: Clip.antiAlias,
@@ -51,8 +51,8 @@ class QuickSettingsMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         const QsHeader(),
         Padding(
@@ -60,7 +60,7 @@ class QuickSettingsMainScreen extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: .circular(16),
               boxShadow: [
                 BoxShadow(
                   color: context.colorScheme.shadow.withValues(alpha: 0.2),
@@ -69,7 +69,7 @@ class QuickSettingsMainScreen extends StatelessWidget {
               ],
             ),
             clipBehavior: Clip.antiAlias,
-            padding: const EdgeInsets.all(12),
+            padding: const .all(12),
             child: const QsContent(),
           ),
         ),
@@ -97,7 +97,7 @@ class QsContent extends StatelessWidget {
         ),
         Gaps.md.gap,
         const Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             BrightnessSlider(),
           ],
@@ -107,9 +107,9 @@ class QsContent extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             color: context.colorScheme.surfaceContainer,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: .circular(8),
           ),
-          padding: const EdgeInsets.all(8),
+          padding: const .all(8),
           child: const Row(
             children: [BatteryProgress()],
           ),
@@ -185,9 +185,9 @@ class QsTile extends HookWidget {
           context.colorScheme.primary,
           animation,
         ),
-        borderRadius: BorderRadius.lerp(
-          BorderRadius.circular(48),
-          BorderRadius.circular(8),
+        borderRadius: .lerp(
+          .circular(48),
+          .circular(8),
           animation,
         ),
         boxShadow: [
@@ -201,7 +201,7 @@ class QsTile extends HookWidget {
         ],
       ),
       clipBehavior: Clip.none,
-      padding: EdgeInsets.zero,
+      padding: .zero,
       child: Row(
         children: [
           // Main action button
@@ -209,12 +209,12 @@ class QsTile extends HookWidget {
             flex: 3,
             child: Padding(
               padding:
-                  EdgeInsets.lerp(
-                    const EdgeInsets.only(left: 16, right: 8),
-                    const EdgeInsets.only(left: 12, right: 8),
+                  .lerp(
+                    const .only(left: 16, right: 8),
+                    const .only(left: 12, right: 8),
                     animation,
                   ) ??
-                  EdgeInsets.zero,
+                  .zero,
               child: TextIcon(
                 icon: Icon(
                   icon,
@@ -226,8 +226,8 @@ class QsTile extends HookWidget {
                   size: 20,
                 ),
                 text: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: .center,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       text,
@@ -237,10 +237,10 @@ class QsTile extends HookWidget {
                           context.colorScheme.onPrimary,
                           animation,
                         ),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                     if (subText != null)
                       Text(
@@ -253,7 +253,7 @@ class QsTile extends HookWidget {
                           ),
                         ),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        overflow: .ellipsis,
                       ),
                   ],
                 ),
@@ -269,7 +269,7 @@ class QsTile extends HookWidget {
               onTap: () =>
                   _openMoreSetting(context, text, openedChild, position),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(99),
+                borderRadius: .circular(99),
               ),
               child: Iconify(
                 Ic.chevron_right,
@@ -330,16 +330,16 @@ class QsMoreSettings extends StatelessWidget {
         ),
         Align(
           alignment: switch (position) {
-            WidgetPosition.left => Alignment.bottomLeft,
-            WidgetPosition.center => Alignment.bottomCenter,
-            WidgetPosition.right => Alignment.bottomRight,
+            .left => .bottomLeft,
+            .center => .bottomCenter,
+            .right => .bottomRight,
           },
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const .all(8),
             child: Container(
               decoration: BoxDecoration(
                 color: context.colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: .circular(16),
                 boxShadow: [
                   BoxShadow(
                     color: context.colorScheme.shadow.withValues(alpha: 0.2),
@@ -351,7 +351,7 @@ class QsMoreSettings extends StatelessWidget {
                 maxHeight: 520,
                 maxWidth: 380,
               ),
-              padding: const EdgeInsets.all(8),
+              padding: const .all(8),
               child: Column(
                 children: [
                   // Header
@@ -398,7 +398,7 @@ class QsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const .symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           const WhoAmI(),

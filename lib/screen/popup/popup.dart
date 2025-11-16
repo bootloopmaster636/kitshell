@@ -30,7 +30,7 @@ class PopupContainer extends StatelessWidget {
                   },
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: .all(8),
                   child: PopupContent(),
                 ),
               ],
@@ -56,9 +56,9 @@ class PopupContent extends StatelessWidget {
               duration: Durations.medium4,
               curve: Curves.easeOutQuint,
               alignment: switch (state.position) {
-                WidgetPosition.left => Alignment.bottomLeft,
-                WidgetPosition.center => Alignment.bottomCenter,
-                WidgetPosition.right => Alignment.bottomRight,
+                .left => .bottomLeft,
+                .center => .bottomCenter,
+                .right => .bottomRight,
               },
               child: InheritedAlignment(
                 position: state.position,
@@ -98,7 +98,7 @@ class PopupChild extends StatelessWidget {
                   color: context.colorScheme.surfaceContainer.withValues(
                     alpha: popupBgOpacity,
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: .circular(16),
                   border: Border.all(
                     color: context.colorScheme.outlineVariant,
                   ),
@@ -116,7 +116,7 @@ class PopupChild extends StatelessWidget {
                 child: AnimatedSize(
                   duration: Durations.medium4,
                   curve: Curves.easeInOutCubicEmphasized,
-                  alignment: Alignment.bottomCenter,
+                  alignment: .bottomCenter,
                   clipBehavior: Clip.none,
                   child: Draggable(
                     key: ValueKey(popup.hashCode),

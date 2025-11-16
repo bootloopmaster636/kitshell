@@ -106,13 +106,13 @@ class WhoAmI extends HookWidget {
     final userInfo = useFuture(userInfoFuture);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children: [
         Text(
           userInfo.data?.fullname ?? '-',
           style: context.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
+            fontWeight: .bold,
             color: context.theme.colorScheme.primary,
           ),
         ),

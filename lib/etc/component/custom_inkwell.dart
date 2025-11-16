@@ -61,7 +61,7 @@ class CustomInkwell extends StatelessWidget {
             hoverColor: hoverColor,
             borderRadius: decoration?.borderRadius?.resolve(null),
             child: Padding(
-              padding: padding ?? const EdgeInsets.all(8),
+              padding: padding ?? const .all(8),
               child: child,
             ),
           ),

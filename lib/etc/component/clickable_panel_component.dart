@@ -35,12 +35,12 @@ class ClickablePanelComponent extends HookWidget {
           );
         },
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: .circular(8),
           border: isHovering.value
               ? Border.all(color: context.colorScheme.outlineVariant)
               : Border.all(color: Colors.transparent),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const .symmetric(horizontal: 8),
         child: content,
       ),
     );

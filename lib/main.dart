@@ -66,7 +66,7 @@ class NotCompatibleWidget extends StatelessWidget {
       home: ColoredBox(
         color: context.colorScheme.surface,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             Text(
               t.failedToLoad.title,
@@ -101,7 +101,7 @@ ThemeData lightTheme = ThemeData(
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
   sliderTheme: const SliderThemeData(
     year2023: false,
-    padding: EdgeInsets.zero,
+    padding: .zero,
   ),
   splashFactory: InkSparkle.splashFactory,
   pageTransitionsTheme: const PageTransitionsTheme(
@@ -139,7 +139,7 @@ ThemeData darkTheme = ThemeData(
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
   sliderTheme: const SliderThemeData(
     year2023: false,
-    padding: EdgeInsets.zero,
+    padding: .zero,
   ),
   splashFactory: InkSparkle.splashFactory,
   pageTransitionsTheme: const PageTransitionsTheme(

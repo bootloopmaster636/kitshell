@@ -28,16 +28,16 @@ class MainPanel extends StatelessWidget {
               decoration: BoxDecoration(
                 color: context.colorScheme.surface.withValues(alpha: 0.76),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const .symmetric(horizontal: 8),
               child: Stack(
                 children: [
                   // Left section
                   RepaintBoundary(
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: .centerLeft,
                       child:
                           SectionRow(
-                            position: WidgetPosition.left,
+                            position: .left,
                             components: state.componentsLeft,
                           ).animate().slideX(
                             begin: -1,
@@ -53,7 +53,7 @@ class MainPanel extends StatelessWidget {
                     child: Align(
                       child:
                           SectionRow(
-                            position: WidgetPosition.center,
+                            position: .center,
                             components: state.componentsCenter,
                           ).animate().slideY(
                             begin: 1,
@@ -67,10 +67,10 @@ class MainPanel extends StatelessWidget {
                   // Right section
                   RepaintBoundary(
                     child: Align(
-                      alignment: Alignment.centerRight,
+                      alignment: .centerRight,
                       child:
                           SectionRow(
-                            position: WidgetPosition.right,
+                            position: .right,
                             components: state.componentsRight,
                           ).animate().slideX(
                             begin: 1,
@@ -141,11 +141,11 @@ class PanelPopupDragTarget extends StatelessWidget {
                             alpha: 0.8,
                           ),
                         ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: .topCenter,
+                        end: .bottomCenter,
                       ),
                     ),
-                    alignment: Alignment.center,
+                    alignment: .center,
                     child: Text(
                       t.general.closePopup,
                       style: context.textTheme.bodyLarge?.copyWith(
@@ -188,11 +188,11 @@ class SectionRow extends StatelessWidget {
       position: position,
       child: Row(
         mainAxisAlignment: switch (position) {
-          WidgetPosition.left => MainAxisAlignment.start,
-          WidgetPosition.center => MainAxisAlignment.center,
-          WidgetPosition.right => MainAxisAlignment.end,
+          .left => .start,
+          .center => .center,
+          .right => .end,
         },
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: components,
       ),
     );

@@ -55,7 +55,7 @@ class MprisPopupContent extends StatelessWidget {
       children: [
         AlbumArtBg(),
         Padding(
-          padding: EdgeInsets.all(16),
+          padding: .all(16),
           child: MprisInformation(),
         ),
       ],
@@ -69,8 +69,8 @@ class MprisInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .spaceBetween,
+      crossAxisAlignment: .start,
       children: [
         PlayerIcon(),
         InformationTitle(),
@@ -98,17 +98,17 @@ class InformationTitle extends StatelessWidget {
             // Track title, artist, and album
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   if (metadata.title?.isNotEmpty ?? false)
                     Text(
                       metadata.title ?? t.mpris.unknown.title,
                       style: context.textTheme.bodyLarge?.copyWith(
                         color: context.colorScheme.onSecondaryContainer,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                   if (metadata.artists?.isNotEmpty ?? false)
                     Text(
@@ -117,7 +117,7 @@ class InformationTitle extends StatelessWidget {
                         color: context.colorScheme.onSecondaryContainer,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                   if (metadata.album?.isNotEmpty ?? false)
                     Text(
@@ -126,7 +126,7 @@ class InformationTitle extends StatelessWidget {
                         color: context.colorScheme.onSecondaryContainer,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                 ],
               ),
@@ -138,9 +138,9 @@ class InformationTitle extends StatelessWidget {
               CustomInkwell(
                 decoration: BoxDecoration(
                   color: context.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: .circular(8),
                 ),
-                padding: const EdgeInsets.all(8),
+                padding: const .all(8),
                 onTap: () {
                   get<MprisBloc>().add(
                     const MprisEventDispatch(
@@ -173,7 +173,7 @@ class InformationProgressAndControl extends StatelessWidget {
         if (state is! MprisStatePlaying) return const SizedBox.shrink();
 
         return Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: Gaps.sm.value,
           children: [
             TrackSeekbar(
@@ -323,11 +323,11 @@ class TrackSeekbar extends HookWidget {
             }),
           ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         spacing: Gaps.sm.value,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: .spaceBetween,
             children: [
               if (progressDuration != null)
                 Text(
@@ -421,7 +421,7 @@ class PlayerIcon extends HookWidget {
         canRaise.value = state.trackProgress.player.canBeRaised;
       },
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: .spaceBetween,
         children: [
           TextIcon(
             icon: iconPath.value != null

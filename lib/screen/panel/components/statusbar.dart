@@ -168,21 +168,21 @@ class StatusComponent extends HookWidget {
             ),
             if (value != null)
               Align(
-                alignment: Alignment.topLeft,
+                alignment: .topLeft,
                 child:
                     Container(
                           width: 16,
                           height: 14,
                           decoration: BoxDecoration(
                             color: context.colorScheme.primary,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: .circular(8),
                           ),
-                          alignment: Alignment.center,
+                          alignment: .center,
                           child: AnimatedFlipCounter(
                             value: value ?? 0,
                             textStyle: context.textTheme.labelMedium?.copyWith(
                               fontSize: 8,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: .bold,
                               color: context.colorScheme.onPrimary,
                             ),
                             duration: Durations.short2,
@@ -197,9 +197,9 @@ class StatusComponent extends HookWidget {
               ),
             if (cornerIcon != null)
               Align(
-                alignment: Alignment.bottomRight,
+                alignment: .bottomRight,
                 child: Padding(
-                  padding: const EdgeInsets.all(2),
+                  padding: const .all(2),
                   child: Iconify(
                     cornerIcon!,
                     color: context.colorScheme.secondary,
