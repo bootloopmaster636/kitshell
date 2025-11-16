@@ -111,6 +111,22 @@ ThemeData lightTheme = ThemeData(
       ),
     },
   ),
+  expansionTileTheme: ExpansionTileThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    collapsedShape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    childrenPadding: const .all(8),
+    expansionAnimationStyle: AnimationStyle(
+      curve: Easing.standard,
+      duration: Durations.medium2,
+      reverseCurve: Easing.standard.flipped,
+      reverseDuration: Durations.medium1,
+    ),
+    tilePadding: const .symmetric(horizontal: 16, vertical: 4),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -132,5 +148,21 @@ ThemeData darkTheme = ThemeData(
         backgroundColor: Colors.transparent,
       ),
     },
+  ),
+  expansionTileTheme: ExpansionTileThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    collapsedShape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    childrenPadding: const .all(8),
+    expansionAnimationStyle: AnimationStyle(
+      curve: Easing.standard,
+      duration: Durations.medium2,
+      reverseCurve: Easing.standard.flipped,
+      reverseDuration: Durations.medium1,
+    ),
+    tilePadding: const .symmetric(horizontal: 16, vertical: 4),
   ),
 );

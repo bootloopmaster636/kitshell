@@ -223,6 +223,7 @@ impl WlanDevice {
 
         // Sort by strength
         access_points.sort_by_key(|e| e.strength);
+        access_points.reverse();
 
         Ok(access_points)
     }

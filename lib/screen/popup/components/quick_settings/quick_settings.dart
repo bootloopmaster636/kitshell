@@ -18,6 +18,7 @@ import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_batter
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart';
 import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/screen/panel/panel.dart';
+import 'package:kitshell/screen/popup/components/quick_settings/qs_tiles/internet/qs_internet.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
 import 'package:kitshell/src/rust/api/quick_settings/display_brightness.dart';
 import 'package:kitshell/src/rust/api/quick_settings/whoami.dart';
@@ -77,12 +78,11 @@ class QuickSettingsMainScreen extends StatelessWidget {
   }
 }
 
-class QsContent extends HookWidget {
+class QsContent extends StatelessWidget {
   const QsContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final test = useState(false);
     return Column(
       children: [
         GridView.count(
@@ -91,21 +91,8 @@ class QsContent extends HookWidget {
           crossAxisSpacing: Gaps.sm.value,
           childAspectRatio: 3,
           shrinkWrap: true,
-          children: [
-            QsTile(
-              icon: Carbon.wifi,
-              text: 'Wi-Fi',
-              onAction: () {
-                test.value = !test.value;
-              },
-              openedChild: const Placeholder(),
-              active: test.value,
-            ),
-            QsTile(
-              icon: Carbon.bluetooth,
-              text: 'Bluetooth',
-              onAction: () {},
-            ),
+          children: const [
+            InternetQsTile(),
           ],
         ),
         Gaps.md.gap,
@@ -136,7 +123,7 @@ class QsTile extends HookWidget {
   const QsTile({
     required this.icon,
     required this.text,
-    required this.onAction,
+    this.onAction,
     this.subText,
     this.openedChild,
     this.active,
@@ -144,7 +131,7 @@ class QsTile extends HookWidget {
   });
 
   /// Feature icon to be displayed on the left side
-  final String icon;
+  final IconData icon;
 
   /// Feature name
   final String text;
@@ -152,8 +139,9 @@ class QsTile extends HookWidget {
   /// Feature's additional text
   final String? subText;
 
-  /// Function to run when clicking on QS tile
-  final VoidCallback onAction;
+  /// Function to run when clicking on QS tile, if null will
+  /// open more setting if available.
+  final VoidCallback? onAction;
 
   /// Widget to open when clicking on 'more button'
   /// If null, the feature does not support more action
@@ -181,8 +169,16 @@ class QsTile extends HookWidget {
     }, [active]);
 
     return CustomInkwell(
-      onTap: onAction.call,
-      onLongPress: () => _openMoreSetting(context, text, openedChild, position),
+      onTap: () async {
+        if (onAction != null) {
+          onAction?.call();
+        } else {
+          if (openedChild == null) return;
+          await _openMoreSetting(context, text, openedChild, position);
+        }
+      },
+      onLongPress: () async =>
+          _openMoreSetting(context, text, openedChild, position),
       decoration: BoxDecoration(
         color: Color.lerp(
           context.colorScheme.surfaceContainer,
@@ -220,13 +216,14 @@ class QsTile extends HookWidget {
                   ) ??
                   EdgeInsets.zero,
               child: TextIcon(
-                icon: Iconify(
+                icon: Icon(
                   icon,
                   color: Color.lerp(
                     context.colorScheme.onSurfaceVariant,
                     context.colorScheme.onPrimary,
                     animation,
                   ),
+                  size: 20,
                 ),
                 text: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -350,11 +347,12 @@ class QsMoreSettings extends StatelessWidget {
                   ),
                 ],
               ),
-              constraints: const BoxConstraints(maxHeight: 650, maxWidth: 400),
+              constraints: const BoxConstraints(
+                maxHeight: 520,
+                maxWidth: 380,
+              ),
               padding: const EdgeInsets.all(8),
               child: Column(
-                mainAxisSize: .min,
-                spacing: Gaps.sm.value,
                 children: [
                   // Header
                   Row(
@@ -377,7 +375,12 @@ class QsMoreSettings extends StatelessWidget {
                   ),
 
                   // Content
-                  moreSettingPage,
+                  Flexible(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(child: moreSettingPage),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -49,3 +49,16 @@ quickSettings:
       remaining: $time remaining
       timeToFull: Time until fully charged
       timeToEmpty: Time until battery is empty
+  internet:
+    title: Internet
+    devType:
+      wifi: Wi-Fi
+      lan: Ethernet
+      modem: Modem
+    general:
+      connect: Connect
+      disconnect: Disconnect
+      connectedTo: Connected to $connection
+      disconnected: Disconnected
+    wifi:
+      passwordRequired: A password is required to connect to this Wi-Fi. Please type the password...

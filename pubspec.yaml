@@ -43,6 +43,7 @@ dependencies:
   rapidfuzz: ^0.1.1
   collection: any
   hero_container: ^1.0.2
+  lucide_flutter: ^0.553.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

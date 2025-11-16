@@ -17,6 +17,7 @@ class WlanBloc extends Bloc<WlanEvent, WlanState> {
           devState: InternetDeviceState.unknown,
           isActive: false,
           isScanning: false,
+          iface: '',
         ),
       ) {
     on<WlanEventStarted>(_onStarted);
@@ -33,9 +34,10 @@ class WlanBloc extends Bloc<WlanEvent, WlanState> {
   ) async {
     emit(state.copyWith(isScanning: true));
     await _wlanRepo.initDevice(event.interface);
-    emit(state.copyWith(isScanning: false));
+    emit(state.copyWith(isScanning: false, iface: event.interface));
     add(const _WlanEventListenDevState());
     add(const _WlanEventListenApList());
+    add(const WlanEventScanned());
   }
 
   Future<void> _onScanned(
