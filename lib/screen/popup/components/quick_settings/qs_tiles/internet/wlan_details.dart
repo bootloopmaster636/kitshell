@@ -15,9 +15,7 @@ class WlanDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final openedIdx = useState(
-      wlanBloc.state.accessPoints.indexWhere((e) => e.isActive),
-    );
+    final openedIdx = useState(-1);
     final _ = useMemoized(() async {
       await Future<void>.delayed(const Duration(seconds: 1));
       wlanBloc.add(const WlanEventScanned());
@@ -50,6 +48,10 @@ class WlanDetails extends HookWidget {
             initiallyExpanded: true,
             childrenPadding: .zero,
             children: [
+              Container(
+                height: Gaps.xxs.value,
+                color: context.colorScheme.surfaceContainer,
+              ),
               if (state.isScanning) const LinearProgressIndicator(),
               ...state.accessPoints.indexed.map((data) {
                 final (idx, ap) = data;
@@ -57,7 +59,7 @@ class WlanDetails extends HookWidget {
                   decoration: BoxDecoration(
                     color: context.colorScheme.surfaceContainer,
                   ),
-                  padding: const .symmetric(vertical: 1),
+                  padding: const .only(bottom: 2),
                   child: AccessPointTile(
                     apDetail: ap,
                     openedIdx: openedIdx,
@@ -95,25 +97,16 @@ class AccessPointTile extends StatelessWidget {
         }
       },
       decoration: BoxDecoration(
-        color: apDetail.isActive
-            ? context.colorScheme.primaryContainer
-            : context.colorScheme.surface,
+        color: context.colorScheme.surface,
         borderRadius: .circular(4),
       ),
       padding: const .all(16),
-      child: DefaultTextStyle(
-        style: context.textTheme.bodyMedium!.copyWith(
-          color: apDetail.isActive
-              ? context.colorScheme.onPrimaryContainer
-              : context.colorScheme.onSurface,
-        ),
-        child: AnimatedCrossFade(
-          duration: Durations.medium1,
-          sizeCurve: Easing.standard,
-          crossFadeState: openedIdx.value != idx ? .showFirst : .showSecond,
-          firstChild: ApTileCollapsed(apDetail: apDetail),
-          secondChild: ApTileExpanded(apDetail: apDetail),
-        ),
+      child: AnimatedCrossFade(
+        duration: Durations.medium1,
+        sizeCurve: Easing.standard,
+        crossFadeState: openedIdx.value != idx ? .showFirst : .showSecond,
+        firstChild: ApTileCollapsed(apDetail: apDetail),
+        secondChild: ApTileExpanded(apDetail: apDetail),
       ),
     );
   }
@@ -133,21 +126,24 @@ class ApTileCollapsed extends StatelessWidget {
             >= 0 && <= 25 => LucideIcons.wifiZero,
             > 25 && <= 50 => LucideIcons.wifiLow,
             > 50 && <= 75 => LucideIcons.wifiHigh,
-            >= 75 => LucideIcons.wifi,
-            _ => LucideIcons.wifiZero,
+            >= 75 && <= 100 => LucideIcons.wifi,
+            _ => LucideIcons.circleQuestionMark,
           },
           size: 20,
           color: apDetail.isActive
-              ? context.colorScheme.onPrimaryContainer
+              ? context.colorScheme.primary
               : context.colorScheme.onSurface,
         ),
         Column(
           crossAxisAlignment: .start,
-          spacing: Gaps.xs.value,
           children: [
             Text(
               apDetail.ssid,
-              style: context.textTheme.bodyMedium,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: apDetail.isActive
+                    ? context.colorScheme.primary
+                    : context.colorScheme.onSurface,
+              ),
             ),
             ApCapabilities(apDetail: apDetail),
           ],
@@ -164,9 +160,11 @@ class ApTileExpanded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: Gaps.sm.value,
       children: [
         ApTileCollapsed(apDetail: apDetail),
+
         FilledButton(
           onPressed: () {},
           child: Text(t.quickSettings.internet.general.connect),
@@ -182,27 +180,38 @@ class ApCapabilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: Gaps.xs.value,
-      children: [
-        if (!apDetail.isSecured)
-          _capabilityBuilder(
-            context,
-            t.quickSettings.internet.wifi.capabilities.open,
-          ),
+    return Padding(
+      padding: const .only(top: 2),
+      child: Row(
+        spacing: Gaps.xs.value,
+        children: [
+          if (apDetail.isActive)
+            _capabilityBuilder(
+              context,
+              t.quickSettings.internet.wifi.capabilities.active,
+            ),
 
-        switch (apDetail.frequency) {
-          WifiFreq.freq5Ghz => _capabilityBuilder(
-            context,
-            t.quickSettings.internet.wifi.capabilities.freq5g,
-          ),
-          WifiFreq.freq6Ghz => _capabilityBuilder(
-            context,
-            t.quickSettings.internet.wifi.capabilities.freq6g,
-          ),
-          WifiFreq.freq24Ghz || WifiFreq.freqUnknown => const SizedBox.shrink(),
-        },
-      ],
+          if (apDetail.rsnSecurityFlag == ApSecurityFlag.none &&
+              apDetail.wpaSecurityFlag == ApSecurityFlag.none)
+            _capabilityBuilder(
+              context,
+              t.quickSettings.internet.wifi.capabilities.open,
+            ),
+
+          switch (apDetail.frequency) {
+            WifiFreq.freq5Ghz => _capabilityBuilder(
+              context,
+              t.quickSettings.internet.wifi.capabilities.freq5g,
+            ),
+            WifiFreq.freq6Ghz => _capabilityBuilder(
+              context,
+              t.quickSettings.internet.wifi.capabilities.freq6g,
+            ),
+            WifiFreq.freq24Ghz ||
+            WifiFreq.freqUnknown => const SizedBox.shrink(),
+          },
+        ],
+      ),
     );
   }
 

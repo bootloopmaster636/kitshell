@@ -1787,16 +1787,17 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
         let mut var_strength = <u8>::sse_decode(deserializer);
         let mut var_frequency =
             <crate::api::quick_settings::network::wlan::WifiFreq>::sse_decode(deserializer);
-        let mut var_isSecured = <bool>::sse_decode(deserializer);
-        let mut var_security =
+        let mut var_wpaSecurityFlag =
+            <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
+        let mut var_rsnSecurityFlag =
             <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
         let mut var_isActive = <bool>::sse_decode(deserializer);
         return crate::api::quick_settings::network::wlan::AccessPoint {
             ssid: var_ssid,
             strength: var_strength,
             frequency: var_frequency,
-            is_secured: var_isSecured,
-            security: var_security,
+            wpa_security_flag: var_wpaSecurityFlag,
+            rsn_security_flag: var_rsnSecurityFlag,
             is_active: var_isActive,
         };
     }
@@ -2839,8 +2840,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::network::wlan
             self.ssid.into_into_dart().into_dart(),
             self.strength.into_into_dart().into_dart(),
             self.frequency.into_into_dart().into_dart(),
-            self.is_secured.into_into_dart().into_dart(),
-            self.security.into_into_dart().into_dart(),
+            self.wpa_security_flag.into_into_dart().into_dart(),
+            self.rsn_security_flag.into_into_dart().into_dart(),
             self.is_active.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -3667,9 +3668,12 @@ impl SseEncode for crate::api::quick_settings::network::wlan::AccessPoint {
             self.frequency,
             serializer,
         );
-        <bool>::sse_encode(self.is_secured, serializer);
         <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_encode(
-            self.security,
+            self.wpa_security_flag,
+            serializer,
+        );
+        <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_encode(
+            self.rsn_security_flag,
             serializer,
         );
         <bool>::sse_encode(self.is_active, serializer);

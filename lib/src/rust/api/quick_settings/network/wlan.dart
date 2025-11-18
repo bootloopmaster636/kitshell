@@ -44,8 +44,8 @@ class AccessPoint {
     required this.ssid,
     required this.strength,
     required this.frequency,
-    required this.isSecured,
-    required this.security,
+    required this.wpaSecurityFlag,
+    required this.rsnSecurityFlag,
     required this.isActive,
   });
 
@@ -58,11 +58,11 @@ class AccessPoint {
   /// This access point radio frequency
   final WifiFreq frequency;
 
-  /// Whether this AP require password to connect
-  final bool isSecured;
+  /// WPA Security flag for this AP
+  final ApSecurityFlag wpaSecurityFlag;
 
-  /// Security flag for this AP
-  final ApSecurityFlag security;
+  /// RSN Security flag for this AP
+  final ApSecurityFlag rsnSecurityFlag;
 
   /// Whether this AP is currently active and connected
   final bool isActive;
@@ -72,8 +72,8 @@ class AccessPoint {
       ssid.hashCode ^
       strength.hashCode ^
       frequency.hashCode ^
-      isSecured.hashCode ^
-      security.hashCode ^
+      wpaSecurityFlag.hashCode ^
+      rsnSecurityFlag.hashCode ^
       isActive.hashCode;
 
   @override
@@ -84,8 +84,8 @@ class AccessPoint {
           ssid == other.ssid &&
           strength == other.strength &&
           frequency == other.frequency &&
-          isSecured == other.isSecured &&
-          security == other.security &&
+          wpaSecurityFlag == other.wpaSecurityFlag &&
+          rsnSecurityFlag == other.rsnSecurityFlag &&
           isActive == other.isActive;
 }
 

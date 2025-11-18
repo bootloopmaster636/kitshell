@@ -60,11 +60,11 @@ pub struct AccessPoint {
     /// This access point radio frequency
     pub frequency: WifiFreq,
 
-    /// Whether this AP require password to connect
-    pub is_secured: bool,
+    /// WPA Security flag for this AP
+    pub wpa_security_flag: ApSecurityFlag,
 
-    /// Security flag for this AP
-    pub security: ApSecurityFlag,
+    /// RSN Security flag for this AP
+    pub rsn_security_flag: ApSecurityFlag,
 
     /// Whether this AP is currently active and connected
     pub is_active: bool,
@@ -126,20 +126,20 @@ impl WlanDevice {
     /// Initializes the WLAN device instance
     pub async fn init(&mut self) -> Result<(), Error> {
         println!(
-            "API | Network | Wireless: Initializing device {}",
+            "API | Network | WLAN: Initializing device {}",
             self.interface
         );
         self.dbus_connection = match Connection::system().await {
             Ok(val) => Some(val),
             Err(_) => {
-                bail!("API | Network | Wireless: Could not connect to dbus");
+                bail!("API | Network | WLAN: Could not connect to dbus");
             }
         };
 
         let nm = match NetworkManagerProxy::new(&self.dbus_connection.as_mut().unwrap()).await {
             Ok(val) => val,
             Err(_) => {
-                bail!("API | Network | Wireless: Could not get NetworkManager");
+                bail!("API | Network | WLAN: Could not get NetworkManager");
             }
         };
 
@@ -148,7 +148,7 @@ impl WlanDevice {
             Ok(val) => Some(val),
             Err(_) => {
                 bail!(
-                    "API | Network | Wireless: Could not get device object path from interface {}",
+                    "API | Network | WLAN: Could not get device object path from interface {}",
                     &self.interface
                 );
             }
@@ -165,13 +165,13 @@ impl WlanDevice {
         let wireless_proxy = match self.get_wireless_proxy().await {
             Ok(val) => val,
             Err(_) => {
-                bail!("API | Network | Wireless: Could not get wireless proxy");
+                bail!("API | Network | WLAN: Could not get wireless proxy");
             }
         };
 
         match wireless_proxy.request_scan(HashMap::new()).await {
             Ok(_) => (),
-            Err(_) => bail!("API | Network | Wireless: Cannot request scan"),
+            Err(_) => bail!("API | Network | WLAN: Cannot request scan"),
         };
         Ok(())
     }
@@ -181,7 +181,7 @@ impl WlanDevice {
         let wireless_proxy = match self.get_wireless_proxy().await {
             Ok(val) => val,
             Err(_) => {
-                bail!("API | Network | Wireless: Could not get wireless proxy");
+                bail!("API | Network | WLAN: Could not get wireless proxy");
             }
         };
 
@@ -190,7 +190,7 @@ impl WlanDevice {
 
         let ap_path_list = match wireless_proxy.get_access_points().await {
             Ok(val) => val,
-            Err(_) => bail!("API | Network | Wireless: Failed to get AP list"),
+            Err(_) => bail!("API | Network | WLAN: Failed to get AP list"),
         };
         for ap_path in ap_path_list {
             let ap_proxy = match AccessPointProxy::new_from_path(
@@ -200,17 +200,17 @@ impl WlanDevice {
             .await
             {
                 Ok(val) => val,
-                Err(_) => bail!("API | Network | Wireless: Cannot get AP proxy"),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP proxy"),
             };
 
             let ssid = match ap_proxy.ssid().await {
                 Ok(val) => String::from_utf8(val)?,
-                Err(_) => bail!("API | Network | Wireless: Cannot get AP SSID"),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP SSID"),
             };
 
             let strength = match ap_proxy.strength().await {
                 Ok(val) => val,
-                Err(_) => bail!("API | Network | Wireless: Cannot get AP strength"),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP strength"),
             };
 
             let frequency = match ap_proxy.frequency().await {
@@ -222,19 +222,38 @@ impl WlanDevice {
 
             let security = match ap_proxy.wpa_flags().await {
                 Ok(val) => ApSecurityFlag::try_from_primitive(val),
-                Err(_) => bail!("API | Network | Wireless: Cannot get AP WPA flag"),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP WPA flag"),
             };
             let security_enum = match security {
                 Ok(val) => val,
                 Err(_) => {
-                    println!("API | Network | Wireless: Got unknown AP WPA flag");
+                    println!("API | Network | WLAN: Got unknown AP WPA flag");
                     ApSecurityFlag::Unknown
                 }
             };
 
-            let is_secured = match ap_proxy.flags().await {
-                Ok(val) => val == 1,
-                Err(_) => bail!("API | Network | Wireless: Cannot get AP secured flag"),
+            let wpa_security = match ap_proxy.wpa_flags().await {
+                Ok(val) => ApSecurityFlag::try_from_primitive(val),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP WPA flag"),
+            };
+            let wpa_security_enum = match wpa_security {
+                Ok(val) => val,
+                Err(_) => {
+                    println!("API | Network | WLAN: Got unknown AP WPA flag");
+                    ApSecurityFlag::Unknown
+                }
+            };
+
+            let rsn_security = match ap_proxy.rsn_flags().await {
+                Ok(val) => ApSecurityFlag::try_from_primitive(val),
+                Err(_) => bail!("API | Network | WLAN: Cannot get AP WPA flag"),
+            };
+            let rsn_security_enum = match rsn_security {
+                Ok(val) => val,
+                Err(_) => {
+                    println!("API | Network | WLAN: Got unknown AP WPA flag");
+                    ApSecurityFlag::Unknown
+                }
             };
 
             let is_active = ap_path == active_ap;
@@ -243,8 +262,8 @@ impl WlanDevice {
                 ssid,
                 strength,
                 frequency,
-                security: security_enum,
-                is_secured,
+                wpa_security_flag: wpa_security_enum,
+                rsn_security_flag: rsn_security_enum,
                 is_active,
             });
         }

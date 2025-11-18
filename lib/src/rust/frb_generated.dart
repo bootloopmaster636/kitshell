@@ -1798,8 +1798,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ssid: dco_decode_String(arr[0]),
       strength: dco_decode_u_8(arr[1]),
       frequency: dco_decode_wifi_freq(arr[2]),
-      isSecured: dco_decode_bool(arr[3]),
-      security: dco_decode_ap_security_flag(arr[4]),
+      wpaSecurityFlag: dco_decode_ap_security_flag(arr[3]),
+      rsnSecurityFlag: dco_decode_ap_security_flag(arr[4]),
       isActive: dco_decode_bool(arr[5]),
     );
   }
@@ -2585,15 +2585,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_ssid = sse_decode_String(deserializer);
     final var_strength = sse_decode_u_8(deserializer);
     final var_frequency = sse_decode_wifi_freq(deserializer);
-    final var_isSecured = sse_decode_bool(deserializer);
-    final var_security = sse_decode_ap_security_flag(deserializer);
+    final var_wpaSecurityFlag = sse_decode_ap_security_flag(deserializer);
+    final var_rsnSecurityFlag = sse_decode_ap_security_flag(deserializer);
     final var_isActive = sse_decode_bool(deserializer);
     return AccessPoint(
       ssid: var_ssid,
       strength: var_strength,
       frequency: var_frequency,
-      isSecured: var_isSecured,
-      security: var_security,
+      wpaSecurityFlag: var_wpaSecurityFlag,
+      rsnSecurityFlag: var_rsnSecurityFlag,
       isActive: var_isActive,
     );
   }
@@ -3639,8 +3639,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.ssid, serializer);
     sse_encode_u_8(self.strength, serializer);
     sse_encode_wifi_freq(self.frequency, serializer);
-    sse_encode_bool(self.isSecured, serializer);
-    sse_encode_ap_security_flag(self.security, serializer);
+    sse_encode_ap_security_flag(self.wpaSecurityFlag, serializer);
+    sse_encode_ap_security_flag(self.rsnSecurityFlag, serializer);
     sse_encode_bool(self.isActive, serializer);
   }
 

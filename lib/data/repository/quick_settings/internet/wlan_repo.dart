@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:injectable/injectable.dart';
+import 'package:kitshell/etc/utitity/logger.dart';
 import 'package:kitshell/src/rust/api/quick_settings/network/network_devices.dart';
 import 'package:kitshell/src/rust/api/quick_settings/network/wlan.dart';
 
@@ -19,22 +20,30 @@ class WlanRepo {
 
   /// Initializes this device, this should be called
   Future<void> initDevice(String interface) async {
+    logger.i('WlanRepo ($interface): Initializing device');
     _wlanDevice = await createWlanDevice(fromIface: interface);
     await _wlanDevice.init();
-    unawaited(_wlanDevice.requestScan());
 
     deviceState = StreamController();
     _deviceStateStream = _wlanDevice.monitorDeviceState().listen((data) {
       deviceState.add(data);
     });
+    logger.i('WlanRepo ($interface): Device init from Flutter completed');
   }
 
   /// Get AP list that has been scanned by the device
   Future<void> fetchApList({required bool withScan}) async {
+    logger.i('WlanRepo: Fetch AP list started');
     if (withScan) {
+      logger.i('WlanRepo: Scanning for AP...');
       await _wlanDevice.requestScan();
     }
-    accessPoints.add(await _wlanDevice.getAccessPoints());
+
+    logger.i('WlanRepo: Getting AP list...');
+    final apList = await _wlanDevice.getAccessPoints();
+
+    logger.i('WlanRepo: Triggering AP list change...');
+    accessPoints.add(apList);
   }
 
   /// Dispose the device, this should be called when the device
