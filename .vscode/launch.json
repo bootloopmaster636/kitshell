@@ -24,31 +24,5 @@
             "type": "dart",
             "flutterMode": "release"
         },
-        {
-            "name": "rust_builder",
-            "cwd": "rust_builder",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "rust_builder (profile mode)",
-            "cwd": "rust_builder",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "rust_builder (release mode)",
-            "cwd": "rust_builder",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "build_tool",
-            "cwd": "rust_builder/cargokit/build_tool",
-            "request": "launch",
-            "type": "dart"
-        }
     ]
 }

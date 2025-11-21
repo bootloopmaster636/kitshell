@@ -1,4 +1,5 @@
 use chrono::{DateTime, Local};
+use flutter_rust_bridge::frb;
 use std::{collections::HashMap, future::pending};
 use zbus::{connection, interface, zvariant::Value, Connection, Error};
 
@@ -30,17 +31,18 @@ pub struct NotificationData {
 }
 
 #[derive(Clone)]
+#[frb(opaque)]
 pub struct NotificationService {
-    pub sink: StreamSink<NotificationData>,
+    sink: StreamSink<NotificationData>,
 }
 
 #[interface(
     name = "org.freedesktop.Notifications",
-    proxy(
-        gen_blocking = false,
-        default_path = "/org/freedesktop/Notifications",
-        default_service = "org.freedesktop.Notifications"
-    )
+    // proxy(
+    //     gen_blocking = false,
+    //     default_path = "/org/freedesktop/Notifications",
+    //     default_service = "org.freedesktop.Notifications"
+    // )
 )]
 impl NotificationService {
     /// Handle the Notify method call

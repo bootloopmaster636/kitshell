@@ -23,17 +23,21 @@ class MainPanel extends StatelessWidget {
         return Material(
           color: Colors.transparent,
           child: PanelPopupDragTarget(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
+            child: Container(
+              height: panelDefaultHeightPx.toDouble(),
+              decoration: BoxDecoration(
+                color: context.colorScheme.surface.withValues(alpha: 0.76),
+              ),
+              padding: const .symmetric(horizontal: 8),
               child: Stack(
                 children: [
                   // Left section
                   RepaintBoundary(
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: .centerLeft,
                       child:
                           SectionRow(
-                            position: WidgetPosition.left,
+                            position: .left,
                             components: state.componentsLeft,
                           ).animate().slideX(
                             begin: -1,
@@ -49,7 +53,7 @@ class MainPanel extends StatelessWidget {
                     child: Align(
                       child:
                           SectionRow(
-                            position: WidgetPosition.center,
+                            position: .center,
                             components: state.componentsCenter,
                           ).animate().slideY(
                             begin: 1,
@@ -63,10 +67,10 @@ class MainPanel extends StatelessWidget {
                   // Right section
                   RepaintBoundary(
                     child: Align(
-                      alignment: Alignment.centerRight,
+                      alignment: .centerRight,
                       child:
                           SectionRow(
-                            position: WidgetPosition.right,
+                            position: .right,
                             components: state.componentsRight,
                           ).animate().slideX(
                             begin: 1,
@@ -88,6 +92,7 @@ class MainPanel extends StatelessWidget {
 
 class PanelPopupDragTarget extends StatelessWidget {
   const PanelPopupDragTarget({required this.child, super.key});
+
   final Widget child;
 
   @override
@@ -136,11 +141,11 @@ class PanelPopupDragTarget extends StatelessWidget {
                             alpha: 0.8,
                           ),
                         ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: .topCenter,
+                        end: .bottomCenter,
                       ),
                     ),
-                    alignment: Alignment.center,
+                    alignment: .center,
                     child: Text(
                       t.general.closePopup,
                       style: context.textTheme.bodyLarge?.copyWith(
@@ -181,35 +186,14 @@ class SectionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InheritedAlignment(
       position: position,
-      child: Container(
-        height: panelDefaultHeightPx.toDouble(),
-        decoration: BoxDecoration(
-          color: context.colorScheme.surface.withValues(alpha: 0.76),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: context.colorScheme.shadow.withValues(alpha: 0.5),
-              blurRadius: 4,
-              blurStyle: BlurStyle.outer,
-            ),
-            BoxShadow(
-              color: context.colorScheme.primaryContainer.withValues(
-                alpha: 0.5,
-              ),
-              blurStyle: BlurStyle.solid,
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Row(
-          mainAxisAlignment: switch (position) {
-            WidgetPosition.left => MainAxisAlignment.start,
-            WidgetPosition.center => MainAxisAlignment.center,
-            WidgetPosition.right => MainAxisAlignment.end,
-          },
-          mainAxisSize: MainAxisSize.min,
-          children: components,
-        ),
+      child: Row(
+        mainAxisAlignment: switch (position) {
+          .left => .start,
+          .center => .center,
+          .right => .end,
+        },
+        mainAxisSize: .min,
+        children: components,
       ),
     );
   }

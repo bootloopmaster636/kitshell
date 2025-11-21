@@ -19,7 +19,7 @@ class WorkspaceIndicator extends HookWidget {
 
     return Container(
       width: 120,
-      padding: const EdgeInsets.all(4),
+      padding: const .all(4),
       child: BlocBuilder<WorkspacesBloc, WorkspacesState>(
         bloc: get<WorkspacesBloc>(),
         builder: (context, state) {
@@ -111,8 +111,8 @@ class WorkspacesItemIndicator extends HookWidget {
     }, [focusedWorkspaceIdx]);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children: [
         // Workspace name
         Text(
@@ -120,7 +120,7 @@ class WorkspacesItemIndicator extends HookWidget {
               'Workspace ${workspaceItemsData[focusedWorkspaceIdx].idx}',
           style: context.textTheme.bodyMedium,
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
         ),
 
         // Workspace pill

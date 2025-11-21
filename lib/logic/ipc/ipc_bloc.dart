@@ -33,7 +33,7 @@ class IpcBloc extends Bloc<IpcEvent, IpcState> {
     if (popupKind == null) return;
 
     PopupWidget? widget;
-    final WidgetPosition position = WidgetPosition.center;
+    final WidgetPosition position = .center;
     switch (popupKind) {
       case 'notif':
         widget = PopupWidget.notifications;
@@ -51,7 +51,7 @@ class IpcBloc extends Bloc<IpcEvent, IpcState> {
     get<ScreenManagerBloc>().add(
       ScreenManagerEvent.openPopup(
         popupToShow: widget,
-        position: WidgetPosition.center,
+        position: .center,
       ),
     );
   }

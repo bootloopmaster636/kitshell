@@ -41,31 +41,28 @@ class CustomInkwell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: decoration?.borderRadius ?? BorderRadius.zero,
-      clipBehavior: clipBehavior,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: decoration,
-        child: Material(
-          color: Colors.transparent,
-          clipBehavior: clipBehavior,
-          child: MouseRegion(
-            onEnter: onPointerEnter?.call,
-            onExit: onPointerExit?.call,
-            onHover: onHover?.call,
-            child: InkWell(
-              onTap: onTap?.call,
-              onLongPress: onLongPress?.call,
-              onTapUp: onTapUp?.call,
-              onTapDown: onTapDown?.call,
-              onTapCancel: onTapCancel?.call,
-              hoverColor: hoverColor,
-              child: Padding(
-                padding: padding ?? const EdgeInsets.all(8),
-                child: child,
-              ),
+    return Container(
+      width: width,
+      height: height,
+      decoration: decoration,
+      child: Material(
+        color: Colors.transparent,
+        clipBehavior: clipBehavior,
+        child: MouseRegion(
+          onEnter: onPointerEnter?.call,
+          onExit: onPointerExit?.call,
+          onHover: onHover?.call,
+          child: InkWell(
+            onTap: onTap?.call,
+            onLongPress: onLongPress?.call,
+            onTapUp: onTapUp?.call,
+            onTapDown: onTapDown?.call,
+            onTapCancel: onTapCancel?.call,
+            hoverColor: hoverColor,
+            borderRadius: decoration?.borderRadius?.resolve(null),
+            child: Padding(
+              padding: padding ?? const .all(8),
+              child: child,
             ),
           ),
         ),

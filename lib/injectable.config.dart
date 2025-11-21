@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -17,6 +17,8 @@ import 'package:kitshell/data/repository/appmenu/app_metadata_repo.dart'
 import 'package:kitshell/data/repository/launchbar/launchbar_repo.dart'
     as _i317;
 import 'package:kitshell/data/repository/launchbar/wm_iface_repo.dart' as _i980;
+import 'package:kitshell/data/repository/quick_settings/internet/wlan_repo.dart'
+    as _i593;
 import 'package:kitshell/logic/ipc/ipc_bloc.dart' as _i874;
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart'
     as _i81;
@@ -34,8 +36,8 @@ import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_batter
     as _i917;
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart'
     as _i993;
-import 'package:kitshell/logic/panel_components/quick_settings/qs_routing/qs_routing_cubit.dart'
-    as _i652;
+import 'package:kitshell/logic/panel_components/quick_settings/internet/base/internet_cubit.dart'
+    as _i92;
 import 'package:kitshell/logic/panel_manager/panel_manager_bloc.dart' as _i1073;
 import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart'
     as _i931;
@@ -49,19 +51,20 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    gh.singleton<_i1073.PanelManagerBloc>(() => _i1073.PanelManagerBloc());
-    gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
-    gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
-    gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
-    gh.singleton<_i723.NotificationBloc>(() => _i723.NotificationBloc());
-    gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
-    gh.singleton<_i652.QsRoutingCubit>(() => _i652.QsRoutingCubit());
-    gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
-    gh.singleton<_i331.MprisBloc>(() => _i331.MprisBloc());
-    gh.singleton<_i173.CavaBloc>(() => _i173.CavaBloc());
-    gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
+    gh.factory<_i593.WlanRepo>(() => _i593.WlanRepo());
     gh.singleton<_i52.AppMetadataRepo>(() => _i52.AppMetadataRepo());
     gh.singleton<_i980.WmIfaceRepo>(() => _i980.WmIfaceRepo());
+    gh.singleton<_i874.IpcBloc>(() => _i874.IpcBloc());
+    gh.singleton<_i797.DatetimeCubit>(() => _i797.DatetimeCubit());
+    gh.singleton<_i723.NotificationBloc>(() => _i723.NotificationBloc());
+    gh.singleton<_i173.CavaBloc>(() => _i173.CavaBloc());
+    gh.singleton<_i331.MprisBloc>(() => _i331.MprisBloc());
+    gh.singleton<_i917.QsBatteryBloc>(() => _i917.QsBatteryBloc());
+    gh.singleton<_i993.QsBrightnessBloc>(() => _i993.QsBrightnessBloc());
+    gh.singleton<_i92.InternetCubit>(() => _i92.InternetCubit());
+    gh.singleton<_i1073.PanelManagerBloc>(() => _i1073.PanelManagerBloc());
+    gh.singleton<_i931.PanelGestureCubit>(() => _i931.PanelGestureCubit());
+    gh.singleton<_i491.ScreenManagerBloc>(() => _i491.ScreenManagerBloc());
     gh.singleton<_i637.AppListRepo>(
       () => _i637.AppListRepo(appMetadataRepo: gh<_i52.AppMetadataRepo>()),
     );

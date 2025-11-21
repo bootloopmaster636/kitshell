@@ -28,17 +28,17 @@ class NotificationsPopup extends StatelessWidget {
       width: 340,
       height: 560,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           const Padding(
-            padding: EdgeInsets.all(12),
+            padding: .all(12),
             child: NotifHeader(),
           ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                 color: context.colorScheme.surface,
-                borderRadius: const BorderRadius.only(
+                borderRadius: const .only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
                 ),
@@ -157,7 +157,7 @@ class NotificationContent extends HookWidget {
         AnimatedList(
           key: listKey.value,
           initialItemCount: items.value.length,
-          padding: const EdgeInsets.all(8),
+          padding: const .all(8),
           itemBuilder:
               (
                 BuildContext context,
@@ -177,7 +177,7 @@ class NotificationContent extends HookWidget {
 
   Widget _dndNoticeBuilder(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.only(
+      borderRadius: const .only(
         topLeft: Radius.circular(16),
         topRight: Radius.circular(16),
         bottomLeft: Radius.circular(8),
@@ -191,7 +191,7 @@ class NotificationContent extends HookWidget {
             alpha: 0.6,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             children:
                 [
                       Iconify(
@@ -203,7 +203,7 @@ class NotificationContent extends HookWidget {
                       Text(
                         t.dateTimeNotif.notification.doNotDisturbEnabled,
                         style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                         ),
                       ),
                       Text(
@@ -277,13 +277,13 @@ class NotificationTile extends HookWidget {
     return CustomInkwell(
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: .circular(8),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const .symmetric(vertical: 8, horizontal: 12),
       onTap: () => isExpanded.value = !isExpanded.value,
       hoverColor: Colors.transparent,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           // Header
           Row(
@@ -291,13 +291,13 @@ class NotificationTile extends HookWidget {
               Text(
                 data.appName,
                 style: context.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: .bold,
                 ),
               ),
               SizedBox(
                 height: 4,
                 child: VerticalDivider(
-                  radius: BorderRadius.circular(8),
+                  radius: .circular(8),
                   width: 16,
                   color: context.colorScheme.outlineVariant,
                   thickness: 4,
@@ -321,7 +321,7 @@ class NotificationTile extends HookWidget {
                   style: IconButton.styleFrom(
                     backgroundColor: context.colorScheme.surfaceContainerHigh,
                   ),
-                  padding: EdgeInsets.zero,
+                  padding: .zero,
                   onPressed: () => get<NotificationBloc>().add(
                     NotificationEventClosed(data.id),
                   ),
@@ -342,7 +342,7 @@ class NotificationTile extends HookWidget {
             child: Text(
               data.summary,
               maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              overflow: .ellipsis,
             ),
           ),
 
@@ -350,14 +350,14 @@ class NotificationTile extends HookWidget {
           AnimatedSize(
             duration: Durations.medium2,
             curve: Curves.easeInOutCubic,
-            alignment: Alignment.topCenter,
+            alignment: .topCenter,
             child: isExpanded.value
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const .symmetric(vertical: 4),
                     child: Container(
                       decoration: BoxDecoration(
                         color: context.colorScheme.surfaceContainerLowest,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: .circular(8),
                       ),
                       child: Html(data: data.body),
                     ),
@@ -403,13 +403,13 @@ class DateTimeSection extends StatelessWidget {
         if (state is! DatetimeLoaded) return const SizedBox();
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: .start,
+          mainAxisSize: .min,
           children: [
             Text(
               DateFormat.Hms(t.locale).format(state.now),
               style: context.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             Text(
@@ -434,7 +434,7 @@ class ActionsSection extends StatelessWidget {
         if (state is! NotificationStateLoaded) return const SizedBox();
 
         return Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: Gaps.sm.value,
           children: [
             // Clear all button
@@ -453,7 +453,7 @@ class ActionsSection extends StatelessWidget {
                     backgroundColor:
                         context.colorScheme.surfaceContainerHighest,
                   ),
-                  padding: EdgeInsets.zero,
+                  padding: .zero,
                   onPressed: () => get<NotificationBloc>().add(
                     const NotificationEventCleared(),
                   ),
@@ -477,7 +477,7 @@ class ActionsSection extends StatelessWidget {
                       ? context.colorScheme.primary
                       : context.colorScheme.surfaceContainerHighest,
                 ),
-                padding: EdgeInsets.zero,
+                padding: .zero,
                 onPressed: () => get<NotificationBloc>().add(
                   const NotificationEventDndToggled(),
                 ),

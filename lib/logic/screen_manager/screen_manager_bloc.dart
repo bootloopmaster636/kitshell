@@ -21,7 +21,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     on<ScreenManagerEventClosePopup>(_onClosePopup, transformer: droppable());
   }
 
-  final layerShellManager = WaylandLayerShell();
+  final _layerShellManager = WaylandLayerShell();
 
   Future<void> _onStarted(
     ScreenManagerEventStarted event,
@@ -30,28 +30,28 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     // Get display resolution info
     final displays = await getDisplayInfo();
     final displayInfo = displays.last;
-    await layerShellManager.initialize(
+    await _layerShellManager.initialize(
       displayInfo.widthPx,
-      panelDefaultHeightPx + 16,
+      panelDefaultHeightPx,
     );
 
     // Set panel anchor to bottom
-    await layerShellManager.setAnchor(ShellEdge.edgeBottom, true);
+    await _layerShellManager.setAnchor(ShellEdge.edgeBottom, true);
 
     // Set keyboard interactivity to onDemand
     // see: https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity:entry:on_demand
-    await layerShellManager.setKeyboardMode(
+    await _layerShellManager.setKeyboardMode(
       ShellKeyboardMode.keyboardModeOnDemand,
     );
 
     // Set to top layer
-    await layerShellManager.setLayer(ShellLayer.layerTop);
+    await _layerShellManager.setLayer(ShellLayer.layerTop);
 
     // Set exclusive mode to only bottom panel
-    await layerShellManager.setExclusiveZone(panelDefaultHeightPx + 8);
+    await _layerShellManager.setExclusiveZone(panelDefaultHeightPx);
 
     // Set where shell appear. Shell will appear on primary monitor
-    await layerShellManager.setMonitor(
+    await _layerShellManager.setMonitor(
       Monitor(displayInfo.idx, displayInfo.name),
     );
 
@@ -63,7 +63,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
       ScreenManagerStateLoaded(
         isPopupShown: false,
         popupShown: PopupWidget.appMenu,
-        position: WidgetPosition.center,
+        position: .center,
         displays: displays,
       ),
     );
@@ -85,7 +85,7 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
 
     // Get display resolution info
     final displayInfo = loadedState.displays.last;
-    await layerShellManager.initialize(
+    await _layerShellManager.initialize(
       displayInfo.widthPx,
       displayInfo.heightPx,
     );
@@ -119,13 +119,13 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
     await Future<void>.delayed(popupOpenCloseDuration);
 
     // Reset layer state
-    await layerShellManager.setLayer(ShellLayer.layerTop);
-    await layerShellManager.setKeyboardMode(
+    await _layerShellManager.setLayer(ShellLayer.layerTop);
+    await _layerShellManager.setKeyboardMode(
       ShellKeyboardMode.keyboardModeOnDemand,
     );
-    await layerShellManager.initialize(
+    await _layerShellManager.initialize(
       displayInfo.widthPx,
-      panelDefaultHeightPx + 16,
+      panelDefaultHeightPx,
     );
   }
 }

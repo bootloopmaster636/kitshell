@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -12,6 +14,7 @@ import 'package:kitshell/etc/utitity/math.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/battery/qs_battery_bloc.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/brightness/qs_brightness_bloc.dart';
+import 'package:kitshell/logic/panel_components/quick_settings/internet/base/internet_cubit.dart';
 import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/screen/panel/panel.dart';
 import 'package:kitshell/src/rust/api/quick_settings/battery.dart';
@@ -25,6 +28,7 @@ class StatusbarComponent extends HookWidget {
     useEffect(() {
       get<QsBrightnessBloc>().add(const QsBrightnessEventStarted());
       get<QsBatteryBloc>().add(const QsBatteryEventStarted());
+      unawaited(get<InternetCubit>().start());
       return () {};
     }, []);
 
@@ -164,21 +168,21 @@ class StatusComponent extends HookWidget {
             ),
             if (value != null)
               Align(
-                alignment: Alignment.topLeft,
+                alignment: .topLeft,
                 child:
                     Container(
                           width: 16,
                           height: 14,
                           decoration: BoxDecoration(
                             color: context.colorScheme.primary,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: .circular(8),
                           ),
-                          alignment: Alignment.center,
+                          alignment: .center,
                           child: AnimatedFlipCounter(
                             value: value ?? 0,
                             textStyle: context.textTheme.labelMedium?.copyWith(
                               fontSize: 8,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: .bold,
                               color: context.colorScheme.onPrimary,
                             ),
                             duration: Durations.short2,
@@ -193,9 +197,9 @@ class StatusComponent extends HookWidget {
               ),
             if (cornerIcon != null)
               Align(
-                alignment: Alignment.bottomRight,
+                alignment: .bottomRight,
                 child: Padding(
-                  padding: const EdgeInsets.all(2),
+                  padding: const .all(2),
                   child: Iconify(
                     cornerIcon!,
                     color: context.colorScheme.secondary,

@@ -303,7 +303,7 @@ class LargeSliderRenderObject extends RenderBox {
     _iconPainter = TextPainter(
       text: _iconTextSpan,
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
+      textAlign: .center,
     );
     _iconPainter.layout();
 
@@ -314,7 +314,7 @@ class LargeSliderRenderObject extends RenderBox {
     _labelPainter = TextPainter(
       text: _labelTextSpan,
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.left,
+      textAlign: .left,
     );
     _labelPainter.layout();
 
@@ -325,7 +325,7 @@ class LargeSliderRenderObject extends RenderBox {
     _valuePainter = TextPainter(
       text: _valueTextSpan,
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.right,
+      textAlign: .right,
     );
     _valuePainter.layout();
 

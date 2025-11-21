@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:kitshell/data/source/hive/hive_registrar.g.dart';
+import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/ipc/ipc_bloc.dart';
@@ -24,7 +25,7 @@ Future<void> main() async {
   final waylandLayerShellPlugin = WaylandLayerShell();
   final isSupported = await waylandLayerShellPlugin.initialize(48, 48);
   if (!isSupported) {
-    runApp(const MaterialApp(home: Center(child: Text('Not supported'))));
+    runApp(TranslationProvider(child: const NotCompatibleWidget()));
     return;
   }
 
@@ -53,6 +54,35 @@ class MainApp extends StatelessWidget {
   }
 }
 
+class NotCompatibleWidget extends StatelessWidget {
+  const NotCompatibleWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: TranslationProvider.of(context).flutterLocale,
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      home: ColoredBox(
+        color: context.colorScheme.surface,
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            Text(
+              t.failedToLoad.title,
+              style: context.textTheme.titleLarge,
+            ),
+            Text(
+              t.failedToLoad.hint,
+              style: context.textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 Future<void> initDb() async {
   final dbDir = await getApplicationSupportDirectory();
 
@@ -71,9 +101,32 @@ ThemeData lightTheme = ThemeData(
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
   sliderTheme: const SliderThemeData(
     year2023: false,
-    padding: EdgeInsets.zero,
+    padding: .zero,
   ),
   splashFactory: InkSparkle.splashFactory,
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: {
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(
+        backgroundColor: Colors.transparent,
+      ),
+    },
+  ),
+  expansionTileTheme: ExpansionTileThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    collapsedShape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    childrenPadding: const .all(8),
+    expansionAnimationStyle: AnimationStyle(
+      curve: Easing.standard,
+      duration: Durations.medium2,
+      reverseCurve: Easing.standard.flipped,
+      reverseDuration: Durations.medium1,
+    ),
+    tilePadding: const .symmetric(horizontal: 16, vertical: 4),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -86,7 +139,30 @@ ThemeData darkTheme = ThemeData(
   progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
   sliderTheme: const SliderThemeData(
     year2023: false,
-    padding: EdgeInsets.zero,
+    padding: .zero,
   ),
   splashFactory: InkSparkle.splashFactory,
+  pageTransitionsTheme: const PageTransitionsTheme(
+    builders: {
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(
+        backgroundColor: Colors.transparent,
+      ),
+    },
+  ),
+  expansionTileTheme: ExpansionTileThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    collapsedShape: RoundedRectangleBorder(
+      borderRadius: .circular(16),
+    ),
+    childrenPadding: const .all(8),
+    expansionAnimationStyle: AnimationStyle(
+      curve: Easing.standard,
+      duration: Durations.medium2,
+      reverseCurve: Easing.standard.flipped,
+      reverseDuration: Durations.medium1,
+    ),
+    tilePadding: const .symmetric(horizontal: 16, vertical: 4),
+  ),
 );

@@ -7,6 +7,7 @@ import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/screen_manager/panel_enum.dart';
 import 'package:kitshell/logic/screen_manager/panel_gesture_cubit.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
+import 'package:kitshell/screen/panel/panel.dart';
 
 class PopupContainer extends StatelessWidget {
   const PopupContainer({super.key});
@@ -17,20 +18,24 @@ class PopupContainer extends StatelessWidget {
       bloc: get<ScreenManagerBloc>(),
       builder: (BuildContext context, ScreenManagerState state) {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
-        return Stack(
-          children: [
-            GestureDetector(
-              onTap: () {
-                get<ScreenManagerBloc>().add(
-                  const ScreenManagerEventClosePopup(),
-                );
-              },
+        return Navigator(
+          onGenerateRoute: (_) => MaterialPageRoute(
+            builder: (context) => Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    get<ScreenManagerBloc>().add(
+                      const ScreenManagerEventClosePopup(),
+                    );
+                  },
+                ),
+                const Padding(
+                  padding: .all(8),
+                  child: PopupContent(),
+                ),
+              ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: PopupContent(),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -48,23 +53,17 @@ class PopupContent extends StatelessWidget {
         if (state is! ScreenManagerStateLoaded) return const SizedBox();
 
         return AnimatedAlign(
-              duration: Durations.long1,
+              duration: Durations.medium4,
               curve: Curves.easeOutQuint,
               alignment: switch (state.position) {
-                WidgetPosition.left => Alignment.bottomLeft,
-                WidgetPosition.center => Alignment.bottomCenter,
-                WidgetPosition.right => Alignment.bottomRight,
+                .left => .bottomLeft,
+                .center => .bottomCenter,
+                .right => .bottomRight,
               },
-              child: AnimatedSize(
-                duration: Durations.medium1,
-                curve: Easing.standard,
-                clipBehavior: Clip.none,
-                child: AnimatedSwitcher(
-                  duration: Durations.medium1,
-                  child: PopupChild(
-                    key: ValueKey(state.popupShown),
-                    popup: state.popupShown,
-                  ),
+              child: InheritedAlignment(
+                position: state.position,
+                child: PopupChild(
+                  popup: state.popupShown,
                 ),
               ),
             )
@@ -84,6 +83,7 @@ class PopupContent extends StatelessWidget {
 
 class PopupChild extends StatelessWidget {
   const PopupChild({required this.popup, super.key});
+
   final PopupWidget popup;
 
   @override
@@ -98,7 +98,7 @@ class PopupChild extends StatelessWidget {
                   color: context.colorScheme.surfaceContainer.withValues(
                     alpha: popupBgOpacity,
                   ),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: .circular(16),
                   border: Border.all(
                     color: context.colorScheme.outlineVariant,
                   ),
@@ -112,12 +112,25 @@ class PopupChild extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Draggable(
-                  data: 'popup',
-                  maxSimultaneousDrags: 1,
-                  axis: Axis.vertical,
-                  feedback: const SizedBox.shrink(),
-                  child: popup.widget,
+                clipBehavior: Clip.antiAlias,
+                child: AnimatedSize(
+                  duration: Durations.medium4,
+                  curve: Curves.easeInOutCubicEmphasized,
+                  alignment: .bottomCenter,
+                  clipBehavior: Clip.none,
+                  child: Draggable(
+                    key: ValueKey(popup.hashCode),
+                    data: 'popup',
+                    maxSimultaneousDrags: 1,
+                    axis: Axis.vertical,
+                    feedback: const SizedBox.shrink(),
+                    child: popup.widget
+                        .animate(key: ValueKey(popup.hashCode))
+                        .fadeIn(
+                          duration: Durations.medium1,
+                          curve: Curves.easeOut,
+                        ),
+                  ),
                 ),
               )
               .animate(target: state.readyToClose ? 1 : 0)
