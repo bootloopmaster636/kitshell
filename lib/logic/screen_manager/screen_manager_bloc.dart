@@ -89,8 +89,8 @@ class ScreenManagerBloc extends Bloc<ScreenManagerEvent, ScreenManagerState> {
       displayInfo.widthPx,
       displayInfo.heightPx,
     );
-    await _layerShellManager.setLayer(ShellLayer.layerOverlay);
-    await _layerShellManager.setKeyboardMode(
+    await layerShellManager.setLayer(ShellLayer.layerOverlay);
+    await layerShellManager.setKeyboardMode(
       ShellKeyboardMode.keyboardModeExclusive,
     );
     emit(
