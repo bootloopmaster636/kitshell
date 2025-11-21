@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
@@ -17,7 +18,7 @@ class WlanDetails extends HookWidget {
   Widget build(BuildContext context) {
     final openedIdx = useState(-1);
     final _ = useMemoized(() async {
-      await Future<void>.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(Durations.long1);
       wlanBloc.add(const WlanEventScanned());
       return () {};
     }, []);
@@ -56,16 +57,21 @@ class WlanDetails extends HookWidget {
               ...state.accessPoints.indexed.map((data) {
                 final (idx, ap) = data;
                 return Container(
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.surfaceContainer,
-                  ),
-                  padding: const .only(bottom: 2),
-                  child: AccessPointTile(
-                    apDetail: ap,
-                    openedIdx: openedIdx,
-                    idx: idx,
-                  ),
-                );
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.surfaceContainer,
+                      ),
+                      padding: const .only(bottom: 2),
+                      child: AccessPointTile(
+                        apDetail: ap,
+                        openedIdx: openedIdx,
+                        idx: idx,
+                      ),
+                    )
+                    .animate(
+                      key: ValueKey(ap),
+                      delay: Duration(milliseconds: 40 * idx),
+                    )
+                    .fadeIn();
               }),
             ],
           );
@@ -125,7 +131,7 @@ class ApTileCollapsed extends StatelessWidget {
           switch (apDetail.strength) {
             >= 0 && <= 25 => LucideIcons.wifiZero,
             > 25 && <= 50 => LucideIcons.wifiLow,
-            > 50 && <= 75 => LucideIcons.wifiHigh,
+            > 50 && < 75 => LucideIcons.wifiHigh,
             >= 75 && <= 100 => LucideIcons.wifi,
             _ => LucideIcons.circleQuestionMark,
           },
@@ -139,7 +145,7 @@ class ApTileCollapsed extends StatelessWidget {
           children: [
             Text(
               apDetail.ssid,
-              style: context.textTheme.bodyMedium?.copyWith(
+              style: context.textTheme.titleMedium?.copyWith(
                 color: apDetail.isActive
                     ? context.colorScheme.primary
                     : context.colorScheme.onSurface,
@@ -153,21 +159,66 @@ class ApTileCollapsed extends StatelessWidget {
   }
 }
 
-class ApTileExpanded extends StatelessWidget {
+class ApTileExpanded extends HookWidget {
   const ApTileExpanded({required this.apDetail, super.key});
   final AccessPoint apDetail;
 
   @override
   Widget build(BuildContext context) {
+    final connectAuto = useState(true);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: Gaps.sm.value,
+      spacing: Gaps.md.value,
       children: [
+        // AP name and info
         ApTileCollapsed(apDetail: apDetail),
 
-        FilledButton(
-          onPressed: () {},
-          child: Text(t.quickSettings.internet.general.connect),
+        // AP details
+        Container(
+          decoration: BoxDecoration(
+            color: context.colorScheme.surfaceContainerLow,
+            borderRadius: .circular(8),
+          ),
+          padding: const .all(8),
+          child: Column(
+            crossAxisAlignment: .stretch,
+            children: [
+              Text(
+                t.quickSettings.internet.wifi.signalStrength(
+                  val: apDetail.strength,
+                ),
+                style: context.textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
+
+        // Connect/disconnect button
+        Row(
+          children: [
+            const Spacer(),
+            FilledButton(
+              onPressed: () {
+                final wlanBloc = BlocProvider.of<WlanBloc>(context);
+                if (apDetail.isActive) {
+                  wlanBloc.add(const WlanEventDisconnect());
+                } else {
+                  wlanBloc.add(
+                    WlanEventConnect(
+                      apPath: apDetail.apPath,
+                      ssid: apDetail.ssid,
+                    ),
+                  );
+                }
+              },
+              child: Text(
+                apDetail.isActive
+                    ? t.quickSettings.internet.general.disconnect
+                    : t.quickSettings.internet.general.connect,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -188,24 +239,24 @@ class ApCapabilities extends StatelessWidget {
           if (apDetail.isActive)
             _capabilityBuilder(
               context,
-              t.quickSettings.internet.wifi.capabilities.active,
+              t.quickSettings.internet.wifi.info.active,
             ),
 
           if (apDetail.rsnSecurityFlag == ApSecurityFlag.none &&
               apDetail.wpaSecurityFlag == ApSecurityFlag.none)
             _capabilityBuilder(
               context,
-              t.quickSettings.internet.wifi.capabilities.open,
+              t.quickSettings.internet.wifi.info.open,
             ),
 
           switch (apDetail.frequency) {
             WifiFreq.freq5Ghz => _capabilityBuilder(
               context,
-              t.quickSettings.internet.wifi.capabilities.freq5g,
+              t.quickSettings.internet.wifi.info.freq5g,
             ),
             WifiFreq.freq6Ghz => _capabilityBuilder(
               context,
-              t.quickSettings.internet.wifi.capabilities.freq6g,
+              t.quickSettings.internet.wifi.info.freq6g,
             ),
             WifiFreq.freq24Ghz ||
             WifiFreq.freqUnknown => const SizedBox.shrink(),

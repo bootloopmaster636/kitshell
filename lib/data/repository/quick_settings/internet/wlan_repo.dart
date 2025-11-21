@@ -46,6 +46,29 @@ class WlanRepo {
     accessPoints.add(apList);
   }
 
+  /// Connect
+  Future<void> connect({
+    required String apPath,
+    required String ssid,
+    String? password,
+  }) async {
+    logger.i('WlanRepo: Connecting to wifi $ssid');
+    await _wlanDevice.connectToAp(
+      ssid: ssid,
+      apPath: apPath,
+      password: password,
+      isApSaved: true,
+    );
+    logger.i('WlanRepo: Connected to $ssid');
+  }
+
+  /// Disconnect current connection
+  Future<void> disconnect() async {
+    logger.i('WlanRepo: Disconnecting from AP');
+    await _wlanDevice.disconnect();
+    logger.i('WlanRepo: Disconnected');
+  }
+
   /// Dispose the device, this should be called when the device
   /// is not used / does not exist anymore.
   Future<void> dispose() async {

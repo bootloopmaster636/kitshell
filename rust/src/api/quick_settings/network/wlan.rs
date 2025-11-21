@@ -7,7 +7,10 @@ use rusty_network_manager::{AccessPointProxy, DeviceProxy, NetworkManagerProxy, 
 use smol::Timer;
 use std::collections::HashMap;
 use std::time::Duration;
-use zbus::{zvariant::OwnedObjectPath, Connection};
+use zbus::{
+    zvariant::{OwnedObjectPath, Value},
+    Connection,
+};
 
 /// Enum containing connectivity state
 ///
@@ -68,6 +71,9 @@ pub struct AccessPoint {
 
     /// Whether this AP is currently active and connected
     pub is_active: bool,
+
+    /// DBUS path for this AP
+    pub ap_path: String,
 }
 
 #[derive(Clone, Copy, Ord, Eq, PartialOrd, PartialEq)]
@@ -220,18 +226,6 @@ impl WlanDevice {
                 _ => WifiFreq::FreqUnknown,
             };
 
-            let security = match ap_proxy.wpa_flags().await {
-                Ok(val) => ApSecurityFlag::try_from_primitive(val),
-                Err(_) => bail!("API | Network | WLAN: Cannot get AP WPA flag"),
-            };
-            let security_enum = match security {
-                Ok(val) => val,
-                Err(_) => {
-                    println!("API | Network | WLAN: Got unknown AP WPA flag");
-                    ApSecurityFlag::Unknown
-                }
-            };
-
             let wpa_security = match ap_proxy.wpa_flags().await {
                 Ok(val) => ApSecurityFlag::try_from_primitive(val),
                 Err(_) => bail!("API | Network | WLAN: Cannot get AP WPA flag"),
@@ -265,6 +259,7 @@ impl WlanDevice {
                 wpa_security_flag: wpa_security_enum,
                 rsn_security_flag: rsn_security_enum,
                 is_active,
+                ap_path: String::from(ap_path.as_str()),
             });
         }
 
@@ -275,7 +270,79 @@ impl WlanDevice {
         Ok(access_points)
     }
 
-    pub async fn connect_to_ap(&self, ssid: String, password: Option<String>) -> Result<(), Error> {
+    pub async fn connect_to_ap(
+        &self,
+        ssid: String,
+        password: Option<String>,
+        ap_path: String,
+        is_ap_saved: bool,
+    ) -> Result<(), Error> {
+        println!("API | Network | WLAN: Connecting to AP {}", ssid);
+        let nm = self.get_nm_proxy().await?;
+        let mut connection_settings: HashMap<&str, HashMap<&str, Value<'_>>> = HashMap::new();
+
+        // connection settings
+        println!("API | Network | WLAN: Making config");
+        let mut connection: HashMap<&str, Value<'_>> = HashMap::new();
+        connection.insert("id", Value::new(self.interface.clone()));
+        connection.insert("type", Value::new("802-11-wireless"));
+        connection_settings.insert("connection", connection);
+
+        // wifi info
+        let mut wireless80211: HashMap<&str, Value<'_>> = HashMap::new();
+        wireless80211.insert("ssid", Value::new(ssid.as_bytes()));
+        connection_settings.insert("802-11-wireless", wireless80211);
+
+        // if require password, add password
+        if password.is_some() {
+            let mut wireless_security: HashMap<&str, Value<'_>> = HashMap::new();
+            wireless_security.insert("psk", Value::new(password.unwrap()));
+            connection_settings.insert("802-11-wireless-security", wireless_security);
+        }
+
+        // Ip config
+        let mut ipv4: HashMap<&str, Value<'_>> = HashMap::new();
+        ipv4.insert("method", Value::new("auto"));
+        connection_settings.insert("ipv4", ipv4);
+
+        let mut ipv6: HashMap<&str, Value<'_>> = HashMap::new();
+        ipv6.insert("method", Value::new("auto"));
+        connection_settings.insert("ipv6", ipv6);
+
+        let specific_object = match OwnedObjectPath::try_from(ap_path) {
+            Ok(val) => val,
+            Err(_) => {
+                bail!("API | Network | WLAN: Could not get AP Path owned object path");
+            }
+        };
+
+        println!("API | Network | WLAN: Config created, connecting");
+        if is_ap_saved {
+            nm.activate_connection(
+                &OwnedObjectPath::try_from("/").unwrap(),
+                &self.device_path.as_ref().unwrap(),
+                &specific_object,
+            )
+            .await
+            .expect("Could not activate connection");
+        } else {
+            nm.add_and_activate_connection(
+                connection_settings,
+                &self.device_path.as_ref().unwrap(),
+                &specific_object,
+            )
+            .await
+            .expect("Could not add and activate connection");
+        }
+        println!("API | Network | WLAN: Connection request to {} sent", ssid);
+
+        Ok(())
+    }
+
+    pub async fn disconnect(&self) -> Result<(), Error> {
+        let device_proxy = self.get_device_proxy().await?;
+        device_proxy.disconnect().await?;
+
         Ok(())
     }
 
@@ -289,6 +356,18 @@ impl WlanDevice {
             let state = device_proxy.state().await?;
             let _ = sink.add(InternetDeviceState::try_from_primitive(state)?);
             Timer::after(Duration::from_millis(100)).await;
+        }
+    }
+
+    /// Get a wireless proxy for this device
+    async fn get_nm_proxy(&self) -> Result<NetworkManagerProxy<'_>, Error> {
+        if let Some(connection) = &self.dbus_connection {
+            match NetworkManagerProxy::new(connection).await {
+                Ok(proxy) => Ok(proxy),
+                Err(e) => bail!("Failed to create wireless proxy: {}", e),
+            }
+        } else {
+            bail!("Device not initialized. Call init() first.")
         }
     }
 

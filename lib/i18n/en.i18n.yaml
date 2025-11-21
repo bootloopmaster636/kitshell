@@ -62,8 +62,9 @@ quickSettings:
       disconnected: Disconnected
     wifi:
       passwordRequired: A password is required to connect to this Wi-Fi. Please type the password...
-      signalStrength: Signal strength $val%
-      capabilities:
+      signalStrength: "Signal strength: $val%"
+      connectAuto: Connect automatically?
+      info:
         active: Connected
         freq5g: 5GHz
         freq6g: 6GHz

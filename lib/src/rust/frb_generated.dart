@@ -83,7 +83,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1455776400;
+  int get rustContentHash => 760376969;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -160,7 +160,13 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceConnectToAp({
     required WlanDevice that,
     required String ssid,
+    required String apPath,
+    required bool isApSaved,
     String? password,
+  });
+
+  Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceDisconnect({
+    required WlanDevice that,
   });
 
   Future<List<AccessPoint>>
@@ -693,6 +699,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceConnectToAp({
     required WlanDevice that,
     required String ssid,
+    required String apPath,
+    required bool isApSaved,
     String? password,
   }) {
     return handler.executeNormal(
@@ -705,6 +713,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
           sse_encode_String(ssid, serializer);
           sse_encode_opt_String(password, serializer);
+          sse_encode_String(apPath, serializer);
+          sse_encode_bool(isApSaved, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
@@ -718,7 +728,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         ),
         constMeta:
             kCrateApiQuickSettingsNetworkWlanWlanDeviceConnectToApConstMeta,
-        argValues: [that, ssid, password],
+        argValues: [that, ssid, password, apPath, isApSaved],
         apiImpl: this,
       ),
     );
@@ -728,7 +738,45 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   get kCrateApiQuickSettingsNetworkWlanWlanDeviceConnectToApConstMeta =>
       const TaskConstMeta(
         debugName: 'WlanDevice_connect_to_ap',
-        argNames: ['that', 'ssid', 'password'],
+        argNames: ['that', 'ssid', 'password', 'apPath', 'isApSaved'],
+      );
+
+  @override
+  Future<void> crateApiQuickSettingsNetworkWlanWlanDeviceDisconnect({
+    required WlanDevice that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerWlanDevice(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 18,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_AnyhowException,
+        ),
+        constMeta:
+            kCrateApiQuickSettingsNetworkWlanWlanDeviceDisconnectConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiQuickSettingsNetworkWlanWlanDeviceDisconnectConstMeta =>
+      const TaskConstMeta(
+        debugName: 'WlanDevice_disconnect',
+        argNames: ['that'],
       );
 
   @override
@@ -747,7 +795,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 18,
+            funcId: 19,
             port: port_,
           );
         },
@@ -785,7 +833,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 19,
+            funcId: 20,
             port: port_,
           );
         },
@@ -825,7 +873,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 20,
+              funcId: 21,
               port: port_,
             );
           },
@@ -865,7 +913,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 21,
+            funcId: 22,
             port: port_,
           );
         },
@@ -902,7 +950,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 22,
+            funcId: 23,
             port: port_,
           );
         },
@@ -937,7 +985,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 23,
+            funcId: 24,
             port: port_,
           );
         },
@@ -969,7 +1017,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 24,
+            funcId: 25,
             port: port_,
           );
         },
@@ -1002,7 +1050,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 25,
+            funcId: 26,
             port: port_,
           );
         },
@@ -1035,7 +1083,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 26,
+            funcId: 27,
             port: port_,
           );
         },
@@ -1065,7 +1113,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 27,
+            funcId: 28,
             port: port_,
           );
         },
@@ -1098,7 +1146,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 28,
+            funcId: 29,
             port: port_,
           );
         },
@@ -1129,7 +1177,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 29,
+            funcId: 30,
             port: port_,
           );
         },
@@ -1162,7 +1210,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 30,
+            funcId: 31,
             port: port_,
           );
         },
@@ -1197,7 +1245,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 31,
+            funcId: 32,
             port: port_,
           );
         },
@@ -1232,7 +1280,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 32,
+            funcId: 33,
             port: port_,
           );
         },
@@ -1265,7 +1313,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 33,
+              funcId: 34,
               port: port_,
             );
           },
@@ -1300,7 +1348,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 34,
+            funcId: 35,
             port: port_,
           );
         },
@@ -1333,7 +1381,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 35,
+            funcId: 36,
             port: port_,
           );
         },
@@ -1366,7 +1414,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 36,
+            funcId: 37,
             port: port_,
           );
         },
@@ -1399,7 +1447,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 37,
+              funcId: 38,
               port: port_,
             );
           },
@@ -1435,7 +1483,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 38,
+              funcId: 39,
               port: port_,
             );
           },
@@ -1472,7 +1520,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 39,
+              funcId: 40,
               port: port_,
             );
           },
@@ -1507,7 +1555,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 40,
+              funcId: 41,
               port: port_,
             );
           },
@@ -1545,7 +1593,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 41,
+              funcId: 42,
               port: port_,
             );
           },
@@ -1580,7 +1628,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 42,
+              funcId: 43,
               port: port_,
             );
           },
@@ -1792,8 +1840,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AccessPoint dco_decode_access_point(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
     return AccessPoint(
       ssid: dco_decode_String(arr[0]),
       strength: dco_decode_u_8(arr[1]),
@@ -1801,6 +1849,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       wpaSecurityFlag: dco_decode_ap_security_flag(arr[3]),
       rsnSecurityFlag: dco_decode_ap_security_flag(arr[4]),
       isActive: dco_decode_bool(arr[5]),
+      apPath: dco_decode_String(arr[6]),
     );
   }
 
@@ -2588,6 +2637,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_wpaSecurityFlag = sse_decode_ap_security_flag(deserializer);
     final var_rsnSecurityFlag = sse_decode_ap_security_flag(deserializer);
     final var_isActive = sse_decode_bool(deserializer);
+    final var_apPath = sse_decode_String(deserializer);
     return AccessPoint(
       ssid: var_ssid,
       strength: var_strength,
@@ -2595,6 +2645,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       wpaSecurityFlag: var_wpaSecurityFlag,
       rsnSecurityFlag: var_rsnSecurityFlag,
       isActive: var_isActive,
+      apPath: var_apPath,
     );
   }
 
@@ -3642,6 +3693,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_ap_security_flag(self.wpaSecurityFlag, serializer);
     sse_encode_ap_security_flag(self.rsnSecurityFlag, serializer);
     sse_encode_bool(self.isActive, serializer);
+    sse_encode_String(self.apPath, serializer);
   }
 
   @protected
@@ -4381,13 +4433,23 @@ class WlanDeviceImpl extends RustOpaque implements WlanDevice {
         interface_: interface_,
       );
 
-  Future<void> connectToAp({required String ssid, String? password}) => RustLib
-      .instance
-      .api
+  Future<void> connectToAp({
+    required String ssid,
+    required String apPath,
+    required bool isApSaved,
+    String? password,
+  }) => RustLib.instance.api
       .crateApiQuickSettingsNetworkWlanWlanDeviceConnectToAp(
         that: this,
         ssid: ssid,
         password: password,
+        apPath: apPath,
+        isApSaved: isApSaved,
+      );
+
+  Future<void> disconnect() =>
+      RustLib.instance.api.crateApiQuickSettingsNetworkWlanWlanDeviceDisconnect(
+        that: this,
       );
 
   Future<List<AccessPoint>> getAccessPoints() => RustLib.instance.api

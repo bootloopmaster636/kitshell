@@ -40,7 +40,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1455776400;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 760376969;
 
 // Section: executor
 
@@ -604,6 +604,8 @@ fn wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_imp
             >>::sse_decode(&mut deserializer);
             let api_ssid = <String>::sse_decode(&mut deserializer);
             let api_password = <Option<String>>::sse_decode(&mut deserializer);
+            let api_ap_path = <String>::sse_decode(&mut deserializer);
+            let api_is_ap_saved = <bool>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
@@ -630,6 +632,67 @@ fn wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_imp
                                 &*api_that_guard,
                                 api_ssid,
                                 api_password,
+                                api_ap_path,
+                                api_is_ap_saved,
+                            )
+                            .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__quick_settings__network__wlan__WlanDevice_disconnect_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "WlanDevice_disconnect",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<WlanDevice>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_that_guard = api_that_guard.unwrap();
+                        let output_ok =
+                            crate::api::quick_settings::network::wlan::WlanDevice::disconnect(
+                                &*api_that_guard,
                             )
                             .await?;
                         Ok(output_ok)
@@ -1792,6 +1855,7 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
         let mut var_rsnSecurityFlag =
             <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
         let mut var_isActive = <bool>::sse_decode(deserializer);
+        let mut var_apPath = <String>::sse_decode(deserializer);
         return crate::api::quick_settings::network::wlan::AccessPoint {
             ssid: var_ssid,
             strength: var_strength,
@@ -1799,6 +1863,7 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
             wpa_security_flag: var_wpaSecurityFlag,
             rsn_security_flag: var_rsnSecurityFlag,
             is_active: var_isActive,
+            ap_path: var_apPath,
         };
     }
 }
@@ -2629,19 +2694,25 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        18 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(
+        18 => wire__crate__api__quick_settings__network__wlan__WlanDevice_disconnect_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        19 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(
+        19 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        20 => {
+        20 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        21 => {
             wire__crate__api__quick_settings__network__wlan__WlanDevice_monitor_device_state_impl(
                 port,
                 ptr,
@@ -2649,125 +2720,125 @@ fn pde_ffi_dispatcher_primary_impl(
                 data_len,
             )
         }
-        21 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(
+        22 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        22 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
+        23 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        23 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(
+        24 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        24 => wire__crate__api__wm_interface__base__detect_current_wm_impl(
+        25 => wire__crate__api__wm_interface__base__detect_current_wm_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        25 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
+        26 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        26 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
+        27 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        27 => {
+        28 => {
             wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len)
         }
-        28 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
+        29 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        29 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(
+        30 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        30 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
+        31 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        31 => wire__crate__api__notifications__invoke_notif_action_impl(
+        32 => wire__crate__api__notifications__invoke_notif_action_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        32 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
+        33 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        33 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
-        34 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
+        34 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
+        35 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        35 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
+        36 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        36 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
+        37 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        37 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
+        38 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        38 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
+        39 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        39 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
+        40 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        40 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
+        41 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        41 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
+        42 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        42 => wire__crate__api__notifications__watch_notification_bus_impl(
+        43 => wire__crate__api__notifications__watch_notification_bus_impl(
             port,
             ptr,
             rust_vec_len,
@@ -2843,6 +2914,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::network::wlan
             self.wpa_security_flag.into_into_dart().into_dart(),
             self.rsn_security_flag.into_into_dart().into_dart(),
             self.is_active.into_into_dart().into_dart(),
+            self.ap_path.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -3677,6 +3749,7 @@ impl SseEncode for crate::api::quick_settings::network::wlan::AccessPoint {
             serializer,
         );
         <bool>::sse_encode(self.is_active, serializer);
+        <String>::sse_encode(self.ap_path, serializer);
     }
 }
 

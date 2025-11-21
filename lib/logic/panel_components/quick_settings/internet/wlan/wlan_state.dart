@@ -8,5 +8,6 @@ sealed class WlanState with _$WlanState {
     required bool isScanning,
     required List<AccessPoint> accessPoints,
     required InternetDeviceState devState,
+    String? activeDevicePath,
   }) = _WlanState;
 }

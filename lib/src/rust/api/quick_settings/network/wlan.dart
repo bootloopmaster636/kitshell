@@ -7,7 +7,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/api/quick_settings/network/network_devices.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_wireless_proxy`
+// These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_nm_proxy`, `get_wireless_proxy`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ConnectivityState`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
 
@@ -27,7 +27,14 @@ abstract class WlanDevice implements RustOpaqueInterface {
 
   set interface(String interface_);
 
-  Future<void> connectToAp({required String ssid, String? password});
+  Future<void> connectToAp({
+    required String ssid,
+    required String apPath,
+    required bool isApSaved,
+    String? password,
+  });
+
+  Future<void> disconnect();
 
   Future<List<AccessPoint>> getAccessPoints();
 
@@ -47,6 +54,7 @@ class AccessPoint {
     required this.wpaSecurityFlag,
     required this.rsnSecurityFlag,
     required this.isActive,
+    required this.apPath,
   });
 
   /// This access point name/SSID
@@ -67,6 +75,9 @@ class AccessPoint {
   /// Whether this AP is currently active and connected
   final bool isActive;
 
+  /// DBUS path for this AP
+  final String apPath;
+
   @override
   int get hashCode =>
       ssid.hashCode ^
@@ -74,7 +85,8 @@ class AccessPoint {
       frequency.hashCode ^
       wpaSecurityFlag.hashCode ^
       rsnSecurityFlag.hashCode ^
-      isActive.hashCode;
+      isActive.hashCode ^
+      apPath.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -86,7 +98,8 @@ class AccessPoint {
           frequency == other.frequency &&
           wpaSecurityFlag == other.wpaSecurityFlag &&
           rsnSecurityFlag == other.rsnSecurityFlag &&
-          isActive == other.isActive;
+          isActive == other.isActive &&
+          apPath == other.apPath;
 }
 
 /// Enum containing AP security flags
