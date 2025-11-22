@@ -2,22 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconify_flutter_plus/iconify_flutter_plus.dart';
 import 'package:iconify_flutter_plus/icons/bi.dart';
 import 'package:iconify_flutter_plus/icons/ic.dart';
 import 'package:kitshell/data/model/runtime/appinfo/appinfo_model.dart';
-import 'package:kitshell/etc/component/custom_contextmenu.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
-import 'package:kitshell/etc/component/text_icon.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/injectable.dart';
 import 'package:kitshell/logic/panel_components/appmenu/appmenu_bloc.dart';
-import 'package:kitshell/logic/panel_components/launchbar/launchbar_bloc.dart';
 import 'package:kitshell/logic/screen_manager/screen_manager_bloc.dart';
 
 class AppmenuPopup extends HookWidget {
@@ -99,7 +95,7 @@ class AppsList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return AppEntryTile(
                     key: ValueKey(state.searchResult?[index].hashCode),
-                    appInfo: state.searchResult![index],
+                    appInfo: state.searchResult[index],
                   );
                 },
               ),
@@ -163,28 +159,25 @@ class AppEntryTilePinned extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 140,
-      child: ContextMenuRegion(
-        contextMenu: makeContextMenu(context, appInfo),
-        child: CustomInkwell(
-          decoration: BoxDecoration(borderRadius: .circular(8)),
-          onTap: () {
-            get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
-            get<AppmenuBloc>().add(
-              AppmenuAppExecuted(appInfo),
-            );
-          },
-          child: Column(
-            spacing: Gaps.sm.value,
-            children: [
-              AppIconBuilder(icon: appInfo.metadata.iconPath),
-              Text(
-                appInfo.entry.name,
-                maxLines: 2,
-                overflow: .ellipsis,
-                textAlign: .center,
-              ),
-            ],
-          ),
+      child: CustomInkwell(
+        decoration: BoxDecoration(borderRadius: .circular(8)),
+        onTap: () {
+          get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+          get<AppmenuBloc>().add(
+            AppmenuAppExecuted(appInfo),
+          );
+        },
+        child: Column(
+          spacing: Gaps.sm.value,
+          children: [
+            AppIconBuilder(icon: appInfo.metadata.iconPath),
+            Text(
+              appInfo.entry.name,
+              maxLines: 2,
+              overflow: .ellipsis,
+              textAlign: .center,
+            ),
+          ],
         ),
       ),
     );
@@ -198,23 +191,20 @@ class AppEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ContextMenuRegion(
-      contextMenu: makeContextMenu(context, appInfo),
-      child: CustomInkwell(
-        decoration: BoxDecoration(borderRadius: .circular(8)),
-        onTap: () {
-          get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
-          get<AppmenuBloc>().add(
-            AppmenuAppExecuted(appInfo),
-          );
-        },
-        child: Row(
-          spacing: Gaps.sm.value,
-          children: [
-            AppIconBuilder(icon: appInfo.metadata.iconPath),
-            Text(appInfo.entry.name),
-          ],
-        ),
+    return CustomInkwell(
+      decoration: BoxDecoration(borderRadius: .circular(8)),
+      onTap: () {
+        get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+        get<AppmenuBloc>().add(
+          AppmenuAppExecuted(appInfo),
+        );
+      },
+      child: Row(
+        spacing: Gaps.sm.value,
+        children: [
+          AppIconBuilder(icon: appInfo.metadata.iconPath),
+          Text(appInfo.entry.name),
+        ],
       ),
     );
   }
@@ -266,138 +256,138 @@ class AppIconBuilder extends StatelessWidget {
   }
 }
 
-ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
-  final menuEntries = <ContextMenuEntry<void>>[
-    CustomContextMenuBuilder(
-      widget: Container(
-        width: 300,
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainer,
-          borderRadius: .circular(8),
-        ),
-        padding: const .all(16),
-        child: Row(
-          spacing: Gaps.sm.value,
-          children: [
-            AppIconBuilder(
-              icon: appInfo.metadata.iconPath,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    appInfo.entry.name,
-                    maxLines: 2,
-                    overflow: .ellipsis,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontWeight: .bold,
-                    ),
-                  ),
-                  if (appInfo.entry.desc.isNotEmpty)
-                    Text(
-                      appInfo.entry.desc,
-                      maxLines: 3,
-                      overflow: .ellipsis,
-                      style: context.textTheme.bodySmall,
-                    ),
-                  Gaps.xs.gap,
-                  if (appInfo.entry.exec.isNotEmpty)
-                    Text(
-                      appInfo.entry.exec.join(' '),
-                      maxLines: 1,
-                      overflow: .ellipsis,
-                      style: context.textTheme.labelSmall,
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-    const MenuDivider(color: Colors.transparent),
+// ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {
+//   final menuEntries = <ContextMenuEntry<void>>[
+//     CustomContextMenuBuilder(
+//       widget: Container(
+//         width: 300,
+//         decoration: BoxDecoration(
+//           color: context.colorScheme.surfaceContainer,
+//           borderRadius: .circular(8),
+//         ),
+//         padding: const .all(16),
+//         child: Row(
+//           spacing: Gaps.sm.value,
+//           children: [
+//             AppIconBuilder(
+//               icon: appInfo.metadata.iconPath,
+//             ),
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: .start,
+//                 children: [
+//                   Text(
+//                     appInfo.entry.name,
+//                     maxLines: 2,
+//                     overflow: .ellipsis,
+//                     style: context.textTheme.bodyMedium?.copyWith(
+//                       fontWeight: .bold,
+//                     ),
+//                   ),
+//                   if (appInfo.entry.desc.isNotEmpty)
+//                     Text(
+//                       appInfo.entry.desc,
+//                       maxLines: 3,
+//                       overflow: .ellipsis,
+//                       style: context.textTheme.bodySmall,
+//                     ),
+//                   Gaps.xs.gap,
+//                   if (appInfo.entry.exec.isNotEmpty)
+//                     Text(
+//                       appInfo.entry.exec.join(' '),
+//                       maxLines: 1,
+//                       overflow: .ellipsis,
+//                       style: context.textTheme.labelSmall,
+//                     ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     ),
+//     const MenuDivider(color: Colors.transparent),
 
-    CustomContextMenuBuilder(
-      widget: CustomInkwell(
-        onTap: () {
-          get<AppmenuBloc>().add(AppmenuPinToggled(appInfo.entry.id));
-          Navigator.of(context).pop();
-        },
-        child: Align(
-          alignment: .centerLeft,
-          child: TextIcon(
-            text: Text(
-              appInfo.metadata.isPinned
-                  ? t.appMenu.contextMenu.unpin
-                  : t.appMenu.contextMenu.pin,
-              style: context.textTheme.bodyMedium,
-            ),
-            icon: Iconify(
-              appInfo.metadata.isPinned
-                  ? Ic.outline_pin_off
-                  : Ic.outline_push_pin,
-              size: 16,
-              color: context.colorScheme.onSurface,
-            ),
-          ),
-        ),
-      ),
-    ),
+//     CustomContextMenuBuilder(
+//       widget: CustomInkwell(
+//         onTap: () {
+//           get<AppmenuBloc>().add(AppmenuPinToggled(appInfo.entry.id));
+//           Navigator.of(context).pop();
+//         },
+//         child: Align(
+//           alignment: .centerLeft,
+//           child: TextIcon(
+//             text: Text(
+//               appInfo.metadata.isPinned
+//                   ? t.appMenu.contextMenu.unpin
+//                   : t.appMenu.contextMenu.pin,
+//               style: context.textTheme.bodyMedium,
+//             ),
+//             icon: Iconify(
+//               appInfo.metadata.isPinned
+//                   ? Ic.outline_pin_off
+//                   : Ic.outline_push_pin,
+//               size: 16,
+//               color: context.colorScheme.onSurface,
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
 
-    CustomContextMenuBuilder(
-      widget: CustomInkwell(
-        onTap: () {
-          get<LaunchbarBloc>().add(LaunchbarEventAdded(appInfo.entry.id));
-          Navigator.of(context).pop();
-        },
-        child: Align(
-          alignment: .centerLeft,
-          child: TextIcon(
-            text: Text(
-              t.appMenu.contextMenu.add,
-              style: context.textTheme.bodyMedium,
-            ),
-            icon: Iconify(
-              Ic.outline_rocket_launch,
-              size: 16,
-              color: context.colorScheme.onSurface,
-            ),
-          ),
-        ),
-      ),
-    ),
+//     CustomContextMenuBuilder(
+//       widget: CustomInkwell(
+//         onTap: () {
+//           get<LaunchbarBloc>().add(LaunchbarEventAdded(appInfo.entry.id));
+//           Navigator.of(context).pop();
+//         },
+//         child: Align(
+//           alignment: .centerLeft,
+//           child: TextIcon(
+//             text: Text(
+//               t.appMenu.contextMenu.add,
+//               style: context.textTheme.bodyMedium,
+//             ),
+//             icon: Iconify(
+//               Ic.outline_rocket_launch,
+//               size: 16,
+//               color: context.colorScheme.onSurface,
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
 
-    CustomContextMenuBuilder(
-      widget: CustomInkwell(
-        onTap: () {
-          get<AppmenuBloc>().add(AppmenuRankReset(appInfo.entry.id));
-          Navigator.of(context).pop();
-        },
-        child: Align(
-          alignment: .centerLeft,
-          child: TextIcon(
-            text: Text(
-              t.appMenu.contextMenu.resetRank,
-              style: context.textTheme.bodyMedium,
-            ),
-            icon: Iconify(
-              Ic.outline_restart_alt,
-              size: 16,
-              color: context.colorScheme.onSurface,
-            ),
-          ),
-        ),
-      ),
-    ),
-  ];
+//     CustomContextMenuBuilder(
+//       widget: CustomInkwell(
+//         onTap: () {
+//           get<AppmenuBloc>().add(AppmenuRankReset(appInfo.entry.id));
+//           Navigator.of(context).pop();
+//         },
+//         child: Align(
+//           alignment: .centerLeft,
+//           child: TextIcon(
+//             text: Text(
+//               t.appMenu.contextMenu.resetRank,
+//               style: context.textTheme.bodyMedium,
+//             ),
+//             icon: Iconify(
+//               Ic.outline_restart_alt,
+//               size: 16,
+//               color: context.colorScheme.onSurface,
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   ];
 
-  return ContextMenu(
-    entries: menuEntries,
-    boxDecoration: BoxDecoration(
-      color: context.colorScheme.surface,
-      borderRadius: .circular(8),
-    ),
-    clipBehavior: Clip.antiAlias,
-  );
-}
+//   return ContextMenu(
+//     entries: menuEntries,
+//     boxDecoration: BoxDecoration(
+//       color: context.colorScheme.surface,
+//       borderRadius: .circular(8),
+//     ),
+//     clipBehavior: Clip.antiAlias,
+//   );
+// }
