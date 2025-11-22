@@ -4,7 +4,7 @@ use anyhow::{bail, Error};
 use flutter_rust_bridge::frb;
 use num_enum::TryFromPrimitive;
 use rusty_network_manager::{AccessPointProxy, DeviceProxy, NetworkManagerProxy, WirelessProxy};
-use smol::Timer;
+use smol::{stream::StreamExt, Timer};
 use std::collections::HashMap;
 use std::time::Duration;
 use zbus::{
@@ -352,10 +352,15 @@ impl WlanDevice {
     ) -> Result<(), Error> {
         let device_proxy = self.get_device_proxy().await?;
 
+        let mut state_stream = device_proxy.receive_state_changed().await;
         loop {
-            let state = device_proxy.state().await?;
-            let _ = sink.add(InternetDeviceState::try_from_primitive(state)?);
-            Timer::after(Duration::from_millis(100)).await;
+            match state_stream.next().await {
+                Some(val) => {
+                    let state = val.get().await?;
+                    let _ = sink.add(InternetDeviceState::try_from_primitive(state)?);
+                }
+                None => (),
+            };
         }
     }
 

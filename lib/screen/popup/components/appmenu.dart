@@ -150,15 +150,65 @@ class SearchBarComponent extends HookWidget {
   }
 }
 
-class AppEntryTilePinned extends StatelessWidget {
+class AppEntryTilePinned extends HookWidget {
   const AppEntryTilePinned({required this.appInfo, super.key});
 
   final AppInfoModel appInfo;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 140,
+    final menuCtl = useMemoized(MenuController.new, []);
+
+    return MenuAnchor(
+      controller: menuCtl,
+      menuChildren: buildMenuContent(context, appInfo),
+      child: SizedBox(
+        width: 140,
+        child: CustomInkwell(
+          decoration: BoxDecoration(borderRadius: .circular(8)),
+          onTap: () {
+            get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
+            get<AppmenuBloc>().add(
+              AppmenuAppExecuted(appInfo),
+            );
+          },
+          onSecondaryTap: () {
+            if (menuCtl.isOpen) {
+              menuCtl.close();
+            } else {
+              menuCtl.open();
+            }
+          },
+          child: Column(
+            spacing: Gaps.sm.value,
+            children: [
+              AppIconBuilder(icon: appInfo.metadata.iconPath),
+              Text(
+                appInfo.entry.name,
+                maxLines: 2,
+                overflow: .ellipsis,
+                textAlign: .center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppEntryTile extends HookWidget {
+  const AppEntryTile({required this.appInfo, super.key});
+
+  final AppInfoModel appInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    final menuCtl = useMemoized(MenuController.new, []);
+
+    return MenuAnchor(
+      controller: menuCtl,
+      menuChildren: buildMenuContent(context, appInfo),
       child: CustomInkwell(
         decoration: BoxDecoration(borderRadius: .circular(8)),
         onTap: () {
@@ -167,44 +217,20 @@ class AppEntryTilePinned extends StatelessWidget {
             AppmenuAppExecuted(appInfo),
           );
         },
-        child: Column(
+        onSecondaryTap: () {
+          if (menuCtl.isOpen) {
+            menuCtl.close();
+          } else {
+            menuCtl.open();
+          }
+        },
+        child: Row(
           spacing: Gaps.sm.value,
           children: [
             AppIconBuilder(icon: appInfo.metadata.iconPath),
-            Text(
-              appInfo.entry.name,
-              maxLines: 2,
-              overflow: .ellipsis,
-              textAlign: .center,
-            ),
+            Text(appInfo.entry.name),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class AppEntryTile extends StatelessWidget {
-  const AppEntryTile({required this.appInfo, super.key});
-
-  final AppInfoModel appInfo;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomInkwell(
-      decoration: BoxDecoration(borderRadius: .circular(8)),
-      onTap: () {
-        get<ScreenManagerBloc>().add(const ScreenManagerEventClosePopup());
-        get<AppmenuBloc>().add(
-          AppmenuAppExecuted(appInfo),
-        );
-      },
-      child: Row(
-        spacing: Gaps.sm.value,
-        children: [
-          AppIconBuilder(icon: appInfo.metadata.iconPath),
-          Text(appInfo.entry.name),
-        ],
       ),
     );
   }
@@ -254,6 +280,10 @@ class AppIconBuilder extends StatelessWidget {
       },
     );
   }
+}
+
+List<Widget> buildMenuContent(BuildContext context, AppInfoModel appInfo) {
+  return [Placeholder()];
 }
 
 // ContextMenu<void> makeContextMenu(BuildContext context, AppInfoModel appInfo) {

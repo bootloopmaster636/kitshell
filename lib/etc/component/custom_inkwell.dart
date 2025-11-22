@@ -8,6 +8,7 @@ class CustomInkwell extends StatelessWidget {
     required this.child,
     this.decoration,
     this.onTap,
+    this.onSecondaryTap,
     this.onLongPress,
     this.onTapUp,
     this.onTapDown,
@@ -24,6 +25,7 @@ class CustomInkwell extends StatelessWidget {
   });
 
   final VoidCallback? onTap;
+  final VoidCallback? onSecondaryTap;
   final VoidCallback? onLongPress;
   final void Function(TapUpDetails)? onTapUp;
   final void Function(TapDownDetails)? onTapDown;
@@ -54,6 +56,7 @@ class CustomInkwell extends StatelessWidget {
           onHover: onHover?.call,
           child: InkWell(
             onTap: onTap?.call,
+            onSecondaryTap: onSecondaryTap?.call,
             onLongPress: onLongPress?.call,
             onTapUp: onTapUp?.call,
             onTapDown: onTapDown?.call,
