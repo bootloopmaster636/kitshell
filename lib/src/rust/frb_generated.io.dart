@@ -91,6 +91,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
 
   @protected
+  Map<String, AccessPointSettings>
+  dco_decode_Map_String_access_point_settings_None(dynamic raw);
+
+  @protected
   NetworkDevice
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     dynamic raw,
@@ -143,6 +147,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AccessPoint dco_decode_access_point(dynamic raw);
 
   @protected
+  AccessPointSettings dco_decode_access_point_settings(dynamic raw);
+
+  @protected
   ApSecurityFlag dco_decode_ap_security_flag(dynamic raw);
 
   @protected
@@ -162,6 +169,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Duration dco_decode_box_autoadd_Chrono_Duration(dynamic raw);
+
+  @protected
+  AccessPointSettings dco_decode_box_autoadd_access_point_settings(dynamic raw);
 
   @protected
   double dco_decode_box_autoadd_f_32(dynamic raw);
@@ -242,6 +252,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  List<(String, AccessPointSettings)>
+  dco_decode_list_record_string_access_point_settings(dynamic raw);
+
+  @protected
   List<(String, String)> dco_decode_list_record_string_string(dynamic raw);
 
   @protected
@@ -264,6 +278,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Duration? dco_decode_opt_box_autoadd_Chrono_Duration(dynamic raw);
+
+  @protected
+  AccessPointSettings? dco_decode_opt_box_autoadd_access_point_settings(
+    dynamic raw,
+  );
 
   @protected
   double? dco_decode_opt_box_autoadd_f_32(dynamic raw);
@@ -291,6 +310,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PlayerOperations dco_decode_player_operations(dynamic raw);
+
+  @protected
+  (String, AccessPointSettings) dco_decode_record_string_access_point_settings(
+    dynamic raw,
+  );
 
   @protected
   (String, String) dco_decode_record_string_string(dynamic raw);
@@ -391,6 +415,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  Map<String, AccessPointSettings>
+  sse_decode_Map_String_access_point_settings_None(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   NetworkDevice
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     SseDeserializer deserializer,
@@ -448,6 +478,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AccessPoint sse_decode_access_point(SseDeserializer deserializer);
 
   @protected
+  AccessPointSettings sse_decode_access_point_settings(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   ApSecurityFlag sse_decode_ap_security_flag(SseDeserializer deserializer);
 
   @protected
@@ -467,6 +502,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Duration sse_decode_box_autoadd_Chrono_Duration(SseDeserializer deserializer);
+
+  @protected
+  AccessPointSettings sse_decode_box_autoadd_access_point_settings(
+    SseDeserializer deserializer,
+  );
 
   @protected
   double sse_decode_box_autoadd_f_32(SseDeserializer deserializer);
@@ -559,6 +599,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  List<(String, AccessPointSettings)>
+  sse_decode_list_record_string_access_point_settings(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   List<(String, String)> sse_decode_list_record_string_string(
     SseDeserializer deserializer,
   );
@@ -591,6 +637,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  AccessPointSettings? sse_decode_opt_box_autoadd_access_point_settings(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   double? sse_decode_opt_box_autoadd_f_32(SseDeserializer deserializer);
 
   @protected
@@ -618,6 +669,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PlayerOperations sse_decode_player_operations(SseDeserializer deserializer);
+
+  @protected
+  (String, AccessPointSettings) sse_decode_record_string_access_point_settings(
+    SseDeserializer deserializer,
+  );
 
   @protected
   (String, String) sse_decode_record_string_string(
@@ -732,6 +788,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_Map_String_access_point_settings_None(
+    Map<String, AccessPointSettings> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNetworkDevice(
     NetworkDevice self,
@@ -800,6 +862,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_access_point(AccessPoint self, SseSerializer serializer);
 
   @protected
+  void sse_encode_access_point_settings(
+    AccessPointSettings self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_ap_security_flag(
     ApSecurityFlag self,
     SseSerializer serializer,
@@ -823,6 +891,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_Chrono_Duration(
     Duration self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_box_autoadd_access_point_settings(
+    AccessPointSettings self,
     SseSerializer serializer,
   );
 
@@ -933,6 +1007,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_record_string_access_point_settings(
+    List<(String, AccessPointSettings)> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_list_record_string_string(
     List<(String, String)> self,
     SseSerializer serializer,
@@ -972,6 +1052,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_opt_box_autoadd_access_point_settings(
+    AccessPointSettings? self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_opt_box_autoadd_f_32(double? self, SseSerializer serializer);
 
   @protected
@@ -1004,6 +1090,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_player_operations(
     PlayerOperations self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_record_string_access_point_settings(
+    (String, AccessPointSettings) self,
     SseSerializer serializer,
   );
 

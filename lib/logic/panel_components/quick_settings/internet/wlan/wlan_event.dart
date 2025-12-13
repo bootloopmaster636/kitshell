@@ -7,6 +7,7 @@ sealed class WlanEvent with _$WlanEvent {
   const factory WlanEvent.connect({
     required String apPath,
     required String ssid,
+    required bool isKnown,
     String? password,
   }) = WlanEventConnect;
   const factory WlanEvent.disconnect() = WlanEventDisconnect;

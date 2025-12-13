@@ -352,15 +352,13 @@ class NotificationTile extends HookWidget {
             curve: Curves.easeInOutCubic,
             alignment: .topCenter,
             child: isExpanded.value
-                ? Padding(
-                    padding: const .symmetric(vertical: 4),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.surfaceContainerLowest,
-                        borderRadius: .circular(8),
-                      ),
-                      child: Html(data: data.body),
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainerLowest,
+                      borderRadius: .circular(8),
                     ),
+                    margin: const .symmetric(vertical: 4),
+                    child: Html(data: data.body),
                   )
                 : const SizedBox(width: double.infinity, height: 0),
           ),

@@ -3,10 +3,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:kitshell/etc/component/custom_inkwell.dart';
+import 'package:kitshell/etc/component/text_icon.dart';
 import 'package:kitshell/etc/utitity/dart_extension.dart';
 import 'package:kitshell/etc/utitity/gap.dart';
 import 'package:kitshell/i18n/strings.g.dart';
 import 'package:kitshell/logic/panel_components/quick_settings/internet/wlan/wlan_bloc.dart';
+import 'package:kitshell/logic/panel_components/quick_settings/internet/wlan/wlan_tools.dart';
 import 'package:kitshell/src/rust/api/quick_settings/network/wlan.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 
@@ -69,7 +71,6 @@ class WlanDetails extends HookWidget {
                     )
                     .animate(
                       key: ValueKey(ap),
-                      delay: Duration(milliseconds: 40 * idx),
                     )
                     .fadeIn();
               }),
@@ -118,25 +119,31 @@ class AccessPointTile extends StatelessWidget {
   }
 }
 
-class ApTileCollapsed extends StatelessWidget {
+class ApTileCollapsed extends HookWidget {
   const ApTileCollapsed({required this.apDetail, super.key});
   final AccessPoint apDetail;
 
   @override
   Widget build(BuildContext context) {
+    final icon = useMemoized(() {
+      return switch (apDetail.strength) {
+        >= 0 && <= 25 => LucideIcons.wifiZero,
+        > 25 && <= 50 => LucideIcons.wifiLow,
+        > 50 && < 75 => LucideIcons.wifiHigh,
+        >= 75 && <= 100 => LucideIcons.wifi,
+        _ => LucideIcons.circleQuestionMark,
+      };
+    }, [apDetail.strength]);
+    final ssid = useMemoized(() => apDetail.ssid, [apDetail.ssid]);
+    final isActive = useMemoized(() => apDetail.isActive, [apDetail.isActive]);
+
     return Row(
       spacing: Gaps.sm.value,
       children: [
         Icon(
-          switch (apDetail.strength) {
-            >= 0 && <= 25 => LucideIcons.wifiZero,
-            > 25 && <= 50 => LucideIcons.wifiLow,
-            > 50 && < 75 => LucideIcons.wifiHigh,
-            >= 75 && <= 100 => LucideIcons.wifi,
-            _ => LucideIcons.circleQuestionMark,
-          },
+          icon,
           size: 20,
-          color: apDetail.isActive
+          color: isActive
               ? context.colorScheme.primary
               : context.colorScheme.onSurface,
         ),
@@ -144,14 +151,14 @@ class ApTileCollapsed extends StatelessWidget {
           crossAxisAlignment: .start,
           children: [
             Text(
-              apDetail.ssid,
+              ssid,
               style: context.textTheme.titleMedium?.copyWith(
-                color: apDetail.isActive
+                color: isActive
                     ? context.colorScheme.primary
                     : context.colorScheme.onSurface,
               ),
             ),
-            ApCapabilities(apDetail: apDetail),
+            ApCapabilities(key: ValueKey(apDetail), apDetail: apDetail),
           ],
         ),
       ],
@@ -165,11 +172,9 @@ class ApTileExpanded extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final connectAuto = useState(true);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: Gaps.md.value,
+      spacing: Gaps.sm.value,
       children: [
         // AP name and info
         ApTileCollapsed(apDetail: apDetail),
@@ -180,47 +185,226 @@ class ApTileExpanded extends HookWidget {
             color: context.colorScheme.surfaceContainerLow,
             borderRadius: .circular(8),
           ),
-          padding: const .all(8),
-          child: Column(
-            crossAxisAlignment: .stretch,
-            children: [
-              Text(
-                t.quickSettings.internet.wifi.signalStrength(
-                  val: apDetail.strength,
-                ),
-                style: context.textTheme.bodyMedium,
-              ),
-            ],
-          ),
+          padding: const .all(16),
+          child: ApAdditionalInfo(apDetail: apDetail),
         ),
 
-        // Connect/disconnect button
-        Row(
-          children: [
-            const Spacer(),
-            FilledButton(
-              onPressed: () {
-                final wlanBloc = BlocProvider.of<WlanBloc>(context);
-                if (apDetail.isActive) {
-                  wlanBloc.add(const WlanEventDisconnect());
-                } else {
-                  wlanBloc.add(
-                    WlanEventConnect(
-                      apPath: apDetail.apPath,
-                      ssid: apDetail.ssid,
-                    ),
-                  );
-                }
-              },
+        ApConnectForm(apDetail: apDetail),
+      ],
+    );
+  }
+}
+
+class ApAdditionalInfo extends StatelessWidget {
+  const ApAdditionalInfo({required this.apDetail, super.key});
+  final AccessPoint apDetail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Text(
+          t.quickSettings.internet.wifi.signalStrength(
+            val: apDetail.strength,
+          ),
+          style: context.textTheme.bodyMedium,
+        ),
+      ],
+    );
+  }
+}
+
+class ApConnectForm extends HookWidget {
+  const ApConnectForm({required this.apDetail, super.key});
+  final AccessPoint apDetail;
+
+  @override
+  Widget build(BuildContext context) {
+    final showPasswordField = useState(false);
+
+    return AnimatedCrossFade(
+      crossFadeState: showPasswordField.value ? .showFirst : .showSecond,
+      duration: Durations.medium1,
+      sizeCurve: Easing.standard,
+      firstChild: WifiPasswordEntry(
+        showPasswordField: showPasswordField,
+        apDetail: apDetail,
+      ),
+      secondChild: WifiRegularConnectButton(
+        apDetail: apDetail,
+        showPasswordField: showPasswordField,
+      ),
+    );
+  }
+}
+
+class WifiRegularConnectButton extends HookWidget {
+  const WifiRegularConnectButton({
+    required this.apDetail,
+    required this.showPasswordField,
+    super.key,
+  });
+  final AccessPoint apDetail;
+  final ValueNotifier<bool> showPasswordField;
+
+  @override
+  Widget build(BuildContext context) {
+    final autoConnect = useState(apDetail.settings?.autoconnect ?? true);
+
+    return Row(
+      spacing: Gaps.sm.value,
+      children: [
+        TextIcon(
+          icon: Checkbox(
+            value: autoConnect.value,
+            onChanged: (val) {
+              autoConnect.value = val ?? true;
+            },
+          ),
+          text: Text(t.quickSettings.internet.wifi.connectAuto),
+          spacing: 0,
+        ),
+        const Spacer(),
+        BlocBuilder<WlanBloc, WlanState>(
+          builder: (context, state) {
+            final enableButton =
+                state.devState == .activated || state.devState == .disconnected;
+
+            return FilledButton(
+              onPressed: enableButton
+                  ? () {
+                      final wlanBloc = BlocProvider.of<WlanBloc>(context);
+
+                      // If AP is active, disconnect instead
+                      if (apDetail.isActive) {
+                        wlanBloc.add(const WlanEventDisconnect());
+                        return;
+                      }
+
+                      // If wifi is unknown and is not open, show password field instead
+                      if (!apDetail.isSaved &&
+                          !isAccessPointOpen(
+                            wpaFlag: apDetail.wpaSecurityFlag,
+                            rsnFlag: apDetail.rsnSecurityFlag,
+                            isFlagPrivacy: apDetail.apFlagsPrivacy,
+                          )) {
+                        showPasswordField.value = true;
+                        return;
+                      }
+
+                      // Connect to known/open wifi
+                      wlanBloc.add(
+                        WlanEventConnect(
+                          apPath: apDetail.apPath,
+                          ssid: apDetail.ssid,
+                          isKnown: apDetail.isSaved,
+                        ),
+                      );
+                    }
+                  : null,
               child: Text(
                 apDetail.isActive
                     ? t.quickSettings.internet.general.disconnect
                     : t.quickSettings.internet.general.connect,
               ),
-            ),
-          ],
+            );
+          },
         ),
       ],
+    );
+  }
+}
+
+class WifiPasswordEntry extends HookWidget {
+  const WifiPasswordEntry({
+    required this.showPasswordField,
+    required this.apDetail,
+    super.key,
+  });
+  final ValueNotifier<bool> showPasswordField;
+  final AccessPoint apDetail;
+
+  @override
+  Widget build(BuildContext context) {
+    final isObscured = useState(true);
+    final passwordCtl = useTextEditingController();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainer,
+        borderRadius: .circular(8),
+      ),
+      padding: const .all(16),
+      child: Column(
+        spacing: Gaps.md.value,
+        children: [
+          Text(t.quickSettings.internet.wifi.passwordRequired),
+
+          TextField(
+            controller: passwordCtl,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              label: Text(t.quickSettings.internet.wifi.passwordLabel),
+              suffixIcon: Padding(
+                padding: const .only(right: 8),
+                child: IconButton(
+                  iconSize: 16,
+                  onPressed: () {
+                    isObscured.value = !isObscured.value;
+                  },
+                  icon: Icon(
+                    isObscured.value ? LucideIcons.eyeOff : LucideIcons.eye,
+                  ),
+                ),
+              ),
+            ),
+            obscureText: isObscured.value,
+          ),
+
+          BlocBuilder<WlanBloc, WlanState>(
+            builder: (context, state) {
+              final enableButton =
+                  state.devState == .activated ||
+                  state.devState == .disconnected;
+
+              return Row(
+                spacing: Gaps.sm.value,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: enableButton
+                          ? () {
+                              showPasswordField.value = false;
+                            }
+                          : null,
+                      child: Text(t.general.cancel),
+                    ),
+                  ),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: enableButton
+                          ? () {
+                              BlocProvider.of<WlanBloc>(context).add(
+                                WlanEventConnect(
+                                  apPath: apDetail.apPath,
+                                  ssid: apDetail.ssid,
+                                  isKnown: false,
+                                  password: passwordCtl.text,
+                                ),
+                              );
+                              showPasswordField.value = false;
+                            }
+                          : null,
+                      child: Text(t.quickSettings.internet.general.connect),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -236,14 +420,24 @@ class ApCapabilities extends StatelessWidget {
       child: Row(
         spacing: Gaps.xs.value,
         children: [
+          if (apDetail.isSaved)
+            Icon(
+              LucideIcons.save,
+              size: 12,
+              color: context.colorScheme.onSurface,
+            ),
+
           if (apDetail.isActive)
             _capabilityBuilder(
               context,
               t.quickSettings.internet.wifi.info.active,
             ),
 
-          if (apDetail.rsnSecurityFlag == ApSecurityFlag.none &&
-              apDetail.wpaSecurityFlag == ApSecurityFlag.none)
+          if (isAccessPointOpen(
+            wpaFlag: apDetail.wpaSecurityFlag,
+            rsnFlag: apDetail.rsnSecurityFlag,
+            isFlagPrivacy: apDetail.apFlagsPrivacy,
+          ))
             _capabilityBuilder(
               context,
               t.quickSettings.internet.wifi.info.open,

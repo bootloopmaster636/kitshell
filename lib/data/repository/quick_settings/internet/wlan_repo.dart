@@ -50,6 +50,7 @@ class WlanRepo {
   Future<void> connect({
     required String apPath,
     required String ssid,
+    required bool isKnown,
     String? password,
   }) async {
     logger.i('WlanRepo: Connecting to wifi $ssid');
@@ -57,7 +58,7 @@ class WlanRepo {
       ssid: ssid,
       apPath: apPath,
       password: password,
-      isApSaved: true,
+      isApSaved: isKnown,
     );
     logger.i('WlanRepo: Connected to $ssid');
   }

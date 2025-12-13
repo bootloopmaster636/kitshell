@@ -40,7 +40,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 760376969;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1056892165;
 
 // Section: executor
 
@@ -724,6 +724,30 @@ let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decod
         }
         let api_that_guard = api_that_guard.unwrap();
  let output_ok = crate::api::quick_settings::network::wlan::WlanDevice::get_access_points(&*api_that_guard).await?;   Ok(output_ok)
+                    })().await)
+                } })
+}
+fn wire__crate__api__quick_settings__network__wlan__WlanDevice_get_known_networks_settings_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "WlanDevice_get_known_networks_settings", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<WlanDevice>>>::sse_decode(&mut deserializer);deserializer.end(); move |context| async move {
+                    transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>((move || async move {
+                        let mut api_that_guard = None;
+let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(&api_that, 0, false)]);
+        for i in decode_indices_ {
+            match i {
+                0 => api_that_guard = Some(api_that.lockable_decode_async_ref().await),
+                _ => unreachable!(),
+            }
+        }
+        let api_that_guard = api_that_guard.unwrap();
+ let output_ok = crate::api::quick_settings::network::wlan::WlanDevice::get_known_networks_settings(&*api_that_guard).await?;   Ok(output_ok)
                     })().await)
                 } })
 }
@@ -1718,6 +1742,22 @@ impl SseDecode for std::collections::HashMap<String, String> {
 }
 
 impl SseDecode
+    for std::collections::HashMap<
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <Vec<(
+            String,
+            crate::api::quick_settings::network::wlan::AccessPointSettings,
+        )>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
+    }
+}
+
+impl SseDecode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NetworkDevice>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1854,7 +1894,12 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
             <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
         let mut var_rsnSecurityFlag =
             <crate::api::quick_settings::network::wlan::ApSecurityFlag>::sse_decode(deserializer);
+        let mut var_apFlagsPrivacy = <bool>::sse_decode(deserializer);
         let mut var_isActive = <bool>::sse_decode(deserializer);
+        let mut var_isSaved = <bool>::sse_decode(deserializer);
+        let mut var_settings = <Option<
+            crate::api::quick_settings::network::wlan::AccessPointSettings,
+        >>::sse_decode(deserializer);
         let mut var_apPath = <String>::sse_decode(deserializer);
         return crate::api::quick_settings::network::wlan::AccessPoint {
             ssid: var_ssid,
@@ -1862,8 +1907,21 @@ impl SseDecode for crate::api::quick_settings::network::wlan::AccessPoint {
             frequency: var_frequency,
             wpa_security_flag: var_wpaSecurityFlag,
             rsn_security_flag: var_rsnSecurityFlag,
+            ap_flags_privacy: var_apFlagsPrivacy,
             is_active: var_isActive,
+            is_saved: var_isSaved,
+            settings: var_settings,
             ap_path: var_apPath,
+        };
+    }
+}
+
+impl SseDecode for crate::api::quick_settings::network::wlan::AccessPointSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_autoconnect = <bool>::sse_decode(deserializer);
+        return crate::api::quick_settings::network::wlan::AccessPointSettings {
+            autoconnect: var_autoconnect,
         };
     }
 }
@@ -2224,6 +2282,26 @@ impl SseDecode for Vec<u8> {
     }
 }
 
+impl SseDecode
+    for Vec<(
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    )>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<(
+                String,
+                crate::api::quick_settings::network::wlan::AccessPointSettings,
+            )>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<(String, String)> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2326,6 +2404,21 @@ impl SseDecode for Option<chrono::Duration> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<chrono::Duration>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::quick_settings::network::wlan::AccessPointSettings> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(
+                <crate::api::quick_settings::network::wlan::AccessPointSettings>::sse_decode(
+                    deserializer,
+                ),
+            );
         } else {
             return None;
         }
@@ -2490,6 +2583,23 @@ impl SseDecode for crate::api::mpris::mpris::PlayerOperations {
                 unimplemented!("");
             }
         }
+    }
+}
+
+impl SseDecode
+    for (
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    )
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 =
+            <crate::api::quick_settings::network::wlan::AccessPointSettings>::sse_decode(
+                deserializer,
+            );
+        return (var_field0, var_field1);
     }
 }
 
@@ -2688,164 +2798,36 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        17 => wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        18 => wire__crate__api__quick_settings__network__wlan__WlanDevice_disconnect_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        19 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        20 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        21 => {
-            wire__crate__api__quick_settings__network__wlan__WlanDevice_monitor_device_state_impl(
-                port,
-                ptr,
-                rust_vec_len,
-                data_len,
-            )
-        }
-        22 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        23 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        24 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        25 => wire__crate__api__wm_interface__base__detect_current_wm_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        26 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        27 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        28 => {
-            wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len)
-        }
-        29 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        30 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        31 => wire__crate__api__quick_settings__whoami__get_user_info_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        32 => wire__crate__api__notifications__invoke_notif_action_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        33 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        34 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
-        35 => wire__crate__api__wm_interface__niri__niri_close_window_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        36 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        37 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        38 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        39 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        40 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        41 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        42 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        43 => wire__crate__api__notifications__watch_notification_bus_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        _ => unreachable!(),
-    }
+                        17 => wire__crate__api__quick_settings__network__wlan__WlanDevice_connect_to_ap_impl(port, ptr, rust_vec_len, data_len),
+18 => wire__crate__api__quick_settings__network__wlan__WlanDevice_disconnect_impl(port, ptr, rust_vec_len, data_len),
+19 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_access_points_impl(port, ptr, rust_vec_len, data_len),
+20 => wire__crate__api__quick_settings__network__wlan__WlanDevice_get_known_networks_settings_impl(port, ptr, rust_vec_len, data_len),
+21 => wire__crate__api__quick_settings__network__wlan__WlanDevice_init_impl(port, ptr, rust_vec_len, data_len),
+22 => wire__crate__api__quick_settings__network__wlan__WlanDevice_monitor_device_state_impl(port, ptr, rust_vec_len, data_len),
+23 => wire__crate__api__quick_settings__network__wlan__WlanDevice_request_scan_impl(port, ptr, rust_vec_len, data_len),
+24 => wire__crate__api__quick_settings__display_brightness__change_brightness_impl(port, ptr, rust_vec_len, data_len),
+25 => wire__crate__api__quick_settings__network__wlan__create_wlan_device_impl(port, ptr, rust_vec_len, data_len),
+26 => wire__crate__api__wm_interface__base__detect_current_wm_impl(port, ptr, rust_vec_len, data_len),
+27 => wire__crate__api__mpris__mpris__dispatch_player_action_impl(port, ptr, rust_vec_len, data_len),
+28 => wire__crate__api__appmenu__appmenu_items__get_appmenu_items_impl(port, ptr, rust_vec_len, data_len),
+29 => wire__crate__api__display_info__get_display_info_impl(port, ptr, rust_vec_len, data_len),
+30 => wire__crate__api__appmenu__appmenu_items__get_icon_path_impl(port, ptr, rust_vec_len, data_len),
+31 => wire__crate__api__quick_settings__network__network_devices__get_network_devices_impl(port, ptr, rust_vec_len, data_len),
+32 => wire__crate__api__quick_settings__whoami__get_user_info_impl(port, ptr, rust_vec_len, data_len),
+33 => wire__crate__api__notifications__invoke_notif_action_impl(port, ptr, rust_vec_len, data_len),
+34 => wire__crate__api__appmenu__appmenu_items__launch_app_impl(port, ptr, rust_vec_len, data_len),
+35 => wire__crate__api__mpris__cava__listen_to_cava_impl(port, ptr, rust_vec_len, data_len),
+36 => wire__crate__api__wm_interface__niri__niri_close_window_impl(port, ptr, rust_vec_len, data_len),
+37 => wire__crate__api__wm_interface__niri__niri_focus_window_impl(port, ptr, rust_vec_len, data_len),
+38 => wire__crate__api__wm_interface__niri__niri_switch_workspace_impl(port, ptr, rust_vec_len, data_len),
+39 => wire__crate__api__wm_interface__niri__niri_watch_launchbar_events_impl(port, ptr, rust_vec_len, data_len),
+40 => wire__crate__api__quick_settings__display_brightness__watch_backlight_event_impl(port, ptr, rust_vec_len, data_len),
+41 => wire__crate__api__quick_settings__battery__watch_battery_event_impl(port, ptr, rust_vec_len, data_len),
+42 => wire__crate__api__ipc__ipc__watch_kitshell_socket_impl(port, ptr, rust_vec_len, data_len),
+43 => wire__crate__api__mpris__mpris__watch_media_player_events_impl(port, ptr, rust_vec_len, data_len),
+44 => wire__crate__api__notifications__watch_notification_bus_impl(port, ptr, rust_vec_len, data_len),
+                        _ => unreachable!(),
+                    }
 }
 
 fn pde_ffi_dispatcher_sync_impl(
@@ -2913,7 +2895,10 @@ impl flutter_rust_bridge::IntoDart for crate::api::quick_settings::network::wlan
             self.frequency.into_into_dart().into_dart(),
             self.wpa_security_flag.into_into_dart().into_dart(),
             self.rsn_security_flag.into_into_dart().into_dart(),
+            self.ap_flags_privacy.into_into_dart().into_dart(),
             self.is_active.into_into_dart().into_dart(),
+            self.is_saved.into_into_dart().into_dart(),
+            self.settings.into_into_dart().into_dart(),
             self.ap_path.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -2927,6 +2912,27 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::quick_settings::network::wlan
     for crate::api::quick_settings::network::wlan::AccessPoint
 {
     fn into_into_dart(self) -> crate::api::quick_settings::network::wlan::AccessPoint {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart
+    for crate::api::quick_settings::network::wlan::AccessPointSettings
+{
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.autoconnect.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::quick_settings::network::wlan::AccessPointSettings
+{
+}
+impl
+    flutter_rust_bridge::IntoIntoDart<
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    > for crate::api::quick_settings::network::wlan::AccessPointSettings
+{
+    fn into_into_dart(self) -> crate::api::quick_settings::network::wlan::AccessPointSettings {
         self
     }
 }
@@ -3613,6 +3619,21 @@ impl SseEncode for std::collections::HashMap<String, String> {
 }
 
 impl SseEncode
+    for std::collections::HashMap<
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(
+            String,
+            crate::api::quick_settings::network::wlan::AccessPointSettings,
+        )>>::sse_encode(self.into_iter().collect(), serializer);
+    }
+}
+
+impl SseEncode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NetworkDevice>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3748,8 +3769,21 @@ impl SseEncode for crate::api::quick_settings::network::wlan::AccessPoint {
             self.rsn_security_flag,
             serializer,
         );
+        <bool>::sse_encode(self.ap_flags_privacy, serializer);
         <bool>::sse_encode(self.is_active, serializer);
+        <bool>::sse_encode(self.is_saved, serializer);
+        <Option<crate::api::quick_settings::network::wlan::AccessPointSettings>>::sse_encode(
+            self.settings,
+            serializer,
+        );
         <String>::sse_encode(self.ap_path, serializer);
+    }
+}
+
+impl SseEncode for crate::api::quick_settings::network::wlan::AccessPointSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.autoconnect, serializer);
     }
 }
 
@@ -4043,6 +4077,24 @@ impl SseEncode for Vec<u8> {
     }
 }
 
+impl SseEncode
+    for Vec<(
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    )>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(
+                String,
+                crate::api::quick_settings::network::wlan::AccessPointSettings,
+            )>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<(String, String)> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4127,6 +4179,18 @@ impl SseEncode for Option<chrono::Duration> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <chrono::Duration>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::quick_settings::network::wlan::AccessPointSettings> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::quick_settings::network::wlan::AccessPointSettings>::sse_encode(
+                value, serializer,
+            );
         }
     }
 }
@@ -4269,6 +4333,21 @@ impl SseEncode for crate::api::mpris::mpris::PlayerOperations {
                 unimplemented!("");
             }
         }
+    }
+}
+
+impl SseEncode
+    for (
+        String,
+        crate::api::quick_settings::network::wlan::AccessPointSettings,
+    )
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <crate::api::quick_settings::network::wlan::AccessPointSettings>::sse_encode(
+            self.1, serializer,
+        );
     }
 }
 

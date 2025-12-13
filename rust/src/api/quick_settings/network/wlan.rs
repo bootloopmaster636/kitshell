@@ -3,12 +3,14 @@ use crate::frb_generated::StreamSink;
 use anyhow::{bail, Error};
 use flutter_rust_bridge::frb;
 use num_enum::TryFromPrimitive;
-use rusty_network_manager::{AccessPointProxy, DeviceProxy, NetworkManagerProxy, WirelessProxy};
-use smol::{stream::StreamExt, Timer};
+use rusty_network_manager::{
+    AccessPointProxy, DeviceProxy, NetworkManagerProxy, SettingsConnectionProxy, SettingsProxy,
+    WirelessProxy,
+};
+use smol::stream::StreamExt;
 use std::collections::HashMap;
-use std::time::Duration;
 use zbus::{
-    zvariant::{OwnedObjectPath, Value},
+    zvariant::{Array, OwnedObjectPath, Value},
     Connection,
 };
 
@@ -69,11 +71,28 @@ pub struct AccessPoint {
     /// RSN Security flag for this AP
     pub rsn_security_flag: ApSecurityFlag,
 
+    /// AP Privacy flags for this AP
+    pub ap_flags_privacy: bool,
+
     /// Whether this AP is currently active and connected
     pub is_active: bool,
 
+    /// Whether this AP is known/saved
+    pub is_saved: bool,
+
+    /// Access point options for known devices
+    /// It is None if the network has not saved yet
+    pub settings: Option<AccessPointSettings>,
+
     /// DBUS path for this AP
     pub ap_path: String,
+}
+
+#[derive(Clone, Eq, Ord, PartialOrd, PartialEq)]
+#[frb(non_opaque)]
+pub struct AccessPointSettings {
+    /// Whether this AP will autoconnect
+    pub autoconnect: bool,
 }
 
 #[derive(Clone, Copy, Ord, Eq, PartialOrd, PartialEq)]
@@ -184,6 +203,15 @@ impl WlanDevice {
 
     pub async fn get_access_points(&self) -> Result<Vec<AccessPoint>, Error> {
         let mut access_points = Vec::new();
+        let known_network = match self.get_known_networks_settings().await {
+            Ok(val) => val,
+            Err(e) => {
+                bail!(
+                    "API | Network | WLAN: Could not get known network list. {}",
+                    e
+                );
+            }
+        };
         let wireless_proxy = match self.get_wireless_proxy().await {
             Ok(val) => val,
             Err(_) => {
@@ -249,16 +277,32 @@ impl WlanDevice {
                     ApSecurityFlag::Unknown
                 }
             };
+            let privacy_flag = match ap_proxy.flags().await {
+                Ok(val) => {
+                    if val == 1 {
+                        true
+                    } else {
+                        false
+                    }
+                }
+                Err(_) => {
+                    println!("API | Network | WLAN: Got unknown AP flag");
+                    false
+                }
+            };
 
             let is_active = ap_path == active_ap;
 
             access_points.push(AccessPoint {
-                ssid,
+                ssid: ssid.clone(),
                 strength,
                 frequency,
                 wpa_security_flag: wpa_security_enum,
                 rsn_security_flag: rsn_security_enum,
+                ap_flags_privacy: privacy_flag,
                 is_active,
+                is_saved: known_network.contains_key(&ssid),
+                settings: known_network.get(&ssid).cloned(),
                 ap_path: String::from(ap_path.as_str()),
             });
         }
@@ -364,10 +408,122 @@ impl WlanDevice {
         }
     }
 
-    /// Get a wireless proxy for this device
+    /// Get known networks settings hashmap for quick matching
+    pub async fn get_known_networks_settings(
+        &self,
+    ) -> Result<HashMap<String, AccessPointSettings>, Error> {
+        let mut known_networks = HashMap::new();
+        let nm_settings_proxy = self.get_settings_proxy().await?;
+
+        let settings = match nm_settings_proxy.list_connections().await {
+            Ok(val) => val,
+            Err(e) => bail!(
+                "API | Network | WLAN: Failed to get known connections. {}",
+                e
+            ),
+        };
+
+        for setting in settings {
+            let settings_conn = match self.get_settings_conn_proxy(setting).await {
+                Ok(val) => val,
+                Err(e) => bail!("API | Network | WLAN: Failed to get connection. {}", e),
+            };
+
+            let settings_map = match settings_conn.get_settings().await {
+                Ok(val) => val,
+                Err(e) => bail!(
+                    "API | Network | WLAN: Failed to get settings hashmap. {}",
+                    e
+                ),
+            };
+
+            // Detect whether this is an AP settings
+            let conn = match settings_map.get("connection") {
+                Some(val) => val,
+                None => {
+                    println!("API | Network | WLAN: No settings named \"connection\"");
+                    continue;
+                }
+            };
+            let conn_type = match conn.get("type") {
+                Some(val) => val,
+                None => {
+                    println!("API | Network | WLAN: No settings named \"type\"");
+                    continue;
+                }
+            };
+            if conn_type.downcast_ref::<&str>().unwrap() != "802-11-wireless" {
+                // This connection is not a wifi connection, continue to next settings
+                continue;
+            }
+
+            // Get this setting ssid
+            let wireless_info = match settings_map.get("802-11-wireless") {
+                Some(val) => val,
+                None => {
+                    println!("API | Network | WLAN: No settings named \"802-11-wireless\"");
+                    continue;
+                }
+            };
+            let ssid_data = match wireless_info.get("ssid") {
+                Some(val) => val,
+                None => {
+                    println!("API | Network | WLAN: No settings named \"ssid\"");
+                    continue;
+                }
+            };
+            let ssid_arr = ssid_data.downcast_ref::<Array>()?;
+            let ssid_bytes = ssid_arr
+                .iter()
+                .map(|e| e.downcast_ref::<u8>().unwrap())
+                .collect::<Vec<u8>>();
+            let ssid = String::from_utf8_lossy(&ssid_bytes);
+
+            // Get autoconnect property
+            let autoconnect = match conn.get("autoconnect") {
+                Some(val) => val.downcast_ref::<bool>().unwrap(),
+                None => true, // Auto connect defaults to true
+            };
+
+            known_networks.insert(ssid.to_string(), AccessPointSettings { autoconnect });
+        }
+
+        Ok(known_networks)
+    }
+
+    /// Get a NM proxy for this device
     async fn get_nm_proxy(&self) -> Result<NetworkManagerProxy<'_>, Error> {
         if let Some(connection) = &self.dbus_connection {
             match NetworkManagerProxy::new(connection).await {
+                Ok(proxy) => Ok(proxy),
+                Err(e) => bail!("Failed to create wireless proxy: {}", e),
+            }
+        } else {
+            bail!("Device not initialized. Call init() first.")
+        }
+    }
+
+    /// Get a NM Settings proxy
+    async fn get_settings_proxy(&self) -> Result<SettingsProxy<'_>, Error> {
+        if let Some(connection) = &self.dbus_connection {
+            match SettingsProxy::new(connection).await {
+                Ok(proxy) => Ok(proxy),
+                Err(e) => bail!("Failed to create wireless proxy: {}", e),
+            }
+        } else {
+            bail!("Device not initialized. Call init() first.")
+        }
+    }
+
+    /// Get a NM Settings proxy
+    async fn get_settings_conn_proxy(
+        &self,
+        settings_object_path: OwnedObjectPath,
+    ) -> Result<SettingsConnectionProxy<'_>, Error> {
+        if let (settings_object_path, Some(connection)) =
+            (settings_object_path, &self.dbus_connection)
+        {
+            match SettingsConnectionProxy::new_from_path(settings_object_path, connection).await {
                 Ok(proxy) => Ok(proxy),
                 Err(e) => bail!("Failed to create wireless proxy: {}", e),
             }

@@ -61,8 +61,8 @@ class WlanBloc extends Bloc<WlanEvent, WlanState> {
       apPath: event.apPath,
       ssid: event.ssid,
       password: event.password,
+      isKnown: event.isKnown,
     );
-    await Future<void>.delayed(const Duration(seconds: 1));
     add(const WlanEventScanned());
   }
 
@@ -82,7 +82,6 @@ class WlanBloc extends Bloc<WlanEvent, WlanState> {
     await emit.forEach(
       _wlanRepo.deviceState.stream,
       onData: (data) {
-        logger.i('WlanBloc: Now state is $data');
         return state.copyWith(devState: data);
       },
     );

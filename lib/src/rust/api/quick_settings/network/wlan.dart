@@ -7,9 +7,9 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:kitshell/src/rust/api/quick_settings/network/network_devices.dart';
 import 'package:kitshell/src/rust/frb_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_nm_proxy`, `get_wireless_proxy`
+// These functions are ignored because they are not marked as `pub`: `get_device_proxy`, `get_nm_proxy`, `get_settings_conn_proxy`, `get_settings_proxy`, `get_wireless_proxy`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `ConnectivityState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `cmp`, `cmp`, `cmp`, `cmp`, `eq`, `eq`, `eq`, `eq`, `partial_cmp`, `partial_cmp`, `partial_cmp`, `partial_cmp`, `try_from_primitive`, `try_from`
 
 /// Create new [WlanDevice] instance from specified interface name
 Future<WlanDevice> createWlanDevice({required String fromIface}) => RustLib
@@ -38,6 +38,9 @@ abstract class WlanDevice implements RustOpaqueInterface {
 
   Future<List<AccessPoint>> getAccessPoints();
 
+  /// Get known networks settings hashmap for quick matching
+  Future<Map<String, AccessPointSettings>> getKnownNetworksSettings();
+
   /// Initializes the WLAN device instance
   Future<void> init();
 
@@ -53,8 +56,11 @@ class AccessPoint {
     required this.frequency,
     required this.wpaSecurityFlag,
     required this.rsnSecurityFlag,
+    required this.apFlagsPrivacy,
     required this.isActive,
+    required this.isSaved,
     required this.apPath,
+    this.settings,
   });
 
   /// This access point name/SSID
@@ -72,8 +78,18 @@ class AccessPoint {
   /// RSN Security flag for this AP
   final ApSecurityFlag rsnSecurityFlag;
 
+  /// AP Privacy flags for this AP
+  final bool apFlagsPrivacy;
+
   /// Whether this AP is currently active and connected
   final bool isActive;
+
+  /// Whether this AP is known/saved
+  final bool isSaved;
+
+  /// Access point options for known devices
+  /// It is None if the network has not saved yet
+  final AccessPointSettings? settings;
 
   /// DBUS path for this AP
   final String apPath;
@@ -85,7 +101,10 @@ class AccessPoint {
       frequency.hashCode ^
       wpaSecurityFlag.hashCode ^
       rsnSecurityFlag.hashCode ^
+      apFlagsPrivacy.hashCode ^
       isActive.hashCode ^
+      isSaved.hashCode ^
+      settings.hashCode ^
       apPath.hashCode;
 
   @override
@@ -98,8 +117,30 @@ class AccessPoint {
           frequency == other.frequency &&
           wpaSecurityFlag == other.wpaSecurityFlag &&
           rsnSecurityFlag == other.rsnSecurityFlag &&
+          apFlagsPrivacy == other.apFlagsPrivacy &&
           isActive == other.isActive &&
+          isSaved == other.isSaved &&
+          settings == other.settings &&
           apPath == other.apPath;
+}
+
+class AccessPointSettings {
+  const AccessPointSettings({
+    required this.autoconnect,
+  });
+
+  /// Whether this AP will autoconnect
+  final bool autoconnect;
+
+  @override
+  int get hashCode => autoconnect.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AccessPointSettings &&
+          runtimeType == other.runtimeType &&
+          autoconnect == other.autoconnect;
 }
 
 /// Enum containing AP security flags

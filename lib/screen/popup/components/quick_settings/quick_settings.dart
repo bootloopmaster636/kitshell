@@ -55,23 +55,21 @@ class QuickSettingsMainScreen extends StatelessWidget {
       crossAxisAlignment: .stretch,
       children: [
         const QsHeader(),
-        Padding(
-          padding: const EdgeInsets.all(8).copyWith(top: 0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: context.colorScheme.surface,
-              borderRadius: .circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: context.colorScheme.shadow.withValues(alpha: 0.2),
-                  blurRadius: 2,
-                ),
-              ],
-            ),
-            clipBehavior: Clip.antiAlias,
-            padding: const .all(12),
-            child: const QsContent(),
+        Container(
+          decoration: BoxDecoration(
+            color: context.colorScheme.surface,
+            borderRadius: .circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: context.colorScheme.shadow.withValues(alpha: 0.2),
+                blurRadius: 2,
+              ),
+            ],
           ),
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.all(8).copyWith(top: 0),
+          padding: const .all(12),
+          child: const QsContent(),
         ),
       ],
     );
@@ -324,9 +322,6 @@ class QsMoreSettings extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => Navigator.of(context).pop(),
-          child: ColoredBox(
-            color: context.colorScheme.scrim.withValues(alpha: 0.3),
-          ).animate(delay: Durations.short3).fadeIn(curve: Curves.easeOutSine),
         ),
         Align(
           alignment: switch (position) {
@@ -334,56 +329,57 @@ class QsMoreSettings extends StatelessWidget {
             .center => .bottomCenter,
             .right => .bottomRight,
           },
-          child: Padding(
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.colorScheme.surfaceContainer,
+              borderRadius: .circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: context.colorScheme.shadow.withValues(
+                    alpha: 0.6,
+                  ),
+                  blurRadius: 8,
+                  blurStyle: BlurStyle.outer,
+                ),
+              ],
+            ),
+            constraints: const BoxConstraints(
+              maxHeight: 520,
+              maxWidth: 380,
+            ),
+            margin: const .all(8),
             padding: const .all(8),
-            child: Container(
-              decoration: BoxDecoration(
-                color: context.colorScheme.surfaceContainer,
-                borderRadius: .circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: context.colorScheme.shadow.withValues(alpha: 0.2),
-                    blurRadius: 2,
-                  ),
-                ],
-              ),
-              constraints: const BoxConstraints(
-                maxHeight: 520,
-                maxWidth: 380,
-              ),
-              padding: const .all(8),
-              child: Column(
-                spacing: Gaps.xs.value,
-                children: [
-                  // Header
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: Iconify(
-                          Ic.arrow_back,
-                          color: context.colorScheme.onSurfaceVariant,
-                          size: 20,
-                        ),
+            child: Column(
+              spacing: Gaps.xs.value,
+              children: [
+                // Header
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Iconify(
+                        Ic.arrow_back,
+                        color: context.colorScheme.onSurfaceVariant,
+                        size: 20,
                       ),
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: context.textTheme.titleLarge,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Content
-                  Flexible(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: SingleChildScrollView(child: moreSettingPage),
                     ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: context.textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Content
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: SingleChildScrollView(child: moreSettingPage),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

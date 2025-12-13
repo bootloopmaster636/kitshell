@@ -5,6 +5,9 @@ failedToLoad:
   hint: Please make sure that Kitshell is running in Wayland environment that supports wlr_layer_shell protocol
 general:
   loading: Loading...
+  positive: "Yes"
+  negative: "No"
+  cancel: Cancel
   time:
     xHours: $hour hour(s)
     xMins: $min minute(s)
@@ -55,6 +58,20 @@ quickSettings:
       wifi: Wi-Fi
       lan: Ethernet
       modem: Modem
+    devState:
+      unknown: Unknown status
+      unmanaged: This device is not managed by Kitshell and NetworkManager.
+      unavailable: This device is unavailable. Is it turned off?
+      disconnected: This device is now disconnected.
+      prepare: Preparing connection...
+      config: Configuring connection...
+      needAuth: This connection needs more information like password, PIN codes, etc. Please provide one.
+      ipConfig: Getting IP address...
+      ipCheck: Running additional check...
+      secondaries: Waiting for secondary connection (VPN maybe?)...
+      activated: This device is now connected.
+      deactivating: Disconnecting from the network...
+      failed: Failed to connect to the network.
     general:
       connect: Connect
       disconnect: Disconnect
@@ -62,6 +79,7 @@ quickSettings:
       disconnected: Disconnected
     wifi:
       passwordRequired: A password is required to connect to this Wi-Fi. Please type the password...
+      passwordLabel: Wi-Fi Password
       signalStrength: "Signal strength: $val%"
       connectAuto: Connect automatically?
       info:
