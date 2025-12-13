@@ -24,7 +24,10 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
        _appMetadataRepo = appMetadataRepo,
        super(const AppmenuInitial()) {
     on<AppmenuSubscribed>(_subs, transformer: droppable());
-    on<AppmenuLoad>(_load, transformer: droppable());
+    on<AppmenuLoad>(
+      _load,
+      transformer: throttled(const Duration(seconds: 3)),
+    );
     on<AppmenuPinToggled>(_togglePin);
     on<AppmenuRankReset>(_resetRank);
     on<AppmenuAppExecuted>(_open, transformer: droppable());
@@ -67,7 +70,6 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
         return AppmenuLoaded(
           entries: regularEntry,
           pinnedEntries: pinnedEntry,
-          lastRefresh: DateTime.now(),
           searchQuery: '',
           searchResult: [],
         );
@@ -76,14 +78,8 @@ class AppmenuBloc extends Bloc<AppmenuEvent, AppmenuState> {
   }
 
   Future<void> _load(AppmenuLoad event, Emitter<AppmenuState> emit) async {
-    if (state is! AppmenuLoaded) return;
-    final loadedState = state as AppmenuLoaded;
-
-    if (loadedState.lastRefresh.add(const Duration(seconds: 30)).second >
-        DateTime.now().second) {
-      _appListRepo.locale = event.locale ?? 'en_US';
-      await _appListRepo.load();
-    }
+    _appListRepo.locale = event.locale ?? 'en_US';
+    await _appListRepo.load();
   }
 
   Future<void> _open(
