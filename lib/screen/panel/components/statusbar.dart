@@ -65,7 +65,9 @@ class BrightnessStatus extends StatelessWidget {
       bloc: get<QsBrightnessBloc>(),
       builder: (context, state) {
         if (state is! QsBrightnessStateLoaded) return const SizedBox();
-        final firstBrightness = state.brightness.first;
+        final firstBrightness = state.brightness.firstOrNull;
+
+        if (firstBrightness == null) return const SizedBox.shrink();
 
         // Determine icon to show
         const iconList = [
@@ -100,7 +102,8 @@ class BatteryStatus extends StatelessWidget {
       bloc: get<QsBatteryBloc>(),
       builder: (context, state) {
         if (state is! QsBatteryStateLoaded) return const SizedBox();
-        final firstBattery = state.batteryInfos.first;
+        final firstBattery = state.batteryInfos.firstOrNull;
+        if (firstBattery == null) return const SizedBox.shrink();
 
         const iconList = [
           Ic.twotone_battery_0_bar,
